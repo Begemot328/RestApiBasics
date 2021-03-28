@@ -1,8 +1,8 @@
 package com.epam.esm.persistence.exceptions;
 
-import com.epam.esm.model.exceptions.ProjectException;
+import com.epam.esm.model.exceptions.BaseException;
 
-public class DAOException extends ProjectException {
+public class DAOException extends BaseException {
 
     public DAOException(String message) {
         super(message);

@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.dao.certificate;
 
 import com.epam.esm.persistence.dao.EntityFinder;
-import com.epam.esm.persistence.dao.MySQLEntityDAO;
+import com.epam.esm.persistence.dao.AbstractEntityDAO;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.exceptions.DAOException;
@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
-public class MySQLCertificateDAO extends MySQLEntityDAO<Certificate> {
+public class CertificateDAO extends AbstractEntityDAO<Certificate> {
     private static final String WHERE_TAG_ID = " WHERE tag_id = ?";
     static final String TAG_ID = "tag_id";
     private static final String READ_BY_TAG_QUERY = "SELECT * FROM tag_certificates";
@@ -50,7 +50,7 @@ public class MySQLCertificateDAO extends MySQLEntityDAO<Certificate> {
     private JdbcTemplate template;
 
     @Autowired
-    public MySQLCertificateDAO(JdbcTemplate template) {
+    public CertificateDAO(JdbcTemplate template) {
         this.template = template;
     }
 

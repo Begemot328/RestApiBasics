@@ -1,6 +1,6 @@
 package com.epam.esm.persistence;
 
-import com.epam.esm.persistence.dao.tag.MySQLTagDAO;
+import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.persistence.exceptions.DAOException;
 import com.epam.esm.persistence.pool.DbParameter;
 import com.epam.esm.persistence.resource.DbResourceManager;
@@ -12,6 +12,6 @@ public class PersistenceRunner {
         System.out.println(DbResourceManager.getInstance().getValue(DbParameter.DB_URL));
         AnnotationConfigApplicationContext context
                 = new AnnotationConfigApplicationContext("com.epam.esm");
-        System.out.println(context.getBean(MySQLTagDAO.class).read(1));
+        System.out.println(context.getBean(TagDAO.class).read(1));
     }
 }

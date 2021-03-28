@@ -1,8 +1,9 @@
 package com.epam.esm.services.service;
 
+import com.epam.esm.persistence.dao.AscDesc;
 import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.dao.EntityFinder;
-import com.epam.esm.persistence.dao.tag.MySQLTagDAO;
+import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.tag.TagFinder;
@@ -10,11 +11,12 @@ import com.epam.esm.persistence.exceptions.DAOException;
 import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
 import com.epam.esm.services.validator.EntityValidator;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Map;
 
 @Service
 public class TagService extends AbstractEntityService<Tag> {
@@ -90,8 +92,8 @@ public class TagService extends AbstractEntityService<Tag> {
 
     public Collection<Tag> findAll(Certificate certificate) throws ServiceException {
         try {
-            if (dao instanceof MySQLTagDAO) {
-                return ((MySQLTagDAO)dao).findAllByCertificate(certificate);
+            if (dao instanceof TagDAO) {
+                return ((TagDAO)dao).findAllByCertificate(certificate);
             } else {
                 throw new ServiceException(WRONG_DAO_MESSAGE);
             }
@@ -101,9 +103,9 @@ public class TagService extends AbstractEntityService<Tag> {
     }
 
     public Collection<Tag> findBy(EntityFinder<Tag> entityFinder) throws ServiceException {
-        if (dao instanceof MySQLTagDAO) {
+        if (dao instanceof TagDAO) {
             try {
-                return ((MySQLTagDAO)dao).findBy(entityFinder);
+                return ((TagDAO)dao).findBy(entityFinder);
             } catch (DAOException e) {
                 throw new ServiceException(e);
             }
@@ -112,10 +114,19 @@ public class TagService extends AbstractEntityService<Tag> {
         }
     }
 
-    public Collection<Tag> find(String name) throws ServiceException {
-        if (dao instanceof MySQLTagDAO) {
+    public Collection<Tag> find(String name, Map<String, String> sorting) throws ServiceException {
+        if (dao instanceof TagDAO) {
             try {
-                return ((MySQLTagDAO)dao).findBy(new TagFinder().findByName(name));
+                TagFinder finder = new TagFinder();
+                if (StringUtils.isNotEmpty(name)) {
+                    finder.findByName(name);
+                }
+                if (sorting != null) {
+                    if (sorting.containsKey(sorting.get("sort-by-name"))) {
+                        finder.sortByName(AscDesc.getValue(sorting.get("sort-by-name")));
+                    }
+                }
+                return ((TagDAO)dao).findBy(finder);
             } catch (DAOException e) {
                 throw new ServiceException(e);
             }

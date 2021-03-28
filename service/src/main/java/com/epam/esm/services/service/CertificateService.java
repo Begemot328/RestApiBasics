@@ -4,7 +4,7 @@ import com.epam.esm.persistence.dao.AscDesc;
 import com.epam.esm.persistence.dao.EntityFinder;
 import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.dao.certificate.CertificateFinder;
-import com.epam.esm.persistence.dao.certificate.MySQLCertificateDAO;
+import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.exceptions.DAOException;
@@ -13,9 +13,9 @@ import com.epam.esm.services.exceptions.ValidationException;
 import com.epam.esm.services.validator.EntityValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Map;
 
@@ -92,9 +92,9 @@ public class CertificateService extends AbstractEntityService<Certificate> {
 
     @Override
     public Collection<Certificate> findBy(EntityFinder<Certificate> entityFinder) throws ServiceException {
-        if (dao instanceof MySQLCertificateDAO) {
+        if (dao instanceof CertificateDAO) {
             try {
-                return ((MySQLCertificateDAO)dao).findBy(entityFinder);
+                return ((CertificateDAO)dao).findBy(entityFinder);
             } catch (DAOException e) {
                 throw new ServiceException(e);
             }
@@ -105,8 +105,8 @@ public class CertificateService extends AbstractEntityService<Certificate> {
 
     public Collection<Certificate> findAll(Tag tag) throws ServiceException {
         try {
-            if (dao instanceof MySQLCertificateDAO) {
-                return ((MySQLCertificateDAO)dao).findAllByTag(tag);
+            if (dao instanceof CertificateDAO) {
+                return ((CertificateDAO)dao).findAllByTag(tag);
             } else {
                 throw new ServiceException(WRONG_DAO_MESSAGE);
             }
@@ -116,41 +116,45 @@ public class CertificateService extends AbstractEntityService<Certificate> {
     }
 
     public void addTagCertificate(Tag tag, Certificate certificate) throws ServiceException {
-        if (dao instanceof MySQLCertificateDAO) {
-            ((MySQLCertificateDAO)dao).addCertificateTag(certificate, tag);
+        if (dao instanceof CertificateDAO) {
+            ((CertificateDAO)dao).addCertificateTag(certificate, tag);
         } else {
             throw new ServiceException(WRONG_DAO_MESSAGE);
         }
     }
 
     public void deleteTagCertificate(Tag tag, Certificate certificate) throws ServiceException {
-        if (dao instanceof MySQLCertificateDAO) {
-            ((MySQLCertificateDAO)dao).deleteCertificateTag(certificate, tag);
+        if (dao instanceof CertificateDAO) {
+            ((CertificateDAO)dao).deleteCertificateTag(certificate, tag);
         } else {
             throw new ServiceException(WRONG_DAO_MESSAGE);
         }
     }
 
-    public Collection<Certificate> find(String tagName, String name, String description, Map<String, String> sorting) throws ServiceException {
-        if (dao instanceof MySQLCertificateDAO) {
+    public Collection<Certificate> find(Integer tagId, String name, String description, Map<String, String> sorting) throws ServiceException {
+        if (dao instanceof CertificateDAO) {
+
+
             CertificateFinder finder = new CertificateFinder();
+            if (tagId != null) {
+                finder.findByTag(tagId);
+            }
             if (StringUtils.isNotEmpty(name)) {
-                finder = finder.findByName(name);
+                finder.findByName(name);
             }
             if (StringUtils.isNotEmpty(description)) {
-                finder = finder.findByName(description);
+                finder.findByName(description);
             }
-            if (StringUtils.isNotEmpty(tagName)) {
-                finder = finder.findByName(name);
-            }
-            if (sorting.containsKey(sorting.get("sort-by-create"))) {
-                finder = finder.sortByCreateDate(getValue(sorting.get("sort-by-create")));
-            }
-            if (sorting.containsKey(sorting.get("sort-by-lastupdate"))) {
-                finder = finder.sortByLastUpdateDate(getValue(sorting.get("sort-by-lastupdate")));
-            }
-            if (sorting.containsKey(sorting.get("sort-by-name"))) {
-                finder = finder.sortByName(getValue(sorting.get("sort-by-name")));
+            if (sorting != null) {
+                if (sorting.containsKey(sorting.get("sort-by-create"))) {
+                    finder.sortByCreateDate(AscDesc.getValue(sorting.get("sort-by-create")));
+                }
+                if (sorting.containsKey(sorting.get("sort-by-lastupdate"))) {
+                    finder.sortByLastUpdateDate(AscDesc.getValue(sorting.get("sort-by-lastupdate")));
+                }
+                if (sorting.containsKey(sorting.get("sort-by-name"))) {
+                    finder.sortByName(AscDesc.getValue(sorting.get("sort-by-name")));
+                }
             }
             return findBy(finder);
         } else {
@@ -158,12 +162,5 @@ public class CertificateService extends AbstractEntityService<Certificate> {
         }
     }
 
-    private AscDesc getValue(String s) {
-        try {
-            AscDesc.valueOf(s);
-        } catch (IllegalArgumentException e) {
-            return AscDesc.ASC;
-        }
-        return AscDesc.valueOf(s);
-    }
+
 }

@@ -4,109 +4,101 @@ import com.epam.esm.persistence.dao.AscDesc;
 import com.epam.esm.persistence.dao.EntityFinder;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
+import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
+@Component
 public class CertificateFinder extends EntityFinder<Certificate> {
 
+
     public CertificateFinder findByName(String name) {
-        this.searchCondition = MySQLCertificateDAO.NAME + BLANK + LIKE.replace(VALUE,name);
+        this.searchCondition = CertificateDAO.NAME + BLANK + LIKE.replace(VALUE,name);
         return this;
     }
 
-    public CertificateFinder findByTags(Tag[] tags) {
+    public void findByTags(Tag[] tags) {
         StringBuilder tagString = new StringBuilder();
         Stream.of(tags).forEach((tag) ->
                 tagString.append(tag.getId()).append(DELIMETER).append(BLANK));
-        this.searchCondition = MySQLCertificateDAO.TAG_ID + BLANK +
+        this.searchCondition = CertificateDAO.TAG_ID + BLANK +
                 IN.replace(VALUE,tagString.substring(0, tagString.length() - 3));
-        return this;
     }
 
-    public CertificateFinder findByTag(Tag tag) {
-        this.searchCondition = MySQLCertificateDAO.TAG_ID + EQUALS + tag.getId();
-        return this;
+    public void findByTag(int id) {
+        this.searchCondition = CertificateDAO.TAG_ID + EQUALS + id;
     }
 
-    public CertificateFinder findByDescription(String description) {
-        this.searchCondition = MySQLCertificateDAO.DESCRIPTION + BLANK
+    public void findByDescription(String description) {
+        this.searchCondition = CertificateDAO.DESCRIPTION + BLANK
                 + LIKE.replace(VALUE ,description);
-        return this;
     }
 
-    public CertificateFinder findByCreateDateEarlier(LocalDate date) {
-        this.searchCondition = MySQLCertificateDAO.CREATE_DATE + BLANK
+    public void findByCreateDateEarlier(LocalDate date) {
+        this.searchCondition = CertificateDAO.CREATE_DATE + BLANK
                 + LESS_OE + BLANK + Date.valueOf(date);
-        return this;
     }
 
-    public CertificateFinder findByCreateDateLater(LocalDate date) {
-        this.searchCondition = MySQLCertificateDAO.CREATE_DATE + BLANK
+    public void findByCreateDateLater(LocalDate date) {
+        this.searchCondition = CertificateDAO.CREATE_DATE + BLANK
                 + MORE_OE + BLANK + Date.valueOf(date);
-        return this;
     }
 
-    public CertificateFinder findByLastUpdateDateEarlier(LocalDate date) {
-        this.searchCondition = MySQLCertificateDAO.LAST_UPDATE_DATE + BLANK
+    public void findByLastUpdateDateEarlier(LocalDate date) {
+        this.searchCondition = CertificateDAO.LAST_UPDATE_DATE + BLANK
                 + LESS_OE + BLANK + Date.valueOf(date);
-        return this;
     }
 
-    public CertificateFinder findByLastUpdateDateLater(LocalDate date) {
-        this.searchCondition = MySQLCertificateDAO.LAST_UPDATE_DATE
+    public void findByLastUpdateDateLater(LocalDate date) {
+        this.searchCondition = CertificateDAO.LAST_UPDATE_DATE
                 + BLANK + MORE_OE + BLANK + Date.valueOf(date);
-        return this;
     }
 
-    public CertificateFinder findByPriceLess(Double price) {
-        this.searchCondition = MySQLCertificateDAO.LAST_UPDATE_DATE
+    public void findByPriceLess(Double price) {
+        this.searchCondition = CertificateDAO.LAST_UPDATE_DATE
                 + BLANK + LESS_OE + BLANK + price;
-        return this;
     }
 
-    public CertificateFinder findByPriceMore(Double price) {
-        this.searchCondition = MySQLCertificateDAO.LAST_UPDATE_DATE + BLANK
+    public void findByPriceMore(Double price) {
+        this.searchCondition = CertificateDAO.LAST_UPDATE_DATE + BLANK
                 + MORE_OE + BLANK + price;
-        return this;
     }
 
-    public CertificateFinder findByDurationLess(Integer duration) {
-        this.searchCondition = MySQLCertificateDAO.LAST_UPDATE_DATE + BLANK
+    public void findByDurationLess(Integer duration) {
+        this.searchCondition = CertificateDAO.LAST_UPDATE_DATE + BLANK
                 + LESS_OE + BLANK + duration;
-        return this;
     }
 
-    public CertificateFinder findByDurationMore(Integer duration) {
-        this.searchCondition = MySQLCertificateDAO.LAST_UPDATE_DATE + BLANK
+    public void findByDurationMore(Integer duration) {
+        this.searchCondition = CertificateDAO.LAST_UPDATE_DATE + BLANK
                 + MORE_OE + BLANK + duration;
-        return this;
     }
 
-    public CertificateFinder sortByCreateDate(AscDesc ascDesc) {
-        return (CertificateFinder) sortBy(MySQLCertificateDAO.CREATE_DATE, ascDesc);
+    public void sortByCreateDate(AscDesc ascDesc) {
+        sortBy(CertificateDAO.CREATE_DATE, ascDesc);
     }
 
-    public CertificateFinder sortByLastUpdateDate(AscDesc ascDesc) {
-        return (CertificateFinder) sortBy(MySQLCertificateDAO.LAST_UPDATE_DATE, ascDesc);
+    public void sortByLastUpdateDate(AscDesc ascDesc) {
+        sortBy(CertificateDAO.LAST_UPDATE_DATE, ascDesc);
     }
 
 
 
-    public CertificateFinder sortByName(AscDesc ascDesc) {
-        return (CertificateFinder) sortBy(MySQLCertificateDAO.NAME, ascDesc);
+    public void sortByName(AscDesc ascDesc) {
+         sortBy(CertificateDAO.NAME, ascDesc);
     }
 
-    public CertificateFinder sortByPrice(AscDesc ascDesc) {
-        return (CertificateFinder) sortBy(MySQLCertificateDAO.PRICE, ascDesc);
+    public void sortByPrice(AscDesc ascDesc) {
+        sortBy(CertificateDAO.PRICE, ascDesc);
     }
 
-    public CertificateFinder sortByDuration(AscDesc ascDesc) {
-        return (CertificateFinder) sortBy(MySQLCertificateDAO.DURATION, ascDesc);
+    public void sortByDuration(AscDesc ascDesc) {
+       sortBy(CertificateDAO.DURATION, ascDesc);
     }
 
-    public CertificateFinder sortByDescription(AscDesc ascDesc) {
-        return (CertificateFinder) sortBy(MySQLCertificateDAO.DESCRIPTION, ascDesc);
+    public void sortByDescription(AscDesc ascDesc) {
+        sortBy(CertificateDAO.DESCRIPTION, ascDesc);
     }
 }

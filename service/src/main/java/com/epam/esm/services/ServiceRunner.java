@@ -1,7 +1,5 @@
 package com.epam.esm.services;
 
-import com.epam.esm.persistence.dao.certificate.MySQLCertificateDAO;
-import com.epam.esm.persistence.dao.tag.MySQLTagDAO;
 import com.epam.esm.persistence.exceptions.DAOException;
 import com.epam.esm.persistence.pool.DbParameter;
 import com.epam.esm.persistence.resource.DbResourceManager;

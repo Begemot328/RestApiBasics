@@ -23,6 +23,10 @@ public abstract class EntityFinder<T extends Entity> {
     protected String searchCondition = new String();
     protected String sortCondition = new String();
 
+    public EntityFinder() {
+
+    }
+
     protected String getSearchCondition() {
         return searchCondition;
     }
@@ -40,43 +44,38 @@ public abstract class EntityFinder<T extends Entity> {
         return query.toString();
     }
 
-    public EntityFinder<T> and(EntityFinder<T> finder) {
+    public void and(EntityFinder<T> finder) {
         if (!finder.getSearchCondition().isEmpty()) {
             this.searchCondition = sortCondition + BLANK + AND + BLANK
                     + "(" + finder.getSearchCondition() + ")";
         }
-        return this;
     }
 
-    public EntityFinder<T> or(EntityFinder<T> finder) {
+    public void or(EntityFinder<T> finder) {
         if (!finder.getSearchCondition().isEmpty()) {
             this.searchCondition = sortCondition + BLANK + OR + BLANK
                     + "(" + finder.getSearchCondition() + ")";
         }
-
-        return this;
     }
 
-    public EntityFinder<T> sortById(AscDesc ascDesc) {
-        return sortBy(MySQLEntityDAO.ID, ascDesc);
+    public void sortById(AscDesc ascDesc) {
+        sortBy(AbstractEntityDAO.ID, ascDesc);
     }
 
-    protected EntityFinder<T> sortBy(String sorting) {
+    protected void sortBy(String sorting) {
         if (!sortCondition.isEmpty()) {
             this.sortCondition = sortCondition.concat(DELIMETER).concat(BLANK).concat(sorting);
         } else {
             this.sortCondition = sorting;
         }
-        return this;
     }
 
-    protected EntityFinder<T> sortBy(String sorting, AscDesc ascDesc) {
+    protected void sortBy(String sorting, AscDesc ascDesc) {
         if (!sortCondition.isEmpty()) {
             this.sortCondition = sortCondition.concat(DELIMETER).concat(BLANK).concat(sorting)
                     .concat(BLANK).concat(ascDesc.toString());
         } else {
             this.sortCondition = sorting.concat(BLANK).concat(ascDesc.toString());
         }
-        return this;
     }
 }

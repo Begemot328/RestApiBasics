@@ -1,8 +1,8 @@
 package com.epam.esm.services.exceptions;
 
-import com.epam.esm.model.exceptions.ProjectException;
+import com.epam.esm.model.exceptions.BaseException;
 
-public class ValidationException extends ProjectException {
+public class ValidationException extends BaseException {
     public ValidationException(String message) {
         super(message);
     }

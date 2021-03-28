@@ -6,15 +6,17 @@ import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
 import com.epam.esm.services.service.CertificateService;
 import com.epam.esm.services.service.TagService;
+import com.epam.esm.web.requesthandler.certificate.CertificateRequestHandler;
+import com.epam.esm.web.requesthandler.tag.TagRequestHandler;
+import com.epam.esm.web.exceptions.WebLayerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Map;
 
 
 @RestController
@@ -22,30 +24,34 @@ import java.util.Collection;
 public class CertificateController {
     private final TagService tagService;
     private final CertificateService certificateService;
+    private final TagRequestHandler taghandler;
+    private final CertificateRequestHandler certificateRequestHandler;
 
 
 
     @Autowired
     public CertificateController(TagService tagService,
-                                 CertificateService certificateService) {
+                                 CertificateService certificateService,
+                                 TagRequestHandler tagHandler, CertificateRequestHandler certificateRequestHandler) {
         this.tagService = tagService;
         this.certificateService = certificateService;
+        this.taghandler = tagHandler;
+        this.certificateRequestHandler = certificateRequestHandler;
     }
 
     @GetMapping
-    public ResponseEntity<?> readAll(@RequestParam(value = "tag", required=false) Integer id) {
+    public ResponseEntity<?> readAll(@RequestParam(value = "tag", required=false) Map<String,String> params) {
         try {
             Collection<Certificate> list;
-            if (id != null) {
-                list = certificateService.findAll(tagService.read(id));
+            if (params == null || params.isEmpty()) {
+                list = certificateRequestHandler.find(params);
             } else {
                 list = certificateService.findAll();
             }
-
             return list != null &&  !list.isEmpty()
                     ? new ResponseEntity<>(list, HttpStatus.OK)
                     : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (ServiceException e) {
+        } catch (WebLayerException | ServiceException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.dao.tag;
 
 import com.epam.esm.persistence.dao.EntityFinder;
-import com.epam.esm.persistence.dao.MySQLEntityDAO;
+import com.epam.esm.persistence.dao.AbstractEntityDAO;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.exceptions.DAOException;
@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
-public class MySQLTagDAO extends MySQLEntityDAO<Tag> {
+public class TagDAO extends AbstractEntityDAO<Tag> {
     private static final String WHERE_ID = " WHERE id = ?";
     private static final String WHERE_CERTIFICATE_ID = " WHERE certificate_id = ?";
     static final String CERTIFICATE_ID = "certificate_id";
@@ -42,7 +42,7 @@ public class MySQLTagDAO extends MySQLEntityDAO<Tag> {
     private JdbcTemplate template;
 
 
-    public MySQLTagDAO(JdbcTemplate template) {
+    public TagDAO(JdbcTemplate template) {
         this.template = template;
     }
 

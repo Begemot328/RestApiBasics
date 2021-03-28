@@ -1,13 +1,13 @@
 package com.epam.esm.model.exceptions;
 
-public class ProjectException extends Exception{
+public class BaseException extends Exception{
 
     /**
      * Constructor
      *
      * @param message the message
      */
-    public ProjectException(String message) {
+    public BaseException(String message) {
         super(message);
     }
 
@@ -17,7 +17,7 @@ public class ProjectException extends Exception{
      * @param message the message
      * @param e the e
      */
-    public ProjectException(String message, Exception e) {
+    public BaseException(String message, Exception e) {
         super(message + e.getLocalizedMessage());
         this.setStackTrace (e.getStackTrace());
     }
@@ -27,7 +27,7 @@ public class ProjectException extends Exception{
      *
      * @param e the e
      */
-    public ProjectException(Exception e) {
+    public BaseException(Exception e) {
         super(e.getClass().getSimpleName() + ": " +  e.getLocalizedMessage());
         this.setStackTrace (e.getStackTrace());
     }

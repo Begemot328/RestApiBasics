@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.Collection;
 
 
-public abstract class MySQLEntityDAO<T extends Entity> implements EntityDAO<T>{
+public abstract class AbstractEntityDAO<T extends Entity> implements EntityDAO<T>{
     private static final String INSERT_QUERY =
             "INSERT INTO [SCHEMA].[TABLE]([PARAMETERS]) VALUES ([VALUES]);";
     private static final String UPDATE_QUERY =
