@@ -1,6 +1,6 @@
 package com.epam.esm.services.service;
 
-import com.epam.esm.persistence.dao.EntityFinder;
+import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Entity;
 import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;

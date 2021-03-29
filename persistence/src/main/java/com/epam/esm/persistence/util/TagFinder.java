@@ -1,7 +1,6 @@
-package com.epam.esm.persistence.dao.tag;
+package com.epam.esm.persistence.util;
 
-import com.epam.esm.persistence.dao.AscDesc;
-import com.epam.esm.persistence.dao.EntityFinder;
+import com.epam.esm.persistence.dao.TagDAO;
 import com.epam.esm.model.entity.Tag;
 import org.springframework.stereotype.Component;
 

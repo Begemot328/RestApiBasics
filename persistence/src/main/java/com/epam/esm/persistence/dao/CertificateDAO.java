@@ -1,7 +1,6 @@
-package com.epam.esm.persistence.dao.certificate;
+package com.epam.esm.persistence.dao;
 
-import com.epam.esm.persistence.dao.EntityFinder;
-import com.epam.esm.persistence.dao.AbstractEntityDAO;
+import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.exceptions.DAOException;
@@ -21,7 +20,7 @@ import java.util.List;
 @Component
 public class CertificateDAO extends AbstractEntityDAO<Certificate> {
     private static final String WHERE_TAG_ID = " WHERE tag_id = ?";
-    static final String TAG_ID = "tag_id";
+    public static final String TAG_ID = "tag_id";
     private static final String READ_BY_TAG_QUERY = "SELECT * FROM tag_certificates";
     private static final String WHERE_ID = " WHERE id = ?";
     private static final String READ_QUERY = "SELECT * FROM certificates.certificate";
@@ -40,20 +39,19 @@ public class CertificateDAO extends AbstractEntityDAO<Certificate> {
     private static final String DELETE_CERTIFICATE_TAG = "DELETE FROM certificates.certificate_tag " +
             "WHERE certificate_id=? AND tag_id=?;";
 
-    static final String DESCRIPTION = "description";
-    static final String NAME = "name";
-    static final String DURATION = "duration";
-    static final String PRICE = "price";
-    static final String ID = "id";
-    static final String LAST_UPDATE_DATE = "last_update_date";
-    static final String CREATE_DATE = "create_date";
+    public static final String DESCRIPTION = "description";
+    public static final String NAME = "name";
+    public static final String DURATION = "duration";
+    public static final String PRICE = "price";
+    public static final String ID = "id";
+    public static final String LAST_UPDATE_DATE = "last_update_date";
+    public static final String CREATE_DATE = "create_date";
     private JdbcTemplate template;
 
     @Autowired
     public CertificateDAO(JdbcTemplate template) {
         this.template = template;
     }
-
 
     public void setTemplate(JdbcTemplate template) {
         this.template = template;
@@ -122,6 +120,9 @@ public class CertificateDAO extends AbstractEntityDAO<Certificate> {
             ps.setDate(6, Date.valueOf(certificate.getLastUpdateDate()));
             return ps;
         }, keyHolder);
+        if (keyHolder.getKey() == null) {
+            throw new DAOException("empty keyholder");
+        }
         certificate.setId(keyHolder.getKey().intValue());
         return certificate;
     }

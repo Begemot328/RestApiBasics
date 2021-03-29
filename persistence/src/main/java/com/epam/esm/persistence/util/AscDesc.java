@@ -1,4 +1,4 @@
-package com.epam.esm.persistence.dao;
+package com.epam.esm.persistence.util;
 
 public enum AscDesc {
     ASC, DESC;

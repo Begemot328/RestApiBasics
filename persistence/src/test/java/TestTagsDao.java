@@ -1,7 +1,7 @@
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.AscDesc;
-import com.epam.esm.persistence.dao.tag.MySQLTagDAO;
-import com.epam.esm.persistence.dao.tag.TagFinder;
+import com.epam.esm.persistence.util.AscDesc;
+import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.util.TagFinder;
 import com.epam.esm.persistence.exceptions.DAOException;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTagsDao extends TestDao {
-    private MySQLTagDAO tagsDao = new MySQLTagDAO(getJdbcTemplate());
+    private TagDAO tagsDao = new TagDAO(getJdbcTemplate());
     Tag tag = new Tag("New tag");
 
     @Test
@@ -29,9 +29,15 @@ public class TestTagsDao extends TestDao {
         Tag cardTag = new Tag("Card game");
         tagsDao.create(cardTag);
 
-        ArrayList<Tag> list = (ArrayList<Tag>) tagsDao.findBy(finder.sortByName(AscDesc.DESC));
+        finder = new TagFinder();
+        finder.sortByName(AscDesc.DESC);
+        ArrayList<Tag> list = (ArrayList<Tag>) tagsDao.findBy(finder);
         assertTrue(list.indexOf(tag) > list.indexOf(cardTag));
-        list = (ArrayList<Tag>) tagsDao.findBy(finder.sortByName(AscDesc.ASC));
+
+
+        finder = new TagFinder();
+        finder.sortByName(AscDesc.ASC);
+        list = (ArrayList<Tag>) tagsDao.findBy(finder);
         assertTrue(list.indexOf(tag) < list.indexOf(cardTag));
 
         tagsDao.delete(tag.getId());
@@ -48,7 +54,7 @@ public class TestTagsDao extends TestDao {
         String newName = "New tag name";
         tag.setName(newName);
         tagsDao.update(tag);
-        assertEquals(newName, tagsDao.read(tag.getId()));
+        assertEquals(newName, tagsDao.read(tag.getId()).getName());
 
         tagsDao.delete(tag.getId());
         assertEquals(tagsDao.findAll().size(), size);

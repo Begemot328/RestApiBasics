@@ -1,6 +1,6 @@
 package com.epam.esm.model.entity;
 
-public abstract class Entity {
+public class Entity {
     protected int id;
 
     public int getId() {

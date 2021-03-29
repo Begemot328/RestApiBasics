@@ -1,6 +1,7 @@
-package com.epam.esm.persistence.dao;
+package com.epam.esm.persistence.util;
 
 import com.epam.esm.model.entity.Entity;
+import com.epam.esm.persistence.dao.AbstractEntityDAO;
 
 public abstract class EntityFinder<T extends Entity> {
     protected static final String WHERE = " WHERE";
@@ -62,7 +63,7 @@ public abstract class EntityFinder<T extends Entity> {
         sortBy(AbstractEntityDAO.ID, ascDesc);
     }
 
-    protected void sortBy(String sorting) {
+    public void sortBy(String sorting) {
         if (!sortCondition.isEmpty()) {
             this.sortCondition = sortCondition.concat(DELIMETER).concat(BLANK).concat(sorting);
         } else {
@@ -70,7 +71,7 @@ public abstract class EntityFinder<T extends Entity> {
         }
     }
 
-    protected void sortBy(String sorting, AscDesc ascDesc) {
+    public void sortBy(String sorting, AscDesc ascDesc) {
         if (!sortCondition.isEmpty()) {
             this.sortCondition = sortCondition.concat(DELIMETER).concat(BLANK).concat(sorting)
                     .concat(BLANK).concat(ascDesc.toString());

@@ -1,7 +1,6 @@
-package com.epam.esm.persistence.dao.tag;
+package com.epam.esm.persistence.dao;
 
-import com.epam.esm.persistence.dao.EntityFinder;
-import com.epam.esm.persistence.dao.AbstractEntityDAO;
+import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.exceptions.DAOException;
@@ -25,7 +24,7 @@ import java.util.List;
 public class TagDAO extends AbstractEntityDAO<Tag> {
     private static final String WHERE_ID = " WHERE id = ?";
     private static final String WHERE_CERTIFICATE_ID = " WHERE certificate_id = ?";
-    static final String CERTIFICATE_ID = "certificate_id";
+    public static final String CERTIFICATE_ID = "certificate_id";
     private static final String READ_QUERY = "SELECT * FROM certificates.tag";
     private static final String READ_BY_TAG_QUERY = "SELECT * FROM certificate_tags";
     private static final String INSERT_QUERY =
@@ -36,7 +35,7 @@ public class TagDAO extends AbstractEntityDAO<Tag> {
     private static final String DELETE_QUERY =
             "DELETE FROM certificates.tag  " +
                     "WHERE id = ?;";
-    static final String NAME = "name";
+    public static final String NAME = "name";
 
     @Autowired
     private JdbcTemplate template;
@@ -98,6 +97,9 @@ public class TagDAO extends AbstractEntityDAO<Tag> {
             ps.setString(1, tag.getName());
             return ps;
         }, keyHolder);
+        if (keyHolder.getKey() == null) {
+            throw new DAOException("empty keyholder");
+        }
         tag.setId(keyHolder.getKey().intValue());
         return   tag;
     }

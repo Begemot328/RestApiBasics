@@ -1,5 +1,4 @@
 import com.epam.esm.persistence.pool.DbParameter;
-import com.epam.esm.persistence.resource.DbResourceManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,25 +15,6 @@ public class TestDao {
     private static final String TEST_DATABASE = "SQL/test_db.sql";
     private static final String BACKUP_DATABASE = "SQL/db.sql";
     private JdbcTemplate template;
-
-    {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(
-                DbResourceManager.getInstance().getValue(DbParameter.DB_DRIVER));
-        dataSource.setUrl(
-                DbResourceManager.getInstance().getValue(DbParameter.DB_URL));
-        dataSource.setUsername(
-                DbResourceManager.getInstance().getValue(DbParameter.DB_USER));
-        dataSource.setPassword(
-                DbResourceManager.getInstance().getValue(DbParameter.DB_PASSWORD));
-        Properties properties = new Properties();
-        properties.setProperty("serverTimezone",
-                DbResourceManager.getInstance().getValue(DbParameter.DB_TIMEZONE));
-        properties.setProperty("useUnicode",
-                DbResourceManager.getInstance().getValue(DbParameter.DB_USE_UNICODE));
-        dataSource.setConnectionProperties(properties);
-        template = new JdbcTemplate(dataSource);
-    }
 
 
     private void setDatabase(String database) throws FileNotFoundException {

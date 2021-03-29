@@ -1,7 +1,6 @@
-package com.epam.esm.persistence.dao.certificate;
+package com.epam.esm.persistence.util;
 
-import com.epam.esm.persistence.dao.AscDesc;
-import com.epam.esm.persistence.dao.EntityFinder;
+import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import org.springframework.stereotype.Component;
@@ -66,6 +65,16 @@ public class CertificateFinder extends EntityFinder<Certificate> {
                 + MORE_OE + BLANK + price;
     }
 
+    public void findBy(Double price) {
+        this.searchCondition = CertificateDAO.LAST_UPDATE_DATE + BLANK
+                + MORE_OE + BLANK + price;
+    }
+
+    public void findBy(String par, String value) {
+        this.searchCondition = par + BLANK
+                + MORE_OE + BLANK + value;
+    }
+
     public void findByDurationLess(Integer duration) {
         this.searchCondition = CertificateDAO.LAST_UPDATE_DATE + BLANK
                 + LESS_OE + BLANK + duration;
@@ -84,21 +93,4 @@ public class CertificateFinder extends EntityFinder<Certificate> {
         sortBy(CertificateDAO.LAST_UPDATE_DATE, ascDesc);
     }
 
-
-
-    public void sortByName(AscDesc ascDesc) {
-         sortBy(CertificateDAO.NAME, ascDesc);
-    }
-
-    public void sortByPrice(AscDesc ascDesc) {
-        sortBy(CertificateDAO.PRICE, ascDesc);
-    }
-
-    public void sortByDuration(AscDesc ascDesc) {
-       sortBy(CertificateDAO.DURATION, ascDesc);
-    }
-
-    public void sortByDescription(AscDesc ascDesc) {
-        sortBy(CertificateDAO.DESCRIPTION, ascDesc);
-    }
 }

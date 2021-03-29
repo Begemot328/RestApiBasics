@@ -1,8 +1,7 @@
 package com.epam.esm.services.exceptions;
 
-import com.epam.esm.model.exceptions.BaseException;
 
-public class ServiceException extends BaseException {
+public class ServiceException extends Exception {
 
     public ServiceException(String message) {
         super(message);

@@ -44,14 +44,14 @@ public class CertificateController {
         try {
             Collection<Certificate> list;
             if (params == null || params.isEmpty()) {
-                list = certificateRequestHandler.find(params);
+                list = certificateService.find(params);
             } else {
                 list = certificateService.findAll();
             }
             return list != null &&  !list.isEmpty()
                     ? new ResponseEntity<>(list, HttpStatus.OK)
                     : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (WebLayerException | ServiceException e) {
+        } catch (ServiceException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.pool;
 
-import com.epam.esm.persistence.resource.DbResourceManager;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -9,37 +9,44 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @Component
-public class DBCPDataSource {
+public class DBCPDataSource extends BasicDataSource {
 
-    private static BasicDataSource ds = new BasicDataSource();
+    private BasicDataSource ds = new BasicDataSource();
 
-    static {
-        ds.setUrl(DbResourceManager.getInstance().getValue(DbParameter.DB_URL));
-        ds.setUsername(DbResourceManager.getInstance().getValue(DbParameter.DB_USER));
-        ds.setPassword(DbResourceManager.getInstance().getValue(DbParameter.DB_PASSWORD));
-        ds.setConnectionProperties(
-                "serverTimezone="
-                        + DbResourceManager.getInstance().getValue(DbParameter.DB_TIMEZONE)
-                        + ";useUnicode="
-                        + DbResourceManager.getInstance().getValue(DbParameter.DB_USE_UNICODE));
-        ds.setDriverClassName(DbResourceManager.getInstance().getValue(DbParameter.DB_DRIVER));
+    @Value("${database.db.url}")
+    private String url;
+    @Value("${database.db.user}")
+    private String login;
+    @Value("${database.db.password}")
+    private String password;
+    @Value("${database.db.driver}")
+    private String driver;
+    @Value("${database.db.timezone}")
+    private String serverTimezone;
+    @Value("${database.db.useUnicode}")
+    private String useUnicode;
+    @Value("${database.db.initpoolsize}")
+    private String initpoolsize;
+    @Value("${database.db.maxpoolsize}")
+    private String maxpoolsize;
+    @Value("${database.db.timezone}")
+    private String maxOpenedPreparedStatements;
 
-        ds.setMinIdle(Integer.parseInt(
-                DbResourceManager.getInstance().getValue(DbParameter.DB_POOL_SIZE)));
-        ds.setMaxIdle(Integer.parseInt(
-                DbResourceManager.getInstance().getValue(DbParameter.DB_MAX_POOL_SIZE)));
-        ds.setMaxOpenPreparedStatements(Integer.parseInt(
-                DbResourceManager.getInstance().getValue(DbParameter.DB_MAX_OPENED_PS)));
+    {
+        ds.setUrl(url);
+        ds.setUsername(login);
+        ds.setPassword(password);
+        ds.setConnectionProperties("serverTimezone=" + serverTimezone
+                + ";useUnicode=" + useUnicode);
+        ds.setDriverClassName(driver);
+        ds.setMinIdle(Integer.parseInt(initpoolsize));
+        ds.setMaxIdle(Integer.parseInt(maxpoolsize));
+        ds.setMaxOpenPreparedStatements(Integer.parseInt(maxOpenedPreparedStatements));
     }
 
-    public static Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
         return ds.getConnection();
     }
 
     private DBCPDataSource(){ }
-
-    @Bean
-    public static BasicDataSource getDataSource() {
-        return ds;
-    }
 }

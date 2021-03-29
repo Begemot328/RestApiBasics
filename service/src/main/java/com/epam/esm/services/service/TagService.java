@@ -1,12 +1,12 @@
 package com.epam.esm.services.service;
 
-import com.epam.esm.persistence.dao.AscDesc;
+import com.epam.esm.persistence.util.AscDesc;
 import com.epam.esm.persistence.dao.EntityDAO;
-import com.epam.esm.persistence.dao.EntityFinder;
-import com.epam.esm.persistence.dao.tag.TagDAO;
+import com.epam.esm.persistence.util.EntityFinder;
+import com.epam.esm.persistence.dao.TagDAO;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.tag.TagFinder;
+import com.epam.esm.persistence.util.TagFinder;
 import com.epam.esm.persistence.exceptions.DAOException;
 import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @Service
-public class TagService extends AbstractEntityService<Tag> {
+public class TagService implements EntityService<Tag> {
 
     private static final String WRONG_DAO_MESSAGE = "Wrong DAO";
     private static TagService INSTANCE = new TagService();

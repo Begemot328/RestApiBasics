@@ -32,10 +32,11 @@ this.searchCondition = sortCondition + BLANK + OR + BLANK
 константы повыносить в енамы
 половину удалить)
 14. запросы и константы в енамы пойдут
-файндер делаешь бином и автовайришь его сюда. передаешь параметр.
+файндер делаешь бином и автовайришь его сюда. передаешь параметр. (финдер - бин. сбрасывается вместо создания)
 15.
 подготовь плз постман коллекцию по эндпоинтам.
 16.и тесты! 
+17.
 
 Model Module
 
@@ -61,19 +62,13 @@ Need to review connection pool logic (static initialization, DbResourceManager w
 
 Service Module
 
-
-
 AbstractEntityService is not needed as it duplicates interface
 CertificateService - the purpose of this logic is not clear : private static CertificateService INSTANCE = new CertificateService();
 Remove AbstractEntityValidator
 There is no point in using base class if we need to add the following verifications:
                              if (dao instanceof CertificateDAO) {
 
-
-
 Common
-
-
 
 Please use more meaningful exception names, messages.
 Please review your @Autowired logic, as it a bit messy (field / setter / constructor ) and use the best approach
