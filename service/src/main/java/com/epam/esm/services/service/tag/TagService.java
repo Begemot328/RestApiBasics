@@ -101,11 +101,18 @@ public class TagService implements EntityService<Tag> {
 
     public Collection<Tag> findBy(EntityFinder<Tag> entityFinder) throws ServiceException {
         try {
-            return ((TagDAO) dao).findBy(entityFinder);
+            return  dao.findBy(entityFinder);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
+
+    public Collection<Tag> findByCertificate(int certificateId) throws ServiceException {
+        finder.newFinder();
+        finder.findByCertificate(certificateId);
+        return findBy(finder);
+    }
+
 
     public Collection<Tag> find(Map<String, String> params) throws ServiceException {
         finder.newFinder();

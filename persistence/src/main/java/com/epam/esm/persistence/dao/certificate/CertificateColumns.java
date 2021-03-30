@@ -6,6 +6,7 @@ public enum CertificateColumns {
     DURATION("duration"),
     PRICE("price"),
     TAG_NAME("tag_name"),
+    TAG_ID("tag_id"),
     ID("id"),
     LAST_UPDATE_DATE("last_update_date"),
     CREATE_DATE ("create_date");

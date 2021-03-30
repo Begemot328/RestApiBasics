@@ -1,5 +1,6 @@
 package com.epam.esm.web.controller;
 
+import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
@@ -52,6 +53,19 @@ public class TagController {
             final Tag tag = tagService.read(id);
             return tag != null
                     ? new ResponseEntity<>(tag, HttpStatus.OK)
+                    : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/{id}/certificates")
+    public ResponseEntity<?> readTags(@PathVariable(value = "id") int id) {
+        try {
+            Collection<Certificate> list;
+            list = certificateService.findByTag(id);
+            return list != null &&  !list.isEmpty()
+                    ? new ResponseEntity<>(list, HttpStatus.OK)
                     : new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (ServiceException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

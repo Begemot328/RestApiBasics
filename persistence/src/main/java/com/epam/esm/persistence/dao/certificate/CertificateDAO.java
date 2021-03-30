@@ -143,14 +143,14 @@ public class CertificateDAO implements EntityDAO<Certificate> {
                 certificateListExtractor);
     }
 
-    public void addCertificateTag(Certificate certificate, Tag tag) {
+    public void addCertificateTag(int certificateId, int tagId) {
         template.update(CertificateQuerries.ADD_CERTIFICATE_TAG.getValue(),
-                certificate.getId(), tag.getId());
+                certificateId, tagId);
     }
 
-    public void deleteCertificateTag(Certificate certificate, Tag tag) {
+    public void deleteCertificateTag(int certificateId, int tagId) {
         template.update(CertificateQuerries.DELETE_CERTIFICATE_TAG.getValue(),
-                certificate.getId(), tag.getId());
+                certificateId, tagId);
     }
 
     public Collection<Certificate> findBy(EntityFinder<Certificate> finder) throws DAOException {

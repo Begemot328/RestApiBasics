@@ -23,9 +23,9 @@ public class CertificateFinder extends EntityFinder<Certificate> {
                 FinderQuerries.VALUE.getValue() ,description);
     }
 
-    public void findByTagName(String description) {
+    public void findByTag(String name) {
         this.searchCondition = CertificateColumns.TAG_NAME.getValue()
-                + " = '" + description + "'";
+                + " = '" + name + "'";
     }
 
     public void findByPriceLess(BigDecimal price) {
@@ -34,5 +34,9 @@ public class CertificateFinder extends EntityFinder<Certificate> {
 
     public void findByPriceMore(BigDecimal price) {
         this.searchCondition = CertificateColumns.PRICE.getValue() + " >= " + price;
+    }
+
+    public void findByTag(int id) {
+        this.searchCondition = CertificateColumns.TAG_ID.getValue() + " = " + id;
     }
 }

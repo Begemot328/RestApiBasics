@@ -58,6 +58,19 @@ public class CertificateController {
         }
     }
 
+    @GetMapping(value = "/{id}/tags")
+    public ResponseEntity<?> readTags(@PathVariable(value = "id") int id) {
+        try {
+            Collection<Tag> list;
+                list = tagService.findByCertificate(id);
+            return list != null &&  !list.isEmpty()
+                    ? new ResponseEntity<>(list, HttpStatus.OK)
+                    : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Tag> delete(@PathVariable(value = "id") int id) {
         try {
