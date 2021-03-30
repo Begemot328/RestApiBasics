@@ -4,6 +4,8 @@ import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.services.exceptions.ValidationException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class CertificateValidator extends AbstractEntityValidator<Certificate>{
     @Override
@@ -18,7 +20,7 @@ public class CertificateValidator extends AbstractEntityValidator<Certificate>{
         if (certificate.getDuration() <= 0) {
             throw new ValidationException("Non-positive duration!");
         }
-        if (certificate.getPrice() <= 0) {
+        if (certificate.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new ValidationException("Non-positive price!");
         }
 

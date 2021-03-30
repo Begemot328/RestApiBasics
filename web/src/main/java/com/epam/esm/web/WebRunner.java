@@ -1,8 +1,7 @@
 package com.epam.esm.web;
 
-import com.epam.esm.persistence.pool.DbParameter;
 import com.epam.esm.services.exceptions.ServiceException;
-import com.epam.esm.services.service.TagService;
+import com.epam.esm.services.service.tag.TagService;
 import com.epam.esm.web.controller.TagController;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

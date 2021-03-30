@@ -1,9 +1,12 @@
-package com.epam.esm.persistence.dao;
+package com.epam.esm.persistence.dao.certificate;
 
+import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.exceptions.DAOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,34 +21,9 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
-public class CertificateDAO extends AbstractEntityDAO<Certificate> {
-    private static final String WHERE_TAG_ID = " WHERE tag_id = ?";
-    public static final String TAG_ID = "tag_id";
-    private static final String READ_BY_TAG_QUERY = "SELECT * FROM tag_certificates";
-    private static final String WHERE_ID = " WHERE id = ?";
-    private static final String READ_QUERY = "SELECT * FROM certificates.certificate";
-    private static final String INSERT_QUERY =
-            "INSERT INTO certificates.certificate (name, description, price," +
-                    "duration, create_date, last_update_date) VALUES (?,?,?,?,?,?);";
-    private static final String UPDATE_QUERY =
-            "UPDATE certificates.certificate SET name=?, description=?, price=?," +
-                    "duration=?, create_date=?, last_update_date=? " +
-                    "WHERE id = ?;";
-    private static final String DELETE_QUERY =
-            "DELETE FROM certificates.certificate  " +
-                    "WHERE id = ?;";
-    private static final String ADD_CERTIFICATE_TAG = "INSERT INTO certificates.certificate_tag " +
-            "(certificate_id, tag_id) VALUES (?,?);";
-    private static final String DELETE_CERTIFICATE_TAG = "DELETE FROM certificates.certificate_tag " +
-            "WHERE certificate_id=? AND tag_id=?;";
+public class CertificateDAO implements EntityDAO<Certificate> {
+    static Logger logger = LoggerFactory.getLogger(CertificateDAO.class);
 
-    public static final String DESCRIPTION = "description";
-    public static final String NAME = "name";
-    public static final String DURATION = "duration";
-    public static final String PRICE = "price";
-    public static final String ID = "id";
-    public static final String LAST_UPDATE_DATE = "last_update_date";
-    public static final String CREATE_DATE = "create_date";
     private JdbcTemplate template;
 
     @Autowired
@@ -68,12 +46,12 @@ public class CertificateDAO extends AbstractEntityDAO<Certificate> {
 
             if(resultSet.next()) {
                 certificate = new Certificate(
-                        resultSet.getString(NAME),
-                        resultSet.getString(DESCRIPTION),
-                        resultSet.getDouble(PRICE),
-                        resultSet.getInt(DURATION),
-                        resultSet.getDate(CREATE_DATE).toLocalDate(),
-                        resultSet.getDate(LAST_UPDATE_DATE).toLocalDate()
+                        resultSet.getString(CertificateColumns.NAME.getValue()),
+                        resultSet.getString(CertificateColumns.DESCRIPTION.getValue()),
+                        resultSet.getBigDecimal(CertificateColumns.PRICE.getValue()),
+                        resultSet.getInt(CertificateColumns.DURATION.getValue()),
+                        resultSet.getDate(CertificateColumns.CREATE_DATE.getValue()).toLocalDate(),
+                        resultSet.getDate(CertificateColumns.LAST_UPDATE_DATE.getValue()).toLocalDate()
                         );
                 certificate.setId(resultSet.getInt(ID));
             }
@@ -89,12 +67,12 @@ public class CertificateDAO extends AbstractEntityDAO<Certificate> {
 
             while (resultSet.next()) {
                 certificate = new Certificate(
-                        resultSet.getString(NAME),
-                        resultSet.getString(DESCRIPTION),
-                        resultSet.getDouble(PRICE),
-                        resultSet.getInt(DURATION),
-                        resultSet.getDate(CREATE_DATE).toLocalDate(),
-                        resultSet.getDate(LAST_UPDATE_DATE).toLocalDate()
+                        resultSet.getString(CertificateColumns.NAME.getValue()),
+                        resultSet.getString(CertificateColumns.DESCRIPTION.getValue()),
+                        resultSet.getBigDecimal(CertificateColumns.PRICE.getValue()),
+                        resultSet.getInt(CertificateColumns.DURATION.getValue()),
+                        resultSet.getDate(CertificateColumns.CREATE_DATE.getValue()).toLocalDate(),
+                        resultSet.getDate(CertificateColumns.LAST_UPDATE_DATE.getValue()).toLocalDate()
                 );
                 certificate.setId(resultSet.getInt(ID));
                 if (!list.contains(certificate)) {
@@ -111,16 +89,18 @@ public class CertificateDAO extends AbstractEntityDAO<Certificate> {
 
         template.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement(CertificateQuerries.INSERT_QUERY.getValue(),
+                            Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, certificate.getName());
             ps.setString(2, certificate.getDescription());
-            ps.setDouble(3, certificate.getPrice());
+            ps.setBigDecimal(3, certificate.getPrice());
             ps.setInt(4, certificate.getDuration());
             ps.setDate(5, Date.valueOf(certificate.getCreateDate()));
             ps.setDate(6, Date.valueOf(certificate.getLastUpdateDate()));
             return ps;
         }, keyHolder);
         if (keyHolder.getKey() == null) {
+            logger.error("empty keyholder");
             throw new DAOException("empty keyholder");
         }
         certificate.setId(keyHolder.getKey().intValue());
@@ -129,14 +109,15 @@ public class CertificateDAO extends AbstractEntityDAO<Certificate> {
 
     @Override
     public Certificate read(int id) throws DAOException {
-        return getTemplate().query(READ_QUERY
-                .concat(WHERE_ID.replace("?", Integer.toString(id))),
+        return getTemplate().query(CertificateQuerries.READ_QUERY.getValue()
+                .concat(CertificateQuerries.WHERE_ID.getValue()
+                        .replace("?", Integer.toString(id))),
                         certificateExtractor);
     }
 
     @Override
     public void update(Certificate certificate) throws DAOException {
-        template.update(UPDATE_QUERY, certificate.getName(),
+        template.update(CertificateQuerries.UPDATE_QUERY.getValue(), certificate.getName(),
                 certificate.getDescription(),
                 certificate.getPrice(),
                 certificate.getDuration(),
@@ -147,33 +128,35 @@ public class CertificateDAO extends AbstractEntityDAO<Certificate> {
 
     @Override
     public void delete(int id) throws DAOException {
-        template.update(DELETE_QUERY, id);
+        template.update(CertificateQuerries.DELETE_QUERY.getValue(), id);
     }
 
     @Override
     public Collection<Certificate> findAll() throws DAOException {
-        return getTemplate().query(READ_QUERY, certificateListExtractor);
+        return getTemplate().query(CertificateQuerries.READ_QUERY.getValue(), certificateListExtractor);
     }
 
     public Collection<Certificate> findAllByTag(Tag tag) throws DAOException {
-        return getTemplate().query(READ_BY_TAG_QUERY
-                        .concat(WHERE_TAG_ID
+        return getTemplate().query(CertificateQuerries.READ_BY_TAG_QUERY.getValue()
+                        .concat(CertificateQuerries.WHERE_TAG_ID.getValue()
                                 .replace("?", Integer.toString(tag.getId()))),
                 certificateListExtractor);
     }
 
     public void addCertificateTag(Certificate certificate, Tag tag) {
-        template.update(ADD_CERTIFICATE_TAG, certificate.getId(), tag.getId());
+        template.update(CertificateQuerries.ADD_CERTIFICATE_TAG.getValue(),
+                certificate.getId(), tag.getId());
     }
 
     public void deleteCertificateTag(Certificate certificate, Tag tag) {
-        template.update(DELETE_CERTIFICATE_TAG, certificate.getId(), tag.getId());
+        template.update(CertificateQuerries.DELETE_CERTIFICATE_TAG.getValue(),
+                certificate.getId(), tag.getId());
     }
 
     public Collection<Certificate> findBy(EntityFinder<Certificate> finder) throws DAOException {
-        System.out.println(READ_BY_TAG_QUERY
+        System.out.println(CertificateQuerries.READ_BY_TAG_QUERY.getValue()
                         .concat(finder.getQuery()));
-        return getTemplate().query(READ_BY_TAG_QUERY
+        return getTemplate().query(CertificateQuerries.READ_BY_TAG_QUERY.getValue()
                         .concat(finder.getQuery()),
                 certificateListExtractor);
     }

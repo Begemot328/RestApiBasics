@@ -1,6 +1,9 @@
 package com.epam.esm.persistence.pool;
 
+import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -9,30 +12,41 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @Component
-public class DBCPDataSource extends BasicDataSource {
+public class DBCPDataSource {
+    static Logger logger = LoggerFactory.getLogger(DBCPDataSource.class);
+
 
     private BasicDataSource ds = new BasicDataSource();
 
-    @Value("${database.db.url}")
+    @Value("${db.url}")
     private String url;
-    @Value("${database.db.user}")
+    @Value("${db.user}")
     private String login;
-    @Value("${database.db.password}")
+    @Value("${db.password}")
     private String password;
-    @Value("${database.db.driver}")
+    @Value("${db.driver}")
     private String driver;
-    @Value("${database.db.timezone}")
+    @Value("${db.timezone}")
     private String serverTimezone;
-    @Value("${database.db.useUnicode}")
+    @Value("${db.useUnicode}")
     private String useUnicode;
-    @Value("${database.db.initpoolsize}")
+    @Value("${db.initpoolsize}")
     private String initpoolsize;
-    @Value("${database.db.maxpoolsize}")
+    @Value("${db.maxpoolsize}")
     private String maxpoolsize;
-    @Value("${database.db.timezone}")
+    @Value("${db.maxOpenedPreparedStatements}")
     private String maxOpenedPreparedStatements;
 
-    {
+    public Connection getConnection() throws SQLException {
+        return ds.getConnection();
+    }
+
+    private DBCPDataSource(){
+        logger.debug("DBCPDataSource() constructor");
+    }
+
+    @Bean
+    public BasicDataSource getDataSource() {
         ds.setUrl(url);
         ds.setUsername(login);
         ds.setPassword(password);
@@ -42,11 +56,6 @@ public class DBCPDataSource extends BasicDataSource {
         ds.setMinIdle(Integer.parseInt(initpoolsize));
         ds.setMaxIdle(Integer.parseInt(maxpoolsize));
         ds.setMaxOpenPreparedStatements(Integer.parseInt(maxOpenedPreparedStatements));
+        return ds;
     }
-
-    public Connection getConnection() throws SQLException {
-        return ds.getConnection();
-    }
-
-    private DBCPDataSource(){ }
 }

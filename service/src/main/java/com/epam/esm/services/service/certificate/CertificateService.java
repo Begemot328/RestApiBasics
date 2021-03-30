@@ -1,43 +1,42 @@
-package com.epam.esm.services.service;
+package com.epam.esm.services.service.certificate;
 
 import com.epam.esm.persistence.util.AscDesc;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.util.CertificateFinder;
-import com.epam.esm.persistence.dao.CertificateDAO;
+import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.exceptions.DAOException;
 import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
+import com.epam.esm.services.service.EntityService;
+import com.epam.esm.services.util.DoubleUtil;
 import com.epam.esm.services.validator.EntityValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class CertificateService implements EntityService<Certificate> {
 
-    private static CertificateService INSTANCE = new CertificateService();
-    private static final String WRONG_DAO_MESSAGE = "Wrong DAO!";
-    private EntityDAO<Certificate> dao;
+    @Autowired
+    private static CertificateService INSTANCE;
+    private CertificateDAO dao;
     private EntityValidator<Certificate> validator;
-
-    private CertificateService() {
-    }
+    private CertificateFinder finder;
 
     @Autowired
-    public void setDao(EntityDAO<Certificate> dao) {
+    private CertificateService(CertificateDAO dao,
+            EntityValidator<Certificate> validator, CertificateFinder finder) {
         this.dao = dao;
-    }
-
-    @Autowired
-    public void setValidator(EntityValidator<Certificate> validator) {
         this.validator = validator;
+        this.finder = finder;
     }
 
     public static EntityService<Certificate> getInstance() {
@@ -66,6 +65,9 @@ public class CertificateService implements EntityService<Certificate> {
     @Override
     public void delete(int id) throws ServiceException {
         try {
+            if (dao.read(id) == null) {
+            throw new ServiceException("Entity does not exist!");
+        }
             dao.delete(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -93,57 +95,49 @@ public class CertificateService implements EntityService<Certificate> {
 
     @Override
     public Collection<Certificate> findBy(EntityFinder<Certificate> entityFinder) throws ServiceException {
-        if (dao instanceof CertificateDAO) {
             try {
-                return ((CertificateDAO) dao).findBy(entityFinder);
+                return  dao.findBy(entityFinder);
             } catch (DAOException e) {
                 throw new ServiceException(e);
             }
-        } else {
-            throw new ServiceException(WRONG_DAO_MESSAGE);
-        }
-    }
-
-    public Collection<Certificate> findAll(Tag tag) throws ServiceException {
-        try {
-            if (dao instanceof CertificateDAO) {
-                return ((CertificateDAO) dao).findAllByTag(tag);
-            } else {
-                throw new ServiceException(WRONG_DAO_MESSAGE);
-            }
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    public void addTagCertificate(Tag tag, Certificate certificate) throws ServiceException {
-        if (dao instanceof CertificateDAO) {
-            ((CertificateDAO) dao).addCertificateTag(certificate, tag);
-        } else {
-            throw new ServiceException(WRONG_DAO_MESSAGE);
-        }
-    }
-
-    public void deleteTagCertificate(Tag tag, Certificate certificate) throws ServiceException {
-        if (dao instanceof CertificateDAO) {
-            ((CertificateDAO) dao).deleteCertificateTag(certificate, tag);
-        } else {
-            throw new ServiceException(WRONG_DAO_MESSAGE);
-        }
     }
 
     public Collection<Certificate> find(Map<String, String> params) throws ServiceException {
-        CertificateFinder finder = new CertificateFinder();
+        finder.newFinder();
         for (String key : params.keySet()) {
             if (key.contains("sort")) {
-                finder.sortBy(CertificateSortingParameters.valueOf(key.toUpperCase().replace("-", "_")).getValue(),
-                        AscDesc.valueOf(params.get(key)));
+                finder.sortBy(CertificateSortingParameters.getEntryByParameter(key).getValue(),
+                        AscDesc.getValue(params.get(key)));
             } else {
-                finder.findBy(CertificateSortingParameters.valueOf(key.toUpperCase().replace("-", "_")).getValue(),
-                        params.get(key));
+                Optional<CertificateSearchParameters> optional =
+                Optional.ofNullable(CertificateSearchParameters.getEntryByParameter(key));
+                if (optional.isPresent()) {
+                    switch (optional.get()) {
+                        case NAME:
+                            finder.findByName(params.get(key));
+                            break;
+                        case DESCRIPTION:
+                            if(StringUtils.isNotEmpty(params.get(key))) {
+                                finder.findByDescription(params.get(key));
+                            }
+                            break;
+                        case TAGNAME:
+                            if(StringUtils.isNotEmpty(params.get(key))) {
+                                finder.findByTagName(params.get(key));
+                            }
+                            break;
+                        case PRICE_LESS:
+                            Optional<BigDecimal> optionalDouble = DoubleUtil.parseDoubleOptional(params.get(key));
+                            optionalDouble.ifPresent(finder::findByPriceLess);
+                            break;
+                        case PRICE_MORE:
+                            optionalDouble = DoubleUtil.parseDoubleOptional(params.get(key));
+                            optionalDouble.ifPresent(finder::findByPriceMore);
+                            break;
+                    }
+                }
             }
         }
-
         return findBy(finder);
     }
 }

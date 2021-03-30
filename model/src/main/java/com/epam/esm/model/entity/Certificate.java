@@ -1,5 +1,6 @@
 package com.epam.esm.model.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -7,12 +8,12 @@ public class Certificate extends Entity{
 
     private String name;
     private String description;
-    private double price;
+    private BigDecimal price;
     private int duration;
     private LocalDate createDate;
     private LocalDate lastUpdateDate;
 
-    public Certificate(String name, String description, double price,
+    public Certificate(String name, String description, BigDecimal price,
                        int duration, LocalDate createDate,
                        LocalDate lastUpdateDate) {
         this.name = name;
@@ -28,7 +29,7 @@ public class Certificate extends Entity{
         if (this == o) return true;
         if (!(o instanceof Certificate)) return false;
         Certificate that = (Certificate) o;
-        return Double.compare(that.price, price) == 0 && duration == that.duration && name.equals(that.name) && Objects.equals(description, that.description) && createDate.equals(that.createDate) && lastUpdateDate.equals(that.lastUpdateDate);
+        return that.price.equals(price) && duration == that.duration && name.equals(that.name) && Objects.equals(description, that.description) && createDate.equals(that.createDate) && lastUpdateDate.equals(that.lastUpdateDate);
     }
 
     @Override
@@ -52,11 +53,11 @@ public class Certificate extends Entity{
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

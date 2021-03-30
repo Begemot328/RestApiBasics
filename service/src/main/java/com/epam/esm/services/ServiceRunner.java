@@ -1,9 +1,8 @@
 package com.epam.esm.services;
 
 import com.epam.esm.persistence.exceptions.DAOException;
-import com.epam.esm.persistence.pool.DbParameter;
 import com.epam.esm.services.exceptions.ServiceException;
-import com.epam.esm.services.service.TagService;
+import com.epam.esm.services.service.tag.TagService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ServiceRunner {

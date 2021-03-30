@@ -13,6 +13,7 @@ import java.util.Collection;
  * @version 1.0
  */
 public interface EntityDAO<T extends Entity> {
+    public static final String ID = "id";
 
     /**
      * Create method

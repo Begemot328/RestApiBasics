@@ -1,9 +1,12 @@
-package com.epam.esm.persistence.dao;
+package com.epam.esm.persistence.dao.tag;
 
+import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.exceptions.DAOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,26 +24,12 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
-public class TagDAO extends AbstractEntityDAO<Tag> {
-    private static final String WHERE_ID = " WHERE id = ?";
-    private static final String WHERE_CERTIFICATE_ID = " WHERE certificate_id = ?";
-    public static final String CERTIFICATE_ID = "certificate_id";
-    private static final String READ_QUERY = "SELECT * FROM certificates.tag";
-    private static final String READ_BY_TAG_QUERY = "SELECT * FROM certificate_tags";
-    private static final String INSERT_QUERY =
-            "INSERT INTO certificates.tag (name) VALUES (?);";
-    private static final String UPDATE_QUERY =
-            "UPDATE certificates.tag  SET name = ? " +
-                    "WHERE id = ?;";
-    private static final String DELETE_QUERY =
-            "DELETE FROM certificates.tag  " +
-                    "WHERE id = ?;";
-    public static final String NAME = "name";
+public class TagDAO implements EntityDAO<Tag> {
+    static Logger logger = LoggerFactory.getLogger(TagDAO.class);
 
-    @Autowired
     private JdbcTemplate template;
 
-
+    @Autowired
     public TagDAO(JdbcTemplate template) {
         this.template = template;
     }
@@ -61,7 +50,7 @@ public class TagDAO extends AbstractEntityDAO<Tag> {
             String name;
             int id;
             if(resultSet.next()) {
-                tag = new Tag(resultSet.getString(NAME));
+                tag = new Tag(resultSet.getString(TagColumns.NAME.getValue()));
                 tag.setId(resultSet.getInt(ID));
             }
             return tag;
@@ -76,7 +65,7 @@ public class TagDAO extends AbstractEntityDAO<Tag> {
             String name;
             int id;
             while (resultSet.next()) {
-                tag = new Tag(resultSet.getString(NAME));
+                tag = new Tag(resultSet.getString(TagColumns.NAME.getValue()));
                 tag.setId(resultSet.getInt(ID));
                 if (!list.contains(tag)) {
                     list.add(tag);
@@ -93,11 +82,13 @@ public class TagDAO extends AbstractEntityDAO<Tag> {
 
         template.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement(TagQuerries.INSERT_QUERY.getValue(),
+                            Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, tag.getName());
             return ps;
         }, keyHolder);
         if (keyHolder.getKey() == null) {
+            logger.error("empty keyholder");
             throw new DAOException("empty keyholder");
         }
         tag.setId(keyHolder.getKey().intValue());
@@ -106,38 +97,38 @@ public class TagDAO extends AbstractEntityDAO<Tag> {
 
     @Override
     public Tag read(int id) throws DAOException {
-        return getTemplate().query(READ_QUERY
-                .concat(WHERE_ID.replace("?", Integer.toString(id))),
+        return getTemplate().query(TagQuerries.READ_QUERY.getValue()
+                .concat(TagQuerries.WHERE_ID.getValue().replace("?", Integer.toString(id))),
                         tagExtractor);
     }
 
     @Override
     public void update(Tag tag) throws DAOException {
-        template.update(UPDATE_QUERY, tag.getName(), tag.getId());
+        template.update(TagQuerries.UPDATE_QUERY.getValue(), tag.getName(), tag.getId());
     }
 
     @Override
     public void delete(int id) throws DAOException {
-        template.update(DELETE_QUERY, id);
+        template.update(TagQuerries.DELETE_QUERY.getValue(), id);
     }
 
     @Override
     public Collection<Tag> findAll() throws DAOException {
-        return getTemplate().query(READ_QUERY, tagListExtractor);
+        return getTemplate().query(TagQuerries.READ_QUERY.getValue(), tagListExtractor);
     }
 
 
     public Collection<Tag> findAllByCertificate(Certificate certificate) throws DAOException {
-        return getTemplate().query(READ_BY_TAG_QUERY
-                .concat(WHERE_CERTIFICATE_ID
+        return getTemplate().query(TagQuerries.READ_BY_TAG_QUERY.getValue()
+                .concat(TagQuerries.WHERE_CERTIFICATE_ID.getValue()
                         .replace("?", Integer.toString(certificate.getId()))),
                 tagListExtractor);
     }
 
     public Collection<Tag> findBy(EntityFinder<Tag> finder) throws DAOException {
-        System.out.println(READ_BY_TAG_QUERY
+        System.out.println(TagQuerries.READ_BY_TAG_QUERY.getValue()
                 .concat(finder.getQuery()));
-        return getTemplate().query(READ_BY_TAG_QUERY
+        return getTemplate().query(TagQuerries.READ_BY_TAG_QUERY.getValue()
                         .concat(finder.getQuery()),
                 tagListExtractor);
     }

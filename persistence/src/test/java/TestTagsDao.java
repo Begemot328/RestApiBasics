@@ -1,6 +1,7 @@
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.dao.tag.TagColumns;
 import com.epam.esm.persistence.util.AscDesc;
-import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.persistence.util.TagFinder;
 import com.epam.esm.persistence.exceptions.DAOException;
 import org.junit.jupiter.api.Test;
@@ -30,13 +31,13 @@ public class TestTagsDao extends TestDao {
         tagsDao.create(cardTag);
 
         finder = new TagFinder();
-        finder.sortByName(AscDesc.DESC);
+        finder.sortBy(TagColumns.NAME.getValue(), AscDesc.DESC);
         ArrayList<Tag> list = (ArrayList<Tag>) tagsDao.findBy(finder);
         assertTrue(list.indexOf(tag) > list.indexOf(cardTag));
 
 
         finder = new TagFinder();
-        finder.sortByName(AscDesc.ASC);
+        finder.sortBy(TagColumns.NAME.getValue(), AscDesc.ASC);
         list = (ArrayList<Tag>) tagsDao.findBy(finder);
         assertTrue(list.indexOf(tag) < list.indexOf(cardTag));
 
