@@ -13,7 +13,6 @@ public class TestDao {
     private static final String BACKUP_DATABASE = "SQL/db.sql";
     private JdbcTemplate template;
 
-
     private void setDatabase(String database) throws FileNotFoundException {
         Scanner scanner = new Scanner(new FileReader(new File(database)));
         scanner.useDelimiter(";");

@@ -3,6 +3,8 @@ package com.epam.esm.persistence.util;
 import com.epam.esm.model.entity.Entity;
 import com.epam.esm.persistence.dao.EntityDAO;
 
+import java.util.Objects;
+
 
 public abstract class EntityFinder<T extends Entity> {
     protected String searchCondition = "";
@@ -55,5 +57,26 @@ public abstract class EntityFinder<T extends Entity> {
         } else {
             this.sortCondition = sorting + " " + ascDesc.toString();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EntityFinder<?> that = (EntityFinder<?>) o;
+        return Objects.equals(getSearchCondition(), that.getSearchCondition()) && Objects.equals(getSortCondition(), that.getSortCondition());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSearchCondition(), getSortCondition());
+    }
+
+    @Override
+    public String toString() {
+        return "EntityFinder{" +
+                "searchCondition='" + searchCondition + '\'' +
+                ", sortCondition='" + sortCondition + '\'' +
+                '}';
     }
 }
