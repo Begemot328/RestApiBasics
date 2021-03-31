@@ -154,16 +154,28 @@ public class CertificateService implements EntityService<Certificate> {
     }
 
     public void addCertificateTag(Certificate certificate, int tagId) throws ServiceException, ValidationException {
-        update(certificate);
+        Optional<Certificate> optional;
+        try {
+            optional = Optional.ofNullable(dao.read(certificate.getId()));
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        if (optional.isEmpty()) {
+            create(certificate);
+        }
         dao.addCertificateTag(certificate.getId(), tagId);
     }
 
     public void addCertificateTag(int certificateId, Tag tag) throws ServiceException, ValidationException {
-        tagService.update(tag);
+        Optional<Tag> optional;
+            optional = Optional.ofNullable(tagService.read(tag.getId()));
+        if (optional.isEmpty()) {
+            tagService.create(tag);
+        }
         dao.addCertificateTag(certificateId, tag.getId());
     }
 
-    public void deleteCertificateTag(int certificateId, int tagId) throws ServiceException, ValidationException {
+    public void deleteCertificateTag(int certificateId, int tagId) throws ServiceException {
             if (findByTag(tagId).stream().map(Entity::getId).anyMatch(id -> id == tagId)) {
                 dao.deleteCertificateTag(certificateId, tagId);
             } else {

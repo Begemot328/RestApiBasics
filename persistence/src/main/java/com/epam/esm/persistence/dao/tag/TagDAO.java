@@ -25,6 +25,9 @@ import java.util.List;
 
 @Component
 public class TagDAO implements EntityDAO<Tag> {
+
+    public TagDAO() {}
+
     static Logger logger = LoggerFactory.getLogger(TagDAO.class);
 
     private JdbcTemplate template;
@@ -33,7 +36,6 @@ public class TagDAO implements EntityDAO<Tag> {
     public TagDAO(JdbcTemplate template) {
         this.template = template;
     }
-
 
     public void setTemplate(JdbcTemplate template) {
         this.template = template;
@@ -115,14 +117,6 @@ public class TagDAO implements EntityDAO<Tag> {
     @Override
     public Collection<Tag> findAll() throws DAOException {
         return getTemplate().query(TagQuerries.READ_QUERY.getValue(), tagListExtractor);
-    }
-
-
-    public Collection<Tag> findAllByCertificate(Certificate certificate) throws DAOException {
-        return getTemplate().query(TagQuerries.READ_BY_TAG_QUERY.getValue()
-                .concat(TagQuerries.WHERE_CERTIFICATE_ID.getValue()
-                        .replace("?", Integer.toString(certificate.getId()))),
-                tagListExtractor);
     }
 
     public Collection<Tag> findBy(EntityFinder<Tag> finder) throws DAOException {

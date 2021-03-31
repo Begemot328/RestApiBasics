@@ -29,9 +29,9 @@ public class TagService implements EntityService<Tag> {
     private TagFinder finder;
 
     @Autowired
-    private TagService(TagDAO dao,
-                       EntityValidator<Tag> validator,
-                       TagFinder finder) {
+    public TagService(TagDAO dao,
+                      EntityValidator<Tag> validator,
+                      TagFinder finder) {
         this.dao = dao;
         this.validator = validator;
         this.finder = finder;
@@ -91,14 +91,6 @@ public class TagService implements EntityService<Tag> {
         }
     }
 
-    public Collection<Tag> findAll(Certificate certificate) throws ServiceException {
-        try {
-            return dao.findAllByCertificate(certificate);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-    }
-
     public Collection<Tag> findBy(EntityFinder<Tag> entityFinder) throws ServiceException {
         try {
             return  dao.findBy(entityFinder);
@@ -113,13 +105,12 @@ public class TagService implements EntityService<Tag> {
         return findBy(finder);
     }
 
-
     public Collection<Tag> find(Map<String, String> params) throws ServiceException {
         finder.newFinder();
         for (String key : params.keySet()) {
-            if (key.contains("sort")) {
+            if (key.contains("SORT")) {
                 finder.sortBy(TagSortingParameters.getEntryByParameter(key).getValue(),
-                        AscDesc.valueOf(params.get(key)));
+                        AscDesc.getValue(params.get(key)));
             } else {
                 Optional<TagSearchParameters> optional =
                         Optional.ofNullable(TagSearchParameters.getEntryByParameter(key));
@@ -132,5 +123,4 @@ public class TagService implements EntityService<Tag> {
         }
         return findBy(finder);
     }
-
 }
