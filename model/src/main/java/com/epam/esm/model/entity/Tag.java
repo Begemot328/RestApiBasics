@@ -5,6 +5,8 @@ import java.util.Objects;
 public class Tag extends Entity {
     private String name;
 
+    public Tag() {}
+
     public Tag(String name) {
         this.name = name;
     }

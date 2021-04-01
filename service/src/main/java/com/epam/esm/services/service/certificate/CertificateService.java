@@ -8,6 +8,7 @@ import com.epam.esm.persistence.util.CertificateFinder;
 import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.exceptions.DAOException;
+import com.epam.esm.services.exceptions.BadRequestException;
 import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
 import com.epam.esm.services.service.EntityService;
@@ -72,8 +73,8 @@ public class CertificateService implements EntityService<Certificate> {
     public void delete(int id) throws ServiceException {
         try {
             if (dao.read(id) == null) {
-            throw new ServiceException("Entity does not exist!");
-        }
+                throw new ServiceException("Entity does not exist!");
+            }
             dao.delete(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -101,11 +102,11 @@ public class CertificateService implements EntityService<Certificate> {
 
     @Override
     public Collection<Certificate> findBy(EntityFinder<Certificate> entityFinder) throws ServiceException {
-            try {
-                return  dao.findBy(entityFinder);
-            } catch (DAOException e) {
-                throw new ServiceException(e);
-            }
+        try {
+            return dao.findBy(entityFinder);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
     }
 
     public Collection<Certificate> find(Map<String, String> params) throws ServiceException {
@@ -113,32 +114,38 @@ public class CertificateService implements EntityService<Certificate> {
         for (String key : params.keySet()) {
             if (key.contains("sort")) {
                 finder.sortBy(CertificateSortingParameters.getEntryByParameter(key).getValue(),
-                        AscDesc.getValue(params.get(key)));
+                        parseAscDesc(params.get(key)));
             } else {
                 Optional<CertificateSearchParameters> optional =
-                Optional.ofNullable(CertificateSearchParameters.getEntryByParameter(key));
+                        Optional.ofNullable(CertificateSearchParameters.getEntryByParameter(key));
                 if (optional.isPresent()) {
                     switch (optional.get()) {
                         case NAME:
                             finder.findByName(params.get(key));
                             break;
                         case DESCRIPTION:
-                            if(StringUtils.isNotEmpty(params.get(key))) {
+                            if (StringUtils.isNotEmpty(params.get(key))) {
                                 finder.findByDescription(params.get(key));
                             }
                             break;
                         case TAGNAME:
-                            if(StringUtils.isNotEmpty(params.get(key))) {
+                            if (StringUtils.isNotEmpty(params.get(key))) {
                                 finder.findByTag(params.get(key));
                             }
                             break;
                         case PRICE_LESS:
-                            Optional<BigDecimal> optionalDouble = DoubleUtil.parseDoubleOptional(params.get(key));
-                            optionalDouble.ifPresent(finder::findByPriceLess);
+                            try {
+                                finder.findByPriceLess(new BigDecimal(params.get(key)));
+                            } catch (NumberFormatException e) {
+                                throw new BadRequestException(e);
+                            }
                             break;
                         case PRICE_MORE:
-                            optionalDouble = DoubleUtil.parseDoubleOptional(params.get(key));
-                            optionalDouble.ifPresent(finder::findByPriceMore);
+                            try {
+                                finder.findByPriceMore(new BigDecimal(params.get(key)));
+                            } catch (NumberFormatException e) {
+                                throw new BadRequestException(e);
+                            }
                             break;
                     }
                 }
@@ -168,7 +175,7 @@ public class CertificateService implements EntityService<Certificate> {
 
     public void addCertificateTag(int certificateId, Tag tag) throws ServiceException, ValidationException {
         Optional<Tag> optional;
-            optional = Optional.ofNullable(tagService.read(tag.getId()));
+        optional = Optional.ofNullable(tagService.read(tag.getId()));
         if (optional.isEmpty()) {
             tagService.create(tag);
         }
@@ -176,11 +183,11 @@ public class CertificateService implements EntityService<Certificate> {
     }
 
     public void deleteCertificateTag(int certificateId, int tagId) throws ServiceException {
-            if (findByTag(tagId).stream().map(Entity::getId).anyMatch(id -> id == tagId)) {
-                dao.deleteCertificateTag(certificateId, tagId);
-            } else {
-                throw new ServiceException("Entity does not exist!");
-            }
+        if (findByTag(tagId).stream().map(Entity::getId).anyMatch(id -> id == tagId)) {
+            dao.deleteCertificateTag(certificateId, tagId);
+        } else {
+            throw new ServiceException("Entity does not exist!");
+        }
     }
 }
 

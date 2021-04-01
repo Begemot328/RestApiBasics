@@ -13,15 +13,9 @@ public class TagFinder extends EntityFinder<Tag> {
                 .replace(FinderQuerries.VALUE.getValue(),name);
     }
 
-    public TagFinder findByCertificate(Certificate certificate) {
-        this.searchCondition = TagColumns.CERTIFICATE_ID.getValue()
-                + " " + certificate.getId();
-        return this;
-    }
-
     public TagFinder findByCertificate(int certificateId) {
         this.searchCondition = TagColumns.CERTIFICATE_ID.getValue()
-                + " " + certificateId;
+                + " = " + certificateId;
         return this;
     }
 }

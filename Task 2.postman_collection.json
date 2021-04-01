@@ -1,0 +1,562 @@
+{
+	"info": {
+		"_postman_id": "d7a5f44c-96ca-4c49-a853-53b62bf0829e",
+		"name": "Task 2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TagController",
+			"item": [
+				{
+					"name": "get all tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all tags name \"b\"",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags?name=b",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all tags sort by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags?sort-by-name=asc",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags"
+							],
+							"query": [
+								{
+									"key": "sort-by-name",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all tags name \"b\" sort by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags?sort-by-name=false&name=b",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags"
+							],
+							"query": [
+								{
+									"key": "sort-by-name",
+									"value": "false"
+								},
+								{
+									"key": "name",
+									"value": "b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get tag 2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags/2",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get tag 2 certificates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags/2/certificates",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags",
+								"2",
+								"certificates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "del tag 2 certificate 1",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags/2/certificates/2",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags",
+								"2",
+								"certificates",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add tag 2 certificate 1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"OZ.by\",\r\n    \"description\": null,\r\n    \"price\": 140.1,\r\n    \"duration\": 10,\r\n    \"createDate\": \"2021-03-22\",\r\n    \"lastUpdateDate\": \"2021-03-22\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags/2/certificates",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags",
+								"2",
+								"certificates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete tag",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags/6",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add tag",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"OZ.by\",\r\n    \"description\": null,\r\n    \"price\": 140.1,\r\n    \"duration\": 10,\r\n    \"createDate\": {\r\n        \"year\": 2021,\r\n        \"month\": \"MARCH\",\r\n        \"dayOfYear\": 81,\r\n        \"chronology\": {\r\n            \"id\": \"ISO\",\r\n            \"calendarType\": \"iso8601\"\r\n        },\r\n        \"era\": \"CE\",\r\n        \"leapYear\": false,\r\n        \"dayOfWeek\": \"MONDAY\",\r\n        \"monthValue\": 3,\r\n        \"dayOfMonth\": 22\r\n    },\r\n    \"lastUpdateDate\": {\r\n        \"year\": 2021,\r\n        \"month\": \"MARCH\",\r\n        \"dayOfYear\": 81,\r\n        \"chronology\": {\r\n            \"id\": \"ISO\",\r\n            \"calendarType\": \"iso8601\"\r\n        },\r\n        \"era\": \"CE\",\r\n        \"leapYear\": false,\r\n        \"dayOfWeek\": \"MONDAY\",\r\n        \"monthValue\": 3,\r\n        \"dayOfMonth\": 22\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags/2/certificates",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags",
+								"2",
+								"certificates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add tag 2 certificate 1 Copy",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"name\": \"games_updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags/",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CertificateController",
+			"item": [
+				{
+					"name": "get all certificates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/certificates",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"certificates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all certificates name o",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/certificates?name=O",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"certificates"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "O"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all certificates sort name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/certificates?sort-by-name=desc",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"certificates"
+							],
+							"query": [
+								{
+									"key": "sort-by-name",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get certificate 1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/certificates/6",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"certificates",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get certificate 2 tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/certificates/2/tags",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"certificates",
+								"2",
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "del certificate 2 tag 1",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/certificates/2/tags",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"certificates",
+								"2",
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add certificate 2 tag 1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 0,\r\n    \"name\": \"gamesdscsd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/certificates/2/tags",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"certificates",
+								"2",
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add certificate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"OZ.by 2\",\r\n    \"description\": \"newly added\",\r\n    \"price\": 140.1,\r\n    \"duration\": 10,\r\n    \"createDate\": \"2021-03-22\",\r\n    \"lastUpdateDate\": \"2021-03-22\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/certificates",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"certificates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete certificate",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"name\": \"games\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/certificates/6",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"certificates",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add certificate 2 tag 1 Copy",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"OZ.by_upd\",\r\n    \"description\": null,\r\n    \"price\": 140.1,\r\n    \"duration\": 10,\r\n    \"createDate\": \"2021-03-22\",\r\n    \"lastUpdateDate\": \"2021-03-22\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/certificates/",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"certificates",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "servlet",
+			"value": "web_war_exploded"
+		}
+	]
+}

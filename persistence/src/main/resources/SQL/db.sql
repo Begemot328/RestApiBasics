@@ -45,7 +45,7 @@ select tag.id as tag_id, tag.name as tag_name, c.id, c.name,
        c.price, c.description,
        c.duration, c.create_date, c.last_update_date
 from tag
-         join certificate_tag ct on ct.tag_id = tag.id
+         left join certificate_tag ct on ct.tag_id = tag.id
          join certificate c on c.id = ct.certificate_id;
 
 drop view if exists certificate_tags;
@@ -55,7 +55,7 @@ select c.id as certificate_id, c.name as certificate_name,  c.price, c.descripti
        c.duration, c.create_date, c.last_update_date, tag.id,
        tag.name
 from certificate c
-         join certificate_tag ct on ct.certificate_id = c.id
+         left join certificate_tag ct on ct.certificate_id = c.id
          join tag on tag.id = ct.tag_id;
 
 insert tag(name) values('sport');

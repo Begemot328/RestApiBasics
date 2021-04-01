@@ -2,6 +2,7 @@ package com.epam.esm.web.controller;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.services.exceptions.BadRequestException;
 import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
 import com.epam.esm.services.service.certificate.CertificateService;
@@ -54,7 +55,7 @@ public class CertificateController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(value = "id") int id) throws ServiceException {
-            tagService.delete(id);
+            certificateService.delete(id);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -88,7 +89,7 @@ public class CertificateController {
     @PostMapping(value = "/{id}/tags",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Tag> create(@PathVariable(value = "id") int id,
+    public ResponseEntity<Tag> createTag(@PathVariable(value = "id") int id,
                                       @RequestBody Tag tag)
             throws ServiceException, ValidationException {
             certificateService.addCertificateTag(id, tag);
@@ -98,11 +99,18 @@ public class CertificateController {
     @DeleteMapping(value = "/{id}/tags/{tag_id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Tag> delete(@PathVariable(value = "id") int id,
+    public ResponseEntity<Tag> deleteTag(@PathVariable(value = "id") int id,
                                       @PathVariable(value = "tag_id") int tagId)
             throws ServiceException {
             certificateService.deleteCertificateTag(id, tagId);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @ExceptionHandler({ BadRequestException.class })
+    public ResponseEntity<Object> handleBadRequestException(
+            Exception ex, WebRequest request) {
+        return new ResponseEntity<Object>(
+                ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ ServiceException.class })

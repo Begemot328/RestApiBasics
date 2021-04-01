@@ -26,8 +26,11 @@ public abstract class EntityFinder<T extends Entity> {
     }
 
     public String getQuery() {
-        StringBuilder query = new StringBuilder(FinderQuerries.WHERE.getValue());
-        query.append(" ").append(searchCondition);
+        StringBuilder query = new StringBuilder();
+        if (!searchCondition.isEmpty()) {
+            query.append(FinderQuerries.WHERE.getValue());
+            query.append(" ").append(searchCondition);
+        }
         if (!sortCondition.isEmpty()) {
             query.append(" ").append(FinderQuerries.ORDER_BY.getValue()).append(" ").append(sortCondition);
         }

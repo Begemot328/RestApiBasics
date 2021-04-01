@@ -110,7 +110,7 @@ public class TagService implements EntityService<Tag> {
         for (String key : params.keySet()) {
             if (key.contains("SORT")) {
                 finder.sortBy(TagSortingParameters.getEntryByParameter(key).getValue(),
-                        AscDesc.getValue(params.get(key)));
+                        parseAscDesc(params.get(key)));
             } else {
                 Optional<TagSearchParameters> optional =
                         Optional.ofNullable(TagSearchParameters.getEntryByParameter(key));

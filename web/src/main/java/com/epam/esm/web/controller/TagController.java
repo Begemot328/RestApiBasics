@@ -2,6 +2,7 @@ package com.epam.esm.web.controller;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.services.exceptions.BadRequestException;
 import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
 import com.epam.esm.services.service.certificate.CertificateService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.Collection;
+import java.util.Map;
 
 
 @RestController
@@ -31,41 +33,41 @@ public class TagController {
         this.certificateService = certificateService;
     }
 
+
+    @GetMapping
+    public ResponseEntity<?> readAll(@RequestParam Map<String,String> params) throws ServiceException {
+            Collection<Tag> list;
+            if (params == null || params.isEmpty()) {
+                list = tagService.findAll();
+            } else {
+                list = tagService.find(params);
+            }
+            return list != null &&  !list.isEmpty()
+                    ? new ResponseEntity<>(list, HttpStatus.OK)
+                    : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> read(@PathVariable(value = "id") int id) {
-        try {
+    public ResponseEntity<?> read(@PathVariable(value = "id") int id) throws ServiceException {
             final Tag tag = tagService.read(id);
             return tag != null
                     ? new ResponseEntity<>(tag, HttpStatus.OK)
                     : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (ServiceException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Tag> delete(@PathVariable(value = "id") int id) {
-        try {
+    public ResponseEntity<Tag> delete(@PathVariable(value = "id") int id) throws ServiceException {
             tagService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ServiceException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Tag> create(@RequestBody Tag tag) {
-        try {
+    public ResponseEntity<Tag> create(@RequestBody Tag tag) throws ServiceException, ValidationException {
             tag = tagService.create(tag);
             return new ResponseEntity<>(tag, HttpStatus.CREATED);
-        } catch (ValidationException e) {
-            return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (ServiceException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @PutMapping(
@@ -77,7 +79,7 @@ public class TagController {
     }
 
     @GetMapping(value = "/{id}/certificates")
-    public ResponseEntity<?> readTags(@PathVariable(value = "id") int id) throws ServiceException {
+    public ResponseEntity<?> readCertificates(@PathVariable(value = "id") int id) throws ServiceException {
             Collection<Certificate> list;
             list = certificateService.findByTag(id);
             return list != null &&  !list.isEmpty()
@@ -88,9 +90,9 @@ public class TagController {
     @PostMapping(value = "/{id}/certificates",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Certificate> add(@PathVariable(value = "id") int id,
-                                           @RequestBody Certificate certificate)
-            throws ServiceException, ValidationException {
+    public ResponseEntity<Certificate> addCertificate(@PathVariable(value = "id") int id,
+                                           @RequestBody Certificate certificate) throws ServiceException,
+            ValidationException {
             certificateService.addCertificateTag(certificate, id);
             return new ResponseEntity<>(certificate, HttpStatus.CREATED);
     }
@@ -98,11 +100,17 @@ public class TagController {
     @DeleteMapping(value = "/{id}/certificates/{certificate_id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Tag> delete(@PathVariable(value = "id") int id,
-                                      @PathVariable(value = "certificate_id") int certificateId)
-            throws ServiceException {
+    public ResponseEntity<Tag> deleteCertificate(@PathVariable(value = "id") int id,
+                                      @PathVariable(value = "certificate_id") int certificateId) throws ServiceException {
             certificateService.deleteCertificateTag(certificateId, id);
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler({ BadRequestException.class })
+    public ResponseEntity<Object> handleBadRequestException(
+            Exception ex, WebRequest request) {
+        return new ResponseEntity<Object>(
+                ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ ServiceException.class })
@@ -120,44 +128,4 @@ public class TagController {
     }
 
 
-    @GetMapping(value = "/{id}/certificates")
-    public ResponseEntity<?> readTags(@PathVariable(value = "id") int id) {
-        try {
-            Collection<Certificate> list;
-            list = certificateService.findByTag(id);
-            return list != null &&  !list.isEmpty()
-                    ? new ResponseEntity<>(list, HttpStatus.OK)
-                    : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (ServiceException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping(value = "/{id}/certificates",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Certificate> add(@PathVariable(value = "id") int id,
-                                           @RequestBody Certificate certificate) {
-        try {
-            certificateService.addCertificateTag(certificate, id);
-            return new ResponseEntity<>(certificate, HttpStatus.CREATED);
-        } catch (ValidationException e) {
-            return  new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-        } catch (ServiceException e) {
-            return  new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
-        }
-    }
-
-    @DeleteMapping(value = "/{id}/certificates/{certificate_id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Tag> delete(@PathVariable(value = "id") int id,
-                                      @PathVariable(value = "certificate_id") int certificateId) {
-        try {
-            certificateService.deleteCertificateTag(certificateId, id);
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        } catch (ServiceException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }

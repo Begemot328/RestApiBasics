@@ -5,7 +5,7 @@ import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 
 public enum CertificateSortingParameters {
     SORT_BY_NAME(CertificateColumns.NAME.getValue()),
-    DESCRIPTION(CertificateColumns.DESCRIPTION.getValue());
+    SORT_BY_DESCRIPTION(CertificateColumns.DESCRIPTION.getValue());
 
     String value;
 
