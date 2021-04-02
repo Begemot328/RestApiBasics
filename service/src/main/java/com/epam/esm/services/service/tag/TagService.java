@@ -1,9 +1,7 @@
 package com.epam.esm.services.service.tag;
 
-import com.epam.esm.persistence.util.AscDesc;
 import com.epam.esm.persistence.util.EntityFinder;
-import com.epam.esm.persistence.dao.tag.TagDAO;
-import com.epam.esm.model.entity.Certificate;
+import com.epam.esm.persistence.dao.TagDAO;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.util.TagFinder;
 import com.epam.esm.persistence.exceptions.DAOException;

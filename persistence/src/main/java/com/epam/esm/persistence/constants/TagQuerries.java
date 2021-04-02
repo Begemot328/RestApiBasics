@@ -1,4 +1,4 @@
-package com.epam.esm.persistence.dao.tag;
+package com.epam.esm.persistence.constants;
 
 public enum TagQuerries {
    WHERE_ID (" WHERE id = ?"),

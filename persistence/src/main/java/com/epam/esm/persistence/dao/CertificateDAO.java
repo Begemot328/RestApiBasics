@@ -1,6 +1,8 @@
-package com.epam.esm.persistence.dao.certificate;
+package com.epam.esm.persistence.dao;
 
-import com.epam.esm.persistence.dao.EntityDAO;
+import com.epam.esm.persistence.constants.CertificateColumns;
+import com.epam.esm.persistence.constants.CertificateQuerries;
+import com.epam.esm.persistence.mapper.CertificateMapper;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
@@ -14,9 +16,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,10 +25,12 @@ public class CertificateDAO implements EntityDAO<Certificate> {
     static Logger logger = LoggerFactory.getLogger(CertificateDAO.class);
 
     private JdbcTemplate template;
+    private CertificateMapper certificateMapper;
 
     @Autowired
-    public CertificateDAO(JdbcTemplate template) {
+    public CertificateDAO(JdbcTemplate template, CertificateMapper certificateMapper) {
         this.template = template;
+        this.certificateMapper = certificateMapper;
     }
 
     public void setTemplate(JdbcTemplate template) {
@@ -59,30 +61,6 @@ public class CertificateDAO implements EntityDAO<Certificate> {
         }
     };
 
-    private final ResultSetExtractor<List<Certificate>> certificateListExtractor = new ResultSetExtractor<List<Certificate>>() {
-        @Override
-        public List<Certificate> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-            Certificate certificate = null;
-            List<Certificate> list = new ArrayList<>();
-
-            while (resultSet.next()) {
-                certificate = new Certificate(
-                        resultSet.getString(CertificateColumns.NAME.getValue()),
-                        resultSet.getString(CertificateColumns.DESCRIPTION.getValue()),
-                        resultSet.getBigDecimal(CertificateColumns.PRICE.getValue()),
-                        resultSet.getInt(CertificateColumns.DURATION.getValue()),
-                        resultSet.getDate(CertificateColumns.CREATE_DATE.getValue()).toLocalDate(),
-                        resultSet.getDate(CertificateColumns.LAST_UPDATE_DATE.getValue()).toLocalDate()
-                );
-                certificate.setId(resultSet.getInt(ID));
-                if (!list.contains(certificate)) {
-                    list.add(certificate);
-                }
-            }
-            return list;
-        }
-    };
-
     @Override
     public Certificate create(Certificate certificate) throws DAOException {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -100,7 +78,6 @@ public class CertificateDAO implements EntityDAO<Certificate> {
             return ps;
         }, keyHolder);
         if (keyHolder.getKey() == null) {
-            logger.error("empty keyholder");
             throw new DAOException("empty keyholder");
         }
         certificate.setId(keyHolder.getKey().intValue());
@@ -109,10 +86,10 @@ public class CertificateDAO implements EntityDAO<Certificate> {
 
     @Override
     public Certificate read(int id) throws DAOException {
-        return getTemplate().query(CertificateQuerries.READ_QUERY.getValue()
+        return template.queryForObject(CertificateQuerries.READ_QUERY.getValue()
                 .concat(CertificateQuerries.WHERE_ID.getValue()
                         .replace("?", Integer.toString(id))),
-                        certificateExtractor);
+                certificateMapper);
     }
 
     @Override
@@ -132,15 +109,15 @@ public class CertificateDAO implements EntityDAO<Certificate> {
     }
 
     @Override
-    public Collection<Certificate> findAll() throws DAOException {
-        return getTemplate().query(CertificateQuerries.READ_QUERY.getValue(), certificateListExtractor);
+    public List<Certificate> findAll() throws DAOException {
+        return template.query(CertificateQuerries.READ_QUERY.getValue(), certificateMapper);
     }
 
     public Collection<Certificate> findAllByTag(Tag tag) throws DAOException {
-        return getTemplate().query(CertificateQuerries.READ_BY_TAG_QUERY.getValue()
+        return template.query(CertificateQuerries.READ_BY_TAG_QUERY.getValue()
                         .concat(CertificateQuerries.WHERE_TAG_ID.getValue()
                                 .replace("?", Integer.toString(tag.getId()))),
-                certificateListExtractor);
+                certificateMapper);
     }
 
     public void addCertificateTag(int certificateId, int tagId) {
@@ -154,10 +131,9 @@ public class CertificateDAO implements EntityDAO<Certificate> {
     }
 
     public Collection<Certificate> findBy(EntityFinder<Certificate> finder) throws DAOException {
-        System.out.println(CertificateQuerries.READ_BY_TAG_QUERY.getValue()
-                        .concat(finder.getQuery()));
-        return getTemplate().query(CertificateQuerries.READ_BY_TAG_QUERY.getValue()
+
+        return template.query(CertificateQuerries.READ_BY_TAG_QUERY.getValue()
                         .concat(finder.getQuery()),
-                certificateListExtractor);
+                certificateMapper);
     }
 }

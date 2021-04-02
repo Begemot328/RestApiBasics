@@ -1,7 +1,8 @@
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.tag.TagColumns;
+import com.epam.esm.persistence.constants.TagColumns;
+import com.epam.esm.persistence.mapper.TagMapper;
 import com.epam.esm.persistence.util.AscDesc;
-import com.epam.esm.persistence.dao.tag.TagDAO;
+import com.epam.esm.persistence.dao.TagDAO;
 import com.epam.esm.persistence.util.TagFinder;
 import com.epam.esm.persistence.exceptions.DAOException;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTagsDao extends TestDao {
-    private TagDAO tagsDao = new TagDAO(getJdbcTemplate());
+    private TagDAO tagsDao = new TagDAO(getJdbcTemplate(), new TagMapper());
     Tag tag = new Tag("New tag");
 
     @Test

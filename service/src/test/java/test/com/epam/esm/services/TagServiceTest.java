@@ -1,8 +1,8 @@
 package test.com.epam.esm.services;
 
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.tag.TagColumns;
-import com.epam.esm.persistence.dao.tag.TagDAO;
+import com.epam.esm.persistence.constants.TagColumns;
+import com.epam.esm.persistence.dao.TagDAO;
 import com.epam.esm.persistence.exceptions.DAOException;
 import com.epam.esm.persistence.util.AscDesc;
 import com.epam.esm.persistence.util.TagFinder;

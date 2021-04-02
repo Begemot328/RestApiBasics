@@ -4,7 +4,7 @@ package com.epam.esm.persistence.dao;
 import com.epam.esm.model.entity.Entity;
 import com.epam.esm.persistence.exceptions.DAOException;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Entity DAO interface.
@@ -55,6 +55,7 @@ public interface EntityDAO<T extends Entity> {
      * Find all method
      *
      * @throws DAOException
+     * @return
      */
-    Collection<T> findAll() throws DAOException;
+    List<T> findAll() throws DAOException;
 }

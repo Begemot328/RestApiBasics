@@ -1,8 +1,9 @@
-package com.epam.esm.persistence.dao.tag;
+package com.epam.esm.persistence.dao;
 
-import com.epam.esm.persistence.dao.EntityDAO;
+import com.epam.esm.persistence.constants.TagColumns;
+import com.epam.esm.persistence.constants.TagQuerries;
+import com.epam.esm.persistence.mapper.TagMapper;
 import com.epam.esm.persistence.util.EntityFinder;
-import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.exceptions.DAOException;
 import org.slf4j.Logger;
@@ -25,58 +26,21 @@ import java.util.List;
 
 @Component
 public class TagDAO implements EntityDAO<Tag> {
+    static Logger logger = LoggerFactory.getLogger(TagDAO.class);
+    private JdbcTemplate template;
+    private TagMapper tagMapper;
 
     public TagDAO() {}
 
-    static Logger logger = LoggerFactory.getLogger(TagDAO.class);
-
-    private JdbcTemplate template;
-
     @Autowired
-    public TagDAO(JdbcTemplate template) {
+    public TagDAO(JdbcTemplate template, TagMapper tagMapper) {
         this.template = template;
+        this.tagMapper = tagMapper;
     }
 
     public void setTemplate(JdbcTemplate template) {
         this.template = template;
     }
-
-    public JdbcTemplate getTemplate() {
-        return this.template;
-    }
-
-    private ResultSetExtractor<Tag> tagExtractor = new ResultSetExtractor<Tag>() {
-        @Override
-        public Tag extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-            Tag tag = null;
-            String name;
-            int id;
-            if(resultSet.next()) {
-                tag = new Tag(resultSet.getString(TagColumns.NAME.getValue()));
-                tag.setId(resultSet.getInt(ID));
-            }
-            return tag;
-        }
-    };
-
-    private ResultSetExtractor<List<Tag>> tagListExtractor = new ResultSetExtractor<List<Tag>>() {
-        @Override
-        public List<Tag> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-            Tag tag = null;
-            List<Tag> list = new ArrayList<>();
-            String name;
-            int id;
-            while (resultSet.next()) {
-                tag = new Tag(resultSet.getString(TagColumns.NAME.getValue()));
-                tag.setId(resultSet.getInt(ID));
-                if (!list.contains(tag)) {
-                    list.add(tag);
-                }
-
-            }
-            return list;
-        }
-    };
 
     @Override
     public Tag create(Tag tag) throws DAOException {
@@ -90,7 +54,6 @@ public class TagDAO implements EntityDAO<Tag> {
             return ps;
         }, keyHolder);
         if (keyHolder.getKey() == null) {
-            logger.error("empty keyholder");
             throw new DAOException("empty keyholder");
         }
         tag.setId(keyHolder.getKey().intValue());
@@ -99,14 +62,16 @@ public class TagDAO implements EntityDAO<Tag> {
 
     @Override
     public Tag read(int id) throws DAOException {
-        return getTemplate().query(TagQuerries.READ_QUERY.getValue()
-                .concat(TagQuerries.WHERE_ID.getValue().replace("?", Integer.toString(id))),
-                        tagExtractor);
+        return template.queryForObject(
+                TagQuerries.READ_QUERY.getValue()
+                .concat(TagQuerries.WHERE_ID.getValue().replace("?",
+                        Integer.toString(id))),
+        tagMapper);
     }
 
     @Override
     public void update(Tag tag) throws DAOException {
-        template.update(TagQuerries.UPDATE_QUERY.getValue(), tag.getName(), tag.getId());
+       throw new UnsupportedOperationException("Update operation for tag in unavailable");
     }
 
     @Override
@@ -115,15 +80,15 @@ public class TagDAO implements EntityDAO<Tag> {
     }
 
     @Override
-    public Collection<Tag> findAll() throws DAOException {
-        return getTemplate().query(TagQuerries.READ_QUERY.getValue(), tagListExtractor);
+    public List<Tag> findAll() throws DAOException {
+        return template.query(TagQuerries.READ_QUERY.getValue(), tagMapper);
     }
 
     public Collection<Tag> findBy(EntityFinder<Tag> finder) throws DAOException {
         System.out.println(TagQuerries.READ_BY_TAG_QUERY.getValue()
                 .concat(finder.getQuery()));
-        return getTemplate().query(TagQuerries.READ_BY_TAG_QUERY.getValue()
+        return template.query(TagQuerries.READ_BY_TAG_QUERY.getValue()
                         .concat(finder.getQuery()),
-                tagListExtractor);
+                tagMapper);
     }
 }

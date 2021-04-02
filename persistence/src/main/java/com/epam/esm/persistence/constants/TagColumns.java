@@ -1,6 +1,7 @@
-package com.epam.esm.persistence.dao.tag;
+package com.epam.esm.persistence.constants;
 
 public enum TagColumns {
+    ID("id"),
     NAME("name"),
     CERTIFICATE_ID( "certificate_id");
 

@@ -106,24 +106,4 @@ public class CertificateController {
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @ExceptionHandler({ BadRequestException.class })
-    public ResponseEntity<Object> handleBadRequestException(
-            Exception ex, WebRequest request) {
-        return new ResponseEntity<Object>(
-                ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({ ServiceException.class })
-    public ResponseEntity<Object> handleServiceException(
-            Exception ex, WebRequest request) {
-        return new ResponseEntity<Object>(
-                ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler({ ValidationException.class })
-    public ResponseEntity<Object> handleValidationException(
-            Exception ex, WebRequest request) {
-        return new ResponseEntity<Object>(
-                ex.getMessage(), new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY);
-    }
 }

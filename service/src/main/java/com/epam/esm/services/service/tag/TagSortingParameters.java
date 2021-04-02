@@ -1,8 +1,6 @@
 package com.epam.esm.services.service.tag;
 
-import com.epam.esm.persistence.dao.certificate.CertificateColumns;
-import com.epam.esm.persistence.dao.certificate.CertificateDAO;
-import com.epam.esm.persistence.dao.tag.TagColumns;
+import com.epam.esm.persistence.constants.TagColumns;
 
 public enum TagSortingParameters {
     SORT_BY_NAME(TagColumns.NAME.getValue());

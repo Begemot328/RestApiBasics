@@ -1,7 +1,6 @@
 package com.epam.esm.services.service.certificate;
 
-import com.epam.esm.persistence.dao.certificate.CertificateColumns;
-import com.epam.esm.persistence.dao.certificate.CertificateDAO;
+import com.epam.esm.persistence.constants.CertificateColumns;
 
 public enum CertificateSortingParameters {
     SORT_BY_NAME(CertificateColumns.NAME.getValue()),

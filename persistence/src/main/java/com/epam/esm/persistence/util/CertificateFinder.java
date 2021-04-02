@@ -1,7 +1,6 @@
 package com.epam.esm.persistence.util;
 
-import com.epam.esm.persistence.dao.certificate.CertificateColumns;
-import com.epam.esm.persistence.dao.certificate.CertificateDAO;
+import com.epam.esm.persistence.constants.CertificateColumns;
 import com.epam.esm.model.entity.Certificate;
 import org.springframework.stereotype.Component;
 

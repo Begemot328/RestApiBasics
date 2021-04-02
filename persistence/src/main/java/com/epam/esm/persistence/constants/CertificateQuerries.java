@@ -1,4 +1,4 @@
-package com.epam.esm.persistence.dao.certificate;
+package com.epam.esm.persistence.constants;
 
 public enum CertificateQuerries {
     READ_BY_TAG_QUERY("SELECT * FROM tag_certificates"),

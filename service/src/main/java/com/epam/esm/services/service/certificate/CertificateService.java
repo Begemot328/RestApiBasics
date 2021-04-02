@@ -2,10 +2,9 @@ package com.epam.esm.services.service.certificate;
 
 import com.epam.esm.model.entity.Entity;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.util.AscDesc;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.persistence.util.CertificateFinder;
-import com.epam.esm.persistence.dao.certificate.CertificateDAO;
+import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.exceptions.DAOException;
 import com.epam.esm.services.exceptions.BadRequestException;
@@ -13,7 +12,6 @@ import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
 import com.epam.esm.services.service.EntityService;
 import com.epam.esm.services.service.tag.TagService;
-import com.epam.esm.services.util.DoubleUtil;
 import com.epam.esm.services.validator.EntityValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,6 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CertificateService implements EntityService<Certificate> {

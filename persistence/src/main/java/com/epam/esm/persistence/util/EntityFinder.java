@@ -53,7 +53,6 @@ public abstract class EntityFinder<T extends Entity> {
         sortBy(EntityDAO.ID, ascDesc);
     }
 
-
     public void sortBy(String sorting, AscDesc ascDesc) {
         if (!sortCondition.isEmpty()) {
             this.sortCondition = sortCondition.concat(", " + sorting + " " + ascDesc.toString());
