@@ -40,12 +40,16 @@ public abstract class EntityFinder<T extends Entity> {
     public void and(EntityFinder<T> finder) {
         if (!finder.getSearchCondition().isEmpty()) {
             this.searchCondition = searchCondition + " AND (" + finder.getSearchCondition() + ")";
+        } else {
+            this.searchCondition = finder.getSearchCondition();
         }
     }
 
     public void or(EntityFinder<T> finder) {
         if (!finder.getSearchCondition().isEmpty()) {
             this.searchCondition = searchCondition + " OR (" + finder.getSearchCondition() + ")";
+        } else {
+            this.searchCondition = finder.getSearchCondition();
         }
     }
 
@@ -59,6 +63,13 @@ public abstract class EntityFinder<T extends Entity> {
         } else {
             this.sortCondition = sorting + " " + ascDesc.toString();
         }
+    }
+
+    protected void find(String query) {
+        if (!searchCondition.isEmpty()) {
+            this.searchCondition += " AND ";
+        }
+        this.searchCondition += query;
     }
 
     @Override

@@ -6,8 +6,6 @@ import com.epam.esm.model.entity.Entity;
 import com.epam.esm.services.exceptions.BadRequestException;
 import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
-
-import javax.management.BadAttributeValueExpException;
 import java.util.Collection;
 
 public interface EntityService<T extends Entity> {

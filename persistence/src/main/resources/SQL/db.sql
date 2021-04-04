@@ -41,22 +41,21 @@ create table certificate_tag
 drop view if exists tag_certificates;
 
 create view tag_certificates as
-select tag.id as tag_id, tag.name as tag_name, c.id, c.name,
-       c.price, c.description,
+select tag.id, tag.name, c.id as certificate_id, c.name as certificate_name,  c.price, c.description,
        c.duration, c.create_date, c.last_update_date
 from tag
          left join certificate_tag ct on ct.tag_id = tag.id
-         join certificate c on c.id = ct.certificate_id;
+         left join certificate c on c.id = ct.certificate_id;
 
 drop view if exists certificate_tags;
 
 create view certificate_tags as
-select c.id as certificate_id, c.name as certificate_name,  c.price, c.description,
-       c.duration, c.create_date, c.last_update_date, tag.id,
-       tag.name
+select  c.id, c.name, c.price, c.description,
+        c.duration, c.create_date, c.last_update_date,
+        tag.id as tag_id, tag.name as tag_name
 from certificate c
          left join certificate_tag ct on ct.certificate_id = c.id
-         join tag on tag.id = ct.tag_id;
+         left join tag on tag.id = ct.tag_id;
 
 insert tag(name) values('sport');
 insert tag(name) values('games');

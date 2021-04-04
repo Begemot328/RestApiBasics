@@ -10,32 +10,36 @@ import java.math.BigDecimal;
 public class CertificateFinder extends EntityFinder<Certificate> {
 
     public CertificateFinder findByName(String name) {
-        this.searchCondition = CertificateColumns.NAME.getValue() + " "
+        find(CertificateColumns.NAME.getValue() + " "
                  + FinderQuerries.LIKE.getValue()
-                .replace(FinderQuerries.VALUE.getValue(),name);
+                .replace(FinderQuerries.VALUE.getValue(),name));
         return this;
     }
 
     public void findByDescription(String description) {
-        this.searchCondition = CertificateColumns.DESCRIPTION.getValue() + " "
+        find(CertificateColumns.DESCRIPTION.getValue() + " "
                 + FinderQuerries.LIKE.getValue().replace(
-                FinderQuerries.VALUE.getValue() ,description);
+                FinderQuerries.VALUE.getValue() ,description));
     }
 
     public void findByTag(String name) {
-        this.searchCondition = CertificateColumns.TAG_NAME.getValue()
-                + " = '" + name + "'";
+        find(CertificateColumns.TAG_NAME.getValue()
+                + " = '" + name + "'");
     }
 
     public void findByPriceLess(BigDecimal price) {
-        this.searchCondition = CertificateColumns.PRICE.getValue() + " <= " + price;
+        find(CertificateColumns.PRICE.getValue() + " <= " + price);
     }
 
     public void findByPriceMore(BigDecimal price) {
-        this.searchCondition = CertificateColumns.PRICE.getValue() + " >= " + price;
+        find(CertificateColumns.PRICE.getValue() + " >= " + price);
     }
 
     public void findByTag(int id) {
-        this.searchCondition = CertificateColumns.TAG_ID.getValue() + " = " + id;
+        find(CertificateColumns.TAG_ID.getValue() + " = " + id);
+    }
+
+    public void findByTagName(String name) {
+        find(CertificateColumns.TAG_NAME.getValue() + " = '" + name + "'");
     }
 }

@@ -1,4 +1,4 @@
-drop schema if exists certificates;
+SET MODE MySQL;
 
 create schema if not exists certificates;
 
@@ -7,10 +7,7 @@ use certificates;
 create table tag
 (
     id   tinyint primary key auto_increment,
-    name varchar(40) not null,
-
-    index certificate_id_index (id),
-    index certificate_name_index (name)
+    name varchar(40) not null
 );
 
 create table certificate
@@ -21,11 +18,7 @@ create table certificate
     price           double       not null,
     duration        int          not null,
     create_date     date         not null,
-    last_update_date date         not null,
-
-    index certificate_id_index (id),
-    index certificate_price_index (price),
-    index certificate_name_index (name)
+    last_update_date date         not null
 
 );
 

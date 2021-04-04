@@ -1,14 +1,14 @@
 package com.epam.esm.persistence.exceptions;
 
 
-public class DAOException extends Exception {
+public class DAOSQLException extends Exception {
 
     /**
      * Constructor
      *
      * @param message the message
      */
-    public DAOException(String message) {
+    public DAOSQLException(String message) {
         super(message);
     }
 
@@ -18,7 +18,7 @@ public class DAOException extends Exception {
      * @param message the message
      * @param e the e
      */
-    public DAOException(String message, Exception e) {
+    public DAOSQLException(String message, Exception e) {
         super(message, e);
     }
 
@@ -27,7 +27,7 @@ public class DAOException extends Exception {
      *
      * @param e the e
      */
-    public DAOException(Exception e) {
+    public DAOSQLException(Exception e) {
         super(e);
     }
 }

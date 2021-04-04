@@ -22,14 +22,14 @@ public class Tag extends Entity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Tag)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Tag tag = (Tag) o;
-        return name.equals(tag.name);
+        return getName() != null ? getName().equals(tag.getName()) : tag.getName() == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return getName() != null ? getName().hashCode() : 0;
     }
 
     @Override

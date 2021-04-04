@@ -2,26 +2,57 @@ import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.TagColumns;
 import com.epam.esm.persistence.mapper.TagMapper;
 import com.epam.esm.persistence.util.AscDesc;
-import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.dao.impl.TagDAOImpl;
 import com.epam.esm.persistence.util.TagFinder;
-import com.epam.esm.persistence.exceptions.DAOException;
+import com.epam.esm.persistence.exceptions.DAOSQLException;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTagsDao extends TestDao {
-    private TagDAO tagsDao = new TagDAO(getJdbcTemplate(), new TagMapper());
+public class TestTagsDAO extends TestDao {
+    private static TagDAOImpl tagsDao;
     Tag tag = new Tag("New tag");
+    private static final String TEST_DATABASE = "SQL/test_db.sql";
+    private static final String BACKUP_DATABASE = "SQL/db.sql";
+    private static JdbcTemplate template;
+
+
+    private void setDatabase(String database) throws FileNotFoundException {
+        Scanner scanner = new Scanner(new FileReader(new File(database)));
+        scanner.useDelimiter(";");
+        while (scanner.hasNext()) {
+            template.update(scanner.next().concat(";"));
+        }
+    }
+
+    @Before
+    void init() throws FileNotFoundException {
+        setDatabase(BACKUP_DATABASE);
+        tagsDao = new TagDAOImpl(new JdbcTemplate(), new TagMapper());
+    }
+
+    @After
+    public void setBackupDatabase() throws FileNotFoundException {
+        setDatabase(BACKUP_DATABASE);
+    }
+
 
     @Test
-    void testFindAll() throws DAOException {
+    void testFindAll() throws DAOSQLException {
         assertEquals(tagsDao.findAll().size(), 3);
     }
 
     @Test
-    void testFinder() throws DAOException {
+    void testFinder() throws DAOSQLException {
         Tag tag = new Tag("Sport game");
         tagsDao.create(tag);
         TagFinder finder = new TagFinder();
@@ -46,7 +77,7 @@ public class TestTagsDao extends TestDao {
     }
 
     @Test
-    void testDao() throws DAOException {
+    void testDao() throws DAOSQLException {
         int size = tagsDao.findAll().size();
         tagsDao.create(tag);
         assertEquals(tagsDao.read(tag.getId()),tag);

@@ -1,8 +1,10 @@
-package com.epam.esm.services.service.certificate;
+package com.epam.esm.services.constants;
 
 import com.epam.esm.persistence.constants.CertificateColumns;
+import com.epam.esm.persistence.constants.TagColumns;
 
 public enum CertificateSortingParameters {
+    SORT_BY_ID(CertificateColumns.ID.getValue()),
     SORT_BY_NAME(CertificateColumns.NAME.getValue()),
     SORT_BY_DESCRIPTION(CertificateColumns.DESCRIPTION.getValue());
 
@@ -16,16 +18,7 @@ public enum CertificateSortingParameters {
         return value;
     }
 
-    public static CertificateSortingParameters getEntry(String s) {
-        try {
-            CertificateSortingParameters.valueOf(s);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-        return CertificateSortingParameters.valueOf(s);
-    }
-
     public static CertificateSortingParameters getEntryByParameter(String s) {
-        return getEntry(s.toUpperCase().replace("-", "_"));
+        return valueOf(s.toUpperCase().replace("-", "_"));
     }
 }

@@ -1,42 +1,40 @@
-package com.epam.esm.services.service.tag;
+package com.epam.esm.services.service.impl;
 
 import com.epam.esm.persistence.util.EntityFinder;
-import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.dao.impl.TagDAOImpl;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.util.TagFinder;
-import com.epam.esm.persistence.exceptions.DAOException;
+import com.epam.esm.persistence.exceptions.DAOSQLException;
+import com.epam.esm.services.exceptions.BadRequestException;
 import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
-import com.epam.esm.services.service.EntityService;
+import com.epam.esm.services.constants.TagSearchParameters;
+import com.epam.esm.services.constants.TagSortingParameters;
+import com.epam.esm.services.service.TagService;
 import com.epam.esm.services.validator.EntityValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
-public class TagService implements EntityService<Tag> {
+public class TagServiceImpl implements TagService {
 
-    @Autowired
-    private static TagService INSTANCE;
-
-    private TagDAO dao;
+    private TagDAOImpl dao;
     private EntityValidator<Tag> validator;
     private TagFinder finder;
 
     @Autowired
-    public TagService(TagDAO dao,
-                      EntityValidator<Tag> validator,
-                      TagFinder finder) {
+    public TagServiceImpl(TagDAOImpl dao,
+                          EntityValidator<Tag> validator,
+                          TagFinder finder) {
         this.dao = dao;
         this.validator = validator;
         this.finder = finder;
-    }
-
-    public static EntityService<Tag> getInstance() {
-        return INSTANCE;
     }
 
     @Override
@@ -44,7 +42,7 @@ public class TagService implements EntityService<Tag> {
         try {
             validator.validate(tag);
             return dao.create(tag);
-        } catch (DAOException e) {
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
@@ -53,7 +51,7 @@ public class TagService implements EntityService<Tag> {
     public Tag read(int id) throws ServiceException {
         try {
             return dao.read(id);
-        } catch (DAOException e) {
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
@@ -65,7 +63,7 @@ public class TagService implements EntityService<Tag> {
                 throw new ServiceException("Entity does not exist");
             }
             dao.delete(id);
-        } catch (DAOException e) {
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
@@ -75,7 +73,7 @@ public class TagService implements EntityService<Tag> {
         try {
             validator.validate(tag);
             dao.update(tag);
-        } catch (DAOException e) {
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
@@ -84,39 +82,44 @@ public class TagService implements EntityService<Tag> {
     public Collection<Tag> findAll() throws ServiceException {
         try {
             return dao.findAll();
-        } catch (DAOException e) {
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
 
-    public Collection<Tag> findBy(EntityFinder<Tag> entityFinder) throws ServiceException {
+    @Override
+    public List<Tag> findBy(EntityFinder<Tag> entityFinder) throws ServiceException {
         try {
-            return  dao.findBy(entityFinder);
-        } catch (DAOException e) {
+            return dao.findBy(entityFinder);
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
 
-    public Collection<Tag> findByCertificate(int certificateId) throws ServiceException {
+    @Override
+    public List<Tag> findByCertificate(int certificateId) throws ServiceException {
         finder.newFinder();
         finder.findByCertificate(certificateId);
         return findBy(finder);
     }
 
-    public Collection<Tag> find(Map<String, String> params) throws ServiceException {
+    @Override
+    public List<Tag> find(Map<String, String> params) throws ServiceException {
         finder.newFinder();
         for (String key : params.keySet()) {
-            if (key.contains("SORT")) {
-                finder.sortBy(TagSortingParameters.getEntryByParameter(key).getValue(),
-                        parseAscDesc(params.get(key)));
-            } else {
-                Optional<TagSearchParameters> optional =
-                        Optional.ofNullable(TagSearchParameters.getEntryByParameter(key));
-                if (optional.isPresent()) {
-                    if (optional.get() == TagSearchParameters.NAME) {
-                        finder.findByName(params.get(key));
+            try {
+                if (key.contains("sort")) {
+                    finder.sortBy(TagSortingParameters.getEntryByParameter(key).getValue(),
+                            parseAscDesc(params.get(key)));
+                } else {
+                    TagSearchParameters optional =
+                            TagSearchParameters.getEntryByParameter(key);
+                    if (optional == TagSearchParameters.NAME) {
+                        finder.findByName(URLDecoder.decode(params.get(key), StandardCharsets.UTF_8));
                     }
                 }
+            } catch (IllegalArgumentException e) {
+                throw new BadRequestException(e);
             }
         }
         return findBy(finder);

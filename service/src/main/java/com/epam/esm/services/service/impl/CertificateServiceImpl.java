@@ -1,50 +1,47 @@
-package com.epam.esm.services.service.certificate;
+package com.epam.esm.services.service.impl;
 
 import com.epam.esm.model.entity.Entity;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.persistence.util.CertificateFinder;
-import com.epam.esm.persistence.dao.CertificateDAO;
+import com.epam.esm.persistence.dao.impl.CertificateDAOImpl;
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.persistence.exceptions.DAOException;
+import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.services.exceptions.BadRequestException;
 import com.epam.esm.services.exceptions.ServiceException;
 import com.epam.esm.services.exceptions.ValidationException;
-import com.epam.esm.services.service.EntityService;
-import com.epam.esm.services.service.tag.TagService;
+import com.epam.esm.services.constants.CertificateSearchParameters;
+import com.epam.esm.services.constants.CertificateSortingParameters;
+import com.epam.esm.services.service.CertificateService;
 import com.epam.esm.services.validator.EntityValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class CertificateService implements EntityService<Certificate> {
+public class CertificateServiceImpl implements CertificateService {
 
-    @Autowired
-    private static CertificateService INSTANCE;
-
-    private CertificateDAO dao;
+    private CertificateDAOImpl dao;
     private EntityValidator<Certificate> validator;
     private CertificateFinder finder;
-    private TagService tagService;
+    private TagServiceImpl tagServiceImpl;
 
     @Autowired
-    private CertificateService(CertificateDAO dao,
-                               EntityValidator<Certificate> validator,
-                               CertificateFinder finder, TagService tagService) {
+    public CertificateServiceImpl(CertificateDAOImpl dao,
+                                  EntityValidator<Certificate> validator,
+                                  CertificateFinder finder, TagServiceImpl tagServiceImpl) {
         this.dao = dao;
         this.validator = validator;
         this.finder = finder;
-        this.tagService = tagService;
-    }
-
-    public static EntityService<Certificate> getInstance() {
-        return INSTANCE;
+        this.tagServiceImpl = tagServiceImpl;
     }
 
     @Override
@@ -52,7 +49,7 @@ public class CertificateService implements EntityService<Certificate> {
         try {
             validator.validate(certificate);
             return dao.create(certificate);
-        } catch (DAOException e) {
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
@@ -61,7 +58,7 @@ public class CertificateService implements EntityService<Certificate> {
     public Certificate read(int id) throws ServiceException {
         try {
             return dao.read(id);
-        } catch (DAOException e) {
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
@@ -73,7 +70,7 @@ public class CertificateService implements EntityService<Certificate> {
                 throw new ServiceException("Entity does not exist!");
             }
             dao.delete(id);
-        } catch (DAOException e) {
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
@@ -83,51 +80,52 @@ public class CertificateService implements EntityService<Certificate> {
         try {
             validator.validate(certificate);
             dao.update(certificate);
-        } catch (DAOException e) {
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public Collection<Certificate> findAll() throws ServiceException {
+    public List<Certificate> findAll() throws ServiceException {
         try {
             return dao.findAll();
-        } catch (DAOException e) {
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public Collection<Certificate> findBy(EntityFinder<Certificate> entityFinder) throws ServiceException {
+    public List<Certificate> findBy(EntityFinder<Certificate> entityFinder) throws ServiceException {
         try {
             return dao.findBy(entityFinder);
-        } catch (DAOException e) {
+        } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
 
-    public Collection<Certificate> find(Map<String, String> params) throws ServiceException {
+    @Override
+    public List<Certificate> find(Map<String, String> params) throws ServiceException {
         finder.newFinder();
         for (String key : params.keySet()) {
-            if (key.contains("sort")) {
-                finder.sortBy(CertificateSortingParameters.getEntryByParameter(key).getValue(),
-                        parseAscDesc(params.get(key)));
-            } else {
-                Optional<CertificateSearchParameters> optional =
-                        Optional.ofNullable(CertificateSearchParameters.getEntryByParameter(key));
-                if (optional.isPresent()) {
-                    switch (optional.get()) {
+            try {
+                if (key.contains("sort")) {
+                    finder.sortBy(CertificateSortingParameters.getEntryByParameter(key).getValue(),
+                            parseAscDesc(params.get(key)));
+                } else {
+
+                    CertificateSearchParameters parameter = CertificateSearchParameters.getEntryByParameter(key);
+                    switch (parameter) {
                         case NAME:
-                            finder.findByName(params.get(key));
+                            finder.findByName(URLDecoder.decode(params.get(key), StandardCharsets.UTF_8));
                             break;
                         case DESCRIPTION:
                             if (StringUtils.isNotEmpty(params.get(key))) {
-                                finder.findByDescription(params.get(key));
+                                finder.findByDescription(URLDecoder.decode(params.get(key), StandardCharsets.UTF_8));
                             }
                             break;
                         case TAGNAME:
                             if (StringUtils.isNotEmpty(params.get(key))) {
-                                finder.findByTag(params.get(key));
+                                finder.findByTagName(URLDecoder.decode(params.get(key), StandardCharsets.UTF_8));
                             }
                             break;
                         case PRICE_LESS:
@@ -146,44 +144,52 @@ public class CertificateService implements EntityService<Certificate> {
                             break;
                     }
                 }
+            } catch (IllegalArgumentException e) {
+                throw new BadRequestException(e);
             }
         }
         return findBy(finder);
     }
 
-    public Collection<Certificate> findByTag(int tagId) throws ServiceException {
+    @Override
+    public List<Certificate> findByTag(int tagId) throws ServiceException {
         finder.newFinder();
         finder.findByTag(tagId);
         return findBy(finder);
     }
 
+    @Override
     public void addCertificateTag(Certificate certificate, int tagId) throws ServiceException, ValidationException {
-        Optional<Certificate> optional;
-        try {
-            optional = Optional.ofNullable(dao.read(certificate.getId()));
-        } catch (DAOException e) {
-            throw new ServiceException(e);
+        Optional<Certificate> certificateOptional;
+        if (dao.iStagCertificateTied(certificate.getId(), tagId)) {
+            throw new BadRequestException("adding existing relation");
         }
-        if (optional.isEmpty()) {
+        certificateOptional = Optional.ofNullable(read(certificate.getId()));
+        if (certificateOptional.isEmpty()) {
             create(certificate);
         }
         dao.addCertificateTag(certificate.getId(), tagId);
     }
 
+    @Override
     public void addCertificateTag(int certificateId, Tag tag) throws ServiceException, ValidationException {
-        Optional<Tag> optional;
-        optional = Optional.ofNullable(tagService.read(tag.getId()));
-        if (optional.isEmpty()) {
-            tagService.create(tag);
+        Optional<Tag> tagOptional;
+        if (dao.iStagCertificateTied(certificateId, tag.getId())) {
+            throw new BadRequestException("adding existing relation");
+        }
+        tagOptional = Optional.ofNullable(tagServiceImpl.read(tag.getId()));
+        if (tagOptional.isEmpty()) {
+            tagServiceImpl.create(tag);
         }
         dao.addCertificateTag(certificateId, tag.getId());
     }
 
+    @Override
     public void deleteCertificateTag(int certificateId, int tagId) throws ServiceException {
-        if (findByTag(tagId).stream().map(Entity::getId).anyMatch(id -> id == tagId)) {
+        if (dao.iStagCertificateTied(certificateId, tagId)) {
             dao.deleteCertificateTag(certificateId, tagId);
         } else {
-            throw new ServiceException("Entity does not exist!");
+            throw new BadRequestException("Entity does not exist!");
         }
     }
 }

@@ -1,8 +1,9 @@
-package com.epam.esm.services.service.tag;
+package com.epam.esm.services.constants;
 
 import com.epam.esm.persistence.constants.TagColumns;
 
 public enum TagSortingParameters {
+    SORT_BY_ID(TagColumns.ID.getValue()),
     SORT_BY_NAME(TagColumns.NAME.getValue());
 
     String value;
@@ -15,16 +16,7 @@ public enum TagSortingParameters {
         return value;
     }
 
-    public static TagSortingParameters getEntry(String s) {
-        try {
-            TagSortingParameters.valueOf(s);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-        return TagSortingParameters.valueOf(s);
-    }
-
     public static TagSortingParameters getEntryByParameter(String s) {
-        return getEntry(s.toUpperCase().replace("-", "_"));
+        return valueOf(s.toUpperCase().replace("-", "_"));
     }
 }

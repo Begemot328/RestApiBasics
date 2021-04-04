@@ -5,7 +5,7 @@ import com.epam.esm.services.exceptions.ValidationException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TagValidator extends AbstractEntityValidator<Tag>{
+public class TagValidator implements EntityValidator<Tag>{
     @Override
     public void validate(Tag tag) throws ValidationException {
         if (tag.getName() == null) {

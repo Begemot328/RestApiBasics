@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 @Service
-public class CertificateValidator extends AbstractEntityValidator<Certificate>{
+public class CertificateValidator implements EntityValidator<Certificate>{
     @Override
     public void validate(Certificate certificate) throws ValidationException {
         if (certificate.getName() == null) {

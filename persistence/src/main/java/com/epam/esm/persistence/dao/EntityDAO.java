@@ -2,7 +2,7 @@ package com.epam.esm.persistence.dao;
 
 
 import com.epam.esm.model.entity.Entity;
-import com.epam.esm.persistence.exceptions.DAOException;
+import com.epam.esm.persistence.exceptions.DAOSQLException;
 
 import java.util.List;
 
@@ -20,42 +20,42 @@ public interface EntityDAO<T extends Entity> {
      *
      * @param t entity to create
      *
-     * @throws DAOException
+     * @throws DAOSQLException
      */
-    T create(T t) throws DAOException;
+    T create(T t) throws DAOSQLException;
 
     /**
      * Read method
      *
      * @param id of the entity
      *
-     * @throws DAOException
+     * @throws DAOSQLException
      */
-    T read(int id) throws DAOException;
+    T read(int id) throws DAOSQLException;
 
     /**
      * Update method
      *
      * @param t entity to create
      *
-     * @throws DAOException
+     * @throws DAOSQLException
      */
-    void update(T t) throws DAOException;
+    void update(T t) throws DAOSQLException;
 
     /**
      * Delete method
      *
      * @param id of the entity to delete
      *
-     * @throws DAOException
+     * @throws DAOSQLException
      */
-    void delete(int id) throws DAOException;
+    void delete(int id) throws DAOSQLException;
 
     /**
      * Find all method
      *
-     * @throws DAOException
+     * @throws DAOSQLException
      * @return
      */
-    List<T> findAll() throws DAOException;
+    List<T> findAll() throws DAOSQLException;
 }

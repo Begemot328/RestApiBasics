@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.util;
 
 public enum FinderQuerries {
-    WHERE(" WHERE"),
+    WHERE(" WHERE "),
     ORDER_BY(" ORDER BY"),
     LIKE("LIKE '%VALUE%'"),
     VALUE("VALUE");
