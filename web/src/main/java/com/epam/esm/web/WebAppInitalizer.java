@@ -1,6 +1,6 @@
 package com.epam.esm.web;
 
-import com.epam.esm.services.ServiceConfig;
+import com.epam.esm.service.ServiceConfig;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

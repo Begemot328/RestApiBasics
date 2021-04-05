@@ -2,17 +2,26 @@ package com.epam.esm.web.controller;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.services.exceptions.ServiceException;
-import com.epam.esm.services.exceptions.ValidationException;
-import com.epam.esm.services.service.impl.CertificateServiceImpl;
-import com.epam.esm.services.service.impl.TagServiceImpl;
+import com.epam.esm.service.exceptions.ServiceException;
+import com.epam.esm.service.exceptions.ValidationException;
+import com.epam.esm.service.service.impl.CertificateServiceImpl;
+import com.epam.esm.service.service.impl.TagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -75,7 +84,7 @@ public class CertificateController {
 
     @GetMapping(value = "/{id}/tags")
     public ResponseEntity<?> readTags(@PathVariable(value = "id") int id) throws ServiceException {
-            Collection<Tag> list;
+            List<Tag> list;
             list = tagServiceImpl.findByCertificate(id);
             return list != null &&  !list.isEmpty()
                     ? new ResponseEntity<>(list, HttpStatus.OK)

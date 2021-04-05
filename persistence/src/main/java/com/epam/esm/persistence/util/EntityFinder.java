@@ -1,7 +1,6 @@
 package com.epam.esm.persistence.util;
 
 import com.epam.esm.model.entity.Entity;
-import com.epam.esm.persistence.dao.EntityDAO;
 
 import java.util.Objects;
 
@@ -11,11 +10,6 @@ public abstract class EntityFinder<T extends Entity> {
     protected String sortCondition = "";
 
     public EntityFinder() {}
-
-    public void newFinder() {
-        searchCondition = "";
-        sortCondition = "";
-    }
 
     protected String getSearchCondition() {
         return searchCondition;
@@ -28,11 +22,11 @@ public abstract class EntityFinder<T extends Entity> {
     public String getQuery() {
         StringBuilder query = new StringBuilder();
         if (!searchCondition.isEmpty()) {
-            query.append(FinderQuerries.WHERE.getValue());
+            query.append(FinderQueries.WHERE.getValue());
             query.append(" ").append(searchCondition);
         }
         if (!sortCondition.isEmpty()) {
-            query.append(" ").append(FinderQuerries.ORDER_BY.getValue()).append(" ").append(sortCondition);
+            query.append(FinderQueries.ORDER_BY.getValue()).append(sortCondition);
         }
         return query.toString();
     }
@@ -51,10 +45,6 @@ public abstract class EntityFinder<T extends Entity> {
         } else {
             this.searchCondition = finder.getSearchCondition();
         }
-    }
-
-    public void sortById(AscDesc ascDesc) {
-        sortBy(EntityDAO.ID, ascDesc);
     }
 
     public void sortBy(String sorting, AscDesc ascDesc) {

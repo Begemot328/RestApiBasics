@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 public class TagFinder extends EntityFinder<Tag> {
 
     public void findByName(String name) {
-        find(TagColumns.NAME.getValue() + " " + FinderQuerries.LIKE.getValue()
-                .replace(FinderQuerries.VALUE.getValue(),name));
+        find(TagColumns.NAME.getValue() + " " + FinderQueries.LIKE.getValue()
+                .replace(FinderQueries.VALUE.getValue(),name));
     }
 
     public TagFinder findByCertificate(int certificateId) {

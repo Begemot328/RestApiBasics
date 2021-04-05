@@ -1,6 +1,6 @@
 package com.epam.esm.persistence.dao.impl;
 
-import com.epam.esm.persistence.constants.TagQuerries;
+import com.epam.esm.persistence.constants.TagQueries;
 import com.epam.esm.persistence.dao.TagDAO;
 import com.epam.esm.persistence.mapper.TagMapper;
 import com.epam.esm.persistence.util.EntityFinder;
@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
@@ -25,16 +24,10 @@ public class TagDAOImpl implements TagDAO {
     private JdbcTemplate template;
     private TagMapper tagMapper;
 
-    public TagDAOImpl() {}
-
     @Autowired
     public TagDAOImpl(JdbcTemplate template, TagMapper tagMapper) {
         this.template = template;
         this.tagMapper = tagMapper;
-    }
-
-    public void setTemplate(JdbcTemplate template) {
-        this.template = template;
     }
 
     @Override
@@ -43,7 +36,7 @@ public class TagDAOImpl implements TagDAO {
 
         template.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(TagQuerries.INSERT_QUERY.getValue(),
+                    .prepareStatement(TagQueries.INSERT_TAG.getValue(),
                             Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, tag.getName());
             return ps;
@@ -58,10 +51,9 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public Tag read(int id) throws DAOSQLException {
         List<Tag> result =  template.query(
-                TagQuerries.READ_QUERY.getValue()
-                .concat(TagQuerries.WHERE_ID.getValue().replace("?",
-                        Integer.toString(id))),
-        tagMapper);
+                TagQueries.SELECT_FROM_TAG.getValue()
+                .concat(TagQueries.WHERE_ID.getValue()),
+        tagMapper, id);
         if(result.isEmpty()) {
             return  null;
         } else {
@@ -76,17 +68,17 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public void delete(int id) throws DAOSQLException {
-        template.update(TagQuerries.DELETE_QUERY.getValue(), id);
+        template.update(TagQueries.DELETE_TAG.getValue(), id);
     }
 
     @Override
     public List<Tag> findAll() throws DAOSQLException {
-        return template.query(TagQuerries.READ_QUERY.getValue(), tagMapper);
+        return template.query(TagQueries.SELECT_FROM_TAG.getValue(), tagMapper);
     }
 
     @Override
     public List<Tag> findBy(EntityFinder<Tag> finder) throws DAOSQLException {
-        return template.queryForStream(TagQuerries.READ_BY_CERTIFICATE_QUERY.getValue()
+        return template.queryForStream(TagQueries.SELECT_FROM_TAG_CERTIFICATES.getValue()
                         .concat(finder.getQuery()),
                 tagMapper).distinct().collect(Collectors.toList());
     }

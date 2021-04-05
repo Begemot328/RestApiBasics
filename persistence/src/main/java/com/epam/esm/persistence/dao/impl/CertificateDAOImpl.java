@@ -1,6 +1,6 @@
 package com.epam.esm.persistence.dao.impl;
 
-import com.epam.esm.persistence.constants.CertificateQuerries;
+import com.epam.esm.persistence.constants.CertificateQueries;
 import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.mapper.CertificateMapper;
 import com.epam.esm.persistence.util.EntityFinder;
@@ -13,7 +13,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import java.sql.*;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,21 +32,13 @@ public class CertificateDAOImpl implements CertificateDAO {
         this.certificateMapper = certificateMapper;
     }
 
-    public void setTemplate(JdbcTemplate template) {
-        this.template = template;
-    }
-
-    public JdbcTemplate getTemplate() {
-        return this.template;
-    }
-
     @Override
     public Certificate create(Certificate certificate) throws DAOSQLException {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         template.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(CertificateQuerries.INSERT_QUERY.getValue(),
+                    .prepareStatement(CertificateQueries.INSERT_CERTIFICATE.getValue(),
                             Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, certificate.getName());
             ps.setString(2, certificate.getDescription());
@@ -63,20 +57,14 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public Certificate read(int id) throws DAOSQLException {
-        List<Certificate> result = template.query(CertificateQuerries.READ_QUERY.getValue()
-                .concat(CertificateQuerries.WHERE_ID.getValue()
-                        .replace("?", Integer.toString(id))),
-                certificateMapper);
-        if(result.isEmpty()) {
-            return  null;
-        } else {
-            return result.get(0);
-        }
+        return template.query(CertificateQueries.SELECT_FROM_CERTIFICATE.getValue()
+                        .concat(CertificateQueries.WHERE_ID.getValue()),
+                certificateMapper, id).stream().findFirst().get();
     }
 
     @Override
     public void update(Certificate certificate) throws DAOSQLException {
-        template.update(CertificateQuerries.UPDATE_QUERY.getValue(), certificate.getName(),
+        template.update(CertificateQueries.UPDATE_CERTIFICATE.getValue(), certificate.getName(),
                 certificate.getDescription(),
                 certificate.getPrice(),
                 certificate.getDuration(),
@@ -87,37 +75,37 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public void delete(int id) throws DAOSQLException {
-        template.update(CertificateQuerries.DELETE_QUERY.getValue(), id);
+        template.update(CertificateQueries.DELETE_CERTIFICATE.getValue(), id);
     }
 
     @Override
     public List<Certificate> findAll() throws DAOSQLException {
-        return template.query(CertificateQuerries.READ_QUERY.getValue(), certificateMapper);
+        return template.query(CertificateQueries.SELECT_FROM_CERTIFICATE.getValue(), certificateMapper);
     }
 
     @Override
     public void addCertificateTag(int certificateId, int tagId) {
-        template.update(CertificateQuerries.ADD_CERTIFICATE_TAG.getValue(),
+        template.update(CertificateQueries.ADD_CERTIFICATE_TAG.getValue(),
                 certificateId, tagId);
     }
 
     @Override
     public void deleteCertificateTag(int certificateId, int tagId) {
-        template.update(CertificateQuerries.DELETE_CERTIFICATE_TAG.getValue(),
+        template.update(CertificateQueries.DELETE_CERTIFICATE_TAG.getValue(),
                 certificateId, tagId);
     }
 
     @Override
     public List<Certificate> findBy(EntityFinder<Certificate> finder) throws DAOSQLException {
-        return template.queryForStream(CertificateQuerries.READ_BY_TAG_QUERY.getValue()
+        return template.queryForStream(CertificateQueries.SELECT_FROM_CERTIFICATE_TAG.getValue()
                         .concat(finder.getQuery()),
                 certificateMapper).distinct().collect(Collectors.toList());
     }
 
-    public boolean iStagCertificateTied(int certificateId, int tagId) {
-        if (template.queryForObject(CertificateQuerries.CHECK_RELATION_BY_TAG.getValue()
-                + tagId + CertificateQuerries.CHECK_RELATION_BY_CERTIFICATE.getValue()
-                + certificateId + ";", Integer.class) == 0) {
+    public boolean isTagCertificateTied(int certificateId, int tagId) {
+        if (template.queryForObject(CertificateQueries.COUNT_CERTIFICATE_TAG.getValue(),
+                new Object[]{tagId, certificateId},
+                Integer.class) == 0) {
             return false;
         } else  return true;
     }

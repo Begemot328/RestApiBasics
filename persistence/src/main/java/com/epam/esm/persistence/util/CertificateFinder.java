@@ -2,6 +2,7 @@ package com.epam.esm.persistence.util;
 
 import com.epam.esm.persistence.constants.CertificateColumns;
 import com.epam.esm.model.entity.Certificate;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -10,16 +11,16 @@ import java.math.BigDecimal;
 public class CertificateFinder extends EntityFinder<Certificate> {
 
     public CertificateFinder findByName(String name) {
-        find(CertificateColumns.NAME.getValue() + " "
-                 + FinderQuerries.LIKE.getValue()
-                .replace(FinderQuerries.VALUE.getValue(),name));
+        find(CertificateColumns.NAME.getValue() + StringUtils.SPACE
+                 + FinderQueries.LIKE.getValue()
+                .replace(FinderQueries.VALUE.getValue(),name));
         return this;
     }
 
     public void findByDescription(String description) {
         find(CertificateColumns.DESCRIPTION.getValue() + " "
-                + FinderQuerries.LIKE.getValue().replace(
-                FinderQuerries.VALUE.getValue() ,description));
+                + FinderQueries.LIKE.getValue().replace(
+                FinderQueries.VALUE.getValue() ,description));
     }
 
     public void findByTag(String name) {

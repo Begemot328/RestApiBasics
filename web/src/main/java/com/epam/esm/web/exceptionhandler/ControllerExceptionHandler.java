@@ -1,8 +1,8 @@
 package com.epam.esm.web.exceptionhandler;
 
-import com.epam.esm.services.exceptions.BadRequestException;
-import com.epam.esm.services.exceptions.ServiceException;
-import com.epam.esm.services.exceptions.ValidationException;
+import com.epam.esm.service.exceptions.BadRequestException;
+import com.epam.esm.service.exceptions.ServiceException;
+import com.epam.esm.service.exceptions.ValidationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
