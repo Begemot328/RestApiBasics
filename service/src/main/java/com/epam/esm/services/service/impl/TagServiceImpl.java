@@ -1,5 +1,6 @@
 package com.epam.esm.services.service.impl;
 
+import com.epam.esm.persistence.dao.TagDAO;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.persistence.dao.impl.TagDAOImpl;
 import com.epam.esm.model.entity.Tag;
@@ -24,12 +25,12 @@ import java.util.Map;
 @Service
 public class TagServiceImpl implements TagService {
 
-    private TagDAOImpl dao;
+    private TagDAO dao;
     private EntityValidator<Tag> validator;
     private TagFinder finder;
 
     @Autowired
-    public TagServiceImpl(TagDAOImpl dao,
+    public TagServiceImpl(TagDAO dao,
                           EntityValidator<Tag> validator,
                           TagFinder finder) {
         this.dao = dao;

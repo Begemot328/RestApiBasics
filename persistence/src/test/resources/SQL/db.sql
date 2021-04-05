@@ -6,12 +6,12 @@ use certificates;
 
 create table tag
 (
-    id   tinyint primary key auto_increment,
-    name varchar(40) not null,
+      id   tinyint primary key auto_increment,
+      name varchar(40) not null,
 
-    index certificate_id_index (id),
-    index certificate_name_index (name)
-);
+      index certificate_id_index (id),
+      index certificate_name_index (name)
+  );
 
 create table certificate
 (

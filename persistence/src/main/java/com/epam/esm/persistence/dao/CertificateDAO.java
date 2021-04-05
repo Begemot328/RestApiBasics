@@ -12,4 +12,6 @@ public interface CertificateDAO extends EntityDAO<Certificate> {
     void addCertificateTag(int certificateId, int tagId);
 
     void deleteCertificateTag(int certificateId, int tagId);
+
+    boolean iStagCertificateTied(int certificateId, int tagId);
 }

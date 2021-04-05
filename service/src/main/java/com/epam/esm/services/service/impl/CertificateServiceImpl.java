@@ -1,7 +1,7 @@
 package com.epam.esm.services.service.impl;
 
-import com.epam.esm.model.entity.Entity;
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.persistence.util.CertificateFinder;
 import com.epam.esm.persistence.dao.impl.CertificateDAOImpl;
@@ -13,15 +13,14 @@ import com.epam.esm.services.exceptions.ValidationException;
 import com.epam.esm.services.constants.CertificateSearchParameters;
 import com.epam.esm.services.constants.CertificateSortingParameters;
 import com.epam.esm.services.service.CertificateService;
+import com.epam.esm.services.service.TagService;
 import com.epam.esm.services.validator.EntityValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,19 +28,19 @@ import java.util.Optional;
 @Service
 public class CertificateServiceImpl implements CertificateService {
 
-    private CertificateDAOImpl dao;
+    private CertificateDAO dao;
     private EntityValidator<Certificate> validator;
     private CertificateFinder finder;
-    private TagServiceImpl tagServiceImpl;
+    private TagService tagService;
 
     @Autowired
-    public CertificateServiceImpl(CertificateDAOImpl dao,
+    public CertificateServiceImpl(CertificateDAO dao,
                                   EntityValidator<Certificate> validator,
-                                  CertificateFinder finder, TagServiceImpl tagServiceImpl) {
+                                  CertificateFinder finder, TagService tagService) {
         this.dao = dao;
         this.validator = validator;
         this.finder = finder;
-        this.tagServiceImpl = tagServiceImpl;
+        this.tagService = tagService;
     }
 
     @Override
@@ -177,9 +176,9 @@ public class CertificateServiceImpl implements CertificateService {
         if (dao.iStagCertificateTied(certificateId, tag.getId())) {
             throw new BadRequestException("adding existing relation");
         }
-        tagOptional = Optional.ofNullable(tagServiceImpl.read(tag.getId()));
+        tagOptional = Optional.ofNullable(tagService.read(tag.getId()));
         if (tagOptional.isEmpty()) {
-            tagServiceImpl.create(tag);
+            tagService.create(tag);
         }
         dao.addCertificateTag(certificateId, tag.getId());
     }

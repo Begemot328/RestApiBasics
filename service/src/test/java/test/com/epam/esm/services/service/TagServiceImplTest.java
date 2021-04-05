@@ -1,4 +1,4 @@
-package test.com.epam.esm.services;
+package test.com.epam.esm.services.service;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.impl.TagDAOImpl;

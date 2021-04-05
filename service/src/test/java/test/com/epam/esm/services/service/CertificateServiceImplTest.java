@@ -1,4 +1,4 @@
-package test.com.epam.esm.services;
+package test.com.epam.esm.services.service;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
@@ -25,11 +25,11 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CertificateServiceImplTest {
-    private CertificateDAOImpl certificateMock = Mockito.mock(CertificateDAOImpl.class);
+    private CertificateDAOImpl certificateDaoMock = Mockito.mock(CertificateDAOImpl.class);
     private EntityValidator<Certificate> validator;
     private CertificateFinder finder = new CertificateFinder();
     private CertificateServiceImpl service;
-    private TagServiceImpl tagService = Mockito.mock(TagServiceImpl.class);
+    private TagServiceImpl tagServiceMock = Mockito.mock(TagServiceImpl.class);
 
     private Tag tag1 = new Tag("Tag1");
     private Certificate certificate1 = new Certificate("Certificate1",
@@ -47,24 +47,28 @@ public class CertificateServiceImplTest {
 
     {
         try {
-            Mockito.when(tagService.read(Mockito.any(Integer.class))).thenReturn(tag1);
-            Mockito.when(tagService.create(Mockito.any(Tag.class))).thenAnswer(invocation -> {
+            Mockito.when(tagServiceMock.read(Mockito.any(Integer.class))).thenReturn(tag1);
+            Mockito.when(tagServiceMock.create(Mockito.any(Tag.class))).thenAnswer(invocation -> {
                 Tag tag = invocation.getArgumentAt(0, Tag.class);
                 tag.setId(tag.getId() + 1);
                 return tag;
             });
 
-            Mockito.when(certificateMock.findAll()).thenReturn(fullList);
-            Mockito.when(certificateMock.read(1)).thenReturn(certificate1);
-            Mockito.when(certificateMock.read(2)).thenReturn(certificate2);
-            Mockito.when(certificateMock.findBy(Mockito.any(CertificateFinder.class))).thenReturn(shortList);
-            Mockito.doNothing().when(certificateMock).delete(Mockito.any(Integer.class));
-            Mockito.doNothing().when(certificateMock).update(Mockito.any(Certificate.class));
-            Mockito.when(certificateMock.create(Mockito.any(Certificate.class))).thenAnswer(invocation -> {
+            Mockito.when(certificateDaoMock.findAll()).thenReturn(fullList);
+            Mockito.when(certificateDaoMock.read(1)).thenReturn(certificate1);
+            Mockito.when(certificateDaoMock.read(2)).thenReturn(certificate2);
+            Mockito.when(certificateDaoMock.findBy(Mockito.any(CertificateFinder.class))).thenReturn(shortList);
+            Mockito.doNothing().when(certificateDaoMock).delete(Mockito.any(Integer.class));
+            Mockito.doNothing().when(certificateDaoMock).update(Mockito.any(Certificate.class));
+            Mockito.when(certificateDaoMock.create(Mockito.any(Certificate.class))).thenAnswer(invocation -> {
                 Certificate certificate = invocation.getArgumentAt(0, Certificate.class);
                 certificate.setId(fullList.size());
                 return certificate;
             });
+            Mockito.when(certificateDaoMock.iStagCertificateTied(
+                    Mockito.any(Integer.class), Mockito.any(Integer.class)))
+                    .thenReturn(false);
+            Mockito.when(certificateDaoMock.iStagCertificateTied(1, 3)).thenReturn(true);
 
             validator = Mockito.mock(CertificateValidator.class);
             Mockito.doNothing().when(validator).validate(Mockito.any(Certificate.class));
@@ -75,7 +79,7 @@ public class CertificateServiceImplTest {
         certificate2.setId(2);
         certificate1.setId(3);
         certificate2.setId(4);
-        service = new CertificateServiceImpl(certificateMock, validator, finder, tagService);
+        service = new CertificateServiceImpl(certificateDaoMock, validator, finder, tagServiceMock);
     }
 
     @Test
@@ -92,19 +96,19 @@ public class CertificateServiceImplTest {
     public void createTest() throws ServiceException, ValidationException, DAOSQLException {
         Certificate certificate = service.create(certificate1);
         assertEquals(certificate.getId(), fullList.size());
-        Mockito.verify(certificateMock, Mockito.times(1)).create(certificate1);
+        Mockito.verify(certificateDaoMock, Mockito.times(1)).create(certificate1);
     }
 
     @Test
     public void deleteTest() throws ServiceException, DAOSQLException {
         service.delete(1);
-        Mockito.verify(certificateMock, Mockito.times(1)).read(1);
+        Mockito.verify(certificateDaoMock, Mockito.times(1)).read(1);
     }
 
     @Test
     public void updateTest() throws ServiceException, ValidationException, DAOSQLException {
         service.update(certificate2);
-        Mockito.verify(certificateMock, Mockito.times(1)).update(certificate2);
+        Mockito.verify(certificateDaoMock, Mockito.times(1)).update(certificate2);
     }
 
     @Test
@@ -112,7 +116,7 @@ public class CertificateServiceImplTest {
         assertEquals(shortList, service.findByTag(1));
         CertificateFinder finder = new CertificateFinder();
         finder.findByTag(1);
-        Mockito.verify(certificateMock, Mockito.times(1)).findBy(finder);
+        Mockito.verify(certificateDaoMock, Mockito.times(1)).findBy(finder);
     }
 
     @Test
@@ -120,8 +124,29 @@ public class CertificateServiceImplTest {
         Map<String, String> params = new HashMap<>();
         params.put(CertificateSearchParameters.NAME.name(), "1");
         params.put(CertificateSortingParameters.SORT_BY_NAME.name().toLowerCase(), "2");
-        
+
         assertEquals(shortList, service.find(params));
-        Mockito.verify(certificateMock, Mockito.times(1)).findBy(Mockito.any(CertificateFinder.class));
+        Mockito.verify(certificateDaoMock, Mockito.times(1)).findBy(Mockito.any(CertificateFinder.class));
+    }
+
+    @Test
+    public void addCertificateTagTest() throws ServiceException, ValidationException {
+        service.addCertificateTag(1, tag1);
+        Mockito.verify(certificateDaoMock, Mockito.times(1))
+                .addCertificateTag(1, tag1.getId());
+    }
+
+    @Test
+    public void addCertificateTag2Test() throws ServiceException, ValidationException {
+        service.addCertificateTag(certificate1, 1);
+        Mockito.verify(certificateDaoMock, Mockito.times(1))
+                .addCertificateTag(certificate1.getId(), 1);
+    }
+
+    @Test
+    public void deleteCertificateTagTest() throws ServiceException, ValidationException {
+        service.deleteCertificateTag(1, 3);
+        Mockito.verify(certificateDaoMock, Mockito.times(1))
+                .deleteCertificateTag(1, 3);
     }
 }
