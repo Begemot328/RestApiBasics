@@ -1,5 +1,7 @@
 package com.epam.esm.service.constants;
 
+import com.epam.esm.service.util.ParametersUtil;
+
 /**
  * Certificate search parameters enum
  *
@@ -16,6 +18,6 @@ public enum CertificateSearchParameters {
      * @return {@link CertificateSearchParameters} enum element
      */
     public static CertificateSearchParameters getEntryByParameter(String parameter) {
-        return valueOf(parameter.toUpperCase().replace("-", "_"));
+        return valueOf(ParametersUtil.convertName(parameter));
     }
 }

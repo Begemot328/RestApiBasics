@@ -1,6 +1,7 @@
 package com.epam.esm.service.constants;
 
 import com.epam.esm.persistence.constants.TagColumns;
+import com.epam.esm.service.util.ParametersUtil;
 
 public enum TagSortingParameters {
     SORT_BY_ID(TagColumns.ID.getValue()),
@@ -28,6 +29,6 @@ public enum TagSortingParameters {
      * @return {@link CertificateSearchParameters} enum element
      */
     public static TagSortingParameters getEntryByParameter(String parameter) {
-        return valueOf(parameter.toUpperCase().replace("-", "_"));
+        return valueOf(ParametersUtil.convertName(parameter));
     }
 }
