@@ -1,7 +1,6 @@
 package com.epam.esm.web;
 
-import com.epam.esm.services.ServiceSpringConfig;
-import com.epam.esm.web.controller.TagController;
+import com.epam.esm.service.ServiceConfig;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -11,7 +10,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.epam.esm")
-@Import(ServiceSpringConfig.class)
+@Import(ServiceConfig.class)
 public class WebAppInitalizer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
