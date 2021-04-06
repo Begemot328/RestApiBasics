@@ -6,6 +6,7 @@ import com.epam.esm.persistence.mapper.CertificateMapper;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
+import com.sun.jdi.ClassType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,6 +107,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     public boolean isTagCertificateTied(int certificateId, int tagId) {
         if (template.queryForObject(CertificateQueries.COUNT_CERTIFICATE_TAG.getValue(),
                 new Object[]{tagId, certificateId},
+                new int[]{Types.INTEGER, Types.INTEGER},
                 Integer.class) == 0) {
             return false;
         } else  return true;
