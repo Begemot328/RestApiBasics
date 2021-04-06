@@ -1,6 +1,6 @@
 package com.epam.esm.service.constants;
 
-import com.epam.esm.service.util.ParametersUtil;
+import com.epam.esm.service.util.ConfigUtils;
 
 /**
  * Certificate search parameters enum
@@ -18,6 +18,6 @@ public enum CertificateSearchParameters {
      * @return {@link CertificateSearchParameters} enum element
      */
     public static CertificateSearchParameters getEntryByParameter(String parameter) {
-        return valueOf(ParametersUtil.convertName(parameter));
+        return valueOf(ConfigUtils.convertName(parameter));
     }
 }

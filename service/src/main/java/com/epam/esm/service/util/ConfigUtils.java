@@ -2,7 +2,7 @@ package com.epam.esm.service.util;
 
 import com.epam.esm.service.constants.CertificateSearchParameters;
 
-public class ParametersUtil {
+public class ConfigUtils {
     private static String UNDESCORE = "_";
     private static String DASH = "-";
 
