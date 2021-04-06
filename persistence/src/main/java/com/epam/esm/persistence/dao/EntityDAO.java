@@ -2,9 +2,9 @@ package com.epam.esm.persistence.dao;
 
 
 import com.epam.esm.model.entity.Entity;
-import com.epam.esm.persistence.exceptions.DAOException;
+import com.epam.esm.persistence.exceptions.DAOSQLException;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Entity DAO interface.
@@ -19,41 +19,42 @@ public interface EntityDAO<T extends Entity> {
      *
      * @param t entity to create
      *
-     * @throws DAOException
+     * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      */
-    T create(T t) throws DAOException;
+    T create(T t) throws DAOSQLException;
 
     /**
      * Read method
      *
      * @param id of the entity
      *
-     * @throws DAOException
+     * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      */
-    T read(int id) throws DAOException;
+    T read(int id) throws DAOSQLException;
 
     /**
      * Update method
      *
      * @param t entity to create
      *
-     * @throws DAOException
+     * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      */
-    void update(T t) throws DAOException;
+    void update(T t) throws DAOSQLException;
 
     /**
      * Delete method
      *
      * @param id of the entity to delete
      *
-     * @throws DAOException
+     * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      */
-    void delete(int id) throws DAOException;
+    void delete(int id) throws DAOSQLException;
 
     /**
      * Find all method
      *
-     * @throws DAOException
+     * @throws DAOSQLException when {@link java.sql.SQLException spotted}
+     * @return {@link java.util.ArrayList} of entities
      */
-    Collection<T> findAll() throws DAOException;
+    List<T> findAll() throws DAOSQLException;
 }
