@@ -1,5 +1,6 @@
 package com.epam.esm.service.service.impl;
 
+import com.epam.esm.model.entity.Entity;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.util.EntityFinder;
@@ -24,6 +25,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * {@link Certificate} service class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Service
 public class CertificateServiceImpl implements CertificateService {
 
@@ -122,7 +129,7 @@ public class CertificateServiceImpl implements CertificateService {
                             break;
                         case TAGNAME:
                             if (StringUtils.isNotEmpty(params.get(key))) {
-                                finder.findByTagName(URLDecoder.decode(params.get(key), StandardCharsets.UTF_8));
+                                finder.findByTag(URLDecoder.decode(params.get(key), StandardCharsets.UTF_8));
                             }
                             break;
                         case PRICE_LESS:

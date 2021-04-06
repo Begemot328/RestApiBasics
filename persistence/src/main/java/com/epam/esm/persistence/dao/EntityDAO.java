@@ -19,7 +19,7 @@ public interface EntityDAO<T extends Entity> {
      *
      * @param t entity to create
      *
-     * @throws DAOSQLException
+     * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      */
     T create(T t) throws DAOSQLException;
 
@@ -28,7 +28,7 @@ public interface EntityDAO<T extends Entity> {
      *
      * @param id of the entity
      *
-     * @throws DAOSQLException
+     * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      */
     T read(int id) throws DAOSQLException;
 
@@ -37,7 +37,7 @@ public interface EntityDAO<T extends Entity> {
      *
      * @param t entity to create
      *
-     * @throws DAOSQLException
+     * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      */
     void update(T t) throws DAOSQLException;
 
@@ -46,15 +46,15 @@ public interface EntityDAO<T extends Entity> {
      *
      * @param id of the entity to delete
      *
-     * @throws DAOSQLException
+     * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      */
     void delete(int id) throws DAOSQLException;
 
     /**
      * Find all method
      *
-     * @throws DAOSQLException
-     * @return
+     * @throws DAOSQLException when {@link java.sql.SQLException spotted}
+     * @return {@link java.util.ArrayList} of entities
      */
     List<T> findAll() throws DAOSQLException;
 }

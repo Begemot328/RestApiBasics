@@ -1,5 +1,11 @@
 package com.epam.esm.persistence.constants;
 
+/**
+ * Certificate SQL queries enum
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public enum CertificateQueries {
     SELECT_FROM_CERTIFICATE_TAG("SELECT * FROM certificates.certificate_tags"),
     WHERE_TAG_ID(" WHERE tag_id = ?"),
@@ -19,12 +25,26 @@ public enum CertificateQueries {
     COUNT_CERTIFICATE_TAG("SELECT COUNT(*) FROM certificates.certificate_tag " +
             "WHERE tag_id = ? AND certificate_id = ?;");
 
+    /**
+     * Default constructor
+     * @param value column name
+     */
     CertificateQueries(String value) {
         this.value = value;
     }
 
+    /**
+     * Value getter
+     *
+     * @return query String line
+     */
     private String value;
 
+    /**
+     * Value getter
+     *
+     * @return query String line
+     */
     public String getValue() {
         return value;
     }

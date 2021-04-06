@@ -1,7 +1,11 @@
 package com.epam.esm.persistence.util;
 
-import java.util.Locale;
-
+/**
+ * Ascending\descenging mode constants
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public enum AscDesc {
     ASC, DESC;
 }

@@ -2,19 +2,44 @@ package com.epam.esm.model.entity;
 
 import java.util.Objects;
 
+/**
+ * Tag entity class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public class Tag extends Entity {
     private String name;
 
+    /**
+     * Default constructor
+     */
     public Tag() {}
 
+    /**
+     * Constructor
+     *
+     * @param name name of the tag
+     */
     public Tag(String name) {
         this.name = name;
     }
 
+
+    /**
+     * Name getter
+     *
+     * @return name of the tag
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Name setter
+     *
+     * @param  name name of the tag
+     */
     public void setName(String name) {
         this.name = name;
     }

@@ -79,7 +79,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Collection<Tag> findAll() throws ServiceException {
+    public List<Tag> findAll() throws ServiceException {
         try {
             return dao.findAll();
         } catch (DAOSQLException e) {

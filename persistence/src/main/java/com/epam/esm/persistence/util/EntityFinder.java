@@ -4,21 +4,42 @@ import com.epam.esm.model.entity.Entity;
 
 import java.util.Objects;
 
-
+/**
+ * Abstract search criteria class to find {@link Entity} objects
+ * via {@link com.epam.esm.persistence.dao.EntityDAO} datasources.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public abstract class EntityFinder<T extends Entity> {
     protected String searchCondition = "";
     protected String sortCondition = "";
 
     public EntityFinder() {}
 
+    /**
+     * Search condition getter
+     *
+     * @return search condition
+     */
     protected String getSearchCondition() {
         return searchCondition;
     }
 
+    /**
+     * Sort condition getter
+     *
+     * @return sort condition
+     */
     protected String getSortCondition() {
         return sortCondition;
     }
 
+    /**
+     * Query getter
+     *
+     * @return query line
+     */
     public String getQuery() {
         StringBuilder query = new StringBuilder();
         if (!searchCondition.isEmpty()) {
@@ -31,6 +52,9 @@ public abstract class EntityFinder<T extends Entity> {
         return query.toString();
     }
 
+    /**
+     * Method to join another {@link EntityFinder} conditions by AND logic
+     */
     public void and(EntityFinder<T> finder) {
         if (!finder.getSearchCondition().isEmpty()) {
             this.searchCondition = searchCondition + " AND (" + finder.getSearchCondition() + ")";
@@ -39,6 +63,9 @@ public abstract class EntityFinder<T extends Entity> {
         }
     }
 
+    /**
+     * Method to join another {@link EntityFinder} conditions by OR logic
+     */
     public void or(EntityFinder<T> finder) {
         if (!finder.getSearchCondition().isEmpty()) {
             this.searchCondition = searchCondition + " OR (" + finder.getSearchCondition() + ")";
@@ -47,6 +74,12 @@ public abstract class EntityFinder<T extends Entity> {
         }
     }
 
+    /**
+     * Method to join another {@link EntityFinder} conditions by AND logic
+     *
+     * @param sorting name of the parameter to sort by
+     * @param ascDesc {@link AscDesc} enum object to specify sorting order
+     */
     public void sortBy(String sorting, AscDesc ascDesc) {
         if (!sortCondition.isEmpty()) {
             this.sortCondition = sortCondition.concat(", " + sorting + " " + ascDesc.toString());
@@ -55,6 +88,11 @@ public abstract class EntityFinder<T extends Entity> {
         }
     }
 
+    /**
+     * Method to find by query, adds it to previous condition according to AND logic by default
+     *
+     * @param query query to find by
+     */
     protected void find(String query) {
         if (!searchCondition.isEmpty()) {
             this.searchCondition += " AND ";

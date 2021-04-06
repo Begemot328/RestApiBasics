@@ -12,10 +12,21 @@ public enum TagSortingParameters {
         this.value = value;
     }
 
+    /**
+     * Value getter
+     *
+     * @return query String line
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Obtain enum element by {@link String} name
+     *
+     * @param parameter parameter to find search parameter by
+     * @return {@link CertificateSearchParameters} enum element
+     */
     public static TagSortingParameters getEntryByParameter(String parameter) {
         return valueOf(parameter.toUpperCase().replace("-", "_"));
     }

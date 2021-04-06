@@ -1,5 +1,8 @@
 package com.epam.esm.persistence.pool;
 
+import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.exceptions.DAOSQLException;
+import com.epam.esm.persistence.util.EntityFinder;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,11 +13,15 @@ import org.springframework.stereotype.Component;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Connection pool, @{link BasicDataSource} wrapper
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Component
 public class DBCPDataSource {
     static Logger logger = LoggerFactory.getLogger(DBCPDataSource.class);
-
-
     private BasicDataSource ds = new BasicDataSource();
 
     @Value("${db.url}")
@@ -36,14 +43,18 @@ public class DBCPDataSource {
     @Value("${db.maxOpenedPreparedStatements}")
     private String maxOpenedPreparedStatements;
 
-    public Connection getConnection() throws SQLException {
-        return ds.getConnection();
-    }
-
+    /**
+     * Default constructor
+     */
     private DBCPDataSource(){
         logger.debug("DBCPDataSource() constructor");
     }
 
+    /**
+     * Get {@link BasicDataSource} method
+     *
+     * @return {@link BasicDataSource}  object with set connection parameters
+     */
     @Bean
     public BasicDataSource getDataSource() {
         ds.setUrl(url);

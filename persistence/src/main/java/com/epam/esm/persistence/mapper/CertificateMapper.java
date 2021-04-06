@@ -9,6 +9,12 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Certificate to/from DB mapper.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Component
 public class CertificateMapper implements RowMapper<Certificate> {
     @Override
