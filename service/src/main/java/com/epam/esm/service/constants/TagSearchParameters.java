@@ -1,6 +1,6 @@
 package com.epam.esm.service.constants;
 
-import com.epam.esm.service.util.ParametersUtil;
+import com.epam.esm.service.util.ConfigUtils;
 
 public enum TagSearchParameters {
     NAME;
@@ -12,6 +12,6 @@ public enum TagSearchParameters {
      * @return {@link CertificateSearchParameters} enum element
      */
     public static TagSearchParameters getEntryByParameter(String parameter) {
-        return valueOf(ParametersUtil.convertName(parameter));
+        return valueOf(ConfigUtils.convertName(parameter));
     }
 }
