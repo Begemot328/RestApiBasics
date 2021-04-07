@@ -1,5 +1,6 @@
 package com.epam.esm.persistence.dao.impl;
 
+import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.CertificateQueries;
 import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.mapper.CertificateMapper;
@@ -19,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -59,9 +61,15 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public Certificate read(int id) throws DAOSQLException {
-        return template.query(CertificateQueries.SELECT_FROM_CERTIFICATE.getValue()
+        List<Certificate> result = template.query(
+                CertificateQueries.SELECT_FROM_CERTIFICATE.getValue()
                         .concat(CertificateQueries.WHERE_ID.getValue()),
-                certificateMapper, id).stream().findFirst().get();
+                certificateMapper, id);
+        if(result.isEmpty()) {
+            return  null;
+        } else {
+            return result.get(0);
+        }
     }
 
     @Override

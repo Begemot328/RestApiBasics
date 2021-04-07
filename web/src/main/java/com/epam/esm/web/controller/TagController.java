@@ -70,16 +70,8 @@ public class TagController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Tag> create(@RequestBody Tag tag) throws ServiceException, ValidationException {
-            tag = tagServiceImpl.create(tag);
-            return new ResponseEntity<>(tag, HttpStatus.CREATED);
-    }
-
-    @PutMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Tag> update(@RequestBody Tag tag) throws ServiceException, ValidationException {
-            tagServiceImpl.update(tag);
-            return new ResponseEntity<>(tag, HttpStatus.CREATED);
+        tag = tagServiceImpl.create(tag);
+        return new ResponseEntity<>(tag, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}/certificates")
