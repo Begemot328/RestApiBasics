@@ -56,5 +56,5 @@ public interface EntityDAO<T extends Entity> {
      * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      * @return {@link java.util.ArrayList} of entities
      */
-    List<T> findAll() throws DAOSQLException;
+    List<T> readAll() throws DAOSQLException;
 }

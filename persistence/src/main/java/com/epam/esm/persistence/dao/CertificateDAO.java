@@ -21,7 +21,7 @@ public interface CertificateDAO extends EntityDAO<Certificate> {
      * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      * @return {@link java.util.ArrayList}  of {@link Tag} objects
      */
-    List<Certificate> findBy(EntityFinder<Certificate> finder) throws DAOSQLException;
+    List<Certificate> readBy(EntityFinder<Certificate> finder) throws DAOSQLException;
 
     /**
      * Add connection between  {@link Tag} and {@link Certificate} method

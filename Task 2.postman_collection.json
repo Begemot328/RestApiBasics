@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "dc68d2f5-ae82-437e-964a-ad8bf689cca9",
+		"_postman_id": "992d22f2-b47a-43fd-ab21-aa29d6940f58",
 		"name": "Task 2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -33,7 +33,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{domain}}/{{servlet}}/tags?name=b",
+							"raw": "http://{{domain}}/{{servlet}}/tags?name=1111",
 							"protocol": "http",
 							"host": [
 								"{{domain}}"
@@ -45,7 +45,7 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "b"
+									"value": "1111"
 								}
 							]
 						}
@@ -133,36 +133,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"id\": 3,\r\n        \"name\": \"books\"\r\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://{{domain}}/{{servlet}}/tags/",
-							"protocol": "http",
-							"host": [
-								"{{domain}}"
-							],
-							"path": [
-								"{{servlet}}",
-								"tags",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "add tag 2 certificate 1 Copy",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 2,\r\n    \"name\": \"games_updated\"\r\n}",
+							"raw": "{\r\n        \"id\": 3,\r\n        \"name\": \"books 2\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -190,7 +161,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://{{domain}}/{{servlet}}/tags/7",
+							"raw": "http://{{domain}}/{{servlet}}/tags/8",
 							"protocol": "http",
 							"host": [
 								"{{domain}}"
@@ -198,7 +169,7 @@
 							"path": [
 								"{{servlet}}",
 								"tags",
-								"7"
+								"8"
 							]
 						}
 					},
@@ -232,7 +203,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[   {\r\n        \"id\": 2,\r\n        \"name\": \"nastolka.by\",\r\n        \"description\": \"board games certificate\",\r\n        \"price\": 40.1,\r\n        \"duration\": 50,\r\n        \"createDate\": \"2021-01-22\",\r\n        \"lastUpdateDate\": \"2021-03-22\"\r\n    }\r\n    ]",
+							"raw": "[\r\n    {\r\n        \"id\": 2,\r\n        \"name\": \"nastolka.by\",\r\n        \"description\": \"board games certificate\",\r\n        \"price\": 40.1,\r\n        \"duration\": 50,\r\n        \"createDate\": \"2021-01-22\",\r\n        \"lastUpdateDate\": \"2021-03-22\"\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -261,7 +232,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://{{domain}}/{{servlet}}/tags/2/certificates/9",
+							"raw": "http://{{domain}}/{{servlet}}/tags/2/certificates/2",
 							"protocol": "http",
 							"host": [
 								"{{domain}}"
@@ -271,7 +242,7 @@
 								"tags",
 								"2",
 								"certificates",
-								"9"
+								"2"
 							]
 						}
 					},
@@ -284,7 +255,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n    \"id\": 0,\r\n    \"name\": \"nastolka.by 34\",\r\n    \"description\": \"board games certificate\",\r\n    \"price\": 40.1,\r\n    \"duration\": 50,\r\n    \"createDate\": \"2021-01-22\",\r\n    \"lastUpdateDate\": \"2021-03-22\"\r\n    }\r\n]",
+							"raw": "[\r\n    {\r\n    \"name\": \"nastolka.by 11111\",\r\n    \"description\": \"board games certificate\",\r\n    \"price\": 40.1,\r\n    \"duration\": 50,\r\n    \"createDate\": \"2021-01-22\",\r\n    \"lastUpdateDate\": \"2021-03-22\"\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -302,6 +273,28 @@
 								"tags",
 								"2",
 								"certificates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "del tag 2 certificate 6",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/tags/2/certificates/11",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"tags",
+								"2",
+								"certificates",
+								"11"
 							]
 						}
 					},
@@ -411,7 +404,36 @@
 					"response": []
 				},
 				{
-					"name": "get all certificates sort name tagname books name o",
+					"name": "get all certificates sort name tagname games",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{domain}}/{{servlet}}/certificates?sort-by-name=desc&tagname=games",
+							"protocol": "http",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"{{servlet}}",
+								"certificates"
+							],
+							"query": [
+								{
+									"key": "sort-by-name",
+									"value": "desc"
+								},
+								{
+									"key": "tagname",
+									"value": "games"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all certificates sort name tagname games name o",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -444,41 +466,12 @@
 					"response": []
 				},
 				{
-					"name": "get all certificates sort name tagname games",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{domain}}/{{servlet}}/certificates?sort-by-name=desc&tagname=games",
-							"protocol": "http",
-							"host": [
-								"{{domain}}"
-							],
-							"path": [
-								"{{servlet}}",
-								"certificates"
-							],
-							"query": [
-								{
-									"key": "sort-by-name",
-									"value": "desc"
-								},
-								{
-									"key": "tagname",
-									"value": "games"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "get certificate 2",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{domain}}/{{servlet}}/certificates/2",
+							"raw": "http://{{domain}}/{{servlet}}/certificates/gfhgfh",
 							"protocol": "http",
 							"host": [
 								"{{domain}}"
@@ -486,7 +479,7 @@
 							"path": [
 								"{{servlet}}",
 								"certificates",
-								"2"
+								"gfhgfh"
 							]
 						}
 					},
@@ -520,7 +513,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n    \"id\": 1,\r\n    \"name\": \"games\"\r\n    }\r\n]",
+							"raw": "[\r\n    {\r\n    \"id\": 2,\r\n    \"name\": \"games\"\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -544,13 +537,13 @@
 					"response": []
 				},
 				{
-					"name": "add certificate 2 tag 1 Copy",
+					"name": "add certificate 2 tag new",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"id\": 0,\r\n        \"name\": \"gamesdscsd\"\r\n    }\r\n]",
+							"raw": "[\r\n    {\r\n        \"id\": 0,\r\n        \"name\": \"games dscsd\"\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -579,7 +572,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://{{domain}}/{{servlet}}/certificates/2/tags/1",
+							"raw": "http://{{domain}}/{{servlet}}/certificates/2/tags/9",
 							"protocol": "http",
 							"host": [
 								"{{domain}}"
@@ -589,7 +582,7 @@
 								"certificates",
 								"2",
 								"tags",
-								"1"
+								"9"
 							]
 						}
 					},
@@ -602,7 +595,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"rider.by\",\r\n    \"description\": null,\r\n    \"price\": 143.5,\r\n    \"duration\": 5,\r\n    \"createDate\": \"2021-02-22\",\r\n    \"lastUpdateDate\": \"2021-03-22\"\r\n}",
+							"raw": "{\r\n    \"name\": \"rider.by new\",\r\n    \"description\": null,\r\n    \"price\": 143.5,\r\n    \"duration\": 5,\r\n    \"createDate\": \"2021-02-22\",\r\n    \"lastUpdateDate\": \"2021-03-22\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -638,7 +631,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{domain}}/{{servlet}}/certificates/10",
+							"raw": "http://{{domain}}/{{servlet}}/certificates/11",
 							"protocol": "http",
 							"host": [
 								"{{domain}}"
@@ -646,7 +639,7 @@
 							"path": [
 								"{{servlet}}",
 								"certificates",
-								"10"
+								"11"
 							]
 						}
 					},
@@ -659,7 +652,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"OZ.by_upd2\",\r\n    \"description\": null,\r\n    \"price\": 140.1,\r\n    \"duration\": 10,\r\n    \"createDate\": \"2021-03-22\",\r\n    \"lastUpdateDate\": \"2021-03-22\"\r\n}",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"\",\r\n    \"description\": \"not null\",\r\n    \"price\": \"12\",\r\n    \"duration\": 10,\r\n    \"createDate\": \"2021-03-22\",\r\n    \"lastUpdateDate\": \"2021-03-22\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -706,10 +699,12 @@
 	],
 	"variable": [
 		{
+			"id": "ea45f92d-6136-45d1-8682-23efd7c3e844",
 			"key": "servlet",
 			"value": "web_war_exploded"
 		},
 		{
+			"id": "72eae4e2-47a0-4b33-9dd1-16f1643d08c8",
 			"key": "domain",
 			"value": "localhost:8081/"
 		}

@@ -1,6 +1,5 @@
 package com.epam.esm.persistence.dao.impl;
 
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.CertificateQueries;
 import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.mapper.CertificateMapper;
@@ -20,15 +19,15 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class CertificateDAOImpl implements CertificateDAO {
     static Logger logger = LoggerFactory.getLogger(CertificateDAOImpl.class);
 
-    private JdbcTemplate template;
-    private CertificateMapper certificateMapper;
+    private final JdbcTemplate template;
+    private final CertificateMapper certificateMapper;
 
     @Autowired
     public CertificateDAOImpl(JdbcTemplate template, CertificateMapper certificateMapper) {
@@ -61,15 +60,9 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public Certificate read(int id) throws DAOSQLException {
-        List<Certificate> result = template.query(
-                CertificateQueries.SELECT_FROM_CERTIFICATE.getValue()
+        return template.queryForObject(CertificateQueries.SELECT_FROM_CERTIFICATE.getValue()
                         .concat(CertificateQueries.WHERE_ID.getValue()),
                 certificateMapper, id);
-        if(result.isEmpty()) {
-            return  null;
-        } else {
-            return result.get(0);
-        }
     }
 
     @Override
@@ -89,7 +82,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public List<Certificate> findAll() throws DAOSQLException {
+    public List<Certificate> readAll() throws DAOSQLException {
         return template.query(CertificateQueries.SELECT_FROM_CERTIFICATE.getValue(), certificateMapper);
     }
 
@@ -106,10 +99,13 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public List<Certificate> findBy(EntityFinder<Certificate> finder) throws DAOSQLException {
-        return template.queryForStream(CertificateQueries.SELECT_FROM_CERTIFICATE_TAG.getValue()
+    public List<Certificate> readBy(EntityFinder<Certificate> finder) throws DAOSQLException {
+        Stream<Certificate> stream = template.queryForStream(CertificateQueries.SELECT_FROM_CERTIFICATE_TAG.getValue()
                         .concat(finder.getQuery()),
-                certificateMapper).distinct().collect(Collectors.toList());
+                certificateMapper);
+        List<Certificate> result = stream.distinct().collect(Collectors.toList());
+        stream.close();
+        return result;
     }
 
     public boolean isTagCertificateTied(int certificateId, int tagId) {

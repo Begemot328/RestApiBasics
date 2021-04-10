@@ -6,6 +6,6 @@ package com.epam.esm.persistence.util;
  * @author Yury Zmushko
  * @version 1.0
  */
-public enum AscDesc {
-    ASC, DESC;
+public enum SortDirection {
+    ASC, DESC
 }

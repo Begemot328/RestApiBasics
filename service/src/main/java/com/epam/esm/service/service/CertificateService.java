@@ -22,7 +22,7 @@ public interface CertificateService extends EntityService<Certificate> {
      * @param tagId {@link Tag} ID to find by
      *
      */
-    List<Certificate> findByTag(int tagId) throws ServiceException;
+    List<Certificate> readByTag(int tagId) throws ServiceException;
 
     /**
      * Add tie between {@link Certificate} and {@link Tag} method
@@ -53,5 +53,5 @@ public interface CertificateService extends EntityService<Certificate> {
      *
      * @param params finding and sorting parameters
      */
-    List<Certificate> find(Map<String, String> params) throws ServiceException;
+    List<Certificate> read(Map<String, String> params) throws ServiceException;
 }

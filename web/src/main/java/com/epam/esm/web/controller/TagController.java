@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,12 +42,12 @@ public class TagController {
     @GetMapping
     public ResponseEntity<?> readAll(@RequestParam Map<String,String> params) throws ServiceException {
             Collection<Tag> list;
-            if (params == null || params.isEmpty()) {
-                list = tagServiceImpl.findAll();
+            if (CollectionUtils.isEmpty(params)) {
+                list = tagServiceImpl.readAll();
             } else {
-                list = tagServiceImpl.find(params);
+                list = tagServiceImpl.read(params);
             }
-            return list != null &&  !list.isEmpty()
+            return !CollectionUtils.isEmpty(list)
                     ? new ResponseEntity<>(list, HttpStatus.OK)
                     : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -77,7 +78,7 @@ public class TagController {
     @GetMapping(value = "/{id}/certificates")
     public ResponseEntity<?> readCertificates(@PathVariable(value = "id") int id) throws ServiceException {
             Collection<Certificate> list;
-            list = certificateServiceImpl.findByTag(id);
+            list = certificateServiceImpl.readByTag(id);
             return list != null &&  !list.isEmpty()
                     ? new ResponseEntity<>(list, HttpStatus.OK)
                     : new ResponseEntity<>(HttpStatus.NOT_FOUND);

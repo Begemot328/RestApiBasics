@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TagServiceImplTests {
     private TagDAOImpl tagDaoMock = Mockito.mock(TagDAOImpl.class);
     private EntityValidator<Tag> validator;
-    private TagFinder finder = new TagFinder();
+    private TagFinder finder;
     private TagServiceImpl service;
 
     private Tag tag1 = new Tag("Tag1");
@@ -35,10 +35,10 @@ public class TagServiceImplTests {
 
     {
         try {
-            Mockito.when(tagDaoMock.findAll()).thenReturn(fullList);
+            Mockito.when(tagDaoMock.readAll()).thenReturn(fullList);
             Mockito.when(tagDaoMock.read(1)).thenReturn(tag1);
             Mockito.when(tagDaoMock.read(2)).thenReturn(tag2);
-            Mockito.when(tagDaoMock.findBy(Mockito.any(TagFinder.class))).thenReturn(shortList);
+            Mockito.when(tagDaoMock.readBy(Mockito.any(TagFinder.class))).thenReturn(shortList);
             Mockito.doNothing().when(tagDaoMock).delete(Mockito.any(Integer.class));
             Mockito.doNothing().when(tagDaoMock).update(Mockito.any(Tag.class));
             Mockito.when(tagDaoMock.create(Mockito.any(Tag.class))).thenAnswer(invocation -> {
@@ -56,7 +56,7 @@ public class TagServiceImplTests {
         tag2.setId(2);
         tag1.setId(3);
         tag2.setId(4);
-        service = new TagServiceImpl(tagDaoMock, validator, finder);
+        service = new TagServiceImpl(tagDaoMock, validator);
     }
 
     @Test
@@ -66,7 +66,7 @@ public class TagServiceImplTests {
 
     @Test
     public void findAllTest() throws ServiceException {
-        assertEquals(fullList, service.findAll());
+        assertEquals(fullList, service.readAll());
     }
 
     @Test
@@ -90,9 +90,9 @@ public class TagServiceImplTests {
 
     @Test
     public void findByCertificateTest() throws ServiceException, DAOSQLException {
-        assertEquals(shortList, service.findByCertificate(1));
+        assertEquals(shortList, service.readByCertificate(1));
         TagFinder finder = new TagFinder().findByCertificate(1);
-        Mockito.verify(tagDaoMock, Mockito.times(1)).findBy(finder);
+        Mockito.verify(tagDaoMock, Mockito.times(1)).readBy(finder);
     }
 
     @Test
@@ -101,7 +101,7 @@ public class TagServiceImplTests {
         params.put(TagSearchParameters.NAME.name(), "1");
         params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), "2");
 
-        assertEquals(shortList, service.find(params));
-        Mockito.verify(tagDaoMock, Mockito.times(1)).findBy(Mockito.any(TagFinder.class));
+        assertEquals(shortList, service.read(params));
+        Mockito.verify(tagDaoMock, Mockito.times(1)).readBy(Mockito.any(TagFinder.class));
     }
 }

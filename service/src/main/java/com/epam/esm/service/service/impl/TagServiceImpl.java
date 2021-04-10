@@ -1,6 +1,7 @@
 package com.epam.esm.service.service.impl;
 
 import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.util.CertificateFinder;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.util.TagFinder;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -26,15 +26,12 @@ public class TagServiceImpl implements TagService {
 
     private TagDAO dao;
     private EntityValidator<Tag> validator;
-    private TagFinder finder;
 
     @Autowired
     public TagServiceImpl(TagDAO dao,
-                          EntityValidator<Tag> validator,
-                          TagFinder finder) {
+                          EntityValidator<Tag> validator) {
         this.dao = dao;
         this.validator = validator;
-        this.finder = finder;
     }
 
     @Override
@@ -79,33 +76,33 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> findAll() throws ServiceException {
+    public List<Tag> readAll() throws ServiceException {
         try {
-            return dao.findAll();
+            return dao.readAll();
         } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<Tag> findBy(EntityFinder<Tag> entityFinder) throws ServiceException {
+    public List<Tag> readBy(EntityFinder<Tag> entityFinder) throws ServiceException {
         try {
-            return dao.findBy(entityFinder);
+            return dao.readBy(entityFinder);
         } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<Tag> findByCertificate(int certificateId) throws ServiceException {
-        finder = new TagFinder();
+    public List<Tag> readByCertificate(int certificateId) throws ServiceException {
+        TagFinder finder = new TagFinder();
         finder.findByCertificate(certificateId);
-        return findBy(finder);
+        return readBy(finder);
     }
 
     @Override
-    public List<Tag> find(Map<String, String> params) throws ServiceException {
-        finder = new TagFinder();
+    public List<Tag> read(Map<String, String> params) throws ServiceException {
+        TagFinder finder = new TagFinder();
         for (String key : params.keySet()) {
             try {
                 if (key.contains("sort")) {
@@ -122,6 +119,6 @@ public class TagServiceImpl implements TagService {
                 throw new BadRequestException(e);
             }
         }
-        return findBy(finder);
+        return readBy(finder);
     }
 }
