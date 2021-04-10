@@ -7,7 +7,7 @@ import com.epam.esm.persistence.mapper.TagMapper;
 import com.epam.esm.persistence.util.TagFinder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -35,7 +35,7 @@ public class TagsDaoTests {
 
     @Test
     void testFindAll() throws DAOSQLException {
-        assertEquals(tagsDao.findAll().size(), 5);
+        assertEquals(tagsDao.readAll().size(), 5);
     }
 
     @Test
@@ -48,10 +48,10 @@ public class TagsDaoTests {
     @Test
     void testCreate() throws DAOSQLException {
         Tag tag = new Tag("new");
-        int size = tagsDao.findAll().size();
+        int size = tagsDao.readAll().size();
 
         tagsDao.create(tag);
-        assertEquals(tagsDao.findAll().size(), ++size);
+        assertEquals(tagsDao.readAll().size(), ++size);
     }
 
     @Test
@@ -64,18 +64,18 @@ public class TagsDaoTests {
 
     @Test
     void testFindBy() throws DAOSQLException {
-        TagFinder finderMock = Mockito.mock(TagFinder.class);
-        Mockito.when(finderMock.getQuery()).thenReturn(" WHERE NAME = 'books'");
+        TagFinder finderMock = mock(TagFinder.class);
+        when(finderMock.getQuery()).thenReturn(" WHERE NAME = 'books'");
         Tag tag = new Tag("books");
         tag.setId(3);
-        assertEquals(Collections.singletonList(tag), tagsDao.findBy(finderMock));
+        assertEquals(Collections.singletonList(tag), tagsDao.readBy(finderMock));
     }
 
     @Test
     void testDelete() throws DAOSQLException {
-        int size = tagsDao.findAll().size();
+        int size = tagsDao.readAll().size();
 
         tagsDao.delete(1);
-        assertEquals(tagsDao.findAll().size(), --size);
+        assertEquals(tagsDao.readAll().size(), --size);
     }
 }

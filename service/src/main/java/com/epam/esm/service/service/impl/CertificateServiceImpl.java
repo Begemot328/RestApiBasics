@@ -1,6 +1,5 @@
 package com.epam.esm.service.service.impl;
 
-import com.epam.esm.model.entity.Entity;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.util.EntityFinder;
@@ -21,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,22 +36,22 @@ public class CertificateServiceImpl implements CertificateService {
 
     private CertificateDAO dao;
     private EntityValidator<Certificate> validator;
-    private CertificateFinder finder;
     private TagService tagService;
 
     @Autowired
     public CertificateServiceImpl(CertificateDAO dao,
                                   EntityValidator<Certificate> validator,
-                                  CertificateFinder finder, TagService tagService) {
+                                  TagService tagService) {
         this.dao = dao;
         this.validator = validator;
-        this.finder = finder;
         this.tagService = tagService;
     }
 
     @Override
     public Certificate create(Certificate certificate) throws ServiceException, ValidationException {
         try {
+            certificate.setCreateDate(LocalDate.now());
+            certificate.setLastUpdateDate(LocalDate.now());
             validator.validate(certificate);
             return dao.create(certificate);
         } catch (DAOSQLException e) {
@@ -83,6 +83,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     public void update(Certificate certificate) throws ServiceException, ValidationException {
         try {
+            certificate.setLastUpdateDate(LocalDate.now());
             validator.validate(certificate);
             dao.update(certificate);
         } catch (DAOSQLException e) {
@@ -91,26 +92,26 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public List<Certificate> findAll() throws ServiceException {
+    public List<Certificate> readAll() throws ServiceException {
         try {
-            return dao.findAll();
+            return dao.readAll();
         } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<Certificate> findBy(EntityFinder<Certificate> entityFinder) throws ServiceException {
+    public List<Certificate> readBy(EntityFinder<Certificate> entityFinder) throws ServiceException {
         try {
-            return dao.findBy(entityFinder);
+            return dao.readBy(entityFinder);
         } catch (DAOSQLException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<Certificate> find(Map<String, String> params) throws ServiceException {
-        finder = new CertificateFinder();
+    public List<Certificate> read(Map<String, String> params) throws ServiceException {
+        CertificateFinder finder = new CertificateFinder();
         for (String key : params.keySet()) {
             try {
                 if (key.contains("sort")) {
@@ -152,14 +153,14 @@ public class CertificateServiceImpl implements CertificateService {
                 throw new BadRequestException(e);
             }
         }
-        return findBy(finder);
+        return readBy(finder);
     }
 
     @Override
-    public List<Certificate> findByTag(int tagId) throws ServiceException {
-        finder = new CertificateFinder();
+    public List<Certificate> readByTag(int tagId) throws ServiceException {
+        CertificateFinder finder = new CertificateFinder();
         finder.findByTag(tagId);
-        return findBy(finder);
+        return readBy(finder);
     }
 
     @Override

@@ -20,12 +20,12 @@ public interface TagService extends EntityService<Tag> {
      * @param certificateId {@link Certificate} ID to find by
      *
      */
-    List<Tag> findByCertificate(int certificateId) throws ServiceException;
+    List<Tag> readByCertificate(int certificateId) throws ServiceException;
 
     /**
      * Find {@link Tag} objects by parameters method
      *
      * @param params finding and sorting parameters
      */
-    List<Tag> find(Map<String, String> params) throws ServiceException;
+    List<Tag> read(Map<String, String> params) throws ServiceException;
 }

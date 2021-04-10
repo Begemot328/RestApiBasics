@@ -54,10 +54,10 @@ public class CertificateServiceImplTests {
                 return tag;
             });
 
-            Mockito.when(certificateDaoMock.findAll()).thenReturn(fullList);
+            Mockito.when(certificateDaoMock.readAll()).thenReturn(fullList);
             Mockito.when(certificateDaoMock.read(1)).thenReturn(certificate1);
             Mockito.when(certificateDaoMock.read(2)).thenReturn(certificate2);
-            Mockito.when(certificateDaoMock.findBy(Mockito.any(CertificateFinder.class))).thenReturn(shortList);
+            Mockito.when(certificateDaoMock.readBy(Mockito.any(CertificateFinder.class))).thenReturn(shortList);
             Mockito.doNothing().when(certificateDaoMock).delete(Mockito.any(Integer.class));
             Mockito.doNothing().when(certificateDaoMock).update(Mockito.any(Certificate.class));
             Mockito.when(certificateDaoMock.create(Mockito.any(Certificate.class))).thenAnswer(invocation -> {
@@ -79,7 +79,7 @@ public class CertificateServiceImplTests {
         certificate2.setId(2);
         certificate1.setId(3);
         certificate2.setId(4);
-        service = new CertificateServiceImpl(certificateDaoMock, validator, finder, tagServiceMock);
+        service = new CertificateServiceImpl(certificateDaoMock, validator, tagServiceMock);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class CertificateServiceImplTests {
 
     @Test
     public void findAllTest() throws ServiceException {
-        assertEquals(fullList, service.findAll());
+        assertEquals(fullList, service.readAll());
     }
 
     @Test
@@ -113,10 +113,10 @@ public class CertificateServiceImplTests {
 
     @Test
     public void findByTagTest() throws ServiceException, DAOSQLException {
-        assertEquals(shortList, service.findByTag(1));
+        assertEquals(shortList, service.readByTag(1));
         CertificateFinder finder = new CertificateFinder();
         finder.findByTag(1);
-        Mockito.verify(certificateDaoMock, Mockito.times(1)).findBy(finder);
+        Mockito.verify(certificateDaoMock, Mockito.times(1)).readBy(finder);
     }
 
     @Test
@@ -125,8 +125,8 @@ public class CertificateServiceImplTests {
         params.put(CertificateSearchParameters.NAME.name(), "1");
         params.put(CertificateSortingParameters.SORT_BY_NAME.name().toLowerCase(), "2");
 
-        assertEquals(shortList, service.find(params));
-        Mockito.verify(certificateDaoMock, Mockito.times(1)).findBy(Mockito.any(CertificateFinder.class));
+        assertEquals(shortList, service.read(params));
+        Mockito.verify(certificateDaoMock, Mockito.times(1)).readBy(Mockito.any(CertificateFinder.class));
     }
 
     @Test
@@ -144,7 +144,7 @@ public class CertificateServiceImplTests {
     }
 
     @Test
-    public void deleteCertificateTagTest() throws ServiceException, ValidationException {
+    public void deleteCertificateTagTest() throws ServiceException {
         service.deleteCertificateTag(1, 3);
         Mockito.verify(certificateDaoMock, Mockito.times(1))
                 .deleteCertificateTag(1, 3);

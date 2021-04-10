@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 @Component
 public class TagDAOImpl implements TagDAO {
     static Logger logger = LoggerFactory.getLogger(TagDAOImpl.class);
-    private JdbcTemplate template;
-    private TagMapper tagMapper;
+    private final JdbcTemplate template;
+    private final TagMapper tagMapper;
 
     @Autowired
     public TagDAOImpl(JdbcTemplate template, TagMapper tagMapper) {
@@ -45,20 +45,15 @@ public class TagDAOImpl implements TagDAO {
             throw new DAOSQLException("empty keyholder");
         }
         tag.setId(keyHolder.getKey().intValue());
-        return   tag;
+        return tag;
     }
 
     @Override
     public Tag read(int id) throws DAOSQLException {
-        List<Tag> result =  template.query(
+        return template.queryForObject(
                 TagQueries.SELECT_FROM_TAG.getValue()
                 .concat(TagQueries.WHERE_ID.getValue()),
         tagMapper, id);
-        if(result.isEmpty()) {
-            return  null;
-        } else {
-            return result.get(0);
-        }
     }
 
     @Override
@@ -72,12 +67,12 @@ public class TagDAOImpl implements TagDAO {
     }
 
     @Override
-    public List<Tag> findAll() throws DAOSQLException {
+    public List<Tag> readAll() throws DAOSQLException {
         return template.query(TagQueries.SELECT_FROM_TAG.getValue(), tagMapper);
     }
 
     @Override
-    public List<Tag> findBy(EntityFinder<Tag> finder) throws DAOSQLException {
+    public List<Tag> readBy(EntityFinder<Tag> finder) throws DAOSQLException {
         return template.queryForStream(TagQueries.SELECT_FROM_TAG_CERTIFICATES.getValue()
                         .concat(finder.getQuery()),
                 tagMapper).distinct().collect(Collectors.toList());

@@ -20,5 +20,5 @@ public interface TagDAO extends EntityDAO<Tag> {
      * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      * @return {@link java.util.ArrayList}  of {@link Tag} objects
      */
-    List<Tag> findBy(EntityFinder<Tag> finder) throws DAOSQLException;
+    List<Tag> readBy(EntityFinder<Tag> finder) throws DAOSQLException;
 }

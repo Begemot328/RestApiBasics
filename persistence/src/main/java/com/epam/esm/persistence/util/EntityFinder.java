@@ -78,13 +78,13 @@ public abstract class EntityFinder<T extends Entity> {
      * Method to join another {@link EntityFinder} conditions by AND logic
      *
      * @param sorting name of the parameter to sort by
-     * @param ascDesc {@link AscDesc} enum object to specify sorting order
+     * @param sortDirection {@link SortDirection} enum object to specify sorting order
      */
-    public void sortBy(String sorting, AscDesc ascDesc) {
+    public void sortBy(String sorting, SortDirection sortDirection) {
         if (!sortCondition.isEmpty()) {
-            this.sortCondition = sortCondition.concat(", " + sorting + " " + ascDesc.toString());
+            this.sortCondition = sortCondition.concat(", " + sorting + " " + sortDirection.toString());
         } else {
-            this.sortCondition = sorting + " " + ascDesc.toString();
+            this.sortCondition = sorting + " " + sortDirection.toString();
         }
     }
 

@@ -1,13 +1,12 @@
 package com.epam.esm.service.service;
 
-import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.persistence.util.AscDesc;
+import com.epam.esm.persistence.util.SortDirection;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Entity;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
-import java.util.Collection;
+
 import java.util.List;
 
 /**
@@ -57,7 +56,7 @@ public interface EntityService<T extends Entity> {
      * {@link com.epam.esm.persistence.exceptions.DAOSQLException}
      * @return list of founded {@link Entity} objects
      */
-    List<T> findAll() throws ServiceException;
+    List<T> readAll() throws ServiceException;
 
     /**
      * Find {@link Entity} objects by {@link EntityFinder} criteria in database method
@@ -67,30 +66,30 @@ public interface EntityService<T extends Entity> {
      * @param entityFinder {@link EntityFinder} criteria to find objects
      * @return list of founded {@link Entity} objects
      */
-    List<T> findBy(EntityFinder<T> entityFinder) throws ServiceException;
+    List<T> readBy(EntityFinder<T> entityFinder) throws ServiceException;
 
     /**
-     * Obtain {@link AscDesc} enum element
+     * Obtain {@link SortDirection} enum element
      *
      * @param param name of the parameter
      * @throws BadRequestException in case of bad request parameters, e.g. param does not
      * correspond to AscDesc elements
-     * @return {@link AscDesc} element
+     * @return {@link SortDirection} element
      */
-    default AscDesc parseAscDesc(String param) throws BadRequestException {
+    default SortDirection parseAscDesc(String param) throws BadRequestException {
         switch (param) {
             case "true":
-                return AscDesc.ASC;
+                return SortDirection.ASC;
             case "false":
-                return AscDesc.DESC;
+                return SortDirection.DESC;
             case "1":
-                return AscDesc.ASC;
+                return SortDirection.ASC;
             case "2":
-                return AscDesc.DESC;
+                return SortDirection.DESC;
             case "asc":
-                return AscDesc.ASC;
+                return SortDirection.ASC;
             case "desc":
-                return AscDesc.DESC;
+                return SortDirection.DESC;
             default:
                 throw new BadRequestException("Wrong parameter sort-by!");
         }
