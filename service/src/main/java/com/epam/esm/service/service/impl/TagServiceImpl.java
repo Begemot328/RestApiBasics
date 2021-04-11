@@ -101,7 +101,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> read(Map<String, String> params) throws ServiceException {
+    public List<Tag> read(Map<String, String> params) throws ServiceException, BadRequestException {
         TagFinder finder = new TagFinder();
         for (String key : params.keySet()) {
             try {

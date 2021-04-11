@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.ZoneId;
 
 /**
  * Certificate to/from DB mapper.
@@ -24,8 +25,10 @@ public class CertificateMapper implements RowMapper<Certificate> {
                     resultSet.getString(CertificateColumns.DESCRIPTION.getValue()),
                     resultSet.getBigDecimal(CertificateColumns.PRICE.getValue()),
                     resultSet.getInt(CertificateColumns.DURATION.getValue()),
-                    resultSet.getDate(CertificateColumns.CREATE_DATE.getValue()).toLocalDate(),
-                    resultSet.getDate(CertificateColumns.LAST_UPDATE_DATE.getValue()).toLocalDate()
+                    resultSet.getTimestamp(CertificateColumns.CREATE_DATE.getValue())
+                            .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                    resultSet.getTimestamp(CertificateColumns.LAST_UPDATE_DATE.getValue())
+                            .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
             );
             certificate.setId(resultSet.getInt(CertificateColumns.ID.getValue()));
         return certificate;

@@ -18,7 +18,7 @@
         <dependency>
             <groupId>com.epam.esm</groupId>
             <artifactId>persistence</artifactId>
-            <version>${parent.version}</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

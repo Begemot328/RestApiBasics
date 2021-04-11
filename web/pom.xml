@@ -11,7 +11,7 @@
 
     <artifactId>web</artifactId>
     <packaging>war</packaging>
-    <version>${parent.version}</version>
+    <version>1.0</version>
     <name>web Maven Webapp</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
@@ -25,7 +25,7 @@
             <dependency>
                 <groupId>com.epam.esm</groupId>
                 <artifactId>service</artifactId>
-                <version>${parent.version}</version>
+                <version>1.0</version>
             </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
         <dependency>

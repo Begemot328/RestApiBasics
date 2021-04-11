@@ -18,7 +18,7 @@
         <dependency>
             <groupId>com.epam.esm</groupId>
             <artifactId>model</artifactId>
-            <version>${parent.version}</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>5.3.5</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2 -->

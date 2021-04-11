@@ -7,8 +7,7 @@
     <groupId>com.epam.esm</groupId>
     <artifactId>RestApiBasics</artifactId>
     <packaging>pom</packaging>
-
-    <version>${project.version}</version>
+    <version>1.0</version>
     <modules>
         <module>persistence</module>
         <module>model</module>
@@ -40,7 +39,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <project.version>1.0</project.version>
+        <project.version>${project.version}</project.version>
         <spring.version>5.3.3</spring.version>
         <junit.version>5.7.1</junit.version>
     </properties>

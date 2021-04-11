@@ -6,7 +6,6 @@ import com.epam.esm.persistence.mapper.CertificateMapper;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.sun.jdi.ClassType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +13,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Types;
+
+import java.sql.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,8 +44,8 @@ public class CertificateDAOImpl implements CertificateDAO {
             ps.setString(2, certificate.getDescription());
             ps.setBigDecimal(3, certificate.getPrice());
             ps.setInt(4, certificate.getDuration());
-            ps.setDate(5, Date.valueOf(certificate.getCreateDate()));
-            ps.setDate(6, Date.valueOf(certificate.getLastUpdateDate()));
+            ps.setTimestamp(5, Timestamp.valueOf(certificate.getCreateDate()));
+            ps.setTimestamp(6, Timestamp.valueOf(certificate.getLastUpdateDate()));
             return ps;
         }, keyHolder);
         if (keyHolder.getKey() == null) {
@@ -71,8 +68,8 @@ public class CertificateDAOImpl implements CertificateDAO {
                 certificate.getDescription(),
                 certificate.getPrice(),
                 certificate.getDuration(),
-                Date.valueOf(certificate.getCreateDate()),
-                Date.valueOf(certificate.getLastUpdateDate()),
+                Timestamp.valueOf(certificate.getCreateDate()),
+                Timestamp.valueOf(certificate.getLastUpdateDate()),
                 certificate.getId());
     }
 

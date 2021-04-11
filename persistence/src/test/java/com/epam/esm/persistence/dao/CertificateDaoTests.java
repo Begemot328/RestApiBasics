@@ -14,7 +14,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 
@@ -49,7 +49,8 @@ public class CertificateDaoTests {
     void testRead() throws DAOSQLException {
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
-                LocalDate.parse("2021-03-22"), LocalDate.parse("2021-03-22") );
+                LocalDateTime.parse("2021-03-22T06:12:15.156"),
+                LocalDateTime.parse("2021-03-22T06:12:15.156") );
         certificate.setId(1);
         assertEquals(certificateDao.read(1), certificate);
     }
@@ -58,7 +59,8 @@ public class CertificateDaoTests {
     void testCreate() throws DAOSQLException {
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
-                LocalDate.parse("2021-03-22"), LocalDate.parse("2021-03-22") );
+                LocalDateTime.parse("2021-03-22T06:12:15.156"),
+                LocalDateTime.parse("2021-03-22T06:12:15.156") );
         int size = certificateDao.readAll().size();
 
         certificateDao.create(certificate);
@@ -69,7 +71,7 @@ public class CertificateDaoTests {
     void testUpdate() throws DAOSQLException {
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
-                LocalDate.parse("2021-03-22"), LocalDate.parse("2021-03-22") );
+                LocalDateTime.parse("2021-03-22T06:12:15.156"), LocalDateTime.parse("2021-03-22T06:12:15.156") );
         int id = 3;
         certificate.setId(id);
         certificateDao.update(certificate);
@@ -82,7 +84,7 @@ public class CertificateDaoTests {
         when(finderMock.getQuery()).thenReturn(" WHERE NAME = 'OZ.by'");
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
-                LocalDate.parse("2021-03-22"), LocalDate.parse("2021-03-22") );
+                LocalDateTime.parse("2021-03-22T06:12:15.156"), LocalDateTime.parse("2021-03-22T06:12:15.156") );
         certificate.setId(1);
         assertEquals(Collections.singletonList(certificate), certificateDao.readBy(finderMock));
     }
@@ -96,12 +98,12 @@ public class CertificateDaoTests {
     }
 
     @Test
-    void testIStagCertificateTied() {
+    void testIsTagCertificateTied() {
         assertTrue(certificateDao.isTagCertificateTied(1, 4));
     }
 
     @Test
-    void testaddCertificateTag() {
+    void testAddCertificateTag() {
         certificateDao.addCertificateTag(1,1);
         assertTrue(certificateDao.isTagCertificateTied(1, 1));
     }

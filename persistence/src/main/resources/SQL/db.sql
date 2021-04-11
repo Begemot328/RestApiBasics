@@ -20,8 +20,8 @@ create table certificate
     description     text,
     price           double       not null,
     duration        int          not null,
-    create_date     date         not null,
-    last_update_date date         not null,
+    create_date     timestamp    not null,
+    last_update_date timestamp   not null,
 
     index certificate_id_index (id),
     index certificate_price_index (price),
@@ -64,15 +64,15 @@ insert tag(name) values('films');
 insert tag(name) values('bicycle');
 
 insert certificate(name, description, price, duration, create_date, last_update_date)
-values('OZ.by', null, 140.1, 10, '2021_03_22', '2021_03_22' );
+values('OZ.by', null, 140.1, 10, '2021_03_22 09:20:11', '2021_03_22 09:20:11' );
 insert certificate(name, description, price, duration, create_date, last_update_date)
-values('nastolka.by', 'board games certificate', 40.1, 50, '2021_01_22', '2021_03_22' );
+values('nastolka.by', 'board games certificate', 40.1, 50, '2021_01_22 09:20:11', '2021_03_22 09:20:11' );
 insert certificate(name, description, price, duration, create_date, last_update_date)
-values('rider.by', null, 140.5, 5, '2021_02_22', '2021_03_22' );
+values('rider.by', null, 140.5, 5, '2021_02_22 09:20:11', '2021_03_22 09:20:11' );
 insert certificate(name, description, price, duration, create_date, last_update_date)
-values('tsum.by', null, 120.5, 3, '2020_02_22', '2020_03_22' );
+values('tsum.by', null, 120.5, 3, '2020_02_22 09:20:11', '2020_03_22 09:20:11' );
 insert certificate(name, description, price, duration, create_date, last_update_date)
-values('Kryshtal', null, 7.63, 2, '2021_03_22', '2021_04_22' );
+values('Kryshtal', null, 7.63, 2, '2021_03_22 09:20:11', '2021_04_22 09:20:11');
 
 insert certificate_tag(tag_id, certificate_id) VALUES (3, 1);
 insert certificate_tag(tag_id, certificate_id) VALUES (2, 2);

@@ -4,28 +4,23 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Certificate extends Entity {
-
     private String name;
     private String description;
     private BigDecimal price;
     private int duration;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate createDate;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate lastUpdateDate;
+    private LocalDateTime createDate;
+    private LocalDateTime lastUpdateDate;
 
     /**
      * Default constructor
@@ -44,8 +39,8 @@ public class Certificate extends Entity {
      * @param lastUpdateDate last update date of the certificate
      */
     public Certificate(String name, String description, BigDecimal price,
-                       int duration, LocalDate createDate,
-                       LocalDate lastUpdateDate) {
+                       int duration, LocalDateTime createDate,
+                       LocalDateTime lastUpdateDate) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -131,7 +126,7 @@ public class Certificate extends Entity {
      *
      * @return  date of the certificate creation
      */
-    public LocalDate getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
@@ -140,7 +135,7 @@ public class Certificate extends Entity {
      *
      * @param createDate date of the certificate creation
      */
-    public void setCreateDate(LocalDate createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
@@ -149,7 +144,7 @@ public class Certificate extends Entity {
      *
      * @return  date of the certificate last update
      */
-    public LocalDate getLastUpdateDate() {
+    public LocalDateTime getLastUpdateDate() {
         return lastUpdateDate;
     }
 
@@ -158,7 +153,7 @@ public class Certificate extends Entity {
      *
      * @param lastUpdateDate date of the certificate last update
      */
-    public void setLastUpdateDate(LocalDate lastUpdateDate) {
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 

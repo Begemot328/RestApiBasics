@@ -7,6 +7,7 @@ import com.epam.esm.persistence.util.CertificateFinder;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.service.exceptions.BadRequestException;
+import com.epam.esm.service.exceptions.ErrorCodes;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.constants.CertificateSearchParameters;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,8 +51,8 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     public Certificate create(Certificate certificate) throws ServiceException, ValidationException {
         try {
-            certificate.setCreateDate(LocalDate.now());
-            certificate.setLastUpdateDate(LocalDate.now());
+            certificate.setCreateDate(LocalDateTime.now());
+            certificate.setLastUpdateDate(LocalDateTime.now());
             validator.validate(certificate);
             return dao.create(certificate);
         } catch (DAOSQLException e) {
@@ -83,7 +84,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     public void update(Certificate certificate) throws ServiceException, ValidationException {
         try {
-            certificate.setLastUpdateDate(LocalDate.now());
+            certificate.setLastUpdateDate(LocalDateTime.now());
             validator.validate(certificate);
             dao.update(certificate);
         } catch (DAOSQLException e) {
@@ -110,7 +111,7 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public List<Certificate> read(Map<String, String> params) throws ServiceException {
+    public List<Certificate> read(Map<String, String> params) throws ServiceException, BadRequestException {
         CertificateFinder finder = new CertificateFinder();
         for (String key : params.keySet()) {
             try {
@@ -164,7 +165,8 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public void addCertificateTag(Certificate certificate, int tagId) throws ServiceException, ValidationException {
+    public void addCertificateTag(Certificate certificate, int tagId) throws ServiceException,
+            ValidationException, BadRequestException {
         Optional<Certificate> certificateOptional;
         if (dao.isTagCertificateTied(certificate.getId(), tagId)) {
             throw new BadRequestException("adding existing relation");
@@ -177,7 +179,8 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public void addCertificateTag(int certificateId, Tag tag) throws ServiceException, ValidationException {
+    public void addCertificateTag(int certificateId, Tag tag) throws ServiceException, ValidationException,
+            BadRequestException {
         Optional<Tag> tagOptional;
         if (dao.isTagCertificateTied(certificateId, tag.getId())) {
             throw new BadRequestException("adding existing relation");
@@ -190,11 +193,11 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public void deleteCertificateTag(int certificateId, int tagId) throws ServiceException {
+    public void deleteCertificateTag(int certificateId, int tagId) throws BadRequestException {
         if (dao.isTagCertificateTied(certificateId, tagId)) {
             dao.deleteCertificateTag(certificateId, tagId);
         } else {
-            throw new BadRequestException("Entity does not exist!");
+            throw new BadRequestException("Entity does not exist!", ErrorCodes.CERTIFICATE_NOT_FOUND);
         }
     }
 }

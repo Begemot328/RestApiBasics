@@ -7,6 +7,8 @@ package com.epam.esm.service.exceptions;
  * @version 1.0
  */
 public class ValidationException extends Exception {
+    private int errorCode;
+
     /**
      * Constructor
      *
@@ -33,5 +35,25 @@ public class ValidationException extends Exception {
      */
     public ValidationException(Exception e) {
         super(e);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param e the e
+     */
+    public ValidationException(Exception e, int errorCode) {
+        super(e);
+        this.errorCode = errorCode;
+    }
+
+    /**
+     * Constructor
+     *
+     * @param message the message
+     */
+    public ValidationException(String message, int errorCode) {
+        super(message);
+        this.errorCode = errorCode;
     }
 }
