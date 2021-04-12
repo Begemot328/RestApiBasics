@@ -1,6 +1,5 @@
 package com.epam.esm.service.service;
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Entity;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.ServiceException;

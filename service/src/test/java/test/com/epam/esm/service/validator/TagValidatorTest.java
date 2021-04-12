@@ -12,19 +12,19 @@ public class TagValidatorTest {
     TagValidator validator = new TagValidator();
 
     @Test
-    void validateTest() throws ValidationException {
+    void testValidateIfNullName() {
         Tag tag = new Tag(null);
         assertThrows(ValidationException.class, () -> validator.validate(tag));
     }
 
     @Test
-    void validateTest2() throws ValidationException {
+    void testValidateIfEmptyName() {
         Tag tag = new Tag("");
         assertThrows(ValidationException.class, () -> validator.validate(tag));
     }
 
     @Test
-    void validateTest3() throws ValidationException {
+    void testValidate() {
         Tag tag = new Tag("Tagname");
         assertDoesNotThrow(() -> validator.validate(tag));
     }

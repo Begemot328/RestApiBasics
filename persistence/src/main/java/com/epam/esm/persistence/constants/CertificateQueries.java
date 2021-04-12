@@ -14,8 +14,7 @@ public enum CertificateQueries {
     INSERT_CERTIFICATE("INSERT INTO certificates.certificate (name, description, price," +
             "duration, create_date, last_update_date) VALUES (?,?,?,?,?,?);"),
     UPDATE_CERTIFICATE("UPDATE certificates.certificate SET name=?, description=?, price=?," +
-            "duration=?, create_date=?, last_update_date=? " +
-            "WHERE id = ?;"),
+            "duration=?, last_update_date=? WHERE id = ?;"),
     DELETE_CERTIFICATE("DELETE FROM certificates.certificate  " +
             "WHERE id = ?;"),
     ADD_CERTIFICATE_TAG("INSERT INTO certificates.certificate_tag " +
@@ -36,7 +35,6 @@ public enum CertificateQueries {
     /**
      * Value getter
      *
-     * @return query String line
      */
     private String value;
 

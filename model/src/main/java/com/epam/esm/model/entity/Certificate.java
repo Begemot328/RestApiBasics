@@ -1,7 +1,6 @@
 package com.epam.esm.model.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -69,7 +68,7 @@ public class Certificate extends Entity {
     }
 
     /**
-     * Descritption setter
+     * Description setter
      *
      * @param  description name of the certificate
      */

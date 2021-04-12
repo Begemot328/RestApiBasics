@@ -1,11 +1,12 @@
 package com.epam.esm.service.service;
 
+import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.util.SortDirection;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Entity;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.ServiceException;
-import com.epam.esm.service.exceptions.ValidationException;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface EntityService<T extends Entity> {
      * @param t {@link Entity} to create
      *
      */
-    T create (T t) throws ServiceException, ValidationException;
+    T create (T t) throws ServiceException;
 
     /**
      * Read {@link Entity} from database method
@@ -46,8 +47,9 @@ public interface EntityService<T extends Entity> {
      *
      * @param t {@link Entity} to create
      *
+     * @return Updated {@link Certificate}
      */
-    void update (T t) throws ServiceException, ValidationException;
+    Certificate update (T t) throws ServiceException;
 
     /**
      * Find all  {@link Entity} objects in database method
@@ -78,20 +80,14 @@ public interface EntityService<T extends Entity> {
      */
     default SortDirection parseAscDesc(String param) throws BadRequestException {
         switch (param) {
-            case "true":
-                return SortDirection.ASC;
-            case "false":
-                return SortDirection.DESC;
             case "1":
-                return SortDirection.ASC;
-            case "2":
-                return SortDirection.DESC;
             case "asc":
                 return SortDirection.ASC;
+            case "2":
             case "desc":
                 return SortDirection.DESC;
             default:
-                throw new BadRequestException("Wrong parameter sort-by!");
+                throw new BadRequestException("Wrong parameter sort-by!", 0, HttpStatus.BAD_REQUEST);
         }
     }
 }

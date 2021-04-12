@@ -1,6 +1,5 @@
 package com.epam.esm.model.entity;
 
-import java.util.Objects;
 
 /**
  * Tag entity class.

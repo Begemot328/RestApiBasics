@@ -1,7 +1,6 @@
 package com.epam.esm.web.dto;
 
-import com.epam.esm.service.exceptions.ServiceException;
-import com.epam.esm.web.exceptions.ControllerException;
+import com.epam.esm.service.exceptions.ServiceLayerException;
 
 public class ExceptionDTO {
     private String errorMessage;
@@ -14,7 +13,7 @@ public class ExceptionDTO {
         this.errorCode = errorCode;
     }
 
-    public ExceptionDTO(ControllerException e) {
+    public ExceptionDTO(ServiceLayerException e) {
         this.errorMessage = e.getMessage();
         this.errorCode = e.getErrorCode();
     }

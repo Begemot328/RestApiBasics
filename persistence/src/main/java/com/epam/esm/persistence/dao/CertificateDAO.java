@@ -2,7 +2,6 @@ package com.epam.esm.persistence.dao;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.util.EntityFinder;
 
 import java.util.List;
@@ -18,10 +17,9 @@ public interface CertificateDAO extends EntityDAO<Certificate> {
      * Find using {@link EntityFinder} method
      *
      * @param finder {@link EntityFinder} to obtain search parameters
-     * @throws DAOSQLException when {@link java.sql.SQLException spotted}
      * @return {@link java.util.ArrayList}  of {@link Tag} objects
      */
-    List<Certificate> readBy(EntityFinder<Certificate> finder) throws DAOSQLException;
+    List<Certificate> readBy(EntityFinder<Certificate> finder);
 
     /**
      * Add connection between  {@link Tag} and {@link Certificate} method

@@ -19,7 +19,6 @@ public enum CertificateSortingParameters {
     /**
      * Value getter
      *
-     * @return String name of the table  column to sort by
      */
     CertificateSortingParameters(String value) {
         this.value = value;

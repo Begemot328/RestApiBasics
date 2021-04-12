@@ -2,7 +2,6 @@ package com.epam.esm.persistence.mapper;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.constants.CertificateColumns;
-import com.epam.esm.persistence.dao.EntityDAO;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 

@@ -5,7 +5,6 @@ import com.epam.esm.persistence.dao.impl.TagDAOImpl;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.TagMapper;
 import com.epam.esm.persistence.util.TagFinder;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
@@ -35,12 +34,12 @@ public class TagsDaoTests {
     }
 
     @Test
-    void testFindAll() throws DAOSQLException {
+    void testFindAll() {
         assertEquals(tagsDao.readAll().size(), 5);
     }
 
     @Test
-    void testRead() throws DAOSQLException {
+    void testRead() {
         Tag tag = new Tag("sport");
         tag.setId(1);
         assertEquals(tagsDao.read(1), tag);
@@ -56,15 +55,13 @@ public class TagsDaoTests {
     }
 
     @Test
-    void testUpdate() throws DAOSQLException {
+    void testUpdate() {
         Tag tag = new Tag("new");
-        tag.setId(3);
-
         assertThrows(UnsupportedOperationException.class, () -> tagsDao.update(tag));
     }
 
     @Test
-    void testFindBy() throws DAOSQLException {
+    void testFindBy() {
         TagFinder finderMock = mock(TagFinder.class);
         when(finderMock.getQuery()).thenReturn(" WHERE NAME = 'books'");
         Tag tag = new Tag("books");
@@ -73,7 +70,7 @@ public class TagsDaoTests {
     }
 
     @Test
-    void testDelete() throws DAOSQLException {
+    void testDelete() {
         int size = tagsDao.readAll().size();
 
         tagsDao.delete(1);

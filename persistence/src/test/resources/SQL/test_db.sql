@@ -1,8 +1,8 @@
 SET MODE MySQL;
 DROP ALL OBJECTS;
 
-drop schema if exists certificates;
 
+drop schema if exists certificates;
 create schema if not exists certificates;
 
 use certificates;

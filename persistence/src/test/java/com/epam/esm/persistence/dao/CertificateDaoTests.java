@@ -6,7 +6,6 @@ import com.epam.esm.persistence.dao.impl.CertificateDAOImpl;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.CertificateMapper;
 import com.epam.esm.persistence.util.CertificateFinder;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
@@ -41,12 +40,12 @@ public class CertificateDaoTests {
     }
 
     @Test
-    void testFindAll() throws DAOSQLException {
+    void testFindAll() {
         assertEquals(certificateDao.readAll().size(), 5);
     }
 
     @Test
-    void testRead() throws DAOSQLException {
+    void testRead() {
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
                 LocalDateTime.parse("2021-03-22T09:20:11"),
@@ -68,18 +67,18 @@ public class CertificateDaoTests {
     }
 
     @Test
-    void testUpdate() throws DAOSQLException {
+    void testUpdate() {
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
-                LocalDateTime.parse("2021-03-22T06:12:15.156"), LocalDateTime.parse("2021-03-22T06:12:15.156") );
+                LocalDateTime.parse("2021-03-22T06:12:15.156"), LocalDateTime.now() );
         int id = 3;
         certificate.setId(id);
-        certificateDao.update(certificate);
+        certificate = certificateDao.update(certificate);
         assertEquals(certificateDao.read(id), certificate);
     }
 
     @Test
-    void testFindBy() throws DAOSQLException {
+    void testFindBy() {
         CertificateFinder finderMock = mock(CertificateFinder.class);
         when(finderMock.getQuery()).thenReturn(" WHERE NAME = 'OZ.by'");
         Certificate certificate = new Certificate("OZ.by", null,
@@ -90,9 +89,8 @@ public class CertificateDaoTests {
     }
 
     @Test
-    void testDelete() throws DAOSQLException {
+    void testDelete() {
         int size = certificateDao.readAll().size();
-
         certificateDao.delete(2);
         assertEquals(certificateDao.readAll().size(), --size);
     }

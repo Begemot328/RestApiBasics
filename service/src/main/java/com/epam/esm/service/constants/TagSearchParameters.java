@@ -2,6 +2,12 @@ package com.epam.esm.service.constants;
 
 import com.epam.esm.service.util.ConfigUtils;
 
+/**
+ * Search parameters to search tags
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public enum TagSearchParameters {
     NAME;
 

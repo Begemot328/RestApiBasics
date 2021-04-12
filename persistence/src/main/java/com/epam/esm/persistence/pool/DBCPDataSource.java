@@ -1,17 +1,12 @@
 package com.epam.esm.persistence.pool;
 
-import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.epam.esm.persistence.util.EntityFinder;
+
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * Connection pool, @{link BasicDataSource} wrapper

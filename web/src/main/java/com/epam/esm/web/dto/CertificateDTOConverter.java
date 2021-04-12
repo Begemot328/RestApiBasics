@@ -13,6 +13,9 @@ public class CertificateDTOConverter {
     }
 
     public static CertificateDTO convertObject(Certificate certificate) {
+        if(certificate == null) {
+            return null;
+        }
         CertificateDTO certificateDTO = new CertificateDTO(certificate.getName(),
                 certificate.getDescription(), certificate.getPrice(),
                 certificate.getDuration(), certificate.getCreateDate(), certificate.getLastUpdateDate());

@@ -1,7 +1,5 @@
 package com.epam.esm.model.entity;
 
-import java.sql.Connection;
-
 /**
  * Entity class.
  *

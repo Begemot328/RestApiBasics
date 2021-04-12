@@ -7,7 +7,7 @@ import com.epam.esm.persistence.util.CertificateFinder;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.service.exceptions.BadRequestException;
-import com.epam.esm.service.exceptions.ErrorCodes;
+import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.constants.CertificateSearchParameters;
@@ -17,7 +17,10 @@ import com.epam.esm.service.service.TagService;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -49,69 +52,58 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public Certificate create(Certificate certificate) throws ServiceException, ValidationException {
+    public Certificate create(Certificate certificate) throws ServiceException {
         try {
             certificate.setCreateDate(LocalDateTime.now());
             certificate.setLastUpdateDate(LocalDateTime.now());
             validator.validate(certificate);
             return dao.create(certificate);
         } catch (DAOSQLException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e, ErrorCodes.CERTIFICATE_ERROR_CODE_SUFFIX, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (ValidationException e) {
+            throw new ServiceException(e, ErrorCodes.CERTIFICATE_ERROR_CODE_SUFFIX, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
     @Override
-    public Certificate read(int id) throws ServiceException {
-        try {
+    public Certificate read(int id) {
             return dao.read(id);
-        } catch (DAOSQLException e) {
-            throw new ServiceException(e);
-        }
     }
 
+    @Transactional
     @Override
     public void delete(int id) throws ServiceException {
-        try {
             if (dao.read(id) == null) {
-                throw new ServiceException("Entity does not exist!");
+                throw new ServiceException("Entity does not exist", ErrorCodes.CERTIFICATE_ERROR_CODE_SUFFIX,
+                        HttpStatus.INTERNAL_SERVER_ERROR);
             }
             dao.delete(id);
-        } catch (DAOSQLException e) {
-            throw new ServiceException(e);
-        }
     }
 
+    @Transactional
     @Override
-    public void update(Certificate certificate) throws ServiceException, ValidationException {
+    public Certificate update(Certificate certificate) throws ServiceException {
         try {
             certificate.setLastUpdateDate(LocalDateTime.now());
             validator.validate(certificate);
-            dao.update(certificate);
-        } catch (DAOSQLException e) {
-            throw new ServiceException(e);
+            return dao.update(certificate);
+        } catch (ValidationException e) {
+            throw new ServiceException(e, ErrorCodes.CERTIFICATE_ERROR_CODE_SUFFIX, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
     @Override
-    public List<Certificate> readAll() throws ServiceException {
-        try {
+    public List<Certificate> readAll() {
             return dao.readAll();
-        } catch (DAOSQLException e) {
-            throw new ServiceException(e);
-        }
     }
 
     @Override
-    public List<Certificate> readBy(EntityFinder<Certificate> entityFinder) throws ServiceException {
-        try {
+    public List<Certificate> readBy(EntityFinder<Certificate> entityFinder) {
             return dao.readBy(entityFinder);
-        } catch (DAOSQLException e) {
-            throw new ServiceException(e);
-        }
     }
 
     @Override
-    public List<Certificate> read(Map<String, String> params) throws ServiceException, BadRequestException {
+    public List<Certificate> read(Map<String, String> params) throws BadRequestException {
         CertificateFinder finder = new CertificateFinder();
         for (String key : params.keySet()) {
             try {
@@ -138,38 +130,42 @@ public class CertificateServiceImpl implements CertificateService {
                             try {
                                 finder.findByPriceLess(new BigDecimal(params.get(key)));
                             } catch (NumberFormatException e) {
-                                throw new BadRequestException(e);
+                                throw new BadRequestException(e, ErrorCodes.CERTIFICATE_ERROR_CODE_SUFFIX,
+                                        HttpStatus.BAD_REQUEST);
                             }
                             break;
                         case PRICE_MORE:
                             try {
                                 finder.findByPriceMore(new BigDecimal(params.get(key)));
                             } catch (NumberFormatException e) {
-                                throw new BadRequestException(e);
+                                throw new BadRequestException(e, ErrorCodes.CERTIFICATE_ERROR_CODE_SUFFIX,
+                                        HttpStatus.BAD_REQUEST);
                             }
                             break;
                     }
                 }
             } catch (IllegalArgumentException e) {
-                throw new BadRequestException(e);
+                throw new BadRequestException(e, ErrorCodes.CERTIFICATE_ERROR_CODE_SUFFIX, HttpStatus.BAD_REQUEST);
             }
         }
         return readBy(finder);
     }
 
     @Override
-    public List<Certificate> readByTag(int tagId) throws ServiceException {
+    public List<Certificate> readByTag(int tagId) {
         CertificateFinder finder = new CertificateFinder();
         finder.findByTag(tagId);
         return readBy(finder);
     }
 
+    @Transactional
     @Override
     public void addCertificateTag(Certificate certificate, int tagId) throws ServiceException,
-            ValidationException, BadRequestException {
+            BadRequestException {
         Optional<Certificate> certificateOptional;
         if (dao.isTagCertificateTied(certificate.getId(), tagId)) {
-            throw new BadRequestException("adding existing relation");
+            throw new BadRequestException("adding existing relation",
+                    ErrorCodes.CERTIFICATE_ERROR_CODE_SUFFIX, HttpStatus.BAD_REQUEST);
         }
         certificateOptional = Optional.ofNullable(read(certificate.getId()));
         if (certificateOptional.isEmpty()) {
@@ -178,26 +174,48 @@ public class CertificateServiceImpl implements CertificateService {
         dao.addCertificateTag(certificate.getId(), tagId);
     }
 
+    @Transactional
     @Override
-    public void addCertificateTag(int certificateId, Tag tag) throws ServiceException, ValidationException,
+    public void addCertificateTag(int certificateId, Tag tag) throws ServiceException,
             BadRequestException {
         Optional<Tag> tagOptional;
         if (dao.isTagCertificateTied(certificateId, tag.getId())) {
-            throw new BadRequestException("adding existing relation");
+            throw new BadRequestException("adding existing relation",
+                    ErrorCodes.CERTIFICATE_ERROR_CODE_SUFFIX, HttpStatus.BAD_REQUEST);
         }
         tagOptional = Optional.ofNullable(tagService.read(tag.getId()));
         if (tagOptional.isEmpty()) {
-            tagService.create(tag);
+                tagService.create(tag);
         }
         dao.addCertificateTag(certificateId, tag.getId());
     }
 
+    @Transactional
+    @Override
+    public void addCertificateTags(int certificateId, Tag[] tags) throws BadRequestException,
+            ServiceException {
+        for (Tag tag : tags) {
+            addCertificateTag(certificateId, tag);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void addCertificatesTag(Certificate[] certificates, int tagId) throws BadRequestException,
+            ServiceException {
+        for (Certificate certificate : certificates) {
+            addCertificateTag(certificate, tagId);
+        }
+    }
+
+    @Transactional
     @Override
     public void deleteCertificateTag(int certificateId, int tagId) throws BadRequestException {
         if (dao.isTagCertificateTied(certificateId, tagId)) {
             dao.deleteCertificateTag(certificateId, tagId);
         } else {
-            throw new BadRequestException("Entity does not exist!", ErrorCodes.CERTIFICATE_NOT_FOUND);
+            throw new BadRequestException("Entity does not exist!",
+                    ErrorCodes.CERTIFICATE_ERROR_CODE_SUFFIX, HttpStatus.BAD_REQUEST);
         }
     }
 }
