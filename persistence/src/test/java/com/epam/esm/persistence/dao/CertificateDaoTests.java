@@ -7,6 +7,7 @@ import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.CertificateMapper;
 import com.epam.esm.persistence.util.CertificateFinder;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,11 +34,10 @@ public class CertificateDaoTests {
                 .addScript("classpath:SQL/test_db.sql").build();
     }
 
-    @BeforeAll
-    static void init() {
+    @BeforeEach
+     void init() {
         template = new JdbcTemplate(dataSource());
         certificateDao = new CertificateDAOImpl(template, new CertificateMapper());
-
     }
 
     @Test
@@ -49,8 +49,8 @@ public class CertificateDaoTests {
     void testRead() throws DAOSQLException {
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
-                LocalDateTime.parse("2021-03-22T06:12:15.156"),
-                LocalDateTime.parse("2021-03-22T06:12:15.156") );
+                LocalDateTime.parse("2021-03-22T09:20:11"),
+                LocalDateTime.parse("2021-03-22T09:20:11") );
         certificate.setId(1);
         assertEquals(certificateDao.read(1), certificate);
     }
@@ -84,7 +84,7 @@ public class CertificateDaoTests {
         when(finderMock.getQuery()).thenReturn(" WHERE NAME = 'OZ.by'");
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
-                LocalDateTime.parse("2021-03-22T06:12:15.156"), LocalDateTime.parse("2021-03-22T06:12:15.156") );
+                LocalDateTime.parse("2021-03-22T09:20:11"), LocalDateTime.parse("2021-03-22T09:20:11") );
         certificate.setId(1);
         assertEquals(Collections.singletonList(certificate), certificateDao.readBy(finderMock));
     }

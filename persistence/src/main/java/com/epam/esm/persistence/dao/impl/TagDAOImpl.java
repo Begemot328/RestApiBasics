@@ -24,6 +24,7 @@ public class TagDAOImpl implements TagDAO {
     private final JdbcTemplate template;
     private final TagMapper tagMapper;
 
+
     @Autowired
     public TagDAOImpl(JdbcTemplate template, TagMapper tagMapper) {
         this.template = template;

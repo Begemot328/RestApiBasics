@@ -12,6 +12,7 @@ import com.epam.esm.service.service.impl.TagServiceImpl;
 import com.epam.esm.service.constants.TagSortingParameters;
 import com.epam.esm.service.validator.EntityValidator;
 import com.epam.esm.service.validator.TagValidator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
@@ -34,7 +35,8 @@ public class TagServiceImplTests {
     private List<Tag> fullList = Arrays.asList(tags);
     private List<Tag> shortList = Arrays.asList(tagsShort);
 
-    {
+    @BeforeEach
+    void init() {
         try {
             when(tagDaoMock.readAll()).thenReturn(fullList);
             when(tagDaoMock.read(1)).thenReturn(tag1);
@@ -43,7 +45,7 @@ public class TagServiceImplTests {
             doNothing().when(tagDaoMock).delete(any(Integer.class));
             doNothing().when(tagDaoMock).update(any(Tag.class));
             when(tagDaoMock.create(any(Tag.class))).thenAnswer(invocation -> {
-                Tag tag = invocation.getArgumentAt(0, Tag.class);
+                Tag tag = invocation.getArgument(0, Tag.class);
                 tag.setId(fullList.size());
                 return tag;
             });

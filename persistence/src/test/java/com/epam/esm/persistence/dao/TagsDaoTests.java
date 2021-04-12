@@ -6,6 +6,7 @@ import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.TagMapper;
 import com.epam.esm.persistence.util.TagFinder;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,8 +27,8 @@ public class TagsDaoTests {
                 .addScript("classpath:SQL/test_db.sql").build();
     }
 
-    @BeforeAll
-    static void init() {
+    @BeforeEach
+    void init() {
         template = new JdbcTemplate(dataSource());
         tagsDao = new TagDAOImpl(template, new TagMapper());
 
