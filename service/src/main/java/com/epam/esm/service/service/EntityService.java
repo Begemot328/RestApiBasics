@@ -5,9 +5,12 @@ import com.epam.esm.persistence.util.SortDirection;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Entity;
 import com.epam.esm.service.exceptions.BadRequestException;
+import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
-import org.springframework.http.HttpStatus;
+import com.epam.esm.service.exceptions.ValidationException;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -24,7 +27,7 @@ public interface EntityService<T extends Entity> {
      * @param t {@link Entity} to create
      *
      */
-    T create (T t) throws ServiceException;
+    T create (T t) throws ServiceException, ValidationException;
 
     /**
      * Read {@link Entity} from database method
@@ -32,7 +35,7 @@ public interface EntityService<T extends Entity> {
      * @param id ID of the Entity
      *
      */
-    T read (int id) throws ServiceException;
+    T read (int id) throws NotFoundException;
 
     /**
      * Delete {@link Entity} from database method
@@ -40,7 +43,7 @@ public interface EntityService<T extends Entity> {
      * @param id ID of the Entity
      *
      */
-    void delete (int id) throws ServiceException;
+    void delete (int id) throws BadRequestException;
 
     /**
      * Update {@link Entity} in database method
@@ -49,45 +52,28 @@ public interface EntityService<T extends Entity> {
      *
      * @return Updated {@link Certificate}
      */
-    Certificate update (T t) throws ServiceException;
+    Certificate update (T t) throws ValidationException;
 
     /**
      * Find all  {@link Entity} objects in database method
      *
-     * @throws ServiceException in case of malfunctioning, e.g.
+     * @throws NotFoundException in case of malfunctioning, e.g.
      * {@link com.epam.esm.persistence.exceptions.DAOSQLException}
      * @return list of founded {@link Entity} objects
      */
-    List<T> readAll() throws ServiceException;
+    List<T> readAll() throws NotFoundException;
 
     /**
      * Find {@link Entity} objects by {@link EntityFinder} criteria in database method
      *
-     * @throws ServiceException in case of malfunctioning, e.g.
+     * @throws NotFoundException if nothing was found
      * {@link com.epam.esm.persistence.exceptions.DAOSQLException}
      * @param entityFinder {@link EntityFinder} criteria to find objects
      * @return list of founded {@link Entity} objects
      */
-    List<T> readBy(EntityFinder<T> entityFinder) throws ServiceException;
+    List<T> readBy(EntityFinder<T> entityFinder) throws NotFoundException;
 
-    /**
-     * Obtain {@link SortDirection} enum element
-     *
-     * @param param name of the parameter
-     * @throws BadRequestException in case of bad request parameters, e.g. param does not
-     * correspond to AscDesc elements
-     * @return {@link SortDirection} element
-     */
-    default SortDirection parseAscDesc(String param) throws BadRequestException {
-        switch (param) {
-            case "1":
-            case "asc":
-                return SortDirection.ASC;
-            case "2":
-            case "desc":
-                return SortDirection.DESC;
-            default:
-                throw new BadRequestException("Wrong parameter sort-by!", 0, HttpStatus.BAD_REQUEST);
-        }
+    default String decodeParam(String param) {
+        return URLDecoder.decode(param, StandardCharsets.UTF_8);
     }
 }

@@ -19,15 +19,6 @@ public class TagFinder extends EntityFinder<Tag> {
     }
 
     /**
-     * Find by tag id condition adding method
-     *
-     * @param id of the tag to find by
-     */
-    public void findByTag(int id) {
-        find(CertificateColumns.TAG_ID.getValue() + " = " + id);
-    }
-
-    /**
      * Find by certificate id condition adding method
      *
      * @param certificateId id of the certificate to find by

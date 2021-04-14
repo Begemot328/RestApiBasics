@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.exceptions;
 
 /**
- * Custom exception for DAO layer. Mostly wraps spotted {@link java.sql.SQLException}
+ * Custom exception for DAO layer.
  *
  * @author Yury Zmushko
  * @version 1.0

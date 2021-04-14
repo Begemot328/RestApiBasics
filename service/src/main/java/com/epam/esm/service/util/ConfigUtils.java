@@ -3,8 +3,7 @@ package com.epam.esm.service.util;
 import com.epam.esm.service.constants.CertificateSearchParameters;
 
 public class ConfigUtils {
-    private static String UNDESCORE = "_";
-    private static String DASH = "-";
+    private final static String UNDESCORE = "_";
 
     /**
      * Convert {@link String} line from request parameter format to enum name format
@@ -13,6 +12,7 @@ public class ConfigUtils {
      * @return {@link CertificateSearchParameters} enum element
      */
     public static String convertName(String parameter) {
+        String DASH = "-";
         return parameter.toUpperCase().replace(DASH, UNDESCORE);
     }
 }

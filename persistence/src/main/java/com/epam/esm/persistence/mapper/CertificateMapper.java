@@ -21,15 +21,15 @@ public class CertificateMapper implements RowMapper<Certificate> {
     public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
         Certificate certificate =  new Certificate(
                     resultSet.getString(CertificateColumns.NAME.getValue()),
-                    resultSet.getString(CertificateColumns.DESCRIPTION.getValue()),
                     resultSet.getBigDecimal(CertificateColumns.PRICE.getValue()),
-                    resultSet.getInt(CertificateColumns.DURATION.getValue()),
-                    resultSet.getTimestamp(CertificateColumns.CREATE_DATE.getValue())
-                            .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
-                    resultSet.getTimestamp(CertificateColumns.LAST_UPDATE_DATE.getValue())
-                            .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
-            );
-            certificate.setId(resultSet.getInt(CertificateColumns.ID.getValue()));
+                    resultSet.getInt(CertificateColumns.DURATION.getValue()));
+
+        certificate.setCreateDate(resultSet.getTimestamp(CertificateColumns.CREATE_DATE.getValue())
+                .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        certificate.setLastUpdateDate(resultSet.getTimestamp(CertificateColumns.LAST_UPDATE_DATE.getValue())
+                .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        certificate.setDescription(resultSet.getString(CertificateColumns.DESCRIPTION.getValue()));
+        certificate.setId(resultSet.getInt(CertificateColumns.ID.getValue()));
         return certificate;
     }
 }

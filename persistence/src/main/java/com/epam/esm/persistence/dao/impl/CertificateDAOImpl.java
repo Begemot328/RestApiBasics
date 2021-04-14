@@ -25,8 +25,6 @@ import java.util.stream.Stream;
 
 @Component
 public class CertificateDAOImpl implements CertificateDAO {
-    static Logger logger = LoggerFactory.getLogger(CertificateDAOImpl.class);
-
     private final JdbcTemplate template;
     private final CertificateMapper certificateMapper;
 
@@ -105,12 +103,12 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public List<Certificate> readBy(EntityFinder<Certificate> finder) {
-        Stream<Certificate> stream = template.queryForStream(CertificateQueries.SELECT_FROM_CERTIFICATE_TAG.getValue()
+        Stream<Certificate> certificateStream = template.queryForStream(CertificateQueries.SELECT_FROM_CERTIFICATE_TAG.getValue()
                         .concat(finder.getQuery()),
                 certificateMapper);
-        List<Certificate> result = stream.distinct().collect(Collectors.toList());
-        stream.close();
-        return result;
+        List<Certificate> certificates = certificateStream.distinct().collect(Collectors.toList());
+        certificateStream.close();
+        return certificates;
     }
 
     public boolean isTagCertificateTied(int certificateId, int tagId) {

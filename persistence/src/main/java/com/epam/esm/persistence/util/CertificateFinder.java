@@ -50,24 +50,6 @@ public class CertificateFinder extends EntityFinder<Certificate> {
     }
 
     /**
-     * Find by maximal price condition adding method
-     *
-     * @param price value of maximal price
-     */
-    public void findByPriceLess(BigDecimal price) {
-        find(CertificateColumns.PRICE.getValue() + " <= " + price);
-    }
-
-    /**
-     * Find by minimal price condition adding method
-     *
-     * @param price value of minimal price
-     */
-    public void findByPriceMore(BigDecimal price) {
-        find(CertificateColumns.PRICE.getValue() + " >= " + price);
-    }
-
-    /**
      * Find by tag id condition adding method
      *
      * @param id of the tag to find by

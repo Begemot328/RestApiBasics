@@ -1,6 +1,7 @@
 package com.epam.esm.service.validator;
 
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.ValidationException;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,10 @@ public class TagValidator implements EntityValidator<Tag> {
     @Override
     public void validate(Tag tag) throws ValidationException {
         if (tag.getName() == null) {
-            throw new ValidationException("Null name!");
+            throw new ValidationException("Null name!", ErrorCodes.TAG_VALIDATION_EXCEPTION);
         }
         if (tag.getName().isEmpty()) {
-            throw new ValidationException("Empty name!");
+            throw new ValidationException("Empty name!", ErrorCodes.TAG_VALIDATION_EXCEPTION);
         }
 
     }

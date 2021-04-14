@@ -18,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class TagDAOImpl implements TagDAO {
@@ -78,8 +79,10 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public List<Tag> readBy(EntityFinder<Tag> finder) {
-        return template.queryForStream(TagQueries.SELECT_FROM_TAG_CERTIFICATES.getValue()
-                        .concat(finder.getQuery()),
-                tagMapper).distinct().collect(Collectors.toList());
+        Stream<Tag> tagStream = template.queryForStream(TagQueries.SELECT_FROM_TAG_CERTIFICATES.getValue()
+                        .concat(finder.getQuery()), tagMapper);
+        List<Tag> tags = tagStream.distinct().collect(Collectors.toList());
+        tagStream.close();
+        return tags;
     }
 }

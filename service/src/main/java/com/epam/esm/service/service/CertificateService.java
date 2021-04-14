@@ -3,7 +3,10 @@ package com.epam.esm.service.service;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.service.exceptions.BadRequestException;
+import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
+import com.epam.esm.service.exceptions.ValidationException;
+
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +24,7 @@ public interface CertificateService extends EntityService<Certificate> {
      * @param tagId {@link Tag} ID to find by
      *
      */
-    List<Certificate> readByTag(int tagId) throws ServiceException;
+    List<Certificate> readByTag(int tagId) throws NotFoundException;
 
     /**
      * Add tie between {@link Certificate} and {@link Tag} method
@@ -29,7 +32,7 @@ public interface CertificateService extends EntityService<Certificate> {
      * @param tagId {@link Tag} ID to tie
      * @param certificate {@link Certificate} to tie
      */
-    void addCertificateTag(Certificate certificate, int tagId) throws ServiceException, BadRequestException;
+    void addCertificateTag(Certificate certificate, int tagId) throws ServiceException, BadRequestException, ValidationException;
 
     /**
      * Add tie between {@link Certificate} and {@link Tag} method
@@ -43,7 +46,7 @@ public interface CertificateService extends EntityService<Certificate> {
             BadRequestException;
 
     void addCertificatesTag(Certificate[] certificates, int tagId) throws BadRequestException,
-            ServiceException;
+            ServiceException, ValidationException;
 
     /**
      * Delete tie between {@link Certificate} and {@link Tag} method
@@ -58,5 +61,5 @@ public interface CertificateService extends EntityService<Certificate> {
      *
      * @param params finding and sorting parameters
      */
-    List<Certificate> read(Map<String, String> params) throws ServiceException, BadRequestException;
+    List<Certificate> read(Map<String, String> params) throws BadRequestException, NotFoundException;
 }

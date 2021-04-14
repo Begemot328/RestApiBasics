@@ -4,7 +4,9 @@ import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.impl.TagDAOImpl;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.util.TagFinder;
+import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.BadRequestException;
+import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.constants.TagSearchParameters;
@@ -29,7 +31,6 @@ public class TagServiceImplTests {
 
     private TagDAOImpl tagDaoMock = mock(TagDAOImpl.class);
     private EntityValidator<Tag> validator;
-    private TagFinder finder;
     private TagServiceImpl service;
 
     private Tag tag1 = new Tag("Tag1");
@@ -68,12 +69,12 @@ public class TagServiceImplTests {
     }
 
     @Test
-    public void testRead() throws ServiceException {
+    public void testRead() throws NotFoundException {
         assertEquals(tag1, service.read(1));
     }
 
     @Test
-    public void testFindAll() throws ServiceException {
+    public void testFindAll() throws NotFoundException {
         assertEquals(fullList, service.readAll());
     }
 
@@ -85,7 +86,7 @@ public class TagServiceImplTests {
     }
 
     @Test
-    public void testDelete() throws ServiceException {
+    public void testDelete() throws BadRequestException {
         service.delete(1);
         verify(tagDaoMock, times(1)).read(1);
     }
@@ -96,14 +97,14 @@ public class TagServiceImplTests {
     }
 
     @Test
-    public void testFindByCertificate() throws ServiceException {
+    public void testFindByCertificate() throws NotFoundException {
         assertEquals(shortList, service.readByCertificate(1));
         TagFinder finder = new TagFinder().findByCertificate(1);
         verify(tagDaoMock, times(1)).readBy(finder);
     }
 
     @Test
-    public void testFind() throws ServiceException, BadRequestException {
+    public void testFind() throws BadRequestException, NotFoundException {
         Map<String, String> params = new HashMap<>();
         params.put(TagSearchParameters.NAME.name(), "1");
         params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), "2");
@@ -115,7 +116,7 @@ public class TagServiceImplTests {
     @Test
     public void testCreateIfInvalidTag()
             throws ValidationException {
-        doThrow(new ValidationException("error"))
+        doThrow(new ValidationException("error", ErrorCodes.TAG_VALIDATION_EXCEPTION))
             .when(validator).validate(any(Tag.class));
         assertThrows(ServiceException.class,() -> service.create(tag1));
     }

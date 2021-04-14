@@ -3,15 +3,17 @@ package test.com.epam.esm.service.service;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.impl.CertificateDAOImpl;
+import com.epam.esm.persistence.dao.impl.TagDAOImpl;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.util.CertificateFinder;
 import com.epam.esm.service.constants.CertificateSearchParameters;
 import com.epam.esm.service.constants.CertificateSortingParameters;
+import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.BadRequestException;
+import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.impl.CertificateServiceImpl;
-import com.epam.esm.service.service.impl.TagServiceImpl;
 import com.epam.esm.service.validator.EntityValidator;
 import com.epam.esm.service.validator.CertificateValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,17 +38,16 @@ public class CertificateServiceImplTests {
     private static  EntityValidator<Certificate> validator;
     private static  CertificateFinder finder = new CertificateFinder();
     private static  CertificateServiceImpl service;
-    private static  TagServiceImpl tagServiceMock;
 
     private static  Tag tag1 = new Tag("Tag1");
     private static  Certificate certificate1 = new Certificate("Certificate1",
-            null, BigDecimal.valueOf(10.0), 3, null, null);
+            BigDecimal.valueOf(10.0), 3);
     private static  Certificate certificate2 = new Certificate("Certificate2",
-            null, BigDecimal.valueOf(10.0), 3, null, null);
+            BigDecimal.valueOf(10.0), 3);
     private static  Certificate certificate3 = new Certificate("Certificate3",
-            null, BigDecimal.valueOf(10.0), 3, null, null);
+            BigDecimal.valueOf(10.0), 3);
     private static  Certificate certificate4 = new Certificate("Certificate4",
-            null, BigDecimal.valueOf(10.0), 3, null, null);
+            BigDecimal.valueOf(10.0), 3);
     private static  Certificate[] certificates = {certificate1, certificate2, certificate3, certificate4};
     private static  Certificate[] certificatesShort = {certificate1, certificate2};
     private static  List<Certificate> fullList = Arrays.asList(certificates);
@@ -56,10 +57,10 @@ public class CertificateServiceImplTests {
     @BeforeEach
     void init() {
         certificateDaoMock = mock(CertificateDAOImpl.class);
-        tagServiceMock = mock(TagServiceImpl.class);
+        TagDAOImpl tagDAOMock = mock(TagDAOImpl.class);
             try {
-                when(tagServiceMock.read(any(Integer.class))).thenReturn(tag1);
-                when(tagServiceMock.create(any(Tag.class))).thenAnswer(invocation -> {
+                when(tagDAOMock.read(any(Integer.class))).thenReturn(tag1);
+                when(tagDAOMock.create(any(Tag.class))).thenAnswer(invocation -> {
                     Tag tag = invocation.getArgument(0, Tag.class);
                     tag.setId(tag.getId() + 1);
                     return tag;
@@ -81,47 +82,47 @@ public class CertificateServiceImplTests {
                 when(certificateDaoMock.isTagCertificateTied(1, 3)).thenReturn(true);
                 validator = mock(CertificateValidator.class);
                 doNothing().when(validator).validate(any(Certificate.class));
-            } catch (DAOSQLException | ServiceException | ValidationException e) {
+            } catch (DAOSQLException | ValidationException e) {
                 logger.error(e.getMessage());
             }
             certificate1.setId(1);
             certificate2.setId(2);
             certificate1.setId(3);
             certificate2.setId(4);
-            service = new CertificateServiceImpl(certificateDaoMock, validator, tagServiceMock);
+            service = new CertificateServiceImpl(certificateDaoMock, validator, tagDAOMock);
     }
 
     @Test
-    public void testRead() {
+    public void testRead() throws NotFoundException {
         assertEquals(certificate1, service.read(1));
     }
 
     @Test
-    public void testFindAll() throws ServiceException {
+    public void testFindAll() throws NotFoundException {
         assertEquals(fullList, service.readAll());
     }
 
     @Test
-    public void testCreate() throws ServiceException, DAOSQLException {
+    public void testCreate() throws ServiceException, DAOSQLException, ValidationException {
         Certificate certificate = service.create(certificate1);
         assertEquals(certificate.getId(), fullList.size());
         verify(certificateDaoMock, times(1)).create(certificate1);
     }
 
     @Test
-    public void testDelete() throws ServiceException {
+    public void testDelete() throws BadRequestException {
         service.delete(1);
         verify(certificateDaoMock, times(1)).read(1);
     }
 
     @Test
-    public void testUpdate() throws ServiceException {
+    public void testUpdate() throws ValidationException {
         service.update(certificate2);
         verify(certificateDaoMock, times(1)).update(certificate2);
     }
 
     @Test
-    public void testFindByTag() throws ServiceException {
+    public void testFindByTag() throws NotFoundException {
         assertEquals(shortList, service.readByTag(1));
         CertificateFinder finder = new CertificateFinder();
         finder.findByTag(1);
@@ -129,7 +130,7 @@ public class CertificateServiceImplTests {
     }
 
     @Test
-    public void testFind() throws BadRequestException {
+    public void testFind() throws BadRequestException, NotFoundException {
         Map<String, String> params = new HashMap<>();
         params.put(CertificateSearchParameters.NAME.name(), "1");
         params.put(CertificateSortingParameters.SORT_BY_NAME.name().toLowerCase(), "2");
@@ -145,7 +146,7 @@ public class CertificateServiceImplTests {
     }
 
     @Test
-    public void testAddCertificateTag2() throws ServiceException, BadRequestException {
+    public void testAddCertificateTag2() throws ServiceException, BadRequestException, ValidationException {
         service.addCertificateTag(certificate1, 1);
         verify(certificateDaoMock, times(1))
                 .addCertificateTag(certificate1.getId(), 1);
@@ -161,9 +162,9 @@ public class CertificateServiceImplTests {
     @Test
     public void testCreateIfInvalidTag()
             throws ValidationException {
-        doThrow(new ValidationException("error"))
+        doThrow(new ValidationException("error", ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION))
                 .when(validator).validate(any(Certificate.class));
-        assertThrows(ServiceException.class,() -> service.create(certificate1));
+        assertThrows(ValidationException.class,() -> service.create(certificate1));
     }
 
     @Test

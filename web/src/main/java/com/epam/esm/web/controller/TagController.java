@@ -3,6 +3,7 @@ package com.epam.esm.web.controller;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.service.exceptions.BadRequestException;
+import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ServiceLayerException;
 import com.epam.esm.service.service.impl.CertificateServiceImpl;
@@ -38,7 +39,7 @@ public class TagController {
 
     @GetMapping
     public ResponseEntity<?> readAll(@RequestParam Map<String, String> params)
-            throws ServiceException, BadRequestException {
+            throws BadRequestException, NotFoundException {
         Collection<Tag> list;
         if (CollectionUtils.isEmpty(params)) {
             list = tagServiceImpl.readAll();
@@ -51,7 +52,7 @@ public class TagController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> read(@PathVariable(value = "id") int id) throws ServiceException {
+    public ResponseEntity<?> read(@PathVariable(value = "id") int id) throws NotFoundException {
         final Tag tag = tagServiceImpl.read(id);
         return tag != null
                 ? new ResponseEntity<>(tag, HttpStatus.OK)
@@ -59,7 +60,7 @@ public class TagController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Tag> delete(@PathVariable(value = "id") int id) throws ServiceException {
+    public ResponseEntity<Tag> delete(@PathVariable(value = "id") int id) throws BadRequestException {
         tagServiceImpl.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -73,7 +74,7 @@ public class TagController {
     }
 
     @GetMapping(value = "/{id}/certificates")
-    public ResponseEntity<?> readCertificates(@PathVariable(value = "id") int id) throws ServiceException {
+    public ResponseEntity<?> readCertificates(@PathVariable(value = "id") int id) throws NotFoundException {
         Collection<CertificateDTO> list = certificateServiceImpl.readByTag(id)
                 .stream().map(CertificateDTOConverter::convertObject)
                 .collect(Collectors.toList());

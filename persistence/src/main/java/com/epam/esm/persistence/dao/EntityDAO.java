@@ -4,7 +4,6 @@ package com.epam.esm.persistence.dao;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Entity;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
-
 import java.util.List;
 
 /**

@@ -23,21 +23,14 @@ public class Certificate extends Entity {
      * Constructor
      *
      * @param name name of the certificate
-     * @param description description of the certificate
      * @param price price of the certificate
      * @param duration days to expiring of the certificate
-     * @param createDate creation date of the certificate
-     * @param lastUpdateDate last update date of the certificate
      */
-    public Certificate(String name, String description, BigDecimal price,
-                       int duration, LocalDateTime createDate,
-                       LocalDateTime lastUpdateDate) {
+    public Certificate(String name, BigDecimal price,
+                       int duration) {
         this.name = name;
-        this.description = description;
         this.price = price;
         this.duration = duration;
-        this.createDate = createDate;
-        this.lastUpdateDate = lastUpdateDate;
     }
 
     /**

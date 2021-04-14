@@ -5,9 +5,9 @@ import com.epam.esm.model.entity.Certificate;
 public class CertificateDTOConverter {
 
     public static Certificate convertDTO(CertificateDTO dto) {
-        Certificate certificate = new Certificate(dto.getName(),
-                dto.getDescription(), dto.getPrice(),
-        dto.getDuration(), null, null);
+        Certificate certificate = new Certificate(dto.getName(), dto.getPrice(),
+        dto.getDuration());
+        certificate.setDescription(dto.getDescription());
         certificate.setId(dto.getId());
         return certificate;
     }

@@ -1,7 +1,6 @@
 package com.epam.esm.persistence.dao;
 
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.impl.CertificateDAOImpl;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.CertificateMapper;
@@ -21,11 +20,7 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CertificateDaoTests {
-    private static JdbcTemplate template;
     private static CertificateDAOImpl certificateDao;
-    Tag tag = new Tag("New tag");
-    Certificate certificate  = new Certificate("Certificate1",
-            null, BigDecimal.valueOf(10.0), 3, null, null);
 
     public static DataSource dataSource() {
         return new EmbeddedDatabaseBuilder()
@@ -35,7 +30,7 @@ public class CertificateDaoTests {
 
     @BeforeEach
      void init() {
-        template = new JdbcTemplate(dataSource());
+        JdbcTemplate template = new JdbcTemplate(dataSource());
         certificateDao = new CertificateDAOImpl(template, new CertificateMapper());
     }
 
@@ -46,20 +41,21 @@ public class CertificateDaoTests {
 
     @Test
     void testRead() {
-        Certificate certificate = new Certificate("OZ.by", null,
-                BigDecimal.valueOf(140.1), 10,
-                LocalDateTime.parse("2021-03-22T09:20:11"),
-                LocalDateTime.parse("2021-03-22T09:20:11") );
+        Certificate certificate = new Certificate("OZ.by",
+                BigDecimal.valueOf(140.1), 10);
+        certificate.setLastUpdateDate(LocalDateTime.parse("2021-03-22T09:20:11"));
+        certificate.setCreateDate(LocalDateTime.parse("2021-03-22T09:20:11"));
         certificate.setId(1);
         assertEquals(certificateDao.read(1), certificate);
     }
 
     @Test
     void testCreate() throws DAOSQLException {
-        Certificate certificate = new Certificate("OZ.by", null,
-                BigDecimal.valueOf(140.1), 10,
-                LocalDateTime.parse("2021-03-22T06:12:15.156"),
-                LocalDateTime.parse("2021-03-22T06:12:15.156") );
+        Certificate certificate = new Certificate("OZ.by",
+                BigDecimal.valueOf(140.1), 10);
+        certificate.setLastUpdateDate(LocalDateTime.parse("2021-03-22T09:20:11"));
+        certificate.setCreateDate(LocalDateTime.parse("2021-03-22T09:20:11"));
+        certificate.setId(1);
         int size = certificateDao.readAll().size();
 
         certificateDao.create(certificate);
@@ -68,9 +64,11 @@ public class CertificateDaoTests {
 
     @Test
     void testUpdate() {
-        Certificate certificate = new Certificate("OZ.by", null,
-                BigDecimal.valueOf(140.1), 10,
-                LocalDateTime.parse("2021-03-22T06:12:15.156"), LocalDateTime.now() );
+        Certificate certificate = new Certificate("OZ.by",
+                BigDecimal.valueOf(140.1), 10);
+        certificate.setLastUpdateDate(LocalDateTime.parse("2021-03-22T09:20:11"));
+        certificate.setCreateDate(LocalDateTime.parse("2021-03-22T09:20:11"));
+        certificate.setId(1);
         int id = 3;
         certificate.setId(id);
         certificate = certificateDao.update(certificate);
@@ -81,9 +79,11 @@ public class CertificateDaoTests {
     void testFindBy() {
         CertificateFinder finderMock = mock(CertificateFinder.class);
         when(finderMock.getQuery()).thenReturn(" WHERE NAME = 'OZ.by'");
-        Certificate certificate = new Certificate("OZ.by", null,
-                BigDecimal.valueOf(140.1), 10,
-                LocalDateTime.parse("2021-03-22T09:20:11"), LocalDateTime.parse("2021-03-22T09:20:11") );
+        Certificate certificate = new Certificate("OZ.by",
+                BigDecimal.valueOf(140.1), 10);
+        certificate.setLastUpdateDate(LocalDateTime.parse("2021-03-22T09:20:11"));
+        certificate.setCreateDate(LocalDateTime.parse("2021-03-22T09:20:11"));
+        certificate.setId(1);
         certificate.setId(1);
         assertEquals(Collections.singletonList(certificate), certificateDao.readBy(finderMock));
     }

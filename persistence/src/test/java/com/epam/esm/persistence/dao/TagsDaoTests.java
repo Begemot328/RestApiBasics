@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TagsDaoTests {
-    private static JdbcTemplate template;
     private static TagDAOImpl tagsDao;
 
     public static DataSource dataSource() {
@@ -28,7 +27,7 @@ public class TagsDaoTests {
 
     @BeforeEach
     void init() {
-        template = new JdbcTemplate(dataSource());
+        JdbcTemplate template = new JdbcTemplate(dataSource());
         tagsDao = new TagDAOImpl(template, new TagMapper());
 
     }
