@@ -4,6 +4,7 @@ import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.impl.TagDAOImpl;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.util.TagFinder;
+import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.constants.TagSearchParameters;
@@ -11,17 +12,24 @@ import com.epam.esm.service.service.impl.TagServiceImpl;
 import com.epam.esm.service.constants.TagSortingParameters;
 import com.epam.esm.service.validator.EntityValidator;
 import com.epam.esm.service.validator.TagValidator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TagServiceImplTests {
-    private TagDAOImpl tagDaoMock = Mockito.mock(TagDAOImpl.class);
+    static Logger logger = LoggerFactory.getLogger(CertificateServiceImplTests.class);
+
+    private TagDAOImpl tagDaoMock = mock(TagDAOImpl.class);
     private EntityValidator<Tag> validator;
-    private TagFinder finder = new TagFinder();
+    private TagFinder finder;
     private TagServiceImpl service;
 
     private Tag tag1 = new Tag("Tag1");
@@ -33,22 +41,22 @@ public class TagServiceImplTests {
     private List<Tag> fullList = Arrays.asList(tags);
     private List<Tag> shortList = Arrays.asList(tagsShort);
 
-    {
+    @BeforeEach
+    void init() {
         try {
-            Mockito.when(tagDaoMock.findAll()).thenReturn(fullList);
-            Mockito.when(tagDaoMock.read(1)).thenReturn(tag1);
-            Mockito.when(tagDaoMock.read(2)).thenReturn(tag2);
-            Mockito.when(tagDaoMock.findBy(Mockito.any(TagFinder.class))).thenReturn(shortList);
-            Mockito.doNothing().when(tagDaoMock).delete(Mockito.any(Integer.class));
-            Mockito.doNothing().when(tagDaoMock).update(Mockito.any(Tag.class));
-            Mockito.when(tagDaoMock.create(Mockito.any(Tag.class))).thenAnswer(invocation -> {
-                Tag tag = invocation.getArgumentAt(0, Tag.class);
+            when(tagDaoMock.readAll()).thenReturn(fullList);
+            when(tagDaoMock.read(1)).thenReturn(tag1);
+            when(tagDaoMock.read(2)).thenReturn(tag2);
+            when(tagDaoMock.readBy(any(TagFinder.class))).thenReturn(shortList);
+            doNothing().when(tagDaoMock).delete(any(Integer.class));
+            when(tagDaoMock.create(any(Tag.class))).thenAnswer(invocation -> {
+                Tag tag = invocation.getArgument(0, Tag.class);
                 tag.setId(fullList.size());
                 return tag;
             });
+            validator = mock(TagValidator.class);
+            doNothing().when(validator).validate(any(Tag.class));
 
-            validator = Mockito.mock(TagValidator.class);
-            Mockito.doNothing().when(validator).validate(Mockito.any(Tag.class));
         } catch (DAOSQLException | ValidationException e) {
             e.printStackTrace();
         }
@@ -56,52 +64,66 @@ public class TagServiceImplTests {
         tag2.setId(2);
         tag1.setId(3);
         tag2.setId(4);
-        service = new TagServiceImpl(tagDaoMock, validator, finder);
+        service = new TagServiceImpl(tagDaoMock, validator);
     }
 
     @Test
-    public void readTest() throws ServiceException {
+    public void testRead() throws ServiceException {
         assertEquals(tag1, service.read(1));
     }
 
     @Test
-    public void findAllTest() throws ServiceException {
-        assertEquals(fullList, service.findAll());
+    public void testFindAll() throws ServiceException {
+        assertEquals(fullList, service.readAll());
     }
 
     @Test
-    public void createTest() throws ServiceException, ValidationException, DAOSQLException {
+    public void testCreate() throws ServiceException, DAOSQLException {
         Tag tag = service.create(tag1);
         assertEquals(tag.getId(), fullList.size());
-        Mockito.verify(tagDaoMock, Mockito.times(1)).create(tag1);
+        verify(tagDaoMock, times(1)).create(tag1);
     }
 
     @Test
-    public void deleteTest() throws ServiceException, DAOSQLException {
+    public void testDelete() throws ServiceException {
         service.delete(1);
-        Mockito.verify(tagDaoMock, Mockito.times(1)).read(1);
+        verify(tagDaoMock, times(1)).read(1);
     }
 
     @Test
-    public void updateTest() throws ServiceException, ValidationException, DAOSQLException {
-        service.update(tag2);
-        Mockito.verify(tagDaoMock, Mockito.times(1)).update(tag2);
+    public void testUpdate() {
+        assertThrows(UnsupportedOperationException.class, () -> service.update(tag2));
     }
 
     @Test
-    public void findByCertificateTest() throws ServiceException, DAOSQLException {
-        assertEquals(shortList, service.findByCertificate(1));
+    public void testFindByCertificate() throws ServiceException {
+        assertEquals(shortList, service.readByCertificate(1));
         TagFinder finder = new TagFinder().findByCertificate(1);
-        Mockito.verify(tagDaoMock, Mockito.times(1)).findBy(finder);
+        verify(tagDaoMock, times(1)).readBy(finder);
     }
 
     @Test
-    public void findTest() throws ServiceException, DAOSQLException {
+    public void testFind() throws ServiceException, BadRequestException {
         Map<String, String> params = new HashMap<>();
         params.put(TagSearchParameters.NAME.name(), "1");
         params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), "2");
+        assertEquals(shortList, service.read(params));
+        verify(tagDaoMock, times(1)).readBy(any(TagFinder.class));
+    }
 
-        assertEquals(shortList, service.find(params));
-        Mockito.verify(tagDaoMock, Mockito.times(1)).findBy(Mockito.any(TagFinder.class));
+
+    @Test
+    public void testCreateIfInvalidTag()
+            throws ValidationException {
+        doThrow(new ValidationException("error"))
+            .when(validator).validate(any(Tag.class));
+        assertThrows(ServiceException.class,() -> service.create(tag1));
+    }
+
+    @Test
+    public void testCreateIfInvalidDatabase()
+            throws DAOSQLException {
+        when(tagDaoMock.create(any(Tag.class))).thenThrow(new DAOSQLException("error"));
+        assertThrows(ServiceException.class,() -> service.create(tag1));
     }
 }

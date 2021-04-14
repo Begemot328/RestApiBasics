@@ -3,6 +3,12 @@ package com.epam.esm.service.constants;
 import com.epam.esm.persistence.constants.TagColumns;
 import com.epam.esm.service.util.ConfigUtils;
 
+/**
+ * Parameters to sort tags
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public enum TagSortingParameters {
     SORT_BY_ID(TagColumns.ID.getValue()),
     SORT_BY_NAME(TagColumns.NAME.getValue());

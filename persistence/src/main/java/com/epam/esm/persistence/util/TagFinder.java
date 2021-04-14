@@ -12,7 +12,6 @@ public class TagFinder extends EntityFinder<Tag> {
      * Find by name condition adding method
      *
      * @param name string that found names will include
-     * @return search condition
      */
     public void findByName(String name) {
         find(TagColumns.NAME.getValue() + " " + FinderQueries.LIKE.getValue()
@@ -23,7 +22,6 @@ public class TagFinder extends EntityFinder<Tag> {
      * Find by tag id condition adding method
      *
      * @param id of the tag to find by
-     * @return search condition
      */
     public void findByTag(int id) {
         find(CertificateColumns.TAG_ID.getValue() + " = " + id);

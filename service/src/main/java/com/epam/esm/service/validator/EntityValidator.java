@@ -2,7 +2,6 @@ package com.epam.esm.service.validator;
 
 
 import com.epam.esm.model.entity.Entity;
-import com.epam.esm.service.constants.CertificateSearchParameters;
 import com.epam.esm.service.exceptions.ValidationException;
 
 /**

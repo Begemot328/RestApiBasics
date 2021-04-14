@@ -14,35 +14,35 @@ public class CertificateValidatorTest {
     CertificateValidator validator = new CertificateValidator();
 
     @Test
-    void validateTest() throws ValidationException {
+    void testValidateIfEmptyName() {
         Certificate certificate = new Certificate("",
                 null, BigDecimal.valueOf(10.0), 3, null, null);
         assertThrows(ValidationException.class, () -> validator.validate(certificate));
     }
 
     @Test
-    void validateTest2() throws ValidationException {
+    void testValidateIfNullName() {
         Certificate certificate = new Certificate(null,
                 null, BigDecimal.valueOf(10.0), 3, null, null);
         assertThrows(ValidationException.class, () -> validator.validate(certificate));
     }
 
     @Test
-    void validateTest4() throws ValidationException {
+    void testValidateIfZeroDuration() {
         Certificate certificate = new Certificate("Certificate1",
                 null, BigDecimal.valueOf(10.0), 0, null, null);
         assertThrows(ValidationException.class, () -> validator.validate(certificate));
     }
 
     @Test
-    void validateTest5() throws ValidationException {
+    void testValidateIfZeroPrice() {
         Certificate certificate = new Certificate("Certificate1",
                 null, BigDecimal.valueOf(0), 3, null, null);
         assertThrows(ValidationException.class, () -> validator.validate(certificate));
     }
 
     @Test
-    void validateTest6() throws ValidationException {
+    void testValidate() {
         Certificate certificate = new Certificate("Certificate1",
                 null, BigDecimal.valueOf(10.0), 3, null, null);
         assertDoesNotThrow(() -> validator.validate(certificate));

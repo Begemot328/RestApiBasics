@@ -6,16 +6,17 @@ import com.epam.esm.persistence.dao.impl.CertificateDAOImpl;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.CertificateMapper;
 import com.epam.esm.persistence.util.CertificateFinder;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,23 +33,23 @@ public class CertificateDaoTests {
                 .addScript("classpath:SQL/test_db.sql").build();
     }
 
-    @BeforeAll
-    static void init() {
+    @BeforeEach
+     void init() {
         template = new JdbcTemplate(dataSource());
         certificateDao = new CertificateDAOImpl(template, new CertificateMapper());
-
     }
 
     @Test
-    void testFindAll() throws DAOSQLException {
-        assertEquals(certificateDao.findAll().size(), 5);
+    void testFindAll() {
+        assertEquals(certificateDao.readAll().size(), 5);
     }
 
     @Test
-    void testRead() throws DAOSQLException {
+    void testRead() {
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
-                LocalDate.parse("2021-03-22"), LocalDate.parse("2021-03-22") );
+                LocalDateTime.parse("2021-03-22T09:20:11"),
+                LocalDateTime.parse("2021-03-22T09:20:11") );
         certificate.setId(1);
         assertEquals(certificateDao.read(1), certificate);
     }
@@ -57,50 +58,50 @@ public class CertificateDaoTests {
     void testCreate() throws DAOSQLException {
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
-                LocalDate.parse("2021-03-22"), LocalDate.parse("2021-03-22") );
-        int size = certificateDao.findAll().size();
+                LocalDateTime.parse("2021-03-22T06:12:15.156"),
+                LocalDateTime.parse("2021-03-22T06:12:15.156") );
+        int size = certificateDao.readAll().size();
 
         certificateDao.create(certificate);
-        assertEquals(certificateDao.findAll().size(), ++size);
+        assertEquals(certificateDao.readAll().size(), ++size);
     }
 
     @Test
-    void testUpdate() throws DAOSQLException {
+    void testUpdate() {
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
-                LocalDate.parse("2021-03-22"), LocalDate.parse("2021-03-22") );
+                LocalDateTime.parse("2021-03-22T06:12:15.156"), LocalDateTime.now() );
         int id = 3;
         certificate.setId(id);
-        certificateDao.update(certificate);
+        certificate = certificateDao.update(certificate);
         assertEquals(certificateDao.read(id), certificate);
     }
 
     @Test
-    void testFindBy() throws DAOSQLException {
-        CertificateFinder finderMock = Mockito.mock(CertificateFinder.class);
-        Mockito.when(finderMock.getQuery()).thenReturn(" WHERE NAME = 'OZ.by'");
+    void testFindBy() {
+        CertificateFinder finderMock = mock(CertificateFinder.class);
+        when(finderMock.getQuery()).thenReturn(" WHERE NAME = 'OZ.by'");
         Certificate certificate = new Certificate("OZ.by", null,
                 BigDecimal.valueOf(140.1), 10,
-                LocalDate.parse("2021-03-22"), LocalDate.parse("2021-03-22") );
+                LocalDateTime.parse("2021-03-22T09:20:11"), LocalDateTime.parse("2021-03-22T09:20:11") );
         certificate.setId(1);
-        assertEquals(Collections.singletonList(certificate), certificateDao.findBy(finderMock));
+        assertEquals(Collections.singletonList(certificate), certificateDao.readBy(finderMock));
     }
 
     @Test
-    void testDelete() throws DAOSQLException {
-        int size = certificateDao.findAll().size();
-
+    void testDelete() {
+        int size = certificateDao.readAll().size();
         certificateDao.delete(2);
-        assertEquals(certificateDao.findAll().size(), --size);
+        assertEquals(certificateDao.readAll().size(), --size);
     }
 
     @Test
-    void testIStagCertificateTied() {
+    void testIsTagCertificateTied() {
         assertTrue(certificateDao.isTagCertificateTied(1, 4));
     }
 
     @Test
-    void testaddCertificateTag() {
+    void testAddCertificateTag() {
         certificateDao.addCertificateTag(1,1);
         assertTrue(certificateDao.isTagCertificateTied(1, 1));
     }

@@ -1,7 +1,8 @@
 SET MODE MySQL;
+DROP ALL OBJECTS;
+
 
 drop schema if exists certificates;
-
 create schema if not exists certificates;
 
 use certificates;
@@ -19,8 +20,8 @@ create table certificate
     description     text,
     price           double       not null,
     duration        int          not null,
-    create_date     date         not null,
-    last_update_date date         not null
+    create_date     timestamp         not null,
+    last_update_date timestamp         not null
 );
 
 create table certificate_tag
@@ -60,15 +61,15 @@ insert into tag(name) values('bicycle');
 
 
 insert into certificate(name, description, price, duration, create_date, last_update_date)
-values('OZ.by', null, 140.1, 10, '2021-03-22', '2021-03-22' );
-insert into certificate(name, description, price, duration, create_date, last_update_date)
-values('nastolka.by', 'board games certificate', 40.1, 50, '2021-01-22', '2021-03-22' );
-insert into certificate(name, description, price, duration, create_date, last_update_date)
-values('rider.by', null, 140.5, 5, '2021-02-22', '2021-03-22' );
-insert into certificate(name, description, price, duration, create_date, last_update_date)
-values('tsum.by', null, 120.5, 3, '2020-02-22', '2020-03-22' );
-insert into certificate(name, description, price, duration, create_date, last_update_date)
-values('Kryshtal', null, 7.63, 2, '2021-03-22', '2021-04-22' );
+values('OZ.by', null, 140.1, 10, '2021-03-22 09:20:11', '2021-03-22 09:20:11' );
+insert  into certificate(name, description, price, duration, create_date, last_update_date)
+values('nastolka.by', 'board games certificate', 40.1, 50, '2021-01-22 09:20:11', '2021-03-22 09:20:11' );
+insert  into certificate(name, description, price, duration, create_date, last_update_date)
+values('rider.by', null, 140.5, 5, '2021-02-22 09:20:11', '2021-03-22 09:20:11' );
+insert  into certificate(name, description, price, duration, create_date, last_update_date)
+values('tsum.by', null, 120.5, 3, '2020-02-22 09:20:11', '2020-03-22 09:20:11' );
+insert  into certificate(name, description, price, duration, create_date, last_update_date)
+values('Kryshtal', null, 7.63, 2, '2021-03-22 09:20:11', '2021-04-22 09:20:11');
 
 insert into certificate_tag(tag_id, certificate_id) VALUES (3, 1);
 insert into certificate_tag(tag_id, certificate_id) VALUES (2, 2);
