@@ -4,8 +4,12 @@ package com.epam.esm.persistence.pool;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,7 +18,9 @@ import org.springframework.stereotype.Component;
  * @author Yury Zmushko
  * @version 1.0
  */
-@Component
+
+@Configuration
+@PropertySource("classpath:database.properties")
 public class DBCPDataSource {
     static Logger logger = LoggerFactory.getLogger(DBCPDataSource.class);
     private BasicDataSource ds = new BasicDataSource();
@@ -41,7 +47,7 @@ public class DBCPDataSource {
     /**
      * Default constructor
      */
-    private DBCPDataSource(){
+    public DBCPDataSource(){
         logger.debug("DBCPDataSource() constructor");
     }
 
@@ -62,5 +68,10 @@ public class DBCPDataSource {
         ds.setMaxIdle(Integer.parseInt(maxpoolsize));
         ds.setMaxOpenPreparedStatements(Integer.parseInt(maxOpenedPreparedStatements));
         return ds;
+    }
+
+    @Bean
+    public static JdbcTemplate getTemplate(@Qualifier("getDataSource") BasicDataSource source) {
+        return new JdbcTemplate(source);
     }
 }
