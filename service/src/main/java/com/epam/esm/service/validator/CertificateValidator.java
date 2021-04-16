@@ -19,19 +19,24 @@ public class CertificateValidator implements EntityValidator<Certificate> {
     @Override
     public void validate(Certificate certificate) throws ValidationException {
         if (certificate.getName() == null) {
-            throw new ValidationException("Null name!", ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
+            throw new ValidationException("Certificate name can't be null!",
+                    ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
         }
         if (certificate.getName().isEmpty()) {
-            throw new ValidationException("Empty name!", ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
+            throw new ValidationException("Certificate name can't be empty!",
+                    ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
         }
         if (certificate.getDuration() <= 0) {
-            throw new ValidationException("Non-positive duration!", ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
+            throw new ValidationException("Certificate duration must be positive!",
+                    ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
         }
         if (certificate.getPrice() == null) {
-            throw new ValidationException("Null price!", ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
+            throw new ValidationException("Certificate price can't be null!",
+                    ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
         }
         if (certificate.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new ValidationException("Non-positive price!", ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
+            throw new ValidationException("Certificate price must be positive!",
+                    ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
         }
     }
 }

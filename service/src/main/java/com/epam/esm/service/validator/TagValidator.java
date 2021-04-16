@@ -17,10 +17,12 @@ public class TagValidator implements EntityValidator<Tag> {
     @Override
     public void validate(Tag tag) throws ValidationException {
         if (tag.getName() == null) {
-            throw new ValidationException("Null name!", ErrorCodes.TAG_VALIDATION_EXCEPTION);
+            throw new ValidationException("Tag name can't be null!",
+                    ErrorCodes.TAG_VALIDATION_EXCEPTION);
         }
         if (tag.getName().isEmpty()) {
-            throw new ValidationException("Empty name!", ErrorCodes.TAG_VALIDATION_EXCEPTION);
+            throw new ValidationException("Tag name can't be empty!!",
+                    ErrorCodes.TAG_VALIDATION_EXCEPTION);
         }
 
     }

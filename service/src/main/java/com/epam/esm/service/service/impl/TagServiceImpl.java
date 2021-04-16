@@ -74,23 +74,23 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> readAll() throws NotFoundException {
-        List<Tag> list = dao.readAll();
-        if (CollectionUtils.isEmpty(list)) {
+        List<Tag> tags = dao.readAll();
+        if (CollectionUtils.isEmpty(tags)) {
             throw new NotFoundException("No tags found!",
                     ErrorCodes.TAG_NOT_FOUND);
         } else {
-            return list;
+            return tags;
         }
     }
 
     @Override
     public List<Tag> readBy(EntityFinder<Tag> entityFinder) throws NotFoundException {
-        List<Tag> list = dao.readBy(entityFinder);
-        if (CollectionUtils.isEmpty(list)) {
+        List<Tag> tags = dao.readBy(entityFinder);
+        if (CollectionUtils.isEmpty(tags)) {
             throw new NotFoundException("Requested resource not found!",
                     ErrorCodes.TAG_NOT_FOUND);
         } else {
-            return list;
+            return tags;
         }
     }
 
