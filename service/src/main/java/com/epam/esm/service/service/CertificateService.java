@@ -26,6 +26,8 @@ public interface CertificateService extends EntityService<Certificate> {
      */
     List<Certificate> readByTag(int tagId) throws NotFoundException;
 
+    List<Certificate> readByTags(Tag[] tags) throws NotFoundException;
+
     /**
      * Add tie between {@link Certificate} and {@link Tag} method
      *

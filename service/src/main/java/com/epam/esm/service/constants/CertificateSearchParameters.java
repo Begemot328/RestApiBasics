@@ -9,7 +9,7 @@ import com.epam.esm.service.util.ConfigUtils;
  * @version 1.0
  */
 public enum CertificateSearchParameters {
-    NAME, TAGNAME, DESCRIPTION;
+    NAME, TAGNAME, DESCRIPTION, TAGNAMES;
 
     /**
      * Obtain enum element by {@link String} name

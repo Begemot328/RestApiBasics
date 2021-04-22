@@ -37,7 +37,7 @@ public interface EntityDAO<T extends Entity> {
      *
      * @return  updated {@link Certificate}
      */
-    Certificate update(T t);
+    T update(T t);
 
     /**
      * Delete method

@@ -146,7 +146,9 @@ public class Certificate extends Entity {
         if (this == o) return true;
         if (!(o instanceof Certificate)) return false;
         Certificate that = (Certificate) o;
-        return that.price.equals(price) && duration == that.duration && name.equals(that.name) && Objects.equals(description, that.description) && createDate.equals(that.createDate) && lastUpdateDate.equals(that.lastUpdateDate);
+        return that.price.equals(price) && duration == that.duration && name.equals(that.name)
+                && Objects.equals(description, that.description) && createDate.equals(that.createDate)
+                && lastUpdateDate.equals(that.lastUpdateDate);
     }
 
     @Override

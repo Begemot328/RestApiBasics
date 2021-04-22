@@ -35,7 +35,7 @@ public interface EntityService<T extends Entity> {
      * @param id ID of the Entity
      *
      */
-    T read (int id) throws NotFoundException;
+    T read (int id) throws NotFoundException, BadRequestException;
 
     /**
      * Delete {@link Entity} from database method
@@ -52,7 +52,7 @@ public interface EntityService<T extends Entity> {
      *
      * @return Updated {@link Certificate}
      */
-    Certificate update (T t) throws ValidationException;
+    T update (T t) throws ValidationException;
 
     /**
      * Find all  {@link Entity} objects in database method

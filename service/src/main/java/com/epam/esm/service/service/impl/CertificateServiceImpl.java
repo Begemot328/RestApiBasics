@@ -166,6 +166,21 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
+    @Override
+    public List<Certificate> readByTags(Tag[] tags) throws NotFoundException {
+        List<Certificate> certificates = dao.readBy(tags);
+        if (CollectionUtils.isEmpty(certificates)) {
+            String tagsArray = new String();
+            for(Tag tag: tags) {
+                tagsArray += " (Tag id = " + tag.getName() + "), ";
+            }
+            throw new NotFoundException("Requested resource not found" + tagsArray + "!",
+                    ErrorCodes.CERTIFICATE_NOT_FOUND);
+        } else {
+            return certificates;
+        }
+    }
+
     @Transactional
     @Override
     public void addCertificateTag(Certificate certificate, int tagId) throws ServiceException,

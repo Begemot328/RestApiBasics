@@ -68,7 +68,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Certificate update(Tag tag) {
+    public Tag update(Tag tag) {
         throw new UnsupportedOperationException("Update operation for tag is unavailable");
     }
 
@@ -131,5 +131,10 @@ public class TagServiceImpl implements TagService {
             }
         }
         return readBy(finder);
+    }
+
+    @Override
+    public Tag readMostlyUsedTag() throws BadRequestException, NotFoundException {
+        return dao.readMostlyUsedTag();
     }
 }

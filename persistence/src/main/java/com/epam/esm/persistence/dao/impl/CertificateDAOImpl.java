@@ -1,29 +1,30 @@
 package com.epam.esm.persistence.dao.impl;
 
+import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.CertificateQueries;
 import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.mapper.CertificateMapper;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Component
+@Repository
 public class CertificateDAOImpl implements CertificateDAO {
     private final JdbcTemplate template;
     private final CertificateMapper certificateMapper;
@@ -103,7 +104,8 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public List<Certificate> readBy(EntityFinder<Certificate> finder) {
-        Stream<Certificate> certificateStream = template.queryForStream(CertificateQueries.SELECT_FROM_CERTIFICATE_TAG.getValue()
+        Stream<Certificate> certificateStream = template.queryForStream(
+                CertificateQueries.SELECT_FROM_CERTIFICATE_TAG.getValue()
                         .concat(finder.getQuery()),
                 certificateMapper);
         List<Certificate> certificates = certificateStream.distinct().collect(Collectors.toList());
@@ -116,5 +118,32 @@ public class CertificateDAOImpl implements CertificateDAO {
                 new Object[]{tagId, certificateId},
                 new int[]{Types.INTEGER, Types.INTEGER},
                 Integer.class) != 0;
+    }
+
+    @Override
+    public List<Certificate> readBy(String query) {
+        Stream<Certificate> certificateStream = template.queryForStream(query,
+                certificateMapper);
+        List<Certificate> certificates = certificateStream.distinct().collect(Collectors.toList());
+        certificateStream.close();
+        return certificates;
+    }
+
+    @Override
+    public List<Certificate> readBy(Tag[] tags) {
+        StringBuilder query = new StringBuilder(CertificateQueries.SELECT_FROM_CERTIFICATE_TAG.getValue());
+        boolean first = true;
+        if (ArrayUtils.isEmpty(tags)) {
+            return new ArrayList<>();
+        }
+        for (Tag tag: tags) {
+            if(first) {
+                first = false;
+            } else {
+                query.append(CertificateQueries.INTERSECT.getValue());
+            }
+            query.append(CertificateQueries.WHERE_TAG_NAME.getValue().replace("?",tag.getName()));
+        }
+        return readBy(query.toString());
     }
 }

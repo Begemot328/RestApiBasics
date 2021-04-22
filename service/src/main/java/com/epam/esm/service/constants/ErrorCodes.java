@@ -17,4 +17,14 @@ public class ErrorCodes {
     public static final int TAG_NOT_FOUND = 40402;
     public static final int TAG_VALIDATION_EXCEPTION = 42202;
     public static final int TAG_INTERNAL_ERROR = 50002;
+
+    public static final int USER_BAD_REQUEST = 40003;
+    public static final int USER_NOT_FOUND = 40403;
+    public static final int USER_VALIDATION_EXCEPTION = 42203;
+    public static final int USER_INTERNAL_ERROR = 50003;
+
+    public static final int ORDER_BAD_REQUEST = 40004;
+    public static final int ORDER_NOT_FOUND = 40404;
+    public static final int ORDER_VALIDATION_EXCEPTION = 42204;
+    public static final int ORDER_INTERNAL_ERROR = 50004;
 }

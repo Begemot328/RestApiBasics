@@ -28,4 +28,11 @@ public interface TagService extends EntityService<Tag> {
      * @param params finding and sorting parameters
      */
     List<Tag> read(Map<String, String> params) throws BadRequestException, NotFoundException;
+
+
+    /**
+     * Find {@link Tag} objects by parameters method
+     *
+     */
+    Tag readMostlyUsedTag() throws BadRequestException, NotFoundException;
 }

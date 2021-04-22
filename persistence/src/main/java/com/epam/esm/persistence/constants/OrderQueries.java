@@ -6,16 +6,16 @@ package com.epam.esm.persistence.constants;
  * @author Yury Zmushko
  * @version 1.0
  */
-public enum TagQueries {
+public enum OrderQueries {
     WHERE_ID(" WHERE id = ?"),
-    SELECT_MOST_POPULAR_TAG(" "),
     WHERE_CERTIFICATE_ID(" WHERE certificate_id = ?"),
-    SELECT_FROM_TAG("SELECT * FROM certificates.tag"),
-    SELECT_FROM_TAG_CERTIFICATES("SELECT * FROM certificates.tag_certificates"),
-    INSERT_TAG("INSERT INTO certificates.tag (name) VALUES (?);"),
-    UPDATE_TAG("UPDATE certificates.tag  SET name = ? " +
+    SELECT_FROM_ORDER("SELECT DISTINCT * FROM certificates.order_full"),
+    INSERT_ORDER("INSERT INTO certificates.orders (user_id, certificate_id, purchase_date, amount, quantity) " +
+            "VALUES (?, ?, ?, ?, ?);"),
+    UPDATE_ORDER("UPDATE certificates.orders  SET user_id = ?, certificate_id = ?, " +
+            "purchase_date = ?, amount = ?, quantity = ? " +
             "WHERE id = ?;"),
-    DELETE_TAG("DELETE FROM certificates.tag  " +
+    DELETE_ORDER("DELETE FROM certificates.orders  " +
             "WHERE id = ?;"),
     LIMIT(" LIMIT ?, ?");
 
@@ -24,11 +24,11 @@ public enum TagQueries {
      *
      * @param value column name
      */
-    TagQueries(String value) {
+    OrderQueries(String value) {
         this.value = value;
     }
 
-    private String value;
+    private final String value;
 
     /**
      * Value getter

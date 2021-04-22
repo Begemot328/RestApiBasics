@@ -7,8 +7,10 @@ package com.epam.esm.persistence.constants;
  * @version 1.0
  */
 public enum CertificateQueries {
-    SELECT_FROM_CERTIFICATE_TAG("SELECT * FROM certificates.certificate_tags"),
+    SELECT_FROM_CERTIFICATE_TAG("SELECT DISTINCT name, description, price,"+
+            "duration, create_date, last_update_date FROM certificates.certificate_tags"),
     WHERE_TAG_ID(" WHERE tag_id = ?"),
+    WHERE_TAG_NAME(" WHERE tag_name = ?"),
     WHERE_ID(" WHERE id = ?"),
     SELECT_FROM_CERTIFICATE("SELECT * FROM certificates.certificate"),
     INSERT_CERTIFICATE("INSERT INTO certificates.certificate (name, description, price," +
@@ -22,7 +24,9 @@ public enum CertificateQueries {
     DELETE_CERTIFICATE_TAG("DELETE FROM certificates.certificate_tag " +
             "WHERE certificate_id=? AND tag_id=?;"),
     COUNT_CERTIFICATE_TAG("SELECT COUNT(*) FROM certificates.certificate_tag " +
-            "WHERE tag_id = ? AND certificate_id = ?;");
+            "WHERE tag_id = ? AND certificate_id = ?;"),
+    LIMIT(" LIMIT ?, ?"),
+    INTERSECT(" INTERSECT ");
 
     /**
      * Default constructor

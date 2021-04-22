@@ -1,6 +1,5 @@
 package com.epam.esm.persistence.dao.impl;
 
-import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.constants.TagQueries;
 import com.epam.esm.persistence.dao.TagDAO;
 import com.epam.esm.persistence.mapper.TagMapper;
@@ -13,6 +12,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Component
+@Repository
 public class TagDAOImpl implements TagDAO {
     private final JdbcTemplate template;
     private final TagMapper tagMapper;
@@ -63,7 +64,7 @@ public class TagDAOImpl implements TagDAO {
     }
 
     @Override
-    public Certificate update(Tag tag) {
+    public Tag update(Tag tag) {
         throw new UnsupportedOperationException("Update operation for tag is unavailable");
     }
 
@@ -84,5 +85,23 @@ public class TagDAOImpl implements TagDAO {
         List<Tag> tags = tagStream.distinct().collect(Collectors.toList());
         tagStream.close();
         return tags;
+    }
+
+    @Override
+    public List<Tag> readBy(String query) {
+        Stream<Tag> tagStream = template.queryForStream(query, tagMapper);
+        List<Tag> tags = tagStream.distinct().collect(Collectors.toList());
+        tagStream.close();
+        return tags;
+    }
+
+    @Override
+    public Tag readMostlyUsedTag() {
+        List<Tag> tags = readBy(TagQueries.SELECT_MOST_POPULAR_TAG.getValue());
+
+        if (CollectionUtils.isEmpty(tags)) {
+            return null;
+        }
+        return tags.get(0);
     }
 }
