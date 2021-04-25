@@ -10,14 +10,14 @@ public class CertificateDTOMapper {
 
     public Certificate convertDTO(CertificateDTO dto) {
         Certificate certificate = new Certificate(dto.getName(), BigDecimal.valueOf(dto.getPrice()),
-        dto.getDuration());
+                dto.getDuration());
         certificate.setDescription(dto.getDescription());
         certificate.setId(dto.getId());
         return certificate;
     }
 
     public CertificateDTO convertObject(Certificate certificate) {
-        if(certificate == null) {
+        if (certificate == null) {
             return null;
         }
         CertificateDTO certificateDTO = new CertificateDTO(certificate.getName(),

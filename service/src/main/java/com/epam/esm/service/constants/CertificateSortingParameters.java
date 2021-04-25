@@ -18,19 +18,9 @@ public enum CertificateSortingParameters {
 
     /**
      * Value getter
-     *
      */
     CertificateSortingParameters(String value) {
         this.value = value;
-    }
-
-    /**
-     * Value getter
-     *
-     * @return query String line
-     */
-    public String getValue() {
-        return value;
     }
 
     /**
@@ -41,5 +31,14 @@ public enum CertificateSortingParameters {
      */
     public static CertificateSortingParameters getEntryByParameter(String parameter) {
         return valueOf(ConfigUtils.convertName(parameter));
+    }
+
+    /**
+     * Value getter
+     *
+     * @return query String line
+     */
+    public String getValue() {
+        return value;
     }
 }

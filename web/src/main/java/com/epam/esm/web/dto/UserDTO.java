@@ -13,7 +13,8 @@ public class UserDTO {
         this.login = login;
     }
 
-    public UserDTO() {}
+    public UserDTO() {
+    }
 
     public String getFirstName() {
         return firstName;

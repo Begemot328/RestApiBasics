@@ -17,7 +17,8 @@ public abstract class EntityFinder<T extends Entity> {
     protected String limit = "";
     protected String offset = "";
 
-    public EntityFinder() {}
+    public EntityFinder() {
+    }
 
     /**
      * Search condition getter
@@ -93,7 +94,7 @@ public abstract class EntityFinder<T extends Entity> {
     /**
      * Method to join another {@link EntityFinder} conditions by AND logic
      *
-     * @param sorting name of the parameter to sort by
+     * @param sorting       name of the parameter to sort by
      * @param sortDirection {@link SortDirection} enum object to specify sorting order
      */
     public void sortBy(String sorting, SortDirection sortDirection) {

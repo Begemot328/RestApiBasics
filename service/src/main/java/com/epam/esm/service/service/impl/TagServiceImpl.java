@@ -62,10 +62,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void delete(int id) throws BadRequestException {
-            if (dao.read(id) == null) {
-                throw new BadRequestException("Entity does not exist", ErrorCodes.TAG_BAD_REQUEST);
-            }
-            dao.delete(id);
+        if (dao.read(id) == null) {
+            throw new BadRequestException("Entity does not exist", ErrorCodes.TAG_BAD_REQUEST);
+        }
+        dao.delete(id);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class TagServiceImpl implements TagService {
                 if (key.contains("sort")) {
                     finder.sortBy(TagSortingParameters.getEntryByParameter(key).getValue(),
                             SortDirection.parseAscDesc(params.get(key).get(0)));
-                } else if  (PaginationParameters.contains(key)) {
+                } else if (PaginationParameters.contains(key)) {
                     parsePaginationParameter(finder, key, params.get(key));
                 } else {
                     parseFindParameter(finder, key, params.get(key));

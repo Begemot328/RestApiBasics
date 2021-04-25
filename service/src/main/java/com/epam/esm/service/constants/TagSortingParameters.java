@@ -20,15 +20,6 @@ public enum TagSortingParameters {
     }
 
     /**
-     * Value getter
-     *
-     * @return query String line
-     */
-    public String getValue() {
-        return value;
-    }
-
-    /**
      * Obtain enum element by {@link String} name
      *
      * @param parameter parameter to find search parameter by
@@ -36,5 +27,14 @@ public enum TagSortingParameters {
      */
     public static TagSortingParameters getEntryByParameter(String parameter) {
         return valueOf(ConfigUtils.convertName(parameter));
+    }
+
+    /**
+     * Value getter
+     *
+     * @return query String line
+     */
+    public String getValue() {
+        return value;
     }
 }

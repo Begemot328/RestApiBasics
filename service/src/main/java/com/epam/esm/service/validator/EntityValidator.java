@@ -16,7 +16,6 @@ public interface EntityValidator<T extends Entity> {
      * Validate {@link Entity} method
      *
      * @param t {@link Entity} to validate
-     *
      */
     void validate(T t) throws ValidationException;
 

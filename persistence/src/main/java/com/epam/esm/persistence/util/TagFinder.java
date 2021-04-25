@@ -1,8 +1,7 @@
 package com.epam.esm.persistence.util;
 
-import com.epam.esm.persistence.constants.CertificateColumns;
-import com.epam.esm.persistence.constants.TagColumns;
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.constants.TagColumns;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,7 +14,7 @@ public class TagFinder extends EntityFinder<Tag> {
      */
     public void findByName(String name) {
         find(TagColumns.NAME.getValue() + " " + FinderQueries.LIKE.getValue()
-                .replace(FinderQueries.VALUE.getValue(),name));
+                .replace(FinderQueries.VALUE.getValue(), name));
     }
 
     /**

@@ -7,7 +7,7 @@ package com.epam.esm.persistence.constants;
  * @version 1.0
  */
 public enum CertificateQueries {
-    SELECT_FROM_CERTIFICATE_TAG("SELECT DISTINCT id, name, description, price,"+
+    SELECT_FROM_CERTIFICATE_TAG("SELECT DISTINCT id, name, description, price," +
             "duration, create_date, last_update_date FROM certificates.certificate_tags"),
     WHERE_TAG_ID_IN(" id IN (SELECT DISTINCT id FROM certificates.certificate_tags WHERE tag_id = ?)"),
     WHERE_ID(" WHERE id = ?"),
@@ -26,18 +26,18 @@ public enum CertificateQueries {
             "WHERE tag_id = ? AND certificate_id = ?;");
 
     /**
+     * Value getter
+     */
+    private String value;
+
+    /**
      * Default constructor
+     *
      * @param value column name
      */
     CertificateQueries(String value) {
         this.value = value;
     }
-
-    /**
-     * Value getter
-     *
-     */
-    private String value;
 
     /**
      * Value getter

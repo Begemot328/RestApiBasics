@@ -14,15 +14,16 @@ public enum FinderQueries {
     LIKE("LIKE '%VALUE%'"),
     VALUE("VALUE");
 
+    private String value;
+
     /**
      * Default constructor
+     *
      * @param value column name
      */
     FinderQueries(String value) {
         this.value = value;
     }
-
-    private String value;
 
     /**
      * Value getter

@@ -20,6 +20,8 @@ public enum UserQueries {
     SELECT_PASSWORD("SELECT password FROM account WHERE login = ?"),
     LIMIT(" LIMIT ?, ?");
 
+    private final String value;
+
     /**
      * Default constructor
      *
@@ -28,8 +30,6 @@ public enum UserQueries {
     UserQueries(String value) {
         this.value = value;
     }
-
-    private final String value;
 
     /**
      * Value getter

@@ -3,7 +3,6 @@ package com.epam.esm.web.controller;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
 import com.epam.esm.model.entity.User;
-import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
@@ -56,7 +55,7 @@ public class UserController {
     public ResponseEntity<?> readAll()
             throws NotFoundException {
         List<UserDTO> users = userService.readAll()
-                    .stream().map(userDTOMapper::toUserDTO).collect(Collectors.toList());
+                .stream().map(userDTOMapper::toUserDTO).collect(Collectors.toList());
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 

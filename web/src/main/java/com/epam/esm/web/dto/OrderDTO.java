@@ -29,7 +29,8 @@ public class OrderDTO extends Entity {
         this.purchaseDate = purchaseDate;
     }
 
-    public OrderDTO() {}
+    public OrderDTO() {
+    }
 
     public CertificateDTO getCertificate() {
         return certificate;

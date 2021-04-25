@@ -1,7 +1,7 @@
 package com.epam.esm.service.exceptions;
 
 
-public class ServiceLayerException extends Exception{
+public class ServiceLayerException extends Exception {
     private int errorCode;
 
     public ServiceLayerException(String message, int errorCode) {

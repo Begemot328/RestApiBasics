@@ -1,6 +1,5 @@
 package com.epam.esm.persistence.dao.impl;
 
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.constants.TagQueries;
 import com.epam.esm.persistence.constants.UserColumns;

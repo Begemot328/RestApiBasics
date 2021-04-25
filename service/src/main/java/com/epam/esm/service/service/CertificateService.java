@@ -22,14 +22,13 @@ public interface CertificateService extends EntityService<Certificate> {
      * Find {@link Certificate} by {@link Tag} method
      *
      * @param tagId {@link Tag} ID to find by
-     *
      */
     List<Certificate> readByTag(int tagId) throws NotFoundException;
 
     /**
      * Add tie between {@link Certificate} and {@link Tag} method
      *
-     * @param tagId {@link Tag} ID to tie
+     * @param tagId       {@link Tag} ID to tie
      * @param certificate {@link Certificate} to tie
      */
     void addCertificateTag(Certificate certificate, int tagId) throws ServiceException, BadRequestException, ValidationException;
@@ -37,7 +36,7 @@ public interface CertificateService extends EntityService<Certificate> {
     /**
      * Add tie between {@link Certificate} and {@link Tag} method
      *
-     * @param tag {@link Tag}  to tie
+     * @param tag           {@link Tag}  to tie
      * @param certificateId {@link Certificate} ID to tie
      */
     void addCertificateTag(int certificateId, Tag tag) throws ServiceException, BadRequestException;
@@ -51,7 +50,7 @@ public interface CertificateService extends EntityService<Certificate> {
     /**
      * Delete tie between {@link Certificate} and {@link Tag} method
      *
-     * @param tagId {@link Tag} ID
+     * @param tagId         {@link Tag} ID
      * @param certificateId {@link Certificate} ID
      */
     void deleteCertificateTag(int certificateId, int tagId) throws BadRequestException;

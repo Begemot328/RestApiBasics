@@ -4,6 +4,7 @@ package com.epam.esm.persistence.dao;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Entity;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
+
 import java.util.List;
 
 /**
@@ -18,7 +19,6 @@ public interface EntityDAO<T extends Entity> {
      * Create method
      *
      * @param t entity to create
-     *
      */
     T create(T t) throws DAOSQLException;
 
@@ -26,7 +26,6 @@ public interface EntityDAO<T extends Entity> {
      * Read method
      *
      * @param id of the entity
-     *
      */
     T read(int id);
 
@@ -34,8 +33,7 @@ public interface EntityDAO<T extends Entity> {
      * Update method
      *
      * @param t entity to create
-     *
-     * @return  updated {@link Certificate}
+     * @return updated {@link Certificate}
      */
     T update(T t);
 
@@ -43,7 +41,6 @@ public interface EntityDAO<T extends Entity> {
      * Delete method
      *
      * @param id of the entity to delete
-     *
      */
     void delete(int id);
 

@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(UserDAO dao,
-                          EntityValidator<User> validator) {
+                           EntityValidator<User> validator) {
         this.dao = dao;
         this.validator = validator;
     }

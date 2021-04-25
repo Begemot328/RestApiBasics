@@ -126,14 +126,14 @@ public class TagServiceImplTests {
     public void testCreateIfInvalidTag()
             throws ValidationException {
         doThrow(new ValidationException("error", ErrorCodes.TAG_VALIDATION_EXCEPTION))
-            .when(validator).validate(any(Tag.class));
-        assertThrows(ServiceException.class,() -> service.create(tag1));
+                .when(validator).validate(any(Tag.class));
+        assertThrows(ServiceException.class, () -> service.create(tag1));
     }
 
     @Test
     public void testCreateIfInvalidDatabase()
             throws DAOSQLException {
         when(tagDaoMock.create(any(Tag.class))).thenThrow(new DAOSQLException("error"));
-        assertThrows(ServiceException.class,() -> service.create(tag1));
+        assertThrows(ServiceException.class, () -> service.create(tag1));
     }
 }

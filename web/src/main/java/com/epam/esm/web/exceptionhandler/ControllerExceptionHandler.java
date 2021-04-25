@@ -15,7 +15,7 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler({ RuntimeException.class })
+    @ExceptionHandler({RuntimeException.class})
     public ResponseEntity<ExceptionDTO> handleRuntimeException(
             Exception ex, WebRequest request) {
         return new ResponseEntity<>(
@@ -23,7 +23,7 @@ public class ControllerExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({ Exception.class })
+    @ExceptionHandler({Exception.class})
     public ResponseEntity<ExceptionDTO> handleException(
             Exception ex, WebRequest request) {
         return new ResponseEntity<>(
@@ -31,7 +31,7 @@ public class ControllerExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({ ServiceException.class })
+    @ExceptionHandler({ServiceException.class})
     public ResponseEntity<ExceptionDTO> handleServiceException(
             ServiceLayerException ex, WebRequest request) {
         return new ResponseEntity<>(
@@ -39,7 +39,7 @@ public class ControllerExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({ BadRequestException.class })
+    @ExceptionHandler({BadRequestException.class})
     public ResponseEntity<ExceptionDTO> handleBadRequestException(
             ServiceLayerException ex, WebRequest request) {
         return new ResponseEntity<>(
@@ -47,7 +47,7 @@ public class ControllerExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({ ValidationException.class })
+    @ExceptionHandler({ValidationException.class})
     public ResponseEntity<ExceptionDTO> handleValidationException(
             ServiceLayerException ex, WebRequest request) {
         return new ResponseEntity<>(
@@ -56,7 +56,7 @@ public class ControllerExceptionHandler {
     }
 
 
-    @ExceptionHandler({ NotFoundException.class })
+    @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<ExceptionDTO> handleNotFoundException(
             ServiceLayerException ex, WebRequest request) {
         return new ResponseEntity<>(

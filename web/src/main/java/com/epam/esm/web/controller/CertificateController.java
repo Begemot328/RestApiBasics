@@ -18,7 +18,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,13 +54,13 @@ public class CertificateController {
     public ResponseEntity<?> read(@RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
         List<CertificateDTO> certificates;
-            if (CollectionUtils.isEmpty(params)) {
-                certificates = certificateServiceImpl.readAll()
-                        .stream().map(certificateDTOMapper::convertObject).collect(Collectors.toList());
-            } else {
-                certificates = certificateServiceImpl.read(params)
-                        .stream().map(certificateDTOMapper::convertObject).collect(Collectors.toList());
-            }
+        if (CollectionUtils.isEmpty(params)) {
+            certificates = certificateServiceImpl.readAll()
+                    .stream().map(certificateDTOMapper::convertObject).collect(Collectors.toList());
+        } else {
+            certificates = certificateServiceImpl.read(params)
+                    .stream().map(certificateDTOMapper::convertObject).collect(Collectors.toList());
+        }
         return new ResponseEntity<>(certificates, HttpStatus.OK);
     }
 

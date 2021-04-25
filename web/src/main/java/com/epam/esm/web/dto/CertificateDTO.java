@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.time.LocalDateTime;
 
 public class CertificateDTO {
@@ -38,7 +39,8 @@ public class CertificateDTO {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public CertificateDTO() {}
+    public CertificateDTO() {
+    }
 
     public int getId() {
         return id;

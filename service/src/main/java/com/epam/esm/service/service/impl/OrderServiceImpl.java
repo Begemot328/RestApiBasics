@@ -66,10 +66,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void delete(int id) throws BadRequestException {
-            if (dao.read(id) == null) {
-                throw new BadRequestException("Entity does not exist", ErrorCodes.ORDER_BAD_REQUEST);
-            }
-            dao.delete(id);
+        if (dao.read(id) == null) {
+            throw new BadRequestException("Entity does not exist", ErrorCodes.ORDER_BAD_REQUEST);
+        }
+        dao.delete(id);
     }
 
     @Override

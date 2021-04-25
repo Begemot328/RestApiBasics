@@ -13,7 +13,8 @@ public class Tag extends Entity {
     /**
      * Default constructor
      */
-    public Tag() {}
+    public Tag() {
+    }
 
     /**
      * Constructor
@@ -37,7 +38,7 @@ public class Tag extends Entity {
     /**
      * Name setter
      *
-     * @param  name name of the tag
+     * @param name name of the tag
      */
     public void setName(String name) {
         this.name = name;

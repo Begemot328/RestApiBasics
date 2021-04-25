@@ -23,41 +23,37 @@ public interface EntityService<T extends Entity> {
      * Create {@link Entity} and add it to database method
      *
      * @param t {@link Entity} to create
-     *
      */
-    T create (T t) throws ServiceException, ValidationException;
+    T create(T t) throws ServiceException, ValidationException;
 
     /**
      * Read {@link Entity} from database method
      *
      * @param id ID of the Entity
-     *
      */
-    T read (int id) throws NotFoundException;
+    T read(int id) throws NotFoundException;
 
     /**
      * Delete {@link Entity} from database method
      *
      * @param id ID of the Entity
-     *
      */
-    void delete (int id) throws BadRequestException;
+    void delete(int id) throws BadRequestException;
 
     /**
      * Update {@link Entity} in database method
      *
      * @param t {@link Entity} to create
-     *
      * @return Updated {@link Certificate}
      */
-    T update (T t) throws ValidationException;
+    T update(T t) throws ValidationException;
 
     /**
      * Find all  {@link Entity} objects in database method
      *
-     * @throws NotFoundException in case of malfunctioning, e.g.
-     * {@link com.epam.esm.persistence.exceptions.DAOSQLException}
      * @return list of founded {@link Entity} objects
+     * @throws NotFoundException in case of malfunctioning, e.g.
+     *                           {@link com.epam.esm.persistence.exceptions.DAOSQLException}
      */
     List<T> readAll() throws NotFoundException;
 

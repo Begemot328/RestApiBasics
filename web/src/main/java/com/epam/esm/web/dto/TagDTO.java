@@ -11,7 +11,8 @@ public class TagDTO {
         this.name = name;
     }
 
-    public TagDTO() {}
+    public TagDTO() {
+    }
 
     public int getId() {
         return id;

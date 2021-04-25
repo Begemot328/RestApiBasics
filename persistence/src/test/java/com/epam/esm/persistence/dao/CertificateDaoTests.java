@@ -7,17 +7,19 @@ import com.epam.esm.persistence.mapper.CertificateMapper;
 import com.epam.esm.persistence.util.CertificateFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class CertificateDaoTests {
@@ -30,7 +32,7 @@ public class CertificateDaoTests {
     }
 
     @BeforeEach
-     void init() {
+    void init() {
         JdbcTemplate template = new JdbcTemplate(dataSource());
         certificateDao = new CertificateDAOImpl(template, new CertificateMapper());
     }
@@ -103,13 +105,13 @@ public class CertificateDaoTests {
 
     @Test
     void testAddCertificateTag() {
-        certificateDao.addCertificateTag(1,1);
+        certificateDao.addCertificateTag(1, 1);
         assertTrue(certificateDao.isTagCertificateTied(1, 1));
     }
 
     @Test
     void testDeleteCertificateTag() {
-        certificateDao.deleteCertificateTag(3,5);
+        certificateDao.deleteCertificateTag(3, 5);
         assertFalse(certificateDao.isTagCertificateTied(3, 5));
     }
 }

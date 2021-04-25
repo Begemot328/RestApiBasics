@@ -22,8 +22,8 @@ public class Certificate extends Entity {
     /**
      * Constructor
      *
-     * @param name name of the certificate
-     * @param price price of the certificate
+     * @param name     name of the certificate
+     * @param price    price of the certificate
      * @param duration days to expiring of the certificate
      */
     public Certificate(String name, BigDecimal price,
@@ -45,7 +45,7 @@ public class Certificate extends Entity {
     /**
      * Name setter
      *
-     * @param  name name of the certificate
+     * @param name name of the certificate
      */
     public void setName(String name) {
         this.name = name;
@@ -63,7 +63,7 @@ public class Certificate extends Entity {
     /**
      * Description setter
      *
-     * @param  description name of the certificate
+     * @param description name of the certificate
      */
     public void setDescription(String description) {
         this.description = description;
@@ -108,7 +108,7 @@ public class Certificate extends Entity {
     /**
      * Create date getter
      *
-     * @return  date of the certificate creation
+     * @return date of the certificate creation
      */
     public LocalDateTime getCreateDate() {
         return createDate;
@@ -126,7 +126,7 @@ public class Certificate extends Entity {
     /**
      * Last update date getter
      *
-     * @return  date of the certificate last update
+     * @return date of the certificate last update
      */
     public LocalDateTime getLastUpdateDate() {
         return lastUpdateDate;

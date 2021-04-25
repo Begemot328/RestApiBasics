@@ -9,17 +9,18 @@ package com.epam.esm.persistence.constants;
 public enum TagColumns {
     ID("id"),
     NAME("name"),
-    CERTIFICATE_ID( "certificate_id");
+    CERTIFICATE_ID("certificate_id");
+
+    private String value;
 
     /**
      * Default constructor
+     *
      * @param value column name
      */
     TagColumns(String value) {
         this.value = value;
     }
-
-    private String value;
 
     /**
      * Value getter

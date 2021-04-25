@@ -21,7 +21,7 @@ public class DAOSQLException extends Exception {
      * Constructor
      *
      * @param message the message
-     * @param e the e
+     * @param e       the e
      */
     public DAOSQLException(String message, Exception e) {
         super(message, e);

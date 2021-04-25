@@ -23,8 +23,8 @@ public class CertificateFinder extends EntityFinder<Certificate> {
      */
     public void findByName(String name) {
         find(CertificateColumns.NAME.getValue() + StringUtils.SPACE
-                 + FinderQueries.LIKE.getValue()
-                .replace(FinderQueries.VALUE.getValue(),name));
+                + FinderQueries.LIKE.getValue()
+                .replace(FinderQueries.VALUE.getValue(), name));
     }
 
     /**
@@ -35,7 +35,7 @@ public class CertificateFinder extends EntityFinder<Certificate> {
     public void findByDescription(String description) {
         find(CertificateColumns.DESCRIPTION.getValue() + " "
                 + FinderQueries.LIKE.getValue().replace(
-                FinderQueries.VALUE.getValue() ,description));
+                FinderQueries.VALUE.getValue(), description));
     }
 
     /**
@@ -58,7 +58,7 @@ public class CertificateFinder extends EntityFinder<Certificate> {
     }
 
     public void findByTags(int[] tags) {
-        for (int tag: tags) {
+        for (int tag : tags) {
             find(CertificateQueries.WHERE_TAG_ID_IN.getValue().replace("?", Integer.toString(tag)));
         }
     }

@@ -7,8 +7,8 @@ package com.epam.esm.persistence.constants;
  * @version 1.0
  */
 public enum OrderColumns {
-    ID(0,"id"),
-    USER_ID(1,"user_id"),
+    ID(0, "id"),
+    USER_ID(1, "user_id"),
     CERTIFICATE_ID(2, "certificate_id"),
     PURCHASE_DATE(3, "purchase_date"),
     AMOUNT(4, "amount"),
@@ -19,6 +19,7 @@ public enum OrderColumns {
 
     /**
      * Default constructor
+     *
      * @param value column name
      */
     OrderColumns(int column, String value) {

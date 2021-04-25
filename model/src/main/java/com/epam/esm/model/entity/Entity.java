@@ -8,7 +8,9 @@ package com.epam.esm.model.entity;
  */
 public class Entity {
 
-    /** id of the object */
+    /**
+     * id of the object
+     */
     protected int id;
 
     /**
@@ -23,7 +25,7 @@ public class Entity {
     /**
      * Id setter
      *
-     * @param  id id - of the entity
+     * @param id id - of the entity
      */
     public void setId(int id) {
         this.id = id;

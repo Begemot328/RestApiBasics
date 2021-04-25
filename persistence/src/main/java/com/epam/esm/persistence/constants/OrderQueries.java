@@ -19,6 +19,8 @@ public enum OrderQueries {
             "WHERE id = ?;"),
     LIMIT(" LIMIT ?, ?");
 
+    private final String value;
+
     /**
      * Default constructor
      *
@@ -27,8 +29,6 @@ public enum OrderQueries {
     OrderQueries(String value) {
         this.value = value;
     }
-
-    private final String value;
 
     /**
      * Value getter

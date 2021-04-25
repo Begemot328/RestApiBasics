@@ -1,6 +1,5 @@
 package com.epam.esm.persistence.dao;
 
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.util.EntityFinder;
 

@@ -1,6 +1,5 @@
 package com.epam.esm.web.dto;
 
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

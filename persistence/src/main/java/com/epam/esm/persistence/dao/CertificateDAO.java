@@ -25,7 +25,7 @@ public interface CertificateDAO extends EntityDAO<Certificate> {
      * Add connection between  {@link Tag} and {@link Certificate} method
      *
      * @param certificateId {@link Certificate} id
-     * @param tagId {@link Tag} id
+     * @param tagId         {@link Tag} id
      */
     void addCertificateTag(int certificateId, int tagId);
 
@@ -33,7 +33,7 @@ public interface CertificateDAO extends EntityDAO<Certificate> {
      * Remove connection between {@link Tag} and {@link Certificate} method
      *
      * @param certificateId {@link Certificate} id
-     * @param tagId {@link Tag} id
+     * @param tagId         {@link Tag} id
      */
     void deleteCertificateTag(int certificateId, int tagId);
 
@@ -41,7 +41,7 @@ public interface CertificateDAO extends EntityDAO<Certificate> {
      * Check connection between {@link Tag} and {@link Certificate} method
      *
      * @param certificateId {@link Certificate} id
-     * @param tagId {@link Tag} id
+     * @param tagId         {@link Tag} id
      */
     boolean isTagCertificateTied(int certificateId, int tagId);
 

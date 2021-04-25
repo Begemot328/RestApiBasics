@@ -20,7 +20,6 @@ public interface TagService extends EntityService<Tag> {
      * Find {@link Tag} by {@link Certificate} method
      *
      * @param certificateId {@link Certificate} ID to find by
-     *
      */
     List<Tag> readByCertificate(int certificateId) throws NotFoundException;
 
@@ -28,7 +27,6 @@ public interface TagService extends EntityService<Tag> {
 
     /**
      * Find {@link Tag} objects by parameters method
-     *
      */
     Tag readMostlyUsedTag() throws NotFoundException;
 }

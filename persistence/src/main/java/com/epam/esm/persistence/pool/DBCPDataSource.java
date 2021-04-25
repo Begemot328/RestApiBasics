@@ -46,8 +46,13 @@ public class DBCPDataSource {
     /**
      * Default constructor
      */
-    public DBCPDataSource(){
+    public DBCPDataSource() {
         logger.debug("DBCPDataSource() constructor");
+    }
+
+    @Bean
+    public static JdbcTemplate getTemplate(@Qualifier("getDataSource") BasicDataSource source) {
+        return new JdbcTemplate(source);
     }
 
     /**
@@ -67,10 +72,5 @@ public class DBCPDataSource {
         ds.setMaxIdle(Integer.parseInt(maxpoolsize));
         ds.setMaxOpenPreparedStatements(Integer.parseInt(maxOpenedPreparedStatements));
         return ds;
-    }
-
-    @Bean
-    public static JdbcTemplate getTemplate(@Qualifier("getDataSource") BasicDataSource source) {
-        return new JdbcTemplate(source);
     }
 }

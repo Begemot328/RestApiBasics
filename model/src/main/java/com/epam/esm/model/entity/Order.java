@@ -4,14 +4,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Order extends Entity{
+public class Order extends Entity {
     private Certificate certificate;
     private User user;
     private BigDecimal amount;
     private int quantity;
     private LocalDateTime purchaseDate;
 
-    public Order() {}
+    public Order() {
+    }
 
     public Order(Certificate certificate, User user, BigDecimal amount, int quantity, LocalDateTime purchaseDate) {
         this.certificate = certificate;

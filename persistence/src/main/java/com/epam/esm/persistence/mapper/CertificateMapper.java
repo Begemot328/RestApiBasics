@@ -19,10 +19,10 @@ import java.time.ZoneId;
 public class CertificateMapper implements RowMapper<Certificate> {
     @Override
     public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
-        Certificate certificate =  new Certificate(
-                    resultSet.getString(CertificateColumns.NAME.getValue()),
-                    resultSet.getBigDecimal(CertificateColumns.PRICE.getValue()),
-                    resultSet.getInt(CertificateColumns.DURATION.getValue()));
+        Certificate certificate = new Certificate(
+                resultSet.getString(CertificateColumns.NAME.getValue()),
+                resultSet.getBigDecimal(CertificateColumns.PRICE.getValue()),
+                resultSet.getInt(CertificateColumns.DURATION.getValue()));
 
         certificate.setCreateDate(resultSet.getTimestamp(CertificateColumns.CREATE_DATE.getValue())
                 .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());

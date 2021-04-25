@@ -1,17 +1,16 @@
 package com.epam.esm.persistence.dao.impl;
 
+import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.TagQueries;
 import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.TagMapper;
 import com.epam.esm.persistence.util.EntityFinder;
-import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -81,7 +80,7 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public List<Tag> readBy(EntityFinder<Tag> finder) {
         Stream<Tag> tagStream = template.queryForStream(TagQueries.SELECT_FROM_TAG_CERTIFICATES.getValue()
-                        .concat(finder.getQuery()), tagMapper);
+                .concat(finder.getQuery()), tagMapper);
         List<Tag> tags = tagStream.distinct().collect(Collectors.toList());
         tagStream.close();
         return tags;

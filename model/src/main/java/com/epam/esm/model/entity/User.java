@@ -2,7 +2,7 @@ package com.epam.esm.model.entity;
 
 import java.util.Objects;
 
-public class User extends Entity{
+public class User extends Entity {
 
     private String firstName;
     private String lastName;

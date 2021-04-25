@@ -4,6 +4,7 @@ import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.TagColumns;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
