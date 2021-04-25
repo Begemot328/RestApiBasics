@@ -14,6 +14,8 @@ import java.util.Objects;
 public abstract class EntityFinder<T extends Entity> {
     protected String searchCondition = "";
     protected String sortCondition = "";
+    protected String limit = "";
+    protected String offset = "";
 
     public EntityFinder() {}
 
@@ -49,7 +51,21 @@ public abstract class EntityFinder<T extends Entity> {
         if (!sortCondition.isEmpty()) {
             query.append(FinderQueries.ORDER_BY.getValue()).append(sortCondition);
         }
+        if (!limit.isEmpty()) {
+            query.append(FinderQueries.LIMIT.getValue()).append(limit);
+        }
+        if (!offset.isEmpty()) {
+            query.append(FinderQueries.OFFSET.getValue()).append(offset);
+        }
         return query.toString();
+    }
+
+    public void limit(int limit) {
+        this.limit = Integer.toString(limit);
+    }
+
+    public void offset(int offset) {
+        this.offset = Integer.toString(offset);
     }
 
     /**
@@ -118,6 +134,8 @@ public abstract class EntityFinder<T extends Entity> {
         return "EntityFinder{" +
                 "searchCondition='" + searchCondition + '\'' +
                 ", sortCondition='" + sortCondition + '\'' +
+                "limit=" + limit +
+                "offset=" + offset +
                 '}';
     }
 }

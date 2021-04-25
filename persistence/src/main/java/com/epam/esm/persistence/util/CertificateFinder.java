@@ -1,11 +1,10 @@
 package com.epam.esm.persistence.util;
 
-import com.epam.esm.persistence.constants.CertificateColumns;
 import com.epam.esm.model.entity.Certificate;
+import com.epam.esm.persistence.constants.CertificateColumns;
+import com.epam.esm.persistence.constants.CertificateQueries;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
 
 /**
  * Search criteria class to find {@link Certificate} objects
@@ -54,8 +53,13 @@ public class CertificateFinder extends EntityFinder<Certificate> {
      *
      * @param id of the tag to find by
      */
-    public void findByTag(int id) {
+    public void findByTagId(int id) {
         find(CertificateColumns.TAG_ID.getValue() + " = " + id);
     }
 
+    public void findByTags(int[] tags) {
+        for (int tag: tags) {
+            find(CertificateQueries.WHERE_TAG_ID_IN.getValue().replace("?", Integer.toString(tag)));
+        }
+    }
 }

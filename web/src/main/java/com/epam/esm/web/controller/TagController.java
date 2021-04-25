@@ -9,12 +9,15 @@ import com.epam.esm.service.exceptions.ServiceLayerException;
 import com.epam.esm.service.service.impl.CertificateServiceImpl;
 import com.epam.esm.service.service.impl.TagServiceImpl;
 import com.epam.esm.web.dto.CertificateDTO;
-import com.epam.esm.web.dto.CertificateDTOConverter;
+import com.epam.esm.web.dto.CertificateDTOMapper;
+import com.epam.esm.web.dto.TagDTO;
+import com.epam.esm.web.dto.TagDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -29,34 +32,44 @@ public class TagController {
 
     private final TagServiceImpl tagServiceImpl;
     private final CertificateServiceImpl certificateServiceImpl;
+    private final TagDTOMapper tagDTOMapper;
+    private final CertificateDTOMapper certificateDTOMapper;
 
     @Autowired
     public TagController(TagServiceImpl tagServiceImpl,
-                         CertificateServiceImpl certificateServiceImpl) {
+                         CertificateServiceImpl certificateServiceImpl,
+                         CertificateDTOMapper certificateDTOMapper,
+                         TagDTOMapper tagDTOMapper) {
         this.tagServiceImpl = tagServiceImpl;
         this.certificateServiceImpl = certificateServiceImpl;
+        this.certificateDTOMapper = certificateDTOMapper;
+        this.tagDTOMapper = tagDTOMapper;
     }
 
     @GetMapping
-    public ResponseEntity<?> readAll(@RequestParam Map<String, String> params)
+    public ResponseEntity<?> read(@RequestParam MultiValueMap<String, String> params)
             throws BadRequestException, NotFoundException {
-        Collection<Tag> list;
+        List<TagDTO> list;
         if (CollectionUtils.isEmpty(params)) {
-            list = tagServiceImpl.readAll();
+            list = tagServiceImpl.readAll()
+                    .stream().map(tagDTOMapper::toTagDTO).collect(Collectors.toList());
         } else {
-            list = tagServiceImpl.read(params);
+            list = tagServiceImpl.read(params)
+                    .stream().map(tagDTOMapper::toTagDTO).collect(Collectors.toList());
         }
-        return !CollectionUtils.isEmpty(list)
-                ? new ResponseEntity<>(list, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> read(@PathVariable(value = "id") int id) throws NotFoundException {
         final Tag tag = tagServiceImpl.read(id);
-        return tag != null
-                ? new ResponseEntity<>(tag, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return  new ResponseEntity<>(tagDTOMapper.toTagDTO(tag), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/popular")
+    public ResponseEntity<?> readMostPopular() throws NotFoundException {
+        final Tag tag = tagServiceImpl.readMostlyUsedTag();
+        return new ResponseEntity<>(tagDTOMapper.toTagDTO(tag), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -75,12 +88,10 @@ public class TagController {
 
     @GetMapping(value = "/{id}/certificates")
     public ResponseEntity<?> readCertificates(@PathVariable(value = "id") int id) throws NotFoundException {
-        Collection<CertificateDTO> list = certificateServiceImpl.readByTag(id)
-                .stream().map(CertificateDTOConverter::convertObject)
+        List<CertificateDTO> list = certificateServiceImpl.readByTag(id)
+                .stream().map(certificateDTOMapper::convertObject)
                 .collect(Collectors.toList());
-        return !CollectionUtils.isEmpty(list)
-                ? new ResponseEntity<>(list, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @PostMapping(value = "/{id}/certificates",
@@ -90,7 +101,7 @@ public class TagController {
                                             @RequestBody Certificate[] certificates) throws ServiceLayerException {
         certificateServiceImpl.addCertificatesTag(certificates, id);
         List<CertificateDTO> list = Arrays.stream(certificates)
-                .map(CertificateDTOConverter::convertObject).collect(Collectors.toList());
+                .map(certificateDTOMapper::convertObject).collect(Collectors.toList());
         return new ResponseEntity<>(list, HttpStatus.CREATED);
     }
 

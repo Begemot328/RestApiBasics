@@ -4,15 +4,9 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.ShortBufferException;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -57,7 +51,8 @@ public class EncryptDecriptUtil {
         return enCipher.doFinal(input);
     }
 
-    public String decrypt(byte[]  encrypted) throws InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException, ClassNotFoundException {
+    public String decrypt(byte[]  encrypted) throws InvalidKeyException, InvalidAlgorithmParameterException,
+            IllegalBlockSizeException, BadPaddingException {
         deCipher.init(Cipher.DECRYPT_MODE, key, ivSpec);
         return convertFromByteArray(deCipher.doFinal(encrypted));
     }
@@ -70,11 +65,14 @@ public class EncryptDecriptUtil {
         return Base64.getDecoder().decode(complexObject.getBytes(StandardCharsets.US_ASCII));
     }
 
-    public String decryptToString(String input) throws InvalidAlgorithmParameterException, ClassNotFoundException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, IOException {
+    public String decryptToString(String input) throws InvalidAlgorithmParameterException,
+            IllegalBlockSizeException,
+            BadPaddingException, InvalidKeyException {
         return decrypt(convertToByteArray(input));
     }
 
-    public String encryptToString(String input) throws InvalidAlgorithmParameterException, ClassNotFoundException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, IOException {
+    public String encryptToString(String input) throws InvalidAlgorithmParameterException,
+            IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         return convertFromByteArray(encrypt(input));
     }
 }

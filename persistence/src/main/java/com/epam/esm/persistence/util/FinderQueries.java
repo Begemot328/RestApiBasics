@@ -8,6 +8,8 @@ package com.epam.esm.persistence.util;
  */
 public enum FinderQueries {
     WHERE(" WHERE "),
+    LIMIT(" LIMIT "),
+    OFFSET(" OFFSET "),
     ORDER_BY(" ORDER BY "),
     LIKE("LIKE '%VALUE%'"),
     VALUE("VALUE");

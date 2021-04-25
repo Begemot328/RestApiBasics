@@ -1,4 +1,5 @@
 package com.epam.esm.web.dto;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -6,14 +7,13 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class CertificateDTO {
     private int id;
     private String name;
     private String description;
-    private BigDecimal price;
+    private double price;
     private int duration;
 
 
@@ -27,7 +27,7 @@ public class CertificateDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime lastUpdateDate;
 
-    public CertificateDTO(String name, String description, BigDecimal price,
+    public CertificateDTO(String name, String description, double price,
                           int duration, LocalDateTime createDate,
                           LocalDateTime lastUpdateDate) {
         this.name = name;
@@ -64,11 +64,11 @@ public class CertificateDTO {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

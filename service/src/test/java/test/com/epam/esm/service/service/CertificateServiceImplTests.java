@@ -14,19 +14,22 @@ import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.impl.CertificateServiceImpl;
-import com.epam.esm.service.validator.EntityValidator;
 import com.epam.esm.service.validator.CertificateValidator;
+import com.epam.esm.service.validator.EntityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -129,15 +132,17 @@ public class CertificateServiceImplTests {
     public void testFindByTag() throws NotFoundException {
         assertEquals(shortList, service.readByTag(1));
         CertificateFinder finder = new CertificateFinder();
-        finder.findByTag(1);
+        finder.findByTagId(1);
         verify(certificateDaoMock, times(1)).readBy(finder);
     }
 
     @Test
     public void testFind() throws BadRequestException, NotFoundException {
-        Map<String, String> params = new HashMap<>();
-        params.put(CertificateSearchParameters.NAME.name(), "1");
-        params.put(CertificateSortingParameters.SORT_BY_NAME.name().toLowerCase(), "2");
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>() {
+        };
+        params.put(CertificateSearchParameters.NAME.name(), Collections.singletonList("1"));
+        params.put(CertificateSortingParameters.SORT_BY_NAME.name().toLowerCase(),
+                Collections.singletonList("2"));
         assertEquals(shortList, service.read(params));
         verify(certificateDaoMock, times(1)).readBy(any(CertificateFinder.class));
     }

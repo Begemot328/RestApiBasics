@@ -6,9 +6,9 @@ import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
+import org.springframework.util.MultiValueMap;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * {@link Certificate} service interface.
@@ -25,8 +25,6 @@ public interface CertificateService extends EntityService<Certificate> {
      *
      */
     List<Certificate> readByTag(int tagId) throws NotFoundException;
-
-    List<Certificate> readByTags(Tag[] tags) throws NotFoundException;
 
     /**
      * Add tie between {@link Certificate} and {@link Tag} method
@@ -63,5 +61,5 @@ public interface CertificateService extends EntityService<Certificate> {
      *
      * @param params finding and sorting parameters
      */
-    List<Certificate> read(Map<String, String> params) throws BadRequestException, NotFoundException;
+    List<Certificate> read(MultiValueMap<String, String> params) throws BadRequestException, NotFoundException;
 }

@@ -2,7 +2,6 @@ package com.epam.esm.service.validator;
 
 import com.epam.esm.model.entity.Order;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.model.entity.User;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.ValidationException;
 import org.springframework.stereotype.Service;

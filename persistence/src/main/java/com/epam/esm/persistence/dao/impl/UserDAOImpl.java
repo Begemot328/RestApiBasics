@@ -1,11 +1,14 @@
 package com.epam.esm.persistence.dao.impl;
 
+import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
+import com.epam.esm.persistence.constants.TagQueries;
 import com.epam.esm.persistence.constants.UserColumns;
 import com.epam.esm.persistence.constants.UserQueries;
 import com.epam.esm.persistence.dao.UserDAO;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.UserMapper;
+import com.epam.esm.persistence.util.EntityFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -97,5 +102,14 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public String getPassword(String login) {
         return template.queryForObject(UserQueries.SELECT_PASSWORD.getValue(), String.class, login);
+    }
+
+    @Override
+    public List<User> readBy(EntityFinder<User> finder) {
+        Stream<User> userStream = template.queryForStream(TagQueries.SELECT_FROM_TAG_CERTIFICATES.getValue()
+                .concat(finder.getQuery()), userMapper);
+        List<User> users = userStream.distinct().collect(Collectors.toList());
+        userStream.close();
+        return users;
     }
 }

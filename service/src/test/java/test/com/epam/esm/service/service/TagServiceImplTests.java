@@ -5,24 +5,27 @@ import com.epam.esm.persistence.dao.impl.TagDAOImpl;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.util.TagFinder;
 import com.epam.esm.service.constants.ErrorCodes;
+import com.epam.esm.service.constants.TagSearchParameters;
+import com.epam.esm.service.constants.TagSortingParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.constants.TagSearchParameters;
 import com.epam.esm.service.service.impl.TagServiceImpl;
-import com.epam.esm.service.constants.TagSortingParameters;
 import com.epam.esm.service.validator.EntityValidator;
 import com.epam.esm.service.validator.TagValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -31,7 +34,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TagServiceImplTests {
     static Logger logger = LoggerFactory.getLogger(CertificateServiceImplTests.class);
@@ -112,13 +114,13 @@ public class TagServiceImplTests {
 
     @Test
     public void testFind() throws BadRequestException, NotFoundException {
-        Map<String, String> params = new HashMap<>();
-        params.put(TagSearchParameters.NAME.name(), "1");
-        params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), "2");
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>() {
+        };
+        params.put(TagSearchParameters.NAME.name(), Collections.singletonList("1"));
+        params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), Collections.singletonList("2"));
         assertEquals(shortList, service.read(params));
         verify(tagDaoMock, times(1)).readBy(any(TagFinder.class));
     }
-
 
     @Test
     public void testCreateIfInvalidTag()

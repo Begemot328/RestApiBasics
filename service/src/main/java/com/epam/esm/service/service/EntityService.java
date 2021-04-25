@@ -1,8 +1,6 @@
 package com.epam.esm.service.service;
 
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.persistence.util.SortDirection;
-import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Entity;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
@@ -35,7 +33,7 @@ public interface EntityService<T extends Entity> {
      * @param id ID of the Entity
      *
      */
-    T read (int id) throws NotFoundException, BadRequestException;
+    T read (int id) throws NotFoundException;
 
     /**
      * Delete {@link Entity} from database method
@@ -63,15 +61,6 @@ public interface EntityService<T extends Entity> {
      */
     List<T> readAll() throws NotFoundException;
 
-    /**
-     * Find {@link Entity} objects by {@link EntityFinder} criteria in database method
-     *
-     * @throws NotFoundException if nothing was found
-     * {@link com.epam.esm.persistence.exceptions.DAOSQLException}
-     * @param entityFinder {@link EntityFinder} criteria to find objects
-     * @return list of founded {@link Entity} objects
-     */
-    List<T> readBy(EntityFinder<T> entityFinder) throws NotFoundException;
 
     default String decodeParam(String param) {
         return URLDecoder.decode(param, StandardCharsets.UTF_8);

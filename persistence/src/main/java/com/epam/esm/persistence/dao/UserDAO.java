@@ -9,4 +9,6 @@ import java.util.List;
 public interface UserDAO extends EntityDAO<User> {
 
     String getPassword(String login);
+
+    List<User> readBy(EntityFinder<User> finder);
 }

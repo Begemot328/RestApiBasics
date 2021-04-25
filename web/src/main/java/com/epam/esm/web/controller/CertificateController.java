@@ -9,17 +9,17 @@ import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.impl.CertificateServiceImpl;
 import com.epam.esm.service.service.impl.TagServiceImpl;
 import com.epam.esm.web.dto.CertificateDTO;
-import com.epam.esm.web.dto.CertificateDTOConverter;
+import com.epam.esm.web.dto.CertificateDTOMapper;
+import com.epam.esm.web.dto.TagDTO;
+import com.epam.esm.web.dto.TagDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,32 +27,38 @@ import java.util.stream.Collectors;
 public class CertificateController {
     private final TagServiceImpl tagServiceImpl;
     private final CertificateServiceImpl certificateServiceImpl;
+    private final TagDTOMapper tagDTOMapper;
+    private final CertificateDTOMapper certificateDTOMapper;
 
     @Autowired
     public CertificateController(TagServiceImpl tagServiceImpl,
-                                 CertificateServiceImpl certificateServiceImpl) {
+                                 CertificateServiceImpl certificateServiceImpl,
+                                 CertificateDTOMapper certificateDTOMapper,
+                                 TagDTOMapper tagDTOMapper) {
         this.tagServiceImpl = tagServiceImpl;
         this.certificateServiceImpl = certificateServiceImpl;
+        this.certificateDTOMapper = certificateDTOMapper;
+        this.tagDTOMapper = tagDTOMapper;
     }
 
     @GetMapping
-    public ResponseEntity<?> readAll(@RequestParam Map<String, String> params)
+    public ResponseEntity<?> read(@RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
-        Collection<CertificateDTO> list;
+        List<CertificateDTO> certificates;
             if (CollectionUtils.isEmpty(params)) {
-                list = certificateServiceImpl.readAll()
-                        .stream().map(CertificateDTOConverter::convertObject).collect(Collectors.toList());
+                certificates = certificateServiceImpl.readAll()
+                        .stream().map(certificateDTOMapper::convertObject).collect(Collectors.toList());
             } else {
-                list = certificateServiceImpl.read(params)
-                        .stream().map(CertificateDTOConverter::convertObject).collect(Collectors.toList());
+                certificates = certificateServiceImpl.read(params)
+                        .stream().map(certificateDTOMapper::convertObject).collect(Collectors.toList());
             }
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(certificates, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> read(@PathVariable(value = "id") int id) throws NotFoundException {
         Certificate certificate = certificateServiceImpl.read(id);
-        final CertificateDTO certificateDTO = CertificateDTOConverter.convertObject(certificate);
+        final CertificateDTO certificateDTO = certificateDTOMapper.convertObject(certificate);
         return new ResponseEntity<>(certificateDTO, HttpStatus.OK);
     }
 
@@ -68,8 +74,8 @@ public class CertificateController {
     public ResponseEntity<CertificateDTO> create(@RequestBody CertificateDTO certificateDTO)
             throws ValidationException, ServiceException {
         Certificate certificate = certificateServiceImpl.create(
-                CertificateDTOConverter.convertDTO(certificateDTO));
-        return new ResponseEntity<>(CertificateDTOConverter.convertObject(certificate), HttpStatus.CREATED);
+                certificateDTOMapper.convertDTO(certificateDTO));
+        return new ResponseEntity<>(certificateDTOMapper.convertObject(certificate), HttpStatus.CREATED);
     }
 
     @PutMapping(
@@ -77,14 +83,15 @@ public class CertificateController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CertificateDTO> update(@RequestBody CertificateDTO certificateDTO)
             throws ValidationException {
-        certificateDTO = CertificateDTOConverter.convertObject(
-                certificateServiceImpl.update(CertificateDTOConverter.convertDTO(certificateDTO)));
+        certificateDTO = certificateDTOMapper.convertObject(
+                certificateServiceImpl.update(certificateDTOMapper.convertDTO(certificateDTO)));
         return new ResponseEntity<>(certificateDTO, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}/tags")
     public ResponseEntity<?> readTags(@PathVariable(value = "id") int id) throws NotFoundException {
-        List<Tag> list = tagServiceImpl.readByCertificate(id);
+        List<TagDTO> list = tagServiceImpl.readByCertificate(id)
+                .stream().map(tagDTOMapper::toTagDTO).collect(Collectors.toList());
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 

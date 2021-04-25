@@ -46,6 +46,4 @@ public interface CertificateDAO extends EntityDAO<Certificate> {
     boolean isTagCertificateTied(int certificateId, int tagId);
 
     List<Certificate> readBy(String query);
-
-    List<Certificate> readBy(Tag[] tags);
 }

@@ -1,27 +1,28 @@
 package com.epam.esm.service.service.impl;
 
-import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.persistence.dao.TagDAO;
-import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.exceptions.DAOSQLException;
+import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.persistence.util.SortDirection;
 import com.epam.esm.persistence.util.TagFinder;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.epam.esm.service.constants.TagSearchParameters;
-import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.constants.ErrorCodes;
+import com.epam.esm.service.constants.PaginationParameters;
+import com.epam.esm.service.constants.TagSearchParameters;
+import com.epam.esm.service.constants.TagSortingParameters;
+import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.constants.TagSortingParameters;
 import com.epam.esm.service.service.TagService;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.MultiValueMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 @Service
@@ -83,8 +84,8 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-    @Override
-    public List<Tag> readBy(EntityFinder<Tag> entityFinder) throws NotFoundException {
+
+    private List<Tag> readBy(EntityFinder<Tag> entityFinder) throws NotFoundException {
         List<Tag> tags = dao.readBy(entityFinder);
         if (CollectionUtils.isEmpty(tags)) {
             throw new NotFoundException("Requested resource not found!",
@@ -101,11 +102,11 @@ public class TagServiceImpl implements TagService {
         return readBy(finder);
     }
 
-    private void parseFindParameter(TagFinder finder, String parameterString, String value) {
+    private void parseFindParameter(TagFinder finder, String parameterString, List<String> list) {
         TagSearchParameters parameter =
                 TagSearchParameters.getEntryByParameter(parameterString);
         if (parameter == TagSearchParameters.NAME) {
-            addToFinder(finder::findByName, value);
+            addToFinder(finder::findByName, list);
         }
     }
 
@@ -115,14 +116,25 @@ public class TagServiceImpl implements TagService {
         }
     }
 
+    private void addToFinder(Consumer<String> consumer, List<String> list) {
+        if (!CollectionUtils.isEmpty(list)) {
+            addToFinder(consumer, list.get(0));
+        }
+    }
+
     @Override
-    public List<Tag> read(Map<String, String> params) throws NotFoundException, BadRequestException {
+    public List<Tag> read(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException {
         TagFinder finder = new TagFinder();
         for (String key : params.keySet()) {
+            if (CollectionUtils.isEmpty(params.get(key))) {
+                throw new BadRequestException("Empty parameter!", ErrorCodes.TAG_BAD_REQUEST);
+            }
             try {
                 if (key.contains("sort")) {
                     finder.sortBy(TagSortingParameters.getEntryByParameter(key).getValue(),
-                            SortDirection.parseAscDesc(params.get(key)));
+                            SortDirection.parseAscDesc(params.get(key).get(0)));
+                } else if  (PaginationParameters.contains(key)) {
+                    parsePaginationParameter(finder, key, params.get(key));
                 } else {
                     parseFindParameter(finder, key, params.get(key));
                 }
@@ -133,8 +145,26 @@ public class TagServiceImpl implements TagService {
         return readBy(finder);
     }
 
+    private void parsePaginationParameter(EntityFinder finder, String parameterString, List<String> list) {
+        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterString);
+        switch (parameter) {
+            case LIMIT:
+                finder.limit(Integer.parseInt(list.get(0)));
+                break;
+            case OFFSET:
+                finder.offset(Integer.parseInt(list.get(0)));
+                break;
+        }
+    }
+
     @Override
-    public Tag readMostlyUsedTag() throws BadRequestException, NotFoundException {
-        return dao.readMostlyUsedTag();
+    public Tag readMostlyUsedTag() throws NotFoundException {
+        Tag tag = dao.readMostlyUsedTag();
+        if (tag == null) {
+            throw new NotFoundException("Requested resource not found (most popular tag)!",
+                    ErrorCodes.TAG_NOT_FOUND);
+        } else {
+            return tag;
+        }
     }
 }

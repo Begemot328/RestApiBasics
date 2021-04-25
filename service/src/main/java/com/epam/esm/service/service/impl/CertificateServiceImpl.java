@@ -1,20 +1,21 @@
 package com.epam.esm.service.service.impl;
 
+import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.dao.TagDAO;
-import com.epam.esm.persistence.util.EntityFinder;
-import com.epam.esm.persistence.util.CertificateFinder;
-import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
+import com.epam.esm.persistence.util.CertificateFinder;
+import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.persistence.util.SortDirection;
-import com.epam.esm.service.exceptions.BadRequestException;
+import com.epam.esm.service.constants.CertificateSearchParameters;
+import com.epam.esm.service.constants.CertificateSortingParameters;
 import com.epam.esm.service.constants.ErrorCodes;
+import com.epam.esm.service.constants.PaginationParameters;
+import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.constants.CertificateSearchParameters;
-import com.epam.esm.service.constants.CertificateSortingParameters;
 import com.epam.esm.service.service.CertificateService;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -22,10 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -38,9 +39,9 @@ import java.util.function.Consumer;
 @Service
 public class CertificateServiceImpl implements CertificateService {
 
-    private CertificateDAO dao;
-    private EntityValidator<Certificate> validator;
-    private TagDAO tagDAO;
+    private final CertificateDAO dao;
+    private final EntityValidator<Certificate> validator;
+    private final TagDAO tagDAO;
 
     @Autowired
     public CertificateServiceImpl(CertificateDAO dao,
@@ -86,9 +87,9 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     @Override
     public Certificate update(Certificate certificate) throws ValidationException {
-            certificate.setLastUpdateDate(LocalDateTime.now());
-            validator.validate(certificate);
-            return dao.update(certificate);
+        certificate.setLastUpdateDate(LocalDateTime.now());
+        validator.validate(certificate);
+        return dao.update(certificate);
     }
 
     @Override
@@ -102,8 +103,7 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    @Override
-    public List<Certificate> readBy(EntityFinder<Certificate> entityFinder) throws NotFoundException {
+    private List<Certificate> readBy(EntityFinder<Certificate> entityFinder) throws NotFoundException {
         List<Certificate> certificates = dao.readBy(entityFinder);
         if (CollectionUtils.isEmpty(certificates)) {
             throw new NotFoundException("Requested certificate not found!",
@@ -113,18 +113,37 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    private void parseFindParameter(CertificateFinder finder, String parameterString, String value) {
+    private void parsePaginationParameter(CertificateFinder finder, String parameterString, List<String> list) {
+        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterString);
+        switch (parameter) {
+            case LIMIT:
+                finder.limit(Integer.parseInt(list.get(0)));
+                break;
+            case OFFSET:
+                finder.offset(Integer.parseInt(list.get(0)));
+                break;
+        }
+    }
+
+    private void parseFindParameter(CertificateFinder finder, String parameterString, List<String> list) {
         CertificateSearchParameters parameter =
                 CertificateSearchParameters.getEntryByParameter(parameterString);
         switch (parameter) {
             case NAME:
-                addToFinder(finder::findByName, value);
+                addToFinder(finder::findByName, list);
                 break;
             case DESCRIPTION:
-                addToFinder(finder::findByDescription, value);
+                addToFinder(finder::findByDescription, list);
                 break;
             case TAGNAME:
-                addToFinder(finder::findByTag, value);
+                addToFinder(finder::findByTag, list);
+                break;
+            case TAG_ID:
+                if (list.size() > 1) {
+                    finder.findByTags(list.stream().mapToInt(Integer::parseInt).toArray());
+                } else {
+                    finder.findByTagId(Integer.parseInt(list.get(0)));
+                }
                 break;
         }
     }
@@ -135,14 +154,25 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
+    private void addToFinder(Consumer<String> consumer, List<String> list) {
+        if (!CollectionUtils.isEmpty(list)) {
+            addToFinder(consumer, list.get(0));
+        }
+    }
+
     @Override
-    public List<Certificate> read(Map<String, String> params) throws BadRequestException, NotFoundException {
+    public List<Certificate> read(MultiValueMap<String, String> params) throws BadRequestException, NotFoundException {
         CertificateFinder finder = new CertificateFinder();
         for (String key : params.keySet()) {
             try {
+                if (CollectionUtils.isEmpty(params.get(key))) {
+                    throw new BadRequestException("Empty parameter!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
+                }
                 if (key.contains("sort")) {
                     finder.sortBy(CertificateSortingParameters.getEntryByParameter(key).getValue(),
-                            SortDirection.parseAscDesc(params.get(key)));
+                            SortDirection.parseAscDesc(params.get(key).get(0)));
+                } else if (PaginationParameters.contains(key)) {
+                    parsePaginationParameter(finder, key, params.get(key));
                 } else {
                     parseFindParameter(finder, key, params.get(key));
                 }
@@ -156,25 +186,10 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     public List<Certificate> readByTag(int tagId) throws NotFoundException {
         CertificateFinder finder = new CertificateFinder();
-        finder.findByTag(tagId);
+        finder.findByTagId(tagId);
         List<Certificate> certificates = readBy(finder);
         if (CollectionUtils.isEmpty(certificates)) {
             throw new NotFoundException("Requested resource not found (Tag id = " + tagId + ")!",
-                    ErrorCodes.CERTIFICATE_NOT_FOUND);
-        } else {
-            return certificates;
-        }
-    }
-
-    @Override
-    public List<Certificate> readByTags(Tag[] tags) throws NotFoundException {
-        List<Certificate> certificates = dao.readBy(tags);
-        if (CollectionUtils.isEmpty(certificates)) {
-            String tagsArray = new String();
-            for(Tag tag: tags) {
-                tagsArray += " (Tag id = " + tag.getName() + "), ";
-            }
-            throw new NotFoundException("Requested resource not found" + tagsArray + "!",
                     ErrorCodes.CERTIFICATE_NOT_FOUND);
         } else {
             return certificates;

@@ -4,7 +4,9 @@ import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.validator.CertificateValidator;
 import org.junit.jupiter.api.Test;
+
 import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

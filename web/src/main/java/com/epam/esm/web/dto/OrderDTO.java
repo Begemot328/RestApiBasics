@@ -1,19 +1,27 @@
-package com.epam.esm.model.entity;
+package com.epam.esm.web.dto;
 
-import java.math.BigDecimal;
+import com.epam.esm.model.entity.Entity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Order extends Entity{
-    private Certificate certificate;
-    private User user;
-    private BigDecimal amount;
+public class OrderDTO extends Entity {
+    private CertificateDTO certificate;
+    private UserDTO user;
+    private double amount;
     private int quantity;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime purchaseDate;
 
-    public Order() {}
-
-    public Order(Certificate certificate, User user, BigDecimal amount, int quantity, LocalDateTime purchaseDate) {
+    public OrderDTO(CertificateDTO certificate, UserDTO user, double amount, int quantity, LocalDateTime purchaseDate) {
         this.certificate = certificate;
         this.user = user;
         this.amount = amount;
@@ -21,27 +29,29 @@ public class Order extends Entity{
         this.purchaseDate = purchaseDate;
     }
 
-    public Certificate getCertificate() {
+    public OrderDTO() {}
+
+    public CertificateDTO getCertificate() {
         return certificate;
     }
 
-    public void setCertificate(Certificate certificate) {
+    public void setCertificate(CertificateDTO certificate) {
         this.certificate = certificate;
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 
-    public BigDecimal getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -65,8 +75,10 @@ public class Order extends Entity{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
-        return quantity == order.quantity && Objects.equals(certificate, order.certificate) && Objects.equals(user, order.user) && Objects.equals(amount, order.amount) && Objects.equals(purchaseDate, order.purchaseDate);
+        OrderDTO order = (OrderDTO) o;
+        return Double.compare(order.amount, amount) == 0 && quantity == order.quantity
+                && certificate.equals(order.certificate) && user.equals(order.user)
+                && purchaseDate.equals(order.purchaseDate);
     }
 
     @Override

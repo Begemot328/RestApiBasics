@@ -1,16 +1,11 @@
 package com.epam.esm.persistence.dao.impl;
 
 import com.epam.esm.model.entity.Order;
-import com.epam.esm.model.entity.Tag;
-import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.constants.CertificateQueries;
-import com.epam.esm.persistence.constants.OrderQueries;
 import com.epam.esm.persistence.constants.OrderColumns;
+import com.epam.esm.persistence.constants.OrderQueries;
 import com.epam.esm.persistence.dao.OrderDAO;
-import com.epam.esm.persistence.dao.UserDAO;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.OrderMapper;
-import com.epam.esm.persistence.mapper.UserMapper;
 import com.epam.esm.persistence.util.EntityFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -45,7 +40,7 @@ public class OrderDAOImpl implements OrderDAO {
             PreparedStatement ps = connection
                     .prepareStatement(OrderQueries.INSERT_ORDER.getValue(),
                             Statement.RETURN_GENERATED_KEYS);
-            ps.setDouble(OrderColumns.AMOUNT.getColumn(), order.getAmount());
+            ps.setDouble(OrderColumns.AMOUNT.getColumn(), order.getAmount().doubleValue());
             ps.setInt(OrderColumns.QUANTITY.getColumn(), order.getQuantity());
             ps.setInt(OrderColumns.USER_ID.getColumn(), order.getUser().getId());
             ps.setInt(OrderColumns.CERTIFICATE_ID.getColumn(), order.getCertificate().getId());

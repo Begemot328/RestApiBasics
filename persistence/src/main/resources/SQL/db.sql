@@ -134,8 +134,8 @@ create table if not exists orders
 
 drop view if exists order_full;
 create view order_full as
-select user_account.id, first_name, last_name, login, password,
-       c.name as certificate_name,  c.price, c.description,
+select orders.id, user_account.id as user_id , first_name, last_name, login, password,
+       c.name,  c.price, c.description,
        c.duration, c.create_date, c.last_update_date
 from orders join user_account on orders.user_id = user_account.id
             join certificate as c on orders.certificate_id = c.id;
