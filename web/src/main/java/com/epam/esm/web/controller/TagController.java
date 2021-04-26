@@ -13,6 +13,7 @@ import com.epam.esm.web.dto.CertificateDTOMapper;
 import com.epam.esm.web.dto.TagDTO;
 import com.epam.esm.web.dto.TagDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/tags")
 public class TagController {
+    private final static int DEFAULT_LIMIT = 20;
 
     private final TagServiceImpl tagServiceImpl;
     private final CertificateServiceImpl certificateServiceImpl;
@@ -54,15 +57,25 @@ public class TagController {
     @GetMapping
     public ResponseEntity<?> read(@RequestParam MultiValueMap<String, String> params)
             throws BadRequestException, NotFoundException {
-        List<TagDTO> list;
+        List<Tag> tags;
         if (CollectionUtils.isEmpty(params)) {
-            list = tagServiceImpl.readAll()
-                    .stream().map(tagDTOMapper::toTagDTO).collect(Collectors.toList());
+            tags = tagServiceImpl.readAll();
         } else {
-            list = tagServiceImpl.read(params)
-                    .stream().map(tagDTOMapper::toTagDTO).collect(Collectors.toList());
+            tags = tagServiceImpl.read(params);
         }
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        CollectionModel<TagDTO> tagDTOs = tagDTOMapper.toTagDTOList(tags);
+        tagDTOs.add(linkTo(methodOn(this.getClass()).read(params)).withSelfRel());
+        tagDTOs.add(linkTo(methodOn(this.getClass()).read(nextPage(params))).withRel("nextPage"));
+        return new ResponseEntity<>(tagDTOs, HttpStatus.OK);
+    }
+
+    private MultiValueMap<String, String> nextPage(MultiValueMap<String, String> params) {
+        int limit = CollectionUtils.isEmpty(params.get("limit")) ?
+                DEFAULT_LIMIT : Integer.parseInt(params.get("limit").get(0));
+        int offset = CollectionUtils.isEmpty(params.get("offset")) ?
+                0 : Integer.parseInt(params.get("offset").get(0));
+        params.add("offset", Integer.toString(offset + limit));
+        return params;
     }
 
     @GetMapping(value = "/{id}")

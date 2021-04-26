@@ -1,5 +1,6 @@
 package com.epam.esm.web.dto;
 
+import com.epam.esm.model.entity.Certificate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -7,10 +8,11 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
 
-public class CertificateDTO {
+public class CertificateDTO extends RepresentationModel<CertificateDTO> {
     private int id;
     private String name;
     private String description;

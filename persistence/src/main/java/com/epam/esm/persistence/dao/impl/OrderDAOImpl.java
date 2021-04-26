@@ -50,9 +50,10 @@ public class OrderDAOImpl implements OrderDAO {
         }, keyHolder);
         if (keyHolder.getKey() == null) {
             throw new DAOSQLException("empty keyholder");
+        } else {
+            order.setId(keyHolder.getKey().intValue());
+            return order;
         }
-        order.setId(keyHolder.getKey().intValue());
-        return order;
     }
 
     @Override
