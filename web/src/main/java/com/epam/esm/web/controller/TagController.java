@@ -94,7 +94,7 @@ public class TagController {
     @GetMapping(value = "/{id}/certificates")
     public ResponseEntity<?> readCertificates(@PathVariable(value = "id") int id) throws NotFoundException {
         List<CertificateDTO> list = certificateServiceImpl.readByTag(id)
-                .stream().map(certificateDTOMapper::convertObject)
+                .stream().map(certificateDTOMapper::toCertificateDTO)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -106,7 +106,7 @@ public class TagController {
                                             @RequestBody Certificate[] certificates) throws ServiceLayerException {
         certificateServiceImpl.addCertificatesTag(certificates, id);
         List<CertificateDTO> list = Arrays.stream(certificates)
-                .map(certificateDTOMapper::convertObject).collect(Collectors.toList());
+                .map(certificateDTOMapper::toCertificateDTO).collect(Collectors.toList());
         return new ResponseEntity<>(list, HttpStatus.CREATED);
     }
 

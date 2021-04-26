@@ -1,29 +1,25 @@
 package com.epam.esm.web.dto;
 
 import com.epam.esm.model.entity.Certificate;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
+import java.util.Objects;
 
 @Component
 public class CertificateDTOMapper {
+    private ModelMapper mapper;
 
-    public Certificate convertDTO(CertificateDTO dto) {
-        Certificate certificate = new Certificate(dto.getName(), BigDecimal.valueOf(dto.getPrice()),
-                dto.getDuration());
-        certificate.setDescription(dto.getDescription());
-        certificate.setId(dto.getId());
-        return certificate;
+    @Autowired
+    public CertificateDTOMapper(ModelMapper mapper) {
+        this.mapper = mapper;
     }
 
-    public CertificateDTO convertObject(Certificate certificate) {
-        if (certificate == null) {
-            return null;
-        }
-        CertificateDTO certificateDTO = new CertificateDTO(certificate.getName(),
-                certificate.getDescription(), certificate.getPrice().doubleValue(),
-                certificate.getDuration(), certificate.getCreateDate(), certificate.getLastUpdateDate());
-        certificateDTO.setId(certificate.getId());
-        return certificateDTO;
+    public CertificateDTO toCertificateDTO(Certificate сertificate) {
+        return Objects.isNull(сertificate) ? null : mapper.map(сertificate, CertificateDTO.class);
+    }
+
+    public Certificate toCertificate(CertificateDTO certificateDTO) {
+        return Objects.isNull(certificateDTO) ? null : mapper.map(certificateDTO, Certificate.class);
     }
 }

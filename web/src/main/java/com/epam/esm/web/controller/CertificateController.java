@@ -8,8 +8,6 @@ import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.CertificateService;
 import com.epam.esm.service.service.TagService;
-import com.epam.esm.service.service.impl.CertificateServiceImpl;
-import com.epam.esm.service.service.impl.TagServiceImpl;
 import com.epam.esm.web.dto.CertificateDTO;
 import com.epam.esm.web.dto.CertificateDTOMapper;
 import com.epam.esm.web.dto.TagDTO;
@@ -59,10 +57,10 @@ public class CertificateController {
         List<CertificateDTO> certificates;
         if (CollectionUtils.isEmpty(params)) {
             certificates = certificateService.readAll()
-                    .stream().map(certificateDTOMapper::convertObject).collect(Collectors.toList());
+                    .stream().map(certificateDTOMapper::toCertificateDTO).collect(Collectors.toList());
         } else {
             certificates = certificateService.read(params)
-                    .stream().map(certificateDTOMapper::convertObject).collect(Collectors.toList());
+                    .stream().map(certificateDTOMapper::toCertificateDTO).collect(Collectors.toList());
         }
         return new ResponseEntity<>(certificates, HttpStatus.OK);
     }
@@ -70,7 +68,7 @@ public class CertificateController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> read(@PathVariable(value = "id") int id) throws NotFoundException {
         Certificate certificate = certificateService.read(id);
-        final CertificateDTO certificateDTO = certificateDTOMapper.convertObject(certificate);
+        final CertificateDTO certificateDTO = certificateDTOMapper.toCertificateDTO(certificate);
         return new ResponseEntity<>(certificateDTO, HttpStatus.OK);
     }
 
@@ -86,8 +84,8 @@ public class CertificateController {
     public ResponseEntity<CertificateDTO> create(@RequestBody CertificateDTO certificateDTO)
             throws ValidationException, ServiceException {
         Certificate certificate = certificateService.create(
-                certificateDTOMapper.convertDTO(certificateDTO));
-        return new ResponseEntity<>(certificateDTOMapper.convertObject(certificate), HttpStatus.CREATED);
+                certificateDTOMapper.toCertificate(certificateDTO));
+        return new ResponseEntity<>(certificateDTOMapper.toCertificateDTO(certificate), HttpStatus.CREATED);
     }
 
     @PutMapping(
@@ -95,8 +93,8 @@ public class CertificateController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CertificateDTO> update(@RequestBody CertificateDTO certificateDTO)
             throws ValidationException {
-        certificateDTO = certificateDTOMapper.convertObject(
-                certificateService.update(certificateDTOMapper.convertDTO(certificateDTO)));
+        certificateDTO = certificateDTOMapper.toCertificateDTO(
+                certificateService.update(certificateDTOMapper.toCertificate(certificateDTO)));
         return new ResponseEntity<>(certificateDTO, HttpStatus.OK);
     }
 
@@ -129,10 +127,10 @@ public class CertificateController {
     public ResponseEntity<CertificateDTO> patchCertificate(@PathVariable(value = "id") int id,
                                                            @RequestBody CertificateDTO certificateDTO)
             throws ValidationException, BadRequestException {
-        Certificate certificate = certificateDTOMapper.convertDTO(certificateDTO);
+        Certificate certificate = certificateDTOMapper.toCertificate(certificateDTO);
         certificate.setId(id);
         certificate = certificateService.patch(certificate);
-        return new ResponseEntity<>(certificateDTOMapper.convertObject(certificate), HttpStatus.OK);
+        return new ResponseEntity<>(certificateDTOMapper.toCertificateDTO(certificate), HttpStatus.OK);
     }
 
 }
