@@ -6,6 +6,8 @@ import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
+import com.epam.esm.service.service.CertificateService;
+import com.epam.esm.service.service.TagService;
 import com.epam.esm.service.service.impl.CertificateServiceImpl;
 import com.epam.esm.service.service.impl.TagServiceImpl;
 import com.epam.esm.web.dto.CertificateDTO;
@@ -20,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,18 +37,18 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/certificates")
 public class CertificateController {
-    private final TagServiceImpl tagServiceImpl;
-    private final CertificateServiceImpl certificateServiceImpl;
+    private final TagService tagService;
+    private final CertificateService certificateService;
     private final TagDTOMapper tagDTOMapper;
     private final CertificateDTOMapper certificateDTOMapper;
 
     @Autowired
-    public CertificateController(TagServiceImpl tagServiceImpl,
-                                 CertificateServiceImpl certificateServiceImpl,
+    public CertificateController(TagService tagService,
+                                 CertificateService certificateService,
                                  CertificateDTOMapper certificateDTOMapper,
                                  TagDTOMapper tagDTOMapper) {
-        this.tagServiceImpl = tagServiceImpl;
-        this.certificateServiceImpl = certificateServiceImpl;
+        this.tagService = tagService;
+        this.certificateService = certificateService;
         this.certificateDTOMapper = certificateDTOMapper;
         this.tagDTOMapper = tagDTOMapper;
     }
@@ -55,10 +58,10 @@ public class CertificateController {
             throws NotFoundException, BadRequestException {
         List<CertificateDTO> certificates;
         if (CollectionUtils.isEmpty(params)) {
-            certificates = certificateServiceImpl.readAll()
+            certificates = certificateService.readAll()
                     .stream().map(certificateDTOMapper::convertObject).collect(Collectors.toList());
         } else {
-            certificates = certificateServiceImpl.read(params)
+            certificates = certificateService.read(params)
                     .stream().map(certificateDTOMapper::convertObject).collect(Collectors.toList());
         }
         return new ResponseEntity<>(certificates, HttpStatus.OK);
@@ -66,14 +69,14 @@ public class CertificateController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> read(@PathVariable(value = "id") int id) throws NotFoundException {
-        Certificate certificate = certificateServiceImpl.read(id);
+        Certificate certificate = certificateService.read(id);
         final CertificateDTO certificateDTO = certificateDTOMapper.convertObject(certificate);
         return new ResponseEntity<>(certificateDTO, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(value = "id") int id) throws BadRequestException {
-        certificateServiceImpl.delete(id);
+        certificateService.delete(id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -82,7 +85,7 @@ public class CertificateController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CertificateDTO> create(@RequestBody CertificateDTO certificateDTO)
             throws ValidationException, ServiceException {
-        Certificate certificate = certificateServiceImpl.create(
+        Certificate certificate = certificateService.create(
                 certificateDTOMapper.convertDTO(certificateDTO));
         return new ResponseEntity<>(certificateDTOMapper.convertObject(certificate), HttpStatus.CREATED);
     }
@@ -93,13 +96,13 @@ public class CertificateController {
     public ResponseEntity<CertificateDTO> update(@RequestBody CertificateDTO certificateDTO)
             throws ValidationException {
         certificateDTO = certificateDTOMapper.convertObject(
-                certificateServiceImpl.update(certificateDTOMapper.convertDTO(certificateDTO)));
-        return new ResponseEntity<>(certificateDTO, HttpStatus.CREATED);
+                certificateService.update(certificateDTOMapper.convertDTO(certificateDTO)));
+        return new ResponseEntity<>(certificateDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/tags")
     public ResponseEntity<?> readTags(@PathVariable(value = "id") int id) throws NotFoundException {
-        List<TagDTO> list = tagServiceImpl.readByCertificate(id)
+        List<TagDTO> list = tagService.readByCertificate(id)
                 .stream().map(tagDTOMapper::toTagDTO).collect(Collectors.toList());
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -110,7 +113,7 @@ public class CertificateController {
     public ResponseEntity<Tag[]> createTag(@PathVariable(value = "id") int id,
                                            @RequestBody Tag[] tags)
             throws ServiceException, BadRequestException {
-        certificateServiceImpl.addCertificateTags(id, tags);
+        certificateService.addCertificateTags(id, tags);
         return new ResponseEntity<>(tags, HttpStatus.CREATED);
     }
 
@@ -118,7 +121,18 @@ public class CertificateController {
     public ResponseEntity<Tag> deleteTag(@PathVariable(value = "id") int id,
                                          @PathVariable(value = "tag_id") int tagId)
             throws BadRequestException {
-        certificateServiceImpl.deleteCertificateTag(id, tagId);
+        certificateService.deleteCertificateTag(id, tagId);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<CertificateDTO> patchCertificate(@PathVariable(value = "id") int id,
+                                                           @RequestBody CertificateDTO certificateDTO)
+            throws ValidationException, BadRequestException {
+        Certificate certificate = certificateDTOMapper.convertDTO(certificateDTO);
+        certificate.setId(id);
+        certificate = certificateService.patch(certificate);
+        return new ResponseEntity<>(certificateDTOMapper.convertObject(certificate), HttpStatus.OK);
+    }
+
 }

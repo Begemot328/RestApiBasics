@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -181,6 +182,33 @@ public class CertificateServiceImpl implements CertificateService {
             }
         }
         return readBy(finder);
+    }
+
+    @Override
+    public Certificate patch(Certificate certificate) throws ValidationException, BadRequestException {
+        if (certificate.getId() <= 0) {
+            throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
+        }
+
+        Certificate oldCertificate = dao.read(certificate.getId());
+
+        if (oldCertificate == null) {
+            throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
+        }
+        if (certificate.getPrice() != null
+                && certificate.getPrice().compareTo(BigDecimal.ZERO) > 0 ) {
+            oldCertificate.setPrice(certificate.getPrice());
+        }
+        if (certificate.getDescription() != null) {
+            oldCertificate.setDescription(certificate.getDescription());
+        }
+        if (certificate.getDuration() != 0) {
+            oldCertificate.setDuration(certificate.getDuration());
+        }
+        if (certificate.getName() != null) {
+            oldCertificate.setName(certificate.getName());
+        }
+        return update(oldCertificate);
     }
 
     @Override

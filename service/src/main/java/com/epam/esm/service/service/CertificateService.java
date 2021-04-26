@@ -61,4 +61,6 @@ public interface CertificateService extends EntityService<Certificate> {
      * @param params finding and sorting parameters
      */
     List<Certificate> read(MultiValueMap<String, String> params) throws BadRequestException, NotFoundException;
+
+    Certificate patch(Certificate certificate) throws ValidationException, BadRequestException;
 }
