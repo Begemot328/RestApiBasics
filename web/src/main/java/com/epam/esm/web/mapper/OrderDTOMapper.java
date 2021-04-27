@@ -1,6 +1,7 @@
-package com.epam.esm.web.dto;
+package com.epam.esm.web.mapper;
 
 import com.epam.esm.model.entity.Order;
+import com.epam.esm.web.dto.OrderDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,10 @@ public class OrderDTOMapper {
     }
 
     public OrderDTO toOrderDTO(Order order) {
-        return Objects.isNull(order) ? null : mapper.map(order, OrderDTO.class);
+        return mapper.map(order, OrderDTO.class);
     }
 
     public Order toOrder(OrderDTO orderDTO) {
-        return Objects.isNull(orderDTO) ? null : mapper.map(orderDTO, Order.class);
+        return mapper.map(orderDTO, Order.class);
     }
 }

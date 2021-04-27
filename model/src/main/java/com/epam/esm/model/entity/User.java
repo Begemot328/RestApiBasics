@@ -53,7 +53,8 @@ public class User extends Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return firstName.equals(user.firstName) && lastName.equals(user.lastName) && login.equals(user.login) && password.equals(user.password);
+        return firstName.equals(user.firstName) && lastName.equals(user.lastName)
+                && login.equals(user.login) && password.equals(user.password);
     }
 
     @Override

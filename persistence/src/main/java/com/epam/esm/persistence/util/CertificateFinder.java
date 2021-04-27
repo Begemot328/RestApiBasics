@@ -62,4 +62,10 @@ public class CertificateFinder extends EntityFinder<Certificate> {
             find(CertificateQueries.WHERE_TAG_ID_IN.getValue().replace("?", Integer.toString(tag)));
         }
     }
+
+    public void findByTags(String[] tags) {
+        for (String tag : tags) {
+            find(CertificateQueries.WHERE_TAG_NAME_IN.getValue().replace("?", tag));
+        }
+    }
 }

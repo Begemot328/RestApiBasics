@@ -1,6 +1,7 @@
-package com.epam.esm.web.dto;
+package com.epam.esm.web.mapper;
 
 import com.epam.esm.model.entity.Certificate;
+import com.epam.esm.web.dto.CertificateDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,10 +17,10 @@ public class CertificateDTOMapper {
     }
 
     public CertificateDTO toCertificateDTO(Certificate certificate) {
-        return Objects.isNull(certificate) ? null : mapper.map(certificate, CertificateDTO.class);
+        return mapper.map(certificate, CertificateDTO.class);
     }
 
     public Certificate toCertificate(CertificateDTO certificateDTO) {
-        return Objects.isNull(certificateDTO) ? null : mapper.map(certificateDTO, Certificate.class);
+        return mapper.map(certificateDTO, Certificate.class);
     }
 }

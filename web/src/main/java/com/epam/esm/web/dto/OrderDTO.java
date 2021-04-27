@@ -7,25 +7,27 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class OrderDTO extends Entity {
     private CertificateDTO certificate;
     private UserDTO user;
-    private double amount;
-    private int quantity;
+    private BigDecimal orderAmount;
+    private int certificateQuantity;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime purchaseDate;
 
-    public OrderDTO(CertificateDTO certificate, UserDTO user, double amount, int quantity, LocalDateTime purchaseDate) {
+    public OrderDTO(CertificateDTO certificate, UserDTO user, BigDecimal orderAmount,
+                    int certificateQuantity, LocalDateTime purchaseDate) {
         this.certificate = certificate;
         this.user = user;
-        this.amount = amount;
-        this.quantity = quantity;
+        this.orderAmount = orderAmount;
+        this.certificateQuantity = certificateQuantity;
         this.purchaseDate = purchaseDate;
     }
 
@@ -48,20 +50,20 @@ public class OrderDTO extends Entity {
         this.user = user;
     }
 
-    public double getAmount() {
-        return amount;
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getCertificateQuantity() {
+        return certificateQuantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setCertificateQuantity(int certificateQuantity) {
+        this.certificateQuantity = certificateQuantity;
     }
 
     public LocalDateTime getPurchaseDate() {
@@ -77,14 +79,15 @@ public class OrderDTO extends Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderDTO order = (OrderDTO) o;
-        return Double.compare(order.amount, amount) == 0 && quantity == order.quantity
+        return orderAmount.compareTo(order.orderAmount) == 0
+                && certificateQuantity == order.certificateQuantity
                 && certificate.equals(order.certificate) && user.equals(order.user)
                 && purchaseDate.equals(order.purchaseDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(certificate, user, amount, quantity, purchaseDate);
+        return Objects.hash(certificate, user, orderAmount, certificateQuantity, purchaseDate);
     }
 
     @Override
@@ -93,8 +96,8 @@ public class OrderDTO extends Entity {
                 "id=" + id +
                 ", certificate=" + certificate +
                 ", user=" + user +
-                ", amount=" + amount +
-                ", quantity=" + quantity +
+                ", amount=" + orderAmount +
+                ", quantity=" + certificateQuantity +
                 ", purchaseDate=" + purchaseDate +
                 '}';
     }

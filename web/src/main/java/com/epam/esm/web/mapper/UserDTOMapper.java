@@ -1,6 +1,7 @@
-package com.epam.esm.web.dto;
+package com.epam.esm.web.mapper;
 
 import com.epam.esm.model.entity.User;
+import com.epam.esm.web.dto.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,11 +18,11 @@ public class UserDTOMapper {
     }
 
     public UserDTO toUserDTO(User user) {
-        return Objects.isNull(user) ? null : mapper.map(user, UserDTO.class);
+        return mapper.map(user, UserDTO.class);
     }
 
     public User toUser(UserDTO userDTO) {
-        return Objects.isNull(userDTO) ? null : mapper.map(userDTO, User.class);
+        return mapper.map(userDTO, User.class);
     }
 
 }

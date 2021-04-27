@@ -9,11 +9,11 @@ package com.epam.esm.persistence.util;
 public enum SortDirection {
     ASC, DESC;
 
-    private final static String DESC_DIGIT = "2";
+    private final static String DESC_DIRECTION = "2";
 
     public static SortDirection parseAscDesc(String param) {
         switch (param) {
-            case DESC_DIGIT:
+            case DESC_DIRECTION:
             case "desc":
                 return SortDirection.DESC;
             default:
