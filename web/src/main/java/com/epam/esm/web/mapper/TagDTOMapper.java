@@ -17,11 +17,11 @@ public class TagDTOMapper {
     }
 
     public TagDTO toTagDTO(Tag tag) {
-        return Objects.isNull(tag) ? null : mapper.map(tag, TagDTO.class);
+        return mapper.map(tag, TagDTO.class);
     }
 
     public Tag toTag(TagDTO tagDTO) {
-        return Objects.isNull(tagDTO) ? null : mapper.map(tagDTO, Tag.class);
+        return mapper.map(tagDTO, Tag.class);
     }
 
 }

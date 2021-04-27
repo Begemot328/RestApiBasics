@@ -17,7 +17,7 @@ public class CertificateDTOMapper {
     }
 
     public CertificateDTO toCertificateDTO(Certificate сertificate) {
-        return Objects.isNull(сertificate) ? null : mapper.map(сertificate, CertificateDTO.class);
+        return mapper.map(сertificate, CertificateDTO.class);
     }
 
     public Certificate toCertificate(CertificateDTO certificateDTO) {
