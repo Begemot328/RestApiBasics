@@ -20,8 +20,8 @@ public class OrderValidator implements EntityValidator<Order> {
         validateNotNullObject(order.getUser(), "User", ErrorCodes.USER_VALIDATION_EXCEPTION);
         validateNotNullObject(order.getCertificate(), "Certificate", ErrorCodes.USER_VALIDATION_EXCEPTION);
         validateNotNullObject(order.getPurchaseDate(), "Purchase date", ErrorCodes.USER_VALIDATION_EXCEPTION);
-        validatePositiveNumber(order.getAmount(), "Amount", ErrorCodes.USER_VALIDATION_EXCEPTION);
-        validatePositiveNumber(order.getQuantity(), "Quantity", ErrorCodes.USER_VALIDATION_EXCEPTION);
+        validatePositiveNumber(order.getOrderAmount(), "Amount", ErrorCodes.USER_VALIDATION_EXCEPTION);
+        validatePositiveNumber(order.getCertificateQuantity(), "Quantity", ErrorCodes.USER_VALIDATION_EXCEPTION);
     }
 
 }

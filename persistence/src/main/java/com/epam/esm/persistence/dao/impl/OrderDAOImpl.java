@@ -40,8 +40,8 @@ public class OrderDAOImpl implements OrderDAO {
             PreparedStatement ps = connection
                     .prepareStatement(OrderQueries.INSERT_ORDER.getValue(),
                             Statement.RETURN_GENERATED_KEYS);
-            ps.setDouble(OrderColumns.AMOUNT.getColumn(), order.getAmount().doubleValue());
-            ps.setInt(OrderColumns.QUANTITY.getColumn(), order.getQuantity());
+            ps.setDouble(OrderColumns.AMOUNT.getColumn(), order.getOrderAmount().doubleValue());
+            ps.setInt(OrderColumns.QUANTITY.getColumn(), order.getCertificateQuantity());
             ps.setInt(OrderColumns.USER_ID.getColumn(), order.getUser().getId());
             ps.setInt(OrderColumns.CERTIFICATE_ID.getColumn(), order.getCertificate().getId());
             ps.setTimestamp(OrderColumns.PURCHASE_DATE.getColumn(),
@@ -72,8 +72,8 @@ public class OrderDAOImpl implements OrderDAO {
         template.update(OrderQueries.UPDATE_ORDER.getValue(), order.getUser(),
                 order.getCertificate(),
                 order.getPurchaseDate(),
-                order.getAmount(),
-                order.getQuantity());
+                order.getOrderAmount(),
+                order.getCertificateQuantity());
         return read(order.getId());
     }
 

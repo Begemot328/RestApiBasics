@@ -7,18 +7,19 @@ import java.util.Objects;
 public class Order extends Entity {
     private Certificate certificate;
     private User user;
-    private BigDecimal amount;
-    private int quantity;
+    private BigDecimal orderAmount;
+    private int certificateQuantity;
     private LocalDateTime purchaseDate;
 
     public Order() {
     }
 
-    public Order(Certificate certificate, User user, BigDecimal amount, int quantity, LocalDateTime purchaseDate) {
+    public Order(Certificate certificate, User user, BigDecimal orderAmount, int certificateQuantity,
+                 LocalDateTime purchaseDate) {
         this.certificate = certificate;
         this.user = user;
-        this.amount = amount;
-        this.quantity = quantity;
+        this.orderAmount = orderAmount;
+        this.certificateQuantity = certificateQuantity;
         this.purchaseDate = purchaseDate;
     }
 
@@ -38,20 +39,20 @@ public class Order extends Entity {
         this.user = user;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getCertificateQuantity() {
+        return certificateQuantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setCertificateQuantity(int certificateQuantity) {
+        this.certificateQuantity = certificateQuantity;
     }
 
     public LocalDateTime getPurchaseDate() {
@@ -67,12 +68,14 @@ public class Order extends Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return quantity == order.quantity && Objects.equals(certificate, order.certificate) && Objects.equals(user, order.user) && Objects.equals(amount, order.amount) && Objects.equals(purchaseDate, order.purchaseDate);
+        return certificateQuantity == order.certificateQuantity && Objects.equals(certificate, order.certificate)
+                && Objects.equals(user, order.user) && Objects.equals(orderAmount, order.orderAmount)
+                && Objects.equals(purchaseDate, order.purchaseDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(certificate, user, amount, quantity, purchaseDate);
+        return Objects.hash(certificate, user, orderAmount, certificateQuantity, purchaseDate);
     }
 
     @Override
@@ -81,8 +84,8 @@ public class Order extends Entity {
                 "id=" + id +
                 ", certificate=" + certificate +
                 ", user=" + user +
-                ", amount=" + amount +
-                ", quantity=" + quantity +
+                ", amount=" + orderAmount +
+                ", quantity=" + certificateQuantity +
                 ", purchaseDate=" + purchaseDate +
                 '}';
     }

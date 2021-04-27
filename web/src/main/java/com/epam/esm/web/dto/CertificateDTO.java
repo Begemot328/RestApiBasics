@@ -8,13 +8,14 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class CertificateDTO {
     private int id;
     private String name;
     private String description;
-    private double price;
+    private BigDecimal price;
     private int duration;
 
 
@@ -28,7 +29,7 @@ public class CertificateDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime lastUpdateDate;
 
-    public CertificateDTO(String name, String description, double price,
+    public CertificateDTO(String name, String description, BigDecimal price,
                           int duration, LocalDateTime createDate,
                           LocalDateTime lastUpdateDate) {
         this.name = name;
@@ -66,11 +67,11 @@ public class CertificateDTO {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -117,11 +118,13 @@ public class CertificateDTO {
 
         CertificateDTO that = (CertificateDTO) o;
 
-        return new EqualsBuilder().append(id, that.id).append(duration, that.duration).append(name, that.name).append(description, that.description).append(price, that.price).isEquals();
+        return new EqualsBuilder().append(id, that.id).append(duration, that.duration).append(name,
+                that.name).append(description, that.description).append(price, that.price).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).append(name).append(description).append(price).append(duration).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id)
+                .append(name).append(description).append(price).append(duration).toHashCode();
     }
 }

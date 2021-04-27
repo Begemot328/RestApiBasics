@@ -16,16 +16,27 @@ import java.time.ZoneId;
 public class OrderMapper implements RowMapper<Order> {
     @Override
     public Order mapRow(ResultSet resultSet, int i) throws SQLException {
-        Certificate certificate = new CertificateMapper().mapRow(resultSet, i);
-        certificate.setId(resultSet.getInt(OrderColumns.CERTIFICATE_ID.getValue()));
-        User user = new UserMapper().mapRow(resultSet, i);
-        user.setId(resultSet.getInt(OrderColumns.CERTIFICATE_ID.getValue()));
-        Order order = new Order(certificate, user,
+
+
+        Order order = new Order(mapCertificate(resultSet, i),
+                mapUser(resultSet, i),
                 BigDecimal.valueOf(resultSet.getFloat(OrderColumns.AMOUNT.getValue())),
                 resultSet.getInt(OrderColumns.QUANTITY.getValue()),
                 resultSet.getTimestamp(OrderColumns.PURCHASE_DATE.getValue())
                         .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         order.setId(resultSet.getInt(OrderColumns.ID.getValue()));
         return order;
+    }
+
+    private User mapUser(ResultSet resultSet, int i) throws SQLException {
+        User user = new UserMapper().mapRow(resultSet, i);
+        user.setId(resultSet.getInt(OrderColumns.CERTIFICATE_ID.getValue()));
+        return user;
+    }
+
+    private Certificate mapCertificate(ResultSet resultSet, int i) throws SQLException {
+        Certificate certificate = new CertificateMapper().mapRow(resultSet, i);
+        certificate.setId(resultSet.getInt(OrderColumns.CERTIFICATE_ID.getValue()));
+        return certificate;
     }
 }

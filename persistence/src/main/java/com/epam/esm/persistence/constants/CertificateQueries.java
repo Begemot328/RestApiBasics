@@ -10,6 +10,8 @@ public enum CertificateQueries {
     SELECT_FROM_CERTIFICATE_TAG("SELECT DISTINCT id, name, description, price," +
             "duration, create_date, last_update_date FROM certificates.certificate_tags"),
     WHERE_TAG_ID_IN(" id IN (SELECT DISTINCT id FROM certificates.certificate_tags WHERE tag_id = ?)"),
+    WHERE_TAG_NAME_IN(
+            " name IN (SELECT DISTINCT id FROM certificates.certificate_tags WHERE tag_name = '?')"),
     WHERE_ID(" WHERE id = ?"),
     SELECT_FROM_CERTIFICATE("SELECT * FROM certificates.certificate"),
     INSERT_CERTIFICATE("INSERT INTO certificates.certificate (name, description, price," +

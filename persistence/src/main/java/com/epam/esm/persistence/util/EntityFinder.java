@@ -1,6 +1,7 @@
 package com.epam.esm.persistence.util;
 
 import com.epam.esm.model.entity.Entity;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -12,10 +13,10 @@ import java.util.Objects;
  * @version 1.0
  */
 public abstract class EntityFinder<T extends Entity> {
-    protected String searchCondition = "";
-    protected String sortCondition = "";
-    protected String limit = "";
-    protected String offset = "";
+    protected String searchCondition = StringUtils.EMPTY;
+    protected String sortCondition = StringUtils.EMPTY;
+    protected String limit = StringUtils.EMPTY;
+    protected String offset = StringUtils.EMPTY;
 
     public EntityFinder() {
     }
@@ -45,17 +46,17 @@ public abstract class EntityFinder<T extends Entity> {
      */
     public String getQuery() {
         StringBuilder query = new StringBuilder();
-        if (!searchCondition.isEmpty()) {
+        if (StringUtils.isNotEmpty(searchCondition)) {
             query.append(FinderQueries.WHERE.getValue());
             query.append(" ").append(searchCondition);
         }
-        if (!sortCondition.isEmpty()) {
+        if (StringUtils.isNotEmpty(sortCondition)) {
             query.append(FinderQueries.ORDER_BY.getValue()).append(sortCondition);
         }
-        if (!limit.isEmpty()) {
+        if (StringUtils.isNotEmpty(limit)) {
             query.append(FinderQueries.LIMIT.getValue()).append(limit);
         }
-        if (!offset.isEmpty()) {
+        if (StringUtils.isNotEmpty(offset)) {
             query.append(FinderQueries.OFFSET.getValue()).append(offset);
         }
         return query.toString();
@@ -73,7 +74,7 @@ public abstract class EntityFinder<T extends Entity> {
      * Method to join another {@link EntityFinder} conditions by AND logic
      */
     public void and(EntityFinder<T> finder) {
-        if (!finder.getSearchCondition().isEmpty()) {
+        if (StringUtils.isNotEmpty(finder.getSearchCondition())) {
             this.searchCondition = searchCondition + " AND (" + finder.getSearchCondition() + ")";
         } else {
             this.searchCondition = finder.getSearchCondition();
@@ -84,7 +85,7 @@ public abstract class EntityFinder<T extends Entity> {
      * Method to join another {@link EntityFinder} conditions by OR logic
      */
     public void or(EntityFinder<T> finder) {
-        if (!finder.getSearchCondition().isEmpty()) {
+        if (StringUtils.isNotEmpty(finder.getSearchCondition())) {
             this.searchCondition = searchCondition + " OR (" + finder.getSearchCondition() + ")";
         } else {
             this.searchCondition = finder.getSearchCondition();
@@ -98,7 +99,7 @@ public abstract class EntityFinder<T extends Entity> {
      * @param sortDirection {@link SortDirection} enum object to specify sorting order
      */
     public void sortBy(String sorting, SortDirection sortDirection) {
-        if (!sortCondition.isEmpty()) {
+        if (StringUtils.isNotEmpty(sortCondition)) {
             this.sortCondition = sortCondition.concat(", " + sorting + " " + sortDirection.toString());
         } else {
             this.sortCondition = sorting + " " + sortDirection.toString();
@@ -111,7 +112,7 @@ public abstract class EntityFinder<T extends Entity> {
      * @param query query to find by
      */
     protected void find(String query) {
-        if (!searchCondition.isEmpty()) {
+        if (StringUtils.isNotEmpty(searchCondition)) {
             this.searchCondition += " AND ";
         }
         this.searchCondition += query;

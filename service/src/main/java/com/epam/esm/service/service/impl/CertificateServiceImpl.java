@@ -146,6 +146,13 @@ public class CertificateServiceImpl implements CertificateService {
                     finder.findByTagId(Integer.parseInt(list.get(0)));
                 }
                 break;
+            case TAG_NAME:
+                if (list.size() > 1) {
+                    finder.findByTags(list.stream().mapToInt(Integer::parseInt).toArray());
+                } else {
+                    finder.findByTag(list.get(0));
+                }
+                break;
         }
     }
 
@@ -244,12 +251,11 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     public void addCertificateTag(int certificateId, Tag tag) throws ServiceException,
             BadRequestException {
-        Optional<Tag> tagOptional;
         if (dao.isTagCertificateTied(certificateId, tag.getId())) {
             throw new BadRequestException("adding existing relation",
                     ErrorCodes.CERTIFICATE_BAD_REQUEST);
         }
-        tagOptional = Optional.ofNullable(tagDAO.read(tag.getId()));
+        Optional<Tag> tagOptional = Optional.ofNullable(tagDAO.read(tag.getId()));
         if (tagOptional.isEmpty()) {
             try {
                 tagDAO.create(tag);
