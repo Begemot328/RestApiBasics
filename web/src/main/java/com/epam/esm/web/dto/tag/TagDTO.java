@@ -1,5 +1,6 @@
-package com.epam.esm.web.dto;
+package com.epam.esm.web.dto.tag;
 
+import com.epam.esm.web.dto.certificate.CertificateDTO;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;

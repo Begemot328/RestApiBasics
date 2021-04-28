@@ -1,9 +1,9 @@
-package com.epam.esm.web.mapper;
+package com.epam.esm.web.dto.tag;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.web.controller.TagController;
-import com.epam.esm.web.dto.TagDTO;
+import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.exceptions.DTOException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,6 @@ public class TagDTOMapper {
         try {
             Link link = linkTo(methodOn(TagController.class).read(tag.getId())).withSelfRel();
             tagDTO.add(link);
-            link = linkTo(methodOn(TagController.class).readCertificates(tag.getId())).withRel("/certificates");
         } catch (NotFoundException e) {
             throw new DTOException(e);
         }

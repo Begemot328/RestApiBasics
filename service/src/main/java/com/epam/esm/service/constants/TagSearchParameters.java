@@ -18,6 +18,6 @@ public enum TagSearchParameters {
      * @return {@link CertificateSearchParameters} enum element
      */
     public static TagSearchParameters getEntryByParameter(String parameter) {
-        return valueOf(ConfigUtils.convertName(parameter));
+        return valueOf(ConfigUtils.convertToEnumName(parameter));
     }
 }

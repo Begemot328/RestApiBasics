@@ -130,7 +130,7 @@ public class CertificateServiceImplTests {
 
     @Test
     public void testFindByTag() throws NotFoundException {
-        assertEquals(shortList, service.readByTag(1));
+        assertEquals(shortList, service.readByTag(1,1,1));
         CertificateFinder finder = new CertificateFinder();
         finder.findByTagId(1);
         verify(certificateDaoMock, times(1)).readBy(finder);

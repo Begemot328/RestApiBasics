@@ -1,4 +1,4 @@
-package com.epam.esm.web.dto;
+package com.epam.esm.web.dto.user;
 
 import java.util.Objects;
 

@@ -8,10 +8,11 @@ import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.CertificateService;
 import com.epam.esm.service.service.TagService;
-import com.epam.esm.web.dto.CertificateDTO;
-import com.epam.esm.web.mapper.CertificateDTOMapper;
-import com.epam.esm.web.dto.TagDTO;
-import com.epam.esm.web.mapper.TagDTOMapper;
+import com.epam.esm.web.dto.certificate.CertificateDTO;
+import com.epam.esm.web.dto.certificate.CertificateDTOMapper;
+import com.epam.esm.web.dto.tag.TagDTO;
+import com.epam.esm.web.dto.tag.TagDTOMapper;
+import com.epam.esm.web.util.Paginator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -99,8 +100,12 @@ public class CertificateController {
     }
 
     @GetMapping(value = "/{id}/tags")
-    public ResponseEntity<?> readTags(@PathVariable(value = "id") int id) throws NotFoundException {
-        List<TagDTO> list = tagService.readByCertificate(id)
+    public ResponseEntity<?> readTags(@PathVariable(value = "id") int id,
+                                      @RequestParam MultiValueMap<String, String> params)
+            throws NotFoundException {
+
+        Paginator paginator = new Paginator(params);
+        List<TagDTO> list = tagService.readByCertificate(id, paginator.getLimit(), paginator.getOffset())
                 .stream().map(tagDTOMapper::toTagDTO).collect(Collectors.toList());
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

@@ -1,12 +1,10 @@
-package com.epam.esm.web.mapper;
+package com.epam.esm.web.dto.order;
 
 import com.epam.esm.model.entity.Order;
-import com.epam.esm.web.dto.OrderDTO;
+import com.epam.esm.web.dto.order.OrderDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.Objects;
 
 @Component
 public class OrderDTOMapper {

@@ -21,7 +21,7 @@ public interface TagService extends EntityService<Tag> {
      *
      * @param certificateId {@link Certificate} ID to find by
      */
-    List<Tag> readByCertificate(int certificateId) throws NotFoundException;
+    List<Tag> readByCertificate(int certificateId, int limit, int offset) throws NotFoundException;
 
     List<Tag> read(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException;
 

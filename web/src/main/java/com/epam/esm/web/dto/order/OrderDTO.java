@@ -1,6 +1,8 @@
-package com.epam.esm.web.dto;
+package com.epam.esm.web.dto.order;
 
 import com.epam.esm.model.entity.Entity;
+import com.epam.esm.web.dto.user.UserDTO;
+import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

@@ -1,12 +1,10 @@
-package com.epam.esm.web.mapper;
+package com.epam.esm.web.dto.user;
 
 import com.epam.esm.model.entity.User;
-import com.epam.esm.web.dto.UserDTO;
+import com.epam.esm.web.dto.user.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.Objects;
 
 @Component
 public class UserDTOMapper {

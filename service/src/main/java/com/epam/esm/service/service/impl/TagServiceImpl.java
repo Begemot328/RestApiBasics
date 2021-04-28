@@ -96,9 +96,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> readByCertificate(int certificateId) throws NotFoundException {
+    public List<Tag> readByCertificate(int certificateId, int limit, int offset) throws NotFoundException {
         TagFinder finder = new TagFinder();
         finder.findByCertificate(certificateId);
+        finder.offset(offset);
+        finder.limit(limit);
         return readBy(finder);
     }
 

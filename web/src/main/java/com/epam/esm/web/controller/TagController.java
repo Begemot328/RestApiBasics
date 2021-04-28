@@ -8,12 +8,14 @@ import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ServiceLayerException;
 import com.epam.esm.service.service.impl.CertificateServiceImpl;
 import com.epam.esm.service.service.impl.TagServiceImpl;
-import com.epam.esm.web.dto.CertificateDTO;
-import com.epam.esm.web.mapper.CertificateDTOMapper;
-import com.epam.esm.web.dto.TagDTO;
-import com.epam.esm.web.mapper.TagDTOMapper;
+import com.epam.esm.web.dto.certificate.CertificateDTO;
+import com.epam.esm.web.dto.certificate.CertificateDTOMapper;
+import com.epam.esm.web.dto.tag.TagDTO;
+import com.epam.esm.web.dto.tag.TagDTOMapper;
+import com.epam.esm.web.util.Paginator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,25 +61,23 @@ public class TagController {
     @GetMapping
     public ResponseEntity<?> read(@RequestParam MultiValueMap<String, String> params)
             throws BadRequestException, NotFoundException {
-        List<Tag> tags;
+        List<Tag> tags = new ArrayList<Tag>();
         if (CollectionUtils.isEmpty(params)) {
             tags = tagServiceImpl.readAll();
         } else {
             tags = tagServiceImpl.read(params);
         }
+        Paginator paginator = new Paginator(params);
         CollectionModel<TagDTO> tagDTOs = tagDTOMapper.toTagDTOList(tags);
         tagDTOs.add(linkTo(methodOn(this.getClass()).read(params)).withSelfRel());
-        tagDTOs.add(linkTo(methodOn(this.getClass()).read(nextPage(params))).withRel("nextPage"));
-        return new ResponseEntity<>(tagDTOs, HttpStatus.OK);
-    }
 
-    private MultiValueMap<String, String> nextPage(MultiValueMap<String, String> params) {
-        int limit = CollectionUtils.isEmpty(params.get("limit")) ?
-                DEFAULT_LIMIT : Integer.parseInt(params.get("limit").get(0));
-        int offset = CollectionUtils.isEmpty(params.get("offset")) ?
-                0 : Integer.parseInt(params.get("offset").get(0));
-        params.add("offset", Integer.toString(offset + limit));
-        return params;
+        if(paginator.isLimited(params)) {
+            tagDTOs.add(linkTo(methodOn(this.getClass()).read(
+                    paginator.nextPage(params))).withRel("next page"));
+            tagDTOs.add(linkTo(methodOn(this.getClass()).read(
+                    paginator.previousPage(params))).withRel("previous page"));
+        }
+        return new ResponseEntity<>(tagDTOs, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
@@ -87,7 +89,10 @@ public class TagController {
     @GetMapping(value = "/popular")
     public ResponseEntity<?> readMostPopular() throws NotFoundException {
         final Tag tag = tagServiceImpl.readMostlyUsedTag();
-        return new ResponseEntity<>(tagDTOMapper.toTagDTO(tag), HttpStatus.OK);
+        Link link = linkTo(methodOn(TagController.class).readMostPopular()).withRel("most-popular");
+        TagDTO tagDTO = tagDTOMapper.toTagDTO(tag);
+        tagDTO.add(link);
+        return new ResponseEntity<>(tagDTO, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -105,11 +110,23 @@ public class TagController {
     }
 
     @GetMapping(value = "/{id}/certificates")
-    public ResponseEntity<?> readCertificates(@PathVariable(value = "id") int id) throws NotFoundException {
-        List<CertificateDTO> list = certificateServiceImpl.readByTag(id)
-                .stream().map(certificateDTOMapper::toCertificateDTO)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(list, HttpStatus.OK);
+    public ResponseEntity<?> readCertificates(@PathVariable(value = "id") int id,
+                                              @RequestParam MultiValueMap<String, String> params)
+            throws NotFoundException, BadRequestException {
+        Paginator paginator = new Paginator(params);
+        CollectionModel<CertificateDTO> certificateDTOs = certificateDTOMapper.toCertificateDTOList(
+                certificateServiceImpl.readByTag(id, paginator.getLimit(), paginator.getOffset()));
+        Link link = linkTo(methodOn(TagController.class).readCertificates(id, params)).withRel("certificates");
+        certificateDTOs.add(link);
+
+
+        if(paginator.isLimited(params)) {
+            certificateDTOs.add(linkTo(methodOn(this.getClass()).readCertificates(
+                    id, paginator.nextPage(params))).withRel("nextPage"));
+            certificateDTOs.add(linkTo(methodOn(this.getClass()).readCertificates(
+                    id, paginator.previousPage(params))).withRel("previousPage"));
+        }
+        return new ResponseEntity<>(certificateDTOs, HttpStatus.OK);
     }
 
     @PostMapping(value = "/{id}/certificates",

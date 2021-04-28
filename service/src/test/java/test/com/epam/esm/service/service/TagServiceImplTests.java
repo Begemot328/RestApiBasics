@@ -107,7 +107,7 @@ public class TagServiceImplTests {
 
     @Test
     public void testFindByCertificate() throws NotFoundException {
-        assertEquals(shortList, service.readByCertificate(1));
+        assertEquals(shortList, service.readByCertificate(1,1,1));
         TagFinder finder = new TagFinder().findByCertificate(1);
         verify(tagDaoMock, times(1)).readBy(finder);
     }

@@ -23,7 +23,7 @@ public interface CertificateService extends EntityService<Certificate> {
      *
      * @param tagId {@link Tag} ID to find by
      */
-    List<Certificate> readByTag(int tagId) throws NotFoundException;
+    List<Certificate> readByTag(int tagId, int limit, int offset) throws NotFoundException;
 
     /**
      * Add tie between {@link Certificate} and {@link Tag} method

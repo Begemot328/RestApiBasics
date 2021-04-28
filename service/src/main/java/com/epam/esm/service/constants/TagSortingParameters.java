@@ -26,7 +26,7 @@ public enum TagSortingParameters {
      * @return {@link CertificateSearchParameters} enum element
      */
     public static TagSortingParameters getEntryByParameter(String parameter) {
-        return valueOf(ConfigUtils.convertName(parameter));
+        return valueOf(ConfigUtils.convertToEnumName(parameter));
     }
 
     /**

@@ -219,9 +219,11 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public List<Certificate> readByTag(int tagId) throws NotFoundException {
+    public List<Certificate> readByTag(int tagId, int limit, int offset) throws NotFoundException {
         CertificateFinder finder = new CertificateFinder();
         finder.findByTagId(tagId);
+        finder.offset(offset);
+        finder.limit(limit);
         List<Certificate> certificates = readBy(finder);
         if (CollectionUtils.isEmpty(certificates)) {
             throw new NotFoundException("Requested resource not found (Tag id = " + tagId + ")!",

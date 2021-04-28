@@ -1,6 +1,5 @@
-package com.epam.esm.web.dto;
+package com.epam.esm.web.dto.certificate;
 
-import com.epam.esm.model.entity.Certificate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
