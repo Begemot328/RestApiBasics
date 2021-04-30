@@ -1,19 +1,20 @@
 package com.epam.esm.web.dto.order;
 
-import com.epam.esm.model.entity.Entity;
-import com.epam.esm.web.dto.user.UserDTO;
 import com.epam.esm.web.dto.certificate.CertificateDTO;
+import com.epam.esm.web.dto.user.UserDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class OrderDTO extends Entity {
+public class OrderDTO extends RepresentationModel<OrderDTO> {
+    private int id;
     private CertificateDTO certificate;
     private UserDTO user;
     private BigDecimal orderAmount;
@@ -42,6 +43,14 @@ public class OrderDTO extends Entity {
 
     public void setCertificate(CertificateDTO certificate) {
         this.certificate = certificate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public UserDTO getUser() {

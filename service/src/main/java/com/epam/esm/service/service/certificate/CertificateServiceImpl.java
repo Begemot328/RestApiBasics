@@ -1,9 +1,9 @@
-package com.epam.esm.service.service.impl;
+package com.epam.esm.service.service.certificate;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.CertificateDAO;
-import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.dao.certificate.CertificateDAO;
+import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.util.CertificateFinder;
 import com.epam.esm.persistence.util.EntityFinder;
@@ -16,13 +16,12 @@ import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.service.CertificateService;
 import com.epam.esm.service.validator.EntityValidator;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
@@ -163,7 +162,7 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     private void addToFinder(Consumer<String> consumer, List<String> list) {
-        if (!CollectionUtils.isEmpty(list)) {
+        if (CollectionUtils.isNotEmpty(list)) {
             addToFinder(consumer, list.get(0));
         }
     }
@@ -191,6 +190,7 @@ public class CertificateServiceImpl implements CertificateService {
         return readBy(finder);
     }
 
+    @Transactional
     @Override
     public Certificate patch(Certificate certificate) throws ValidationException, BadRequestException {
         if (certificate.getId() <= 0) {
@@ -216,21 +216,6 @@ public class CertificateServiceImpl implements CertificateService {
             oldCertificate.setName(certificate.getName());
         }
         return update(oldCertificate);
-    }
-
-    @Override
-    public List<Certificate> readByTag(int tagId, int limit, int offset) throws NotFoundException {
-        CertificateFinder finder = new CertificateFinder();
-        finder.findByTagId(tagId);
-        finder.offset(offset);
-        finder.limit(limit);
-        List<Certificate> certificates = readBy(finder);
-        if (CollectionUtils.isEmpty(certificates)) {
-            throw new NotFoundException("Requested resource not found (Tag id = " + tagId + ")!",
-                    ErrorCodes.CERTIFICATE_NOT_FOUND);
-        } else {
-            return certificates;
-        }
     }
 
     @Transactional

@@ -3,7 +3,6 @@ package com.epam.esm.web.dto.tag;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.web.controller.TagController;
-import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.exceptions.DTOException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +38,8 @@ public class TagDTOMapper {
     }
 
     public CollectionModel<TagDTO> toTagDTOList(List<Tag> tags) {
-        CollectionModel<TagDTO> tagDTOs = CollectionModel.of(
+        return CollectionModel.of(
                 tags.stream().map(this::toTagDTO).collect(Collectors.toList()));
-        return tagDTOs;
     }
 
     public Tag toTag(TagDTO tagDTO) {

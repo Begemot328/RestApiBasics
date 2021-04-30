@@ -1,10 +1,8 @@
-package com.epam.esm.persistence.dao.impl;
+package com.epam.esm.persistence.dao.user;
 
 import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.constants.TagQueries;
 import com.epam.esm.persistence.constants.UserColumns;
 import com.epam.esm.persistence.constants.UserQueries;
-import com.epam.esm.persistence.dao.UserDAO;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.UserMapper;
 import com.epam.esm.persistence.util.EntityFinder;
@@ -18,8 +16,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -52,8 +48,8 @@ public class UserDAOImpl implements UserDAO {
             PreparedStatement ps = connection
                     .prepareStatement(UserQueries.INSERT_ACCOUNT.getValue(),
                             Statement.RETURN_GENERATED_KEYS);
-            ps.setString(UserColumns.LOGIN.getColumn(), user.getLogin());
-            ps.setString(UserColumns.PASSWORD.getColumn(), user.getPassword());
+            ps.setString(1, user.getLogin());
+            ps.setString(2, user.getPassword());
             return ps;
         }, keyHolder);
         if (keyHolder.getKey() == null) {
@@ -81,10 +77,10 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User update(User user) {
         template.update(UserQueries.UPDATE_USER.getValue(), user.getFirstName(),
-                user.getLastName());
+                user.getLastName(), user.getId());
         template.update(UserQueries.UPDATE_ACCOUNT.getValue(),
                 user.getLogin(),
-                user.getPassword());
+                user.getPassword(), user.getId());
         return read(user.getId());
     }
 
@@ -105,10 +101,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> readBy(EntityFinder<User> finder) {
-        Stream<User> userStream = template.queryForStream(TagQueries.SELECT_FROM_TAG_CERTIFICATES.getValue()
+        return template.query(UserQueries.SELECT_FROM_USER.getValue()
                 .concat(finder.getQuery()), userMapper);
-        List<User> users = userStream.distinct().collect(Collectors.toList());
-        userStream.close();
-        return users;
     }
 }

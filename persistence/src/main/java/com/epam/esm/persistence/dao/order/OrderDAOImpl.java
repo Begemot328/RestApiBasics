@@ -1,9 +1,8 @@
-package com.epam.esm.persistence.dao.impl;
+package com.epam.esm.persistence.dao.order;
 
 import com.epam.esm.model.entity.Order;
 import com.epam.esm.persistence.constants.OrderColumns;
 import com.epam.esm.persistence.constants.OrderQueries;
-import com.epam.esm.persistence.dao.OrderDAO;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.OrderMapper;
 import com.epam.esm.persistence.util.EntityFinder;
@@ -70,11 +69,13 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public Order update(Order order) {
-        template.update(OrderQueries.UPDATE_ORDER.getValue(), order.getUser(),
-                order.getCertificate(),
+        template.update(OrderQueries.UPDATE_ORDER.getValue(),
+                order.getUser().getId(),
+                order.getCertificate().getId(),
                 order.getPurchaseDate(),
                 order.getOrderAmount(),
-                order.getCertificateQuantity());
+                order.getCertificateQuantity(),
+                order.getId());
         return read(order.getId());
     }
 

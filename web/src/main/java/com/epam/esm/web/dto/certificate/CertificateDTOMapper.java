@@ -1,12 +1,8 @@
 package com.epam.esm.web.dto.certificate;
 
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.web.controller.CertificateController;
-import com.epam.esm.web.controller.TagController;
-import com.epam.esm.web.dto.certificate.CertificateDTO;
-import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.exceptions.DTOException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +38,8 @@ public class CertificateDTOMapper {
     }
 
     public CollectionModel<CertificateDTO> toCertificateDTOList(List<Certificate> certificates) {
-        CollectionModel<CertificateDTO> certificateDTOS = CollectionModel.of(
+        return CollectionModel.of(
                 certificates.stream().map(this::toCertificateDTO).collect(Collectors.toList()));
-        return certificateDTOS;
     }
 
     public Certificate toCertificate(CertificateDTO certificateDTO) {

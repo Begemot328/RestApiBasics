@@ -1,7 +1,7 @@
-package com.epam.esm.service.service.impl;
+package com.epam.esm.service.service.tag;
 
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.persistence.util.SortDirection;
@@ -14,12 +14,11 @@ import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.service.TagService;
 import com.epam.esm.service.validator.EntityValidator;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
@@ -84,7 +83,6 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-
     private List<Tag> readBy(EntityFinder<Tag> entityFinder) throws NotFoundException {
         List<Tag> tags = dao.readBy(entityFinder);
         if (CollectionUtils.isEmpty(tags)) {
@@ -95,20 +93,18 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-    @Override
-    public List<Tag> readByCertificate(int certificateId, int limit, int offset) throws NotFoundException {
-        TagFinder finder = new TagFinder();
-        finder.findByCertificate(certificateId);
-        finder.offset(offset);
-        finder.limit(limit);
-        return readBy(finder);
-    }
-
     private void parseFindParameter(TagFinder finder, String parameterString, List<String> list) {
         TagSearchParameters parameter =
                 TagSearchParameters.getEntryByParameter(parameterString);
-        if (parameter == TagSearchParameters.NAME) {
-            addToFinder(finder::findByName, list);
+        switch (parameter) {
+            case NAME:
+                addToFinder(finder::findByName, list);
+                break;
+            case CERTIFICATE_ID:
+                if (CollectionUtils.isNotEmpty(list)) {
+                    finder.findByCertificate(Integer.parseInt(list.get(0)));
+                }
+                break;
         }
     }
 
@@ -119,7 +115,7 @@ public class TagServiceImpl implements TagService {
     }
 
     private void addToFinder(Consumer<String> consumer, List<String> list) {
-        if (!CollectionUtils.isEmpty(list)) {
+        if (CollectionUtils.isNotEmpty(list)) {
             addToFinder(consumer, list.get(0));
         }
     }

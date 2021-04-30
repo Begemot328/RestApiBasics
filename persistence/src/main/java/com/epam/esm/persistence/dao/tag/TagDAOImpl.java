@@ -1,8 +1,7 @@
-package com.epam.esm.persistence.dao.impl;
+package com.epam.esm.persistence.dao.tag;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.TagQueries;
-import com.epam.esm.persistence.dao.TagDAO;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.TagMapper;
 import com.epam.esm.persistence.util.EntityFinder;

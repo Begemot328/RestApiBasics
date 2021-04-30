@@ -3,12 +3,13 @@ package com.epam.esm.persistence.util;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.constants.CertificateColumns;
 import com.epam.esm.persistence.constants.CertificateQueries;
+import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 /**
  * Search criteria class to find {@link Certificate} objects
- * via {@link com.epam.esm.persistence.dao.CertificateDAO} datasources.
+ * via {@link CertificateDAO} datasources.
  *
  * @author Yury Zmushko
  * @version 1.0
@@ -60,12 +61,6 @@ public class CertificateFinder extends EntityFinder<Certificate> {
     public void findByTags(int[] tags) {
         for (int tag : tags) {
             find(CertificateQueries.WHERE_TAG_ID_IN.getValue().replace("?", Integer.toString(tag)));
-        }
-    }
-
-    public void findByTags(String[] tags) {
-        for (String tag : tags) {
-            find(CertificateQueries.WHERE_TAG_NAME_IN.getValue().replace("?", tag));
         }
     }
 }

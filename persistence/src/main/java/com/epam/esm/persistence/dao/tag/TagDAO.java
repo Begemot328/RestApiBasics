@@ -1,6 +1,7 @@
-package com.epam.esm.persistence.dao;
+package com.epam.esm.persistence.dao.tag;
 
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.util.EntityFinder;
 
 import java.util.List;

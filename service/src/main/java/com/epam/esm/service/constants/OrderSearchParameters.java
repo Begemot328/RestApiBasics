@@ -8,8 +8,8 @@ import com.epam.esm.service.util.ConfigUtils;
  * @author Yury Zmushko
  * @version 1.0
  */
-public enum TagSearchParameters {
-    NAME, CERTIFICATE_ID;
+public enum OrderSearchParameters {
+    USER_ID;
 
     /**
      * Obtain enum element by {@link String} name
@@ -17,7 +17,7 @@ public enum TagSearchParameters {
      * @param parameter parameter to find search parameter by
      * @return {@link CertificateSearchParameters} enum element
      */
-    public static TagSearchParameters getEntryByParameter(String parameter) {
+    public static OrderSearchParameters getEntryByParameter(String parameter) {
         return valueOf(ConfigUtils.convertToEnumName(parameter));
     }
 

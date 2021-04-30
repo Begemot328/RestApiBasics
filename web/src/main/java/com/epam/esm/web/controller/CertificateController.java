@@ -2,36 +2,33 @@ package com.epam.esm.web.controller;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.service.constants.TagSearchParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.service.CertificateService;
-import com.epam.esm.service.service.TagService;
+import com.epam.esm.service.service.certificate.CertificateService;
+import com.epam.esm.service.service.tag.TagService;
 import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.certificate.CertificateDTOMapper;
 import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.dto.tag.TagDTOMapper;
 import com.epam.esm.web.util.Paginator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/certificates")
@@ -55,15 +52,26 @@ public class CertificateController {
     @GetMapping
     public ResponseEntity<?> read(@RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
-        List<CertificateDTO> certificates;
+        List<Certificate> certificates;
         if (CollectionUtils.isEmpty(params)) {
-            certificates = certificateService.readAll()
-                    .stream().map(certificateDTOMapper::toCertificateDTO).collect(Collectors.toList());
+            certificates = certificateService.readAll();
         } else {
-            certificates = certificateService.read(params)
-                    .stream().map(certificateDTOMapper::toCertificateDTO).collect(Collectors.toList());
+            certificates = certificateService.read(params);
         }
-        return new ResponseEntity<>(certificates, HttpStatus.OK);
+        CollectionModel<CertificateDTO> certificateDTOs = certificateDTOMapper.toCertificateDTOList(
+                certificates);
+        Link link = linkTo(methodOn(this.getClass()).read(params)).withRel("certificates");
+        certificateDTOs.add(link);
+        Paginator paginator = new Paginator(params);
+
+        if(paginator.isLimited(params)) {
+            certificateDTOs.add(linkTo(methodOn(this.getClass()).read(
+                    paginator.nextPage(params))).withRel("nextPage"));
+            certificateDTOs.add(linkTo(methodOn(this.getClass()).read(
+                    paginator.previousPage(params))).withRel("previousPage"));
+        }
+
+        return new ResponseEntity<>(certificateDTOs, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
@@ -102,12 +110,22 @@ public class CertificateController {
     @GetMapping(value = "/{id}/tags")
     public ResponseEntity<?> readTags(@PathVariable(value = "id") int id,
                                       @RequestParam MultiValueMap<String, String> params)
-            throws NotFoundException {
-
+            throws NotFoundException, BadRequestException {
+        params.put(TagSearchParameters.CERTIFICATE_ID.getParameterName(),
+                Collections.singletonList(Integer.toString(id)));
+        CollectionModel<TagDTO> tagDTOs = tagDTOMapper.toTagDTOList(
+                tagService.read(params));
+        Link link = linkTo(methodOn(this.getClass()).readTags(id, params)).withRel("tags");
+        tagDTOs.add(link);
         Paginator paginator = new Paginator(params);
-        List<TagDTO> list = tagService.readByCertificate(id, paginator.getLimit(), paginator.getOffset())
-                .stream().map(tagDTOMapper::toTagDTO).collect(Collectors.toList());
-        return new ResponseEntity<>(list, HttpStatus.OK);
+
+        if(paginator.isLimited(params)) {
+            tagDTOs.add(linkTo(methodOn(this.getClass()).readTags(
+                    id, paginator.nextPage(params))).withRel("nextPage"));
+            tagDTOs.add(linkTo(methodOn(this.getClass()).readTags(
+                    id, paginator.previousPage(params))).withRel("previousPage"));
+        }
+        return new ResponseEntity<>(tagDTOs, HttpStatus.OK);
     }
 
     @PostMapping(value = "/{id}/tags",

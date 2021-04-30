@@ -2,8 +2,6 @@ package com.epam.esm.service.util;
 
 import com.epam.esm.service.constants.CertificateSearchParameters;
 
-import java.util.Locale;
-
 public class ConfigUtils {
     private final static String UNDESCORE = "_";
     private final static String DASH = "-";

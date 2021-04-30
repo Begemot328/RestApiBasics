@@ -1,7 +1,8 @@
-package com.epam.esm.persistence.dao;
+package com.epam.esm.persistence.dao.certificate;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.util.EntityFinder;
 
 import java.util.List;

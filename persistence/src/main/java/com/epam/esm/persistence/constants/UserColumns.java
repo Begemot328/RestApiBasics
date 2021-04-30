@@ -7,11 +7,11 @@ package com.epam.esm.persistence.constants;
  * @version 1.0
  */
 public enum UserColumns {
-    ID(1, "id"),
-    FIRST_NAME(2, "first_name"),
-    LAST_NAME(3, "last_name"),
-    LOGIN(4, "login"),
-    PASSWORD(5, "password");
+    ID(0, "id"),
+    FIRST_NAME(1, "first_name"),
+    LAST_NAME(2, "last_name"),
+    LOGIN(3, "login"),
+    PASSWORD(4, "password");
 
     private String value;
     private int column;

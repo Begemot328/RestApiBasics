@@ -1,12 +1,9 @@
 package com.epam.esm.service.validator;
 
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.ValidationException;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 /**
  * {@link Certificate} Validation class.

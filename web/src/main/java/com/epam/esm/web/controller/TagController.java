@@ -2,12 +2,13 @@ package com.epam.esm.web.controller;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.service.constants.CertificateSearchParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ServiceLayerException;
-import com.epam.esm.service.service.impl.CertificateServiceImpl;
-import com.epam.esm.service.service.impl.TagServiceImpl;
+import com.epam.esm.service.service.certificate.CertificateServiceImpl;
+import com.epam.esm.service.service.tag.TagServiceImpl;
 import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.certificate.CertificateDTOMapper;
 import com.epam.esm.web.dto.tag.TagDTO;
@@ -21,26 +22,20 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/tags")
 public class TagController {
-    private final static int DEFAULT_LIMIT = 20;
 
     private final TagServiceImpl tagServiceImpl;
     private final CertificateServiceImpl certificateServiceImpl;
@@ -61,7 +56,7 @@ public class TagController {
     @GetMapping
     public ResponseEntity<?> read(@RequestParam MultiValueMap<String, String> params)
             throws BadRequestException, NotFoundException {
-        List<Tag> tags = new ArrayList<Tag>();
+        List<Tag> tags = new ArrayList<>();
         if (CollectionUtils.isEmpty(params)) {
             tags = tagServiceImpl.readAll();
         } else {
@@ -71,7 +66,7 @@ public class TagController {
         CollectionModel<TagDTO> tagDTOs = tagDTOMapper.toTagDTOList(tags);
         tagDTOs.add(linkTo(methodOn(this.getClass()).read(params)).withSelfRel());
 
-        if(paginator.isLimited(params)) {
+        if (paginator.isLimited(params)) {
             tagDTOs.add(linkTo(methodOn(this.getClass()).read(
                     paginator.nextPage(params))).withRel("next page"));
             tagDTOs.add(linkTo(methodOn(this.getClass()).read(
@@ -104,23 +99,23 @@ public class TagController {
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Tag> create(@RequestBody Tag tag) throws ServiceException {
-        tag = tagServiceImpl.create(tag);
-        return new ResponseEntity<>(tag, HttpStatus.CREATED);
+    public ResponseEntity<TagDTO> create(@RequestBody TagDTO tagDTO) throws ServiceException {
+        Tag tag = tagServiceImpl.create(tagDTOMapper.toTag(tagDTO));
+        return new ResponseEntity<>(tagDTOMapper.toTagDTO(tag), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}/certificates")
     public ResponseEntity<?> readCertificates(@PathVariable(value = "id") int id,
                                               @RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
-        Paginator paginator = new Paginator(params);
+        params.put(CertificateSearchParameters.TAG_ID.getParameterName(), Collections.singletonList(Integer.toString(id)));
         CollectionModel<CertificateDTO> certificateDTOs = certificateDTOMapper.toCertificateDTOList(
-                certificateServiceImpl.readByTag(id, paginator.getLimit(), paginator.getOffset()));
+                certificateServiceImpl.read(params));
         Link link = linkTo(methodOn(TagController.class).readCertificates(id, params)).withRel("certificates");
         certificateDTOs.add(link);
+        Paginator paginator = new Paginator(params);
 
-
-        if(paginator.isLimited(params)) {
+        if (paginator.isLimited(params)) {
             certificateDTOs.add(linkTo(methodOn(this.getClass()).readCertificates(
                     id, paginator.nextPage(params))).withRel("nextPage"));
             certificateDTOs.add(linkTo(methodOn(this.getClass()).readCertificates(

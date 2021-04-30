@@ -1,9 +1,13 @@
-package com.epam.esm.service.service;
+package com.epam.esm.service.service.user;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
+import com.epam.esm.service.service.EntityService;
+import org.springframework.util.MultiValueMap;
+
+import java.util.List;
 
 /**
  * {@link Tag} service interface.
@@ -13,5 +17,5 @@ import com.epam.esm.service.exceptions.NotFoundException;
  */
 public interface UserService extends EntityService<User> {
 
-    User signIn(String login) throws BadRequestException, NotFoundException;
+    List<User> read(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException;
 }

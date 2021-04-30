@@ -1,10 +1,20 @@
 package com.epam.esm.web.dto.user;
 
 import com.epam.esm.model.entity.User;
-import com.epam.esm.web.dto.user.UserDTO;
+import com.epam.esm.service.exceptions.NotFoundException;
+import com.epam.esm.web.controller.UserController;
+import com.epam.esm.web.exceptions.DTOException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class UserDTOMapper {
@@ -16,11 +26,22 @@ public class UserDTOMapper {
     }
 
     public UserDTO toUserDTO(User user) {
-        return mapper.map(user, UserDTO.class);
+        UserDTO userDTO = mapper.map(user, UserDTO.class);
+        try {
+            Link link = linkTo(methodOn(UserController.class).readUser(user.getId())).withSelfRel();
+            userDTO.add(link);
+        } catch (NotFoundException e) {
+            throw new DTOException(e);
+        }
+        return userDTO;
     }
 
     public User toUser(UserDTO userDTO) {
         return mapper.map(userDTO, User.class);
     }
 
+    public CollectionModel<UserDTO> toUserDTOList(List<User> users) {
+        return CollectionModel.of(
+                users.stream().map(this::toUserDTO).collect(Collectors.toList()));
+    }
 }

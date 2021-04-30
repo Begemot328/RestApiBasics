@@ -1,4 +1,4 @@
-package com.epam.esm.service.service;
+package com.epam.esm.service.service.certificate;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
@@ -6,6 +6,7 @@ import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
+import com.epam.esm.service.service.EntityService;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
@@ -17,13 +18,6 @@ import java.util.List;
  * @version 1.0
  */
 public interface CertificateService extends EntityService<Certificate> {
-
-    /**
-     * Find {@link Certificate} by {@link Tag} method
-     *
-     * @param tagId {@link Tag} ID to find by
-     */
-    List<Certificate> readByTag(int tagId, int limit, int offset) throws NotFoundException;
 
     /**
      * Add tie between {@link Certificate} and {@link Tag} method

@@ -1,8 +1,10 @@
 package com.epam.esm.web.dto.user;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.util.Objects;
 
-public class UserDTO {
+public class UserDTO extends RepresentationModel<UserDTO> {
     private String firstName;
     private String lastName;
     private String login;

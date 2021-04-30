@@ -1,8 +1,7 @@
-package com.epam.esm.persistence.dao.impl;
+package com.epam.esm.persistence.dao.certificate;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.constants.CertificateQueries;
-import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.mapper.CertificateMapper;
 import com.epam.esm.persistence.util.EntityFinder;

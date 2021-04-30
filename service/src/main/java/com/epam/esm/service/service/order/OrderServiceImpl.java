@@ -1,22 +1,24 @@
-package com.epam.esm.service.service.impl;
+package com.epam.esm.service.service.order;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
 import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.dao.OrderDAO;
+import com.epam.esm.persistence.dao.order.OrderDAO;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.util.EntityFinder;
 import com.epam.esm.persistence.util.OrderFinder;
 import com.epam.esm.service.constants.ErrorCodes;
+import com.epam.esm.service.constants.OrderSearchParameters;
+import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.service.OrderService;
 import com.epam.esm.service.validator.EntityValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -99,9 +101,44 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> readByUser(int id) throws NotFoundException {
+    public List<Order> read(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException {
         OrderFinder finder = new OrderFinder();
-        finder.findByUser(id);
+        for (String key : params.keySet()) {
+            if (org.apache.commons.collections4.CollectionUtils.isEmpty(params.get(key))) {
+                throw new BadRequestException("Empty parameter!", ErrorCodes.ORDER_BAD_REQUEST);
+            }
+            try {
+                 if (PaginationParameters.contains(key)) {
+                    parsePaginationParameter(finder, key, params.get(key));
+                } else {
+                     parseFindParameter(finder, key, params.get(key));
+                 }
+            } catch (IllegalArgumentException e) {
+                throw new BadRequestException(e, ErrorCodes.ORDER_BAD_REQUEST);
+            }
+        }
         return readBy(finder);
+    }
+
+    private void parseFindParameter(OrderFinder finder, String parameterString, List<String> list) {
+        OrderSearchParameters parameter =
+                OrderSearchParameters.getEntryByParameter(parameterString);
+        if (parameter.equals(OrderSearchParameters.USER_ID)) {
+                if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(list)) {
+                    finder.findByUser(Integer.parseInt(list.get(0)));
+                }
+        }
+    }
+
+    private void parsePaginationParameter(EntityFinder finder, String parameterString, List<String> list) {
+        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterString);
+        switch (parameter) {
+            case LIMIT:
+                finder.limit(Integer.parseInt(list.get(0)));
+                break;
+            case OFFSET:
+                finder.offset(Integer.parseInt(list.get(0)));
+                break;
+        }
     }
 }

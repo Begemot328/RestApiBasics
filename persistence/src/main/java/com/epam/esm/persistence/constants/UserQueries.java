@@ -8,7 +8,7 @@ package com.epam.esm.persistence.constants;
  */
 public enum UserQueries {
     WHERE_ID(" WHERE id = ?"),
-    SELECT_FROM_USER("SELECT * FROM certificates.user_account"),
+    SELECT_FROM_USER("SELECT DISTINCT * FROM certificates.user_account"),
     INSERT_USER("INSERT INTO certificates.user (first_name, last_name) VALUES (?, ?);"),
     INSERT_ACCOUNT("INSERT INTO certificates.account (login, password) VALUES (?, ?);"),
     UPDATE_USER("UPDATE certificates.user  SET first_name = ?, last_name = ? " +
@@ -17,8 +17,7 @@ public enum UserQueries {
             "WHERE id = ?;"),
     DELETE_USER("DELETE FROM certificates.user  " +
             "WHERE id = ?;"),
-    SELECT_PASSWORD("SELECT password FROM account WHERE login = ?"),
-    LIMIT(" LIMIT ?, ?");
+    SELECT_PASSWORD("SELECT password FROM certificates.account WHERE login = ?");
 
     private final String value;
 

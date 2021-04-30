@@ -20,7 +20,7 @@ public class UserValidator implements EntityValidator<User> {
         validateFirstName(user);
         validateLastName(user);
         validateLogin(user);
-        validateLogin(user);
+        validatePassword(user);
         }
 
     private void validateFirstName(User user) throws ValidationException {
