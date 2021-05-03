@@ -7,25 +7,36 @@ package com.epam.esm.persistence.constants;
  * @version 1.0
  */
 public enum CertificateColumns {
-    ID("id"),
-    DESCRIPTION("description"),
-    NAME("name"),
-    DURATION("duration"),
-    PRICE("price"),
-    TAG_NAME("tag_name"),
-    TAG_ID("tag_id"),
-    LAST_UPDATE_DATE("last_update_date"),
-    CREATE_DATE("create_date");
+    ID(0,"id"),
+    DESCRIPTION(1,"description"),
+    NAME(2,"name"),
+    DURATION(3,"duration"),
+    PRICE(4,"price"),
+    TAG_NAME(5,"tag_name"),
+    TAG_ID(6,"tag_id"),
+    LAST_UPDATE_DATE(7,"last_update_date"),
+    CREATE_DATE(8,"create_date");
 
-    private String value;
+    private final String value;
+    private final int column;
 
     /**
      * Default constructor
      *
      * @param value column name
      */
-    CertificateColumns(String value) {
+    CertificateColumns(int column, String value) {
         this.value = value;
+        this.column = column;
+    }
+
+    /**
+     * Value getter
+     *
+     * @return number of the column
+     */
+    public int getColumn() {
+        return column;
     }
 
     /**

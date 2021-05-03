@@ -17,9 +17,26 @@ public class UserValidator implements EntityValidator<User> {
 
     @Override
     public void validate(User user) throws ValidationException {
-        validateNotEmptyString(user.getFirstName(), "User firstname", ErrorCodes.USER_VALIDATION_EXCEPTION);
-        validateNotEmptyString(user.getLastName(), "User lastname", ErrorCodes.USER_VALIDATION_EXCEPTION);
-        validateNotEmptyString(user.getLogin(), "User login", ErrorCodes.USER_VALIDATION_EXCEPTION);
-        validateNotEmptyString(user.getPassword(), "User password", ErrorCodes.USER_VALIDATION_EXCEPTION);
+        validateFirstName(user);
+        validateLastName(user);
+        validateLogin(user);
+        validatePassword(user);
+        }
+
+    private void validateFirstName(User user) throws ValidationException {
+        validateNotEmptyString(user.getFirstName(), "User firstname",
+                ErrorCodes.USER_VALIDATION_EXCEPTION);
+    }
+    private void validateLastName(User user) throws ValidationException {
+        validateNotEmptyString(user.getLastName(), "User lastname",
+                ErrorCodes.USER_VALIDATION_EXCEPTION);
+    }
+    private void validateLogin(User user) throws ValidationException {
+        validateNotEmptyString(user.getLogin(), "User login",
+                ErrorCodes.USER_VALIDATION_EXCEPTION);
+    }
+    private void validatePassword(User user) throws ValidationException {
+        validateNotEmptyString(user.getPassword(), "User password",
+                ErrorCodes.USER_VALIDATION_EXCEPTION);
     }
 }

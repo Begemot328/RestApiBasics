@@ -17,11 +17,36 @@ public class OrderValidator implements EntityValidator<Order> {
 
     @Override
     public void validate(Order order) throws ValidationException {
-        validateNotNullObject(order.getUser(), "User", ErrorCodes.USER_VALIDATION_EXCEPTION);
-        validateNotNullObject(order.getCertificate(), "Certificate", ErrorCodes.USER_VALIDATION_EXCEPTION);
-        validateNotNullObject(order.getPurchaseDate(), "Purchase date", ErrorCodes.USER_VALIDATION_EXCEPTION);
-        validatePositiveNumber(order.getOrderAmount(), "Amount", ErrorCodes.USER_VALIDATION_EXCEPTION);
-        validatePositiveNumber(order.getCertificateQuantity(), "Quantity", ErrorCodes.USER_VALIDATION_EXCEPTION);
+        validateUser(order);
+        validateCertificate(order);
+        validatePurchaseDate(order);
+        validateAmount(order);
+        validateQuantity(order);
+        }
+
+    private void validateUser(Order order) throws ValidationException {
+        validateNotNullObject(order.getUser(), "User",
+                ErrorCodes.ORDER_VALIDATION_EXCEPTION);
+        new UserValidator().validate(order.getUser());
     }
 
+    private void validateCertificate(Order order) throws ValidationException {
+        validateNotNullObject(order.getCertificate(), "Certificate",
+                ErrorCodes.ORDER_VALIDATION_EXCEPTION);
+        new CertificateValidator().validate(order.getCertificate());
+    }
+    private void validatePurchaseDate(Order order) throws ValidationException {
+        validateNotNullObject(order.getPurchaseDate(), "Purchase date",
+                ErrorCodes.ORDER_VALIDATION_EXCEPTION);
+    }
+
+    private void validateQuantity(Order order) throws ValidationException {
+        validatePositiveNumber(order.getCertificateQuantity(), "Quantity",
+                ErrorCodes.ORDER_VALIDATION_EXCEPTION);
+    }
+
+    private void validateAmount(Order order) throws ValidationException {
+        validatePositiveNumber(order.getOrderAmount(), "Amount",
+                ErrorCodes.ORDER_VALIDATION_EXCEPTION);
+    }
 }

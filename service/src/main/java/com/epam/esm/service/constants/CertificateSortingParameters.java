@@ -30,7 +30,7 @@ public enum CertificateSortingParameters {
      * @return {@link CertificateSearchParameters} enum element
      */
     public static CertificateSortingParameters getEntryByParameter(String parameter) {
-        return valueOf(ConfigUtils.convertName(parameter));
+        return valueOf(ConfigUtils.convertToEnumName(parameter));
     }
 
     /**

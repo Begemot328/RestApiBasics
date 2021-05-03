@@ -7,19 +7,30 @@ package com.epam.esm.persistence.constants;
  * @version 1.0
  */
 public enum TagColumns {
-    ID("id"),
-    NAME("name"),
-    CERTIFICATE_ID("certificate_id");
+    ID(0,"id"),
+    NAME(1,"name"),
+    CERTIFICATE_ID(2,"certificate_id");
 
-    private String value;
+    private final String value;
+    private final int column;
 
     /**
      * Default constructor
      *
      * @param value column name
      */
-    TagColumns(String value) {
+    TagColumns(int column, String value) {
         this.value = value;
+        this.column = column;
+    }
+
+    /**
+     * Value getter
+     *
+     * @return number of the column
+     */
+    public int getColumn() {
+        return column;
     }
 
     /**

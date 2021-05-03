@@ -16,6 +16,8 @@ public class User extends Entity {
         this.password = password;
     }
 
+    public User() {}
+
     public String getFirstName() {
         return firstName;
     }

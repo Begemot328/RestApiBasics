@@ -18,6 +18,15 @@ public enum CertificateSearchParameters {
      * @return {@link CertificateSearchParameters} enum element
      */
     public static CertificateSearchParameters getEntryByParameter(String parameter) {
-        return valueOf(ConfigUtils.convertName(parameter));
+        return valueOf(ConfigUtils.convertToEnumName(parameter));
+    }
+
+    /**
+     * Returns  request parameter name corresponding to enum element.
+     *
+     * @return {@link String} Corresponding request parameter.
+     */
+    public String getParameterName() {
+        return ConfigUtils.convertToRequestParameter(name());
     }
 }

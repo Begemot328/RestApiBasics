@@ -2,8 +2,8 @@ package test.com.epam.esm.service.service;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.impl.CertificateDAOImpl;
-import com.epam.esm.persistence.dao.impl.TagDAOImpl;
+import com.epam.esm.persistence.dao.certificate.CertificateDAOImpl;
+import com.epam.esm.persistence.dao.tag.TagDAOImpl;
 import com.epam.esm.persistence.exceptions.DAOSQLException;
 import com.epam.esm.persistence.util.CertificateFinder;
 import com.epam.esm.service.constants.CertificateSearchParameters;
@@ -13,7 +13,7 @@ import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.service.impl.CertificateServiceImpl;
+import com.epam.esm.service.service.certificate.CertificateServiceImpl;
 import com.epam.esm.service.validator.CertificateValidator;
 import com.epam.esm.service.validator.EntityValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,12 +31,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class CertificateServiceImplTests {
     static Logger logger = LoggerFactory.getLogger(CertificateServiceImplTests.class);
@@ -94,50 +89,42 @@ public class CertificateServiceImplTests {
         }
         certificate1.setId(1);
         certificate2.setId(2);
-        certificate1.setId(3);
-        certificate2.setId(4);
+        certificate3.setId(3);
+        certificate4.setId(4);
         service = new CertificateServiceImpl(certificateDaoMock, validator, tagDAOMock);
     }
 
     @Test
-    public void testRead() throws NotFoundException {
+    public void read_returnCertificate() throws NotFoundException {
         assertEquals(certificate1, service.read(1));
     }
 
     @Test
-    public void testFindAll() throws NotFoundException {
+    public void readAll_returnCertificates() throws NotFoundException {
         assertEquals(fullList, service.readAll());
     }
 
     @Test
-    public void testCreate() throws ServiceException, DAOSQLException, ValidationException {
+    public void create_createCertificate() throws ServiceException, DAOSQLException, ValidationException {
         Certificate certificate = service.create(certificate1);
         assertEquals(certificate.getId(), fullList.size());
         verify(certificateDaoMock, times(1)).create(certificate1);
     }
 
     @Test
-    public void testDelete() throws BadRequestException {
+    public void delete_deleteCertificate() throws BadRequestException {
         service.delete(1);
         verify(certificateDaoMock, times(1)).read(1);
     }
 
     @Test
-    public void testUpdate() throws ValidationException {
+    public void update_updateCertificate() throws ValidationException {
         service.update(certificate2);
         verify(certificateDaoMock, times(1)).update(certificate2);
     }
 
     @Test
-    public void testFindByTag() throws NotFoundException {
-        assertEquals(shortList, service.readByTag(1));
-        CertificateFinder finder = new CertificateFinder();
-        finder.findByTagId(1);
-        verify(certificateDaoMock, times(1)).readBy(finder);
-    }
-
-    @Test
-    public void testFind() throws BadRequestException, NotFoundException {
+    public void read_returnTags() throws BadRequestException, NotFoundException {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>() {
         };
         params.put(CertificateSearchParameters.NAME.name(), Collections.singletonList("1"));
@@ -148,28 +135,54 @@ public class CertificateServiceImplTests {
     }
 
     @Test
-    public void testAddCertificateTag() throws ServiceException, BadRequestException {
+    public void addCertificateTag_passTag_addTie() throws ServiceException, BadRequestException {
         service.addCertificateTag(1, tag1);
         verify(certificateDaoMock, times(1))
                 .addCertificateTag(1, tag1.getId());
     }
 
     @Test
-    public void testAddCertificateTag2() throws ServiceException, BadRequestException, ValidationException {
-        service.addCertificateTag(certificate1, 1);
-        verify(certificateDaoMock, times(1))
-                .addCertificateTag(certificate1.getId(), 1);
+    public void addCertificateTags_passCertificates_addTies()
+            throws ServiceException, BadRequestException {
+        when(certificateDaoMock.isTagCertificateTied(any(Integer.class), any(Integer.class)))
+                .thenReturn(false);
+        Tag tag1 = new Tag("tag1");
+        Tag tag2 = new Tag("tag2");
+        Tag[] tags = {tag1, tag2};
+        service.addCertificateTags(1, tags);
+
+        verify(certificateDaoMock, atLeast(shortList.size()))
+                .addCertificateTag(eq(1), any(Integer.class));
     }
 
     @Test
-    public void testDeleteCertificateTag() throws BadRequestException {
+    public void addCertificatesTag_passCertificates_addTies()
+            throws ServiceException, BadRequestException, ValidationException {
+        when(certificateDaoMock.isTagCertificateTied(any(Integer.class), any(Integer.class)))
+                .thenReturn(false);
+        service.addCertificatesTag(shortList.toArray(Certificate[]::new), 1);
+
+        verify(certificateDaoMock, atLeast(shortList.size()))
+                .addCertificateTag(any(Integer.class), eq(1));
+    }
+
+    @Test
+    public void addCertificateTag_passCertificate_addTie()
+            throws ServiceException, BadRequestException, ValidationException {
+        service.addCertificateTag(certificate1, 1);
+        verify(certificateDaoMock, times(1))
+                .addCertificateTag(eq(certificate1.getId()), eq(1));
+    }
+
+    @Test
+    public void deleteCertificateTag_deleteTie() throws BadRequestException {
         service.deleteCertificateTag(1, 3);
         verify(certificateDaoMock, times(1))
                 .deleteCertificateTag(1, 3);
     }
 
     @Test
-    public void testCreateIfInvalidTag()
+    public void create_invalidCertificate_throwValidationException()
             throws ValidationException {
         doThrow(new ValidationException("error", ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION))
                 .when(validator).validate(any(Certificate.class));
@@ -177,9 +190,45 @@ public class CertificateServiceImplTests {
     }
 
     @Test
-    public void testCreateIfInvalidDatabase()
+    public void create_catchSQLException_throwsException()
             throws DAOSQLException {
         when(certificateDaoMock.create(any(Certificate.class))).thenThrow(new DAOSQLException("error"));
         assertThrows(ServiceException.class, () -> service.create(certificate1));
+    }
+
+    @Test
+    public void patch_changeName_updateCertificate() throws BadRequestException, ValidationException {
+        Certificate certificate = new Certificate("new name", null, 0);
+        certificate.setId(certificate2.getId());
+        certificate2.setName(certificate.getName());
+        service.patch(certificate);
+        verify(certificateDaoMock, atLeast(1)).update(certificate2);
+    }
+
+    @Test
+    public void patch_changeDuration_updateCertificate() throws BadRequestException, ValidationException {
+        Certificate certificate = new Certificate(null, null, 5);
+        certificate.setId(certificate2.getId());
+        certificate2.setDuration(certificate.getDuration());
+        service.patch(certificate);
+        verify(certificateDaoMock, atLeast(1)).update(certificate2);
+    }
+
+    @Test
+    public void patch_changeDescription_updateCertificate() throws BadRequestException, ValidationException {
+        Certificate certificate = new Certificate(null, null, 0);
+        certificate.setDescription("description");
+        certificate.setId(certificate2.getId());
+        certificate2.setDescription(certificate.getDescription());
+        service.patch(certificate);
+        verify(certificateDaoMock, atLeast(1)).update(certificate2);
+    }
+
+    @Test
+    public void patch_wrongId_throwsException() {
+        Certificate certificate = new Certificate(null, null, 5);
+        certificate.setId(10);
+        certificate2.setDuration(certificate.getDuration());
+        assertThrows(BadRequestException.class, () -> service.patch(certificate));
     }
 }

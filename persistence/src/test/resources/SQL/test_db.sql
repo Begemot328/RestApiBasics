@@ -104,3 +104,97 @@ insert into certificate_tag(tag_id, certificate_id)
 VALUES (5, 5);
 insert into certificate_tag(tag_id, certificate_id)
 VALUES (2, 3);
+
+
+drop table if exists user;
+
+create table if not exists user
+(
+    id  int primary key auto_increment,
+    first_name varchar (40) not null,
+    last_name varchar (40) not null,
+    foreign key(id) references user(id) on update cascade on DELETE cascade);
+
+drop table if exists account;
+
+create table if not exists account
+(
+    id    int primary key auto_increment,
+    login    varchar(40) not null unique,
+    password varchar(100) not null,
+    foreign key(id) references user(id) on update cascade on DELETE cascade);
+
+drop view if exists user_account;
+
+create view user_account as
+select user.id, first_name, last_name, login, password
+from user
+         join account on account.id = user.id;
+
+drop table if exists orders;
+
+create table if not exists orders
+(
+    id    int primary key auto_increment,
+    user_id int not  null,
+    certificate_id int not null,
+    purchase_date timestamp not null,
+    amount float not null,
+    quantity    int not null,
+    foreign key(user_id) references user(id) on update cascade  on delete cascade,
+    foreign key(user_id) references account(id)  on update cascade on delete cascade,
+    foreign key(certificate_id) references certificate(id) on update cascade on delete cascade
+);
+
+drop view if exists order_full;
+create view order_full as
+select orders.id,
+       user_account.id as user_id,
+       first_name,
+       last_name,
+       login,
+       password,
+       c.id as certificate_id,
+       c.name,
+       c.price,
+       c.description,
+       c.duration,
+       c.create_date,
+       c.last_update_date,
+       purchase_date,
+       amount,
+       quantity
+from orders
+         join user_account on orders.user_id = user_account.id
+         join certificate as c on orders.certificate_id = c.id;
+
+insert into
+    user(first_name, last_name)  values ('Yury','Zmushko');
+insert into
+    user(first_name, last_name)  values ('Ivan','Ivanov');
+insert into
+    user(first_name, last_name)  values ('Petr','Petrov');
+insert into
+    user(first_name, last_name)  values ('Sidor','Sidorov');
+
+insert into
+    account(login, password) VALUES ('root','qwerty');
+insert into
+    account(login, password) VALUES ('Ivanov','qwerty');
+insert into
+    account(login, password) VALUES ('Petrov','qwerty');
+insert into
+    account(login, password) VALUES ('Sidorov','qwerty');
+
+insert into
+    orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (2, 2, '2021-03-22 09:20:11', 150, 1);
+insert into
+    orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (3, 3, '2021-04-22 19:21:21', 122, 1);
+insert into
+    orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (4, 1, '2021-03-22 09:20:11', 33, 3);
+insert into
+    orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (3, 3, '2021-04-22 19:21:21', 12, 2);
+insert into
+    orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (1, 2, '2021-03-22 09:20:11', 10, 2);
+insert into
+    orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (4, 5, '2021-04-22 19:21:21', 11, 1);
