@@ -1,7 +1,7 @@
-package com.epam.esm.persistence.util;
+package com.epam.esm.persistence.util.finder;
 
 /**
- * Querries for {@link EntityFinder} object
+ * Querries for {@link EntityFinder} object enum.
  *
  * @author Yury Zmushko
  * @version 1.0
@@ -14,10 +14,10 @@ public enum FinderQueries {
     LIKE("LIKE '%VALUE%'"),
     VALUE("VALUE");
 
-    private String value;
+    private final String value;
 
     /**
-     * Default constructor
+     * Constructor.
      *
      * @param value column name
      */
@@ -26,9 +26,9 @@ public enum FinderQueries {
     }
 
     /**
-     * Value getter
+     * Value getter.
      *
-     * @return query String line
+     * @return Query String line.
      */
     public String getValue() {
         return value;

@@ -17,20 +17,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class OrderValidatorTest {
     OrderValidator validator = new OrderValidator();
     private Order order;
-    private User user;
-    private Certificate certificate;
 
     @BeforeEach
     void init() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        certificate = new Certificate("nastolka.by",
+        Certificate certificate = new Certificate("nastolka.by",
                 BigDecimal.valueOf(40.1), 50);
         certificate.setDescription("board games certificate");
         certificate.setCreateDate(LocalDateTime.parse("2021-01-22 09:20:11", formatter));
         certificate.setLastUpdateDate(LocalDateTime.parse("2021-03-22 09:20:11", formatter));
         certificate.setId(2);
 
-        user = new User("Ivan", "Ivanov", "Ivanov", "qwerty");
+        User user = new User("Ivan", "Ivanov", "Ivanov", "qwerty");
         user.setId(2);
 
         order = new Order(certificate, user, BigDecimal.valueOf(10.0), 1,

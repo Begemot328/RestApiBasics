@@ -1,16 +1,21 @@
 package com.epam.esm.model.entity;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
 /**
  * Entity class.
  *
  * @author Yury Zmushko
- * @version 1.0
+ * @version 2.0
  */
-public class Entity {
+@MappedSuperclass
+public class CustomEntity {
 
-    /**
-     * id of the object
-     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
 
     /**

@@ -13,38 +13,50 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+/**
+ * Sensitive data encryptor-decryptor.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public class EncryptDecriptUtil {
 
-    private static byte[] keyBytes = {1, 2, 3, 4, 5, 6, 7, 8};
-    private static byte[] ivBytes = {9, 10, 11, 12, 13, 14, 15, 16};
-    private Cipher deCipher;
-    private Cipher enCipher;
-    private SecretKeySpec key;
-    private IvParameterSpec ivSpec;
+    private static final byte[] keyBytes = {1, 2, 3, 4, 5, 6, 7, 8};
+    private static final byte[] ivBytes = {9, 10, 11, 12, 13, 14, 15, 16};
+    private final Cipher deCipher;
+    private final Cipher enCipher;
+    private final SecretKeySpec key;
+    private final IvParameterSpec ivSpec;
 
-    public EncryptDecriptUtil() {
+    /**
+     * Default constructor.
+     */
+    public EncryptDecriptUtil()
+            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
         this(keyBytes, ivBytes);
     }
 
-    public EncryptDecriptUtil(byte[] keyBytes, byte[] ivBytes) {
+    /**
+     * Constructor.
+     *
+     * @param keyBytes Byte array to create {@link DESKeySpec}.
+     * @param ivBytes Byte array to create {@link IvParameterSpec}.
+     */
+    public EncryptDecriptUtil(byte[] keyBytes, byte[] ivBytes)
+            throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException {
         ivSpec = new IvParameterSpec(ivBytes);
-        try {
             DESKeySpec dkey = new DESKeySpec(keyBytes);
             key = new SecretKeySpec(dkey.getKey(), "DES");
             deCipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
             enCipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
+    /**
+     * Encrypt method.
+     *
+     * @param obj {@link String} object encrypt.
+     * @return Encrypted byte array.
+     */
     public byte[] encrypt(String obj) throws InvalidKeyException, InvalidAlgorithmParameterException,
             IllegalBlockSizeException, BadPaddingException {
         byte[] input = convertToByteArray(obj);
@@ -52,6 +64,12 @@ public class EncryptDecriptUtil {
         return enCipher.doFinal(input);
     }
 
+    /**
+     * Decrypt method.
+     *
+     * @param encrypted Byte array to decrypt.
+     * @return Decrypted {@link String} object.
+     */
     public String decrypt(byte[] encrypted) throws InvalidKeyException, InvalidAlgorithmParameterException,
             IllegalBlockSizeException, BadPaddingException {
         deCipher.init(Cipher.DECRYPT_MODE, key, ivSpec);
@@ -66,12 +84,24 @@ public class EncryptDecriptUtil {
         return Base64.getDecoder().decode(complexObject.getBytes(StandardCharsets.US_ASCII));
     }
 
+    /**
+     * Decrypt to String method.
+     *
+     * @param input {@link String} to decrypt.
+     * @return Decrypted {@link String} object.
+     */
     public String decryptToString(String input) throws InvalidAlgorithmParameterException,
             IllegalBlockSizeException,
             BadPaddingException, InvalidKeyException {
         return decrypt(convertToByteArray(input));
     }
 
+    /**
+     * Encrypt to String method.
+     *
+     * @param input {@link String} to encrypt.
+     * @return Encrypted {@link String} object.
+     */
     public String encryptToString(String input) throws InvalidAlgorithmParameterException,
             IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         return convertFromByteArray(encrypt(input));

@@ -17,13 +17,19 @@ public enum CertificateColumns {
     LAST_UPDATE_DATE(7,"last_update_date"),
     CREATE_DATE(8,"create_date");
 
+    /*
+     * Name of the column.
+     */
     private final String value;
+    /*
+     * Number of the column.
+     */
     private final int column;
 
     /**
-     * Default constructor
+     * Default constructor.
      *
-     * @param value column name
+     * @param value Column name.
      */
     CertificateColumns(int column, String value) {
         this.value = value;
@@ -31,18 +37,18 @@ public enum CertificateColumns {
     }
 
     /**
-     * Value getter
+     * Column number getter.
      *
-     * @return number of the column
+     * @return Number of the column.
      */
     public int getColumn() {
         return column;
     }
 
     /**
-     * Value getter
+     * Value getter.
      *
-     * @return name of the column
+     * @return Name of the column.
      */
     public String getValue() {
         return value;

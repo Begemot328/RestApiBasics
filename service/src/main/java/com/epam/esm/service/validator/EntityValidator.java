@@ -1,7 +1,7 @@
 package com.epam.esm.service.validator;
 
 
-import com.epam.esm.model.entity.Entity;
+import com.epam.esm.model.entity.CustomEntity;
 import com.epam.esm.service.exceptions.ValidationException;
 
 /**
@@ -10,12 +10,12 @@ import com.epam.esm.service.exceptions.ValidationException;
  * @author Yury Zmushko
  * @version 1.0
  */
-public interface EntityValidator<T extends Entity> {
+public interface EntityValidator<T extends CustomEntity> {
 
     /**
-     * Validate {@link Entity} method
+     * Validate {@link CustomEntity} method.
      *
-     * @param t {@link Entity} to validate
+     * @param t {@link CustomEntity} to validate.
      */
     void validate(T t) throws ValidationException;
 

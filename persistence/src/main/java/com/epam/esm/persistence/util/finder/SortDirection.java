@@ -1,4 +1,4 @@
-package com.epam.esm.persistence.util;
+package com.epam.esm.persistence.util.finder;
 
 /**
  * Ascending\descending mode constants
@@ -11,6 +11,12 @@ public enum SortDirection {
 
     private final static String DESC_DIRECTION = "2";
 
+    /**
+     * Sort direction parser.
+     *
+     * @param param String to parse.
+     * @return SortDirection enum element.
+     */
     public static SortDirection parseAscDesc(String param) {
         switch (param) {
             case DESC_DIRECTION:

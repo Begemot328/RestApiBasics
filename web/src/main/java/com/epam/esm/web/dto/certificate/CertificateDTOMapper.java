@@ -1,9 +1,13 @@
 package com.epam.esm.web.dto.certificate;
 
 import com.epam.esm.model.entity.Certificate;
+import com.epam.esm.model.entity.Tag;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.web.controller.CertificateController;
+import com.epam.esm.web.dto.tag.TagDTO;
+import com.epam.esm.web.dto.tag.TagDTOMapper;
 import com.epam.esm.web.exceptions.DTOException;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -18,11 +22,27 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class CertificateDTOMapper {
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
 
     @Autowired
     public CertificateDTOMapper(ModelMapper mapper) {
         this.mapper = mapper;
+
+        Converter<List<Tag>, List<TagDTO>> converterToDTO =
+                src -> src.getSource().stream().map(tag -> new TagDTOMapper(this.mapper)
+                        .toTagDTO(tag)).collect(Collectors.toList());
+
+        Converter<List<TagDTO>, List<Tag>> converterToObject =
+                src -> src.getSource().stream().map(tagDTO -> new TagDTOMapper(this.mapper)
+                        .toTag(tagDTO)).collect(Collectors.toList());
+
+        mapper.typeMap(Certificate.class, CertificateDTO.class).addMappings(
+               newMapper -> newMapper.using(converterToDTO).map(
+                       Certificate::getTags, CertificateDTO::setTags));
+
+        mapper.typeMap(CertificateDTO.class, Certificate.class).addMappings(
+                newMapper -> newMapper.using(converterToObject).map(
+                        CertificateDTO::getTags, Certificate::setTags));
     }
 
     public CertificateDTO toCertificateDTO(Certificate certificate) {
@@ -34,7 +54,6 @@ public class CertificateDTOMapper {
             throw new DTOException(e);
         }
         return certificateDTO;
-
     }
 
     public CollectionModel<CertificateDTO> toCertificateDTOList(List<Certificate> certificates) {

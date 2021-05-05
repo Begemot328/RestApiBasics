@@ -1,100 +1,84 @@
 package com.epam.esm.persistence.dao.order;
 
 import com.epam.esm.model.entity.Order;
-import com.epam.esm.persistence.constants.OrderColumns;
-import com.epam.esm.persistence.constants.OrderQueries;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.epam.esm.persistence.mapper.OrderMapper;
-import com.epam.esm.persistence.util.EntityFinder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.Metamodel;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+/**
+ * Order DAO implementation.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Repository
 public class OrderDAOImpl implements OrderDAO {
-    private final JdbcTemplate template;
-    private final OrderMapper orderMapper;
 
-    @Autowired
-    public OrderDAOImpl(JdbcTemplate template, OrderMapper orderMapper) {
-        this.template = template;
-        this.orderMapper = orderMapper;
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    /**
+     * Default constructor.
+     */
+    public OrderDAOImpl() {
     }
 
     @Override
-    public Order create(Order order) throws DAOSQLException {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        template.update(connection -> {
-            PreparedStatement ps = connection
-                    .prepareStatement(OrderQueries.INSERT_ORDER.getValue(),
-                            Statement.RETURN_GENERATED_KEYS);
-            ps.setDouble(OrderColumns.AMOUNT.getColumn(), order.getOrderAmount().doubleValue());
-            ps.setInt(OrderColumns.QUANTITY.getColumn(), order.getCertificateQuantity());
-            ps.setInt(OrderColumns.USER_ID.getColumn(), order.getUser().getId());
-            ps.setInt(OrderColumns.CERTIFICATE_ID.getColumn(), order.getCertificate().getId());
-            ps.setTimestamp(OrderColumns.PURCHASE_DATE.getColumn(),
-                    Timestamp.valueOf(order.getPurchaseDate()));
-            return ps;
-        }, keyHolder);
-        if (keyHolder.getKey() == null) {
-            throw new DAOSQLException("empty keyholder");
-        } else {
-            order.setId(keyHolder.getKey().intValue());
-            return order;
-        }
+    public Order create(Order order) {
+        entityManager.persist(order);
+        return order;
     }
 
     @Override
     public Order read(int id) {
-        try {
-            return template.queryForObject(
-                    OrderQueries.SELECT_FROM_ORDER.getValue()
-                            .concat(OrderQueries.WHERE_ID.getValue()),
-                    orderMapper, id);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return entityManager.find(Order.class, id);
     }
 
     @Override
     public Order update(Order order) {
-        template.update(OrderQueries.UPDATE_ORDER.getValue(),
-                order.getUser().getId(),
-                order.getCertificate().getId(),
-                order.getPurchaseDate(),
-                order.getOrderAmount(),
-                order.getCertificateQuantity(),
-                order.getId());
-        return read(order.getId());
+        return entityManager.merge(order);
     }
 
     @Override
     public void delete(int id) {
-        template.update(OrderQueries.DELETE_ORDER.getValue(), id);
+        entityManager.remove(read(id));
     }
 
     @Override
     public List<Order> readAll() {
-        return template.query(OrderQueries.SELECT_FROM_ORDER.getValue(), orderMapper);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
+        Root<Order> rootEntry = criteriaQuery.from(Order.class);
+        CriteriaQuery<Order> all = criteriaQuery.select(rootEntry);
+        TypedQuery<Order> allQuery = entityManager.createQuery(all);
+        return allQuery.getResultList();
     }
 
     @Override
     public List<Order> readBy(EntityFinder<Order> finder) {
-        Stream<Order> orderStream = template.queryForStream(OrderQueries.SELECT_FROM_ORDER.getValue()
-                .concat(finder.getQuery()), orderMapper);
-        List<Order> orders = orderStream.distinct().collect(Collectors.toList());
-        orderStream.close();
-        return orders;
+        TypedQuery<Order> allQuery = entityManager.createQuery(finder.getQuery());
+        allQuery.setFirstResult(finder.getOffset());
+        if(finder.getLimit() > 0) {
+            allQuery.setMaxResults(finder.getLimit());
+        }
+        return allQuery.getResultList();
+    }
+
+    @Override
+    public CriteriaBuilder getBuilder() {
+        return entityManager.getCriteriaBuilder();
+    }
+
+    @Override
+    public Metamodel getMetamodel() {
+        return entityManager.getMetamodel();
     }
 }

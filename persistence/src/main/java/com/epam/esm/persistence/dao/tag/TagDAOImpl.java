@@ -2,63 +2,46 @@ package com.epam.esm.persistence.dao.tag;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.TagQueries;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.epam.esm.persistence.mapper.TagMapper;
-import com.epam.esm.persistence.util.EntityFinder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.Metamodel;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+/**
+ * Tag DAO implementation.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Repository
 public class TagDAOImpl implements TagDAO {
-    private final JdbcTemplate template;
-    private final TagMapper tagMapper;
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    @Autowired
-    public TagDAOImpl(JdbcTemplate template, TagMapper tagMapper) {
-        this.template = template;
-        this.tagMapper = tagMapper;
+    /**
+     * Default constructor.
+     */
+    public TagDAOImpl() {
     }
 
     @Override
-    public Tag create(Tag tag) throws DAOSQLException {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        template.update(connection -> {
-            PreparedStatement ps = connection
-                    .prepareStatement(TagQueries.INSERT_TAG.getValue(),
-                            Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, tag.getName());
-            return ps;
-        }, keyHolder);
-        if (keyHolder.getKey() == null) {
-            throw new DAOSQLException("empty keyholder");
-        }
-        tag.setId(keyHolder.getKey().intValue());
+    public Tag create(Tag tag) {
+        entityManager.persist(tag);
         return tag;
     }
 
     @Override
     public Tag read(int id) {
-        try {
-            return template.queryForObject(
-                    TagQueries.SELECT_FROM_TAG.getValue()
-                            .concat(TagQueries.WHERE_ID.getValue()),
-                    tagMapper, id);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return entityManager.find(Tag.class, id);
     }
 
     @Override
@@ -68,29 +51,43 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public void delete(int id) {
-        template.update(TagQueries.DELETE_TAG.getValue(), id);
+        entityManager.remove(read(id));
     }
 
     @Override
     public List<Tag> readAll() {
-        return template.query(TagQueries.SELECT_FROM_TAG.getValue(), tagMapper);
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
+        Root<Tag> tagRoot = query.from(Tag.class);
+        query.orderBy(builder.desc(tagRoot.get("name")));
+        query = query.select(tagRoot);
+        TypedQuery<Tag> allQuery = entityManager.createQuery(query);
+        return allQuery.getResultList();
+    }
+
+    @Override
+    public CriteriaBuilder getBuilder() {
+        return entityManager.getCriteriaBuilder();
+    }
+
+    @Override
+    public Metamodel getMetamodel() {
+        return entityManager.getMetamodel();
     }
 
     @Override
     public List<Tag> readBy(EntityFinder<Tag> finder) {
-        Stream<Tag> tagStream = template.queryForStream(TagQueries.SELECT_FROM_TAG_CERTIFICATES.getValue()
-                .concat(finder.getQuery()), tagMapper);
-        List<Tag> tags = tagStream.distinct().collect(Collectors.toList());
-        tagStream.close();
-        return tags;
+      TypedQuery<Tag> allQuery = entityManager.createQuery(finder.getQuery());
+        allQuery.setFirstResult(finder.getOffset());
+        if(finder.getLimit() > 0) {
+            allQuery.setMaxResults(finder.getLimit());
+        }
+        return allQuery.getResultList();
     }
 
     @Override
     public List<Tag> readBy(String query) {
-        Stream<Tag> tagStream = template.queryForStream(query, tagMapper);
-        List<Tag> tags = tagStream.distinct().collect(Collectors.toList());
-        tagStream.close();
-        return tags;
+        return entityManager.createNativeQuery(query, Tag.class).getResultList();
     }
 
     @Override

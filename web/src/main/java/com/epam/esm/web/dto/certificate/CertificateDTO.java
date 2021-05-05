@@ -1,5 +1,6 @@
 package com.epam.esm.web.dto.certificate;
 
+import com.epam.esm.web.dto.tag.TagDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -11,6 +12,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CertificateDTO extends RepresentationModel<CertificateDTO> {
     private int id;
@@ -18,6 +20,7 @@ public class CertificateDTO extends RepresentationModel<CertificateDTO> {
     private String description;
     private BigDecimal price;
     private int duration;
+    private List<TagDTO> tags;
 
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -100,15 +103,12 @@ public class CertificateDTO extends RepresentationModel<CertificateDTO> {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    @Override
-    public String toString() {
-        return "CertificateDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", duration=" + duration +
-                '}';
+    public List<TagDTO> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TagDTO> tags) {
+        this.tags = tags;
     }
 
     @Override
@@ -119,13 +119,32 @@ public class CertificateDTO extends RepresentationModel<CertificateDTO> {
 
         CertificateDTO that = (CertificateDTO) o;
 
-        return new EqualsBuilder().append(id, that.id).append(duration, that.duration).append(name,
-                that.name).append(description, that.description).append(price, that.price).isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(o))
+                .append(id, that.id).append(duration, that.duration)
+                .append(name, that.name).append(description, that.description)
+                .append(price, that.price).append(tags, that.tags).append(createDate, that.createDate)
+                .append(lastUpdateDate, that.lastUpdateDate).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id)
-                .append(name).append(description).append(price).append(duration).toHashCode();
+        return new HashCodeBuilder(17, 37)
+                .appendSuper(super.hashCode()).append(id).append(name)
+                .append(description).append(price).append(duration).append(tags)
+                .append(createDate).append(lastUpdateDate).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "CertificateDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", duration=" + duration +
+                ", tags=" + tags +
+                ", createDate=" + createDate +
+                ", lastUpdateDate=" + lastUpdateDate +
+                '}';
     }
 }

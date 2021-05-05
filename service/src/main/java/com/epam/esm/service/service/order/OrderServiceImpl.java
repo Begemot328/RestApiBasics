@@ -4,40 +4,55 @@ import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.order.OrderDAO;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.epam.esm.persistence.util.EntityFinder;
-import com.epam.esm.persistence.util.OrderFinder;
+import com.epam.esm.persistence.util.finder.EntityFinder;
+import com.epam.esm.persistence.util.finder.impl.OrderFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.OrderSearchParameters;
 import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
-import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
+import com.epam.esm.service.service.EntityService;
 import com.epam.esm.service.validator.EntityValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * {@link Order} service implementation.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
-    private OrderDAO dao;
-    private EntityValidator<Order> validator;
+    private final OrderDAO dao;
+    private final EntityValidator<Order> validator;
+    private final EntityService<Certificate> certificateService;
+    private final EntityService<User> userService;
 
     @Autowired
     public OrderServiceImpl(OrderDAO dao,
-                            EntityValidator<Order> validator) {
+                            EntityValidator<Order> validator,
+                            EntityService<User> userService, EntityService<Certificate> certificateService) {
         this.dao = dao;
         this.validator = validator;
+        this.certificateService = certificateService;
+        this.userService = userService;
     }
 
     @Override
-    public Order createOrder(Certificate certificate, User user, int quantity) throws ServiceException, ValidationException {
+    @Transactional
+    public Order createOrder(Certificate certificate, User user, int quantity)
+            throws ValidationException, BadRequestException {
+
         Order order = new Order(certificate, user,
                 certificate.getPrice().multiply(BigDecimal.valueOf(quantity)),
                 quantity, LocalDateTime.now());
@@ -45,25 +60,37 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order create(Order order) throws ServiceException, ValidationException {
-        try {
+    @Transactional
+    public Order create(Order order) throws ValidationException, BadRequestException {
+
             order.setPurchaseDate(LocalDateTime.now());
             validator.validate(order);
+
+            if(certificateService.readOptional(order.getCertificate().getId()).isEmpty()) {
+                throw new BadRequestException("Unknown certificate!", ErrorCodes.ORDER_BAD_REQUEST);
+            }
+            if(userService.readOptional(order.getUser().getId()).isEmpty()) {
+                throw new BadRequestException("Unknown user!", ErrorCodes.ORDER_BAD_REQUEST);
+            }
+
             return dao.create(order);
-        } catch (DAOSQLException e) {
-            throw new ServiceException(e, ErrorCodes.ORDER_INTERNAL_ERROR);
-        }
+
     }
 
     @Override
     public Order read(int id) throws NotFoundException {
-        Order order = dao.read(id);
-        if (order == null) {
+        Optional<Order> orderOptional = readOptional(id);
+        if (orderOptional.isEmpty()) {
             throw new NotFoundException("Requested resource not found(id = " + id + ")!",
                     ErrorCodes.ORDER_NOT_FOUND);
         } else {
-            return order;
+            return orderOptional.get();
         }
+    }
+
+    @Override
+    public Optional<Order> readOptional(int id) {
+        return Optional.ofNullable(dao.read(id));
     }
 
     @Override
@@ -102,7 +129,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> read(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException {
-        OrderFinder finder = new OrderFinder();
+        OrderFinder finder = new OrderFinder(dao);
         for (String key : params.keySet()) {
             if (org.apache.commons.collections4.CollectionUtils.isEmpty(params.get(key))) {
                 throw new BadRequestException("Empty parameter!", ErrorCodes.ORDER_BAD_REQUEST);

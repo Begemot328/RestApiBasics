@@ -1,13 +1,12 @@
 package com.epam.esm.persistence.constants;
 
 /**
- * Tag SQL queries enum
+ * Tag SQL queries enum.
  *
  * @author Yury Zmushko
  * @version 1.0
  */
 public enum TagQueries {
-    WHERE_ID(" WHERE id = ?"),
     SELECT_MOST_POPULAR_TAG("SELECT count(tag_id), name, t.id\n" +
             "FROM certificates.orders\n" +
             " LEFT JOIN certificates.certificate_tag ct ON orders.certificate_id = ct.certificate_id\n" +
@@ -15,7 +14,7 @@ public enum TagQueries {
             " JOIN (SELECT user_id, amount_sum\n" +
             " FROM (SELECT user_id, sum(amount) AS amount_sum\n" +
             " FROM certificates.orders\n" +
-            " GROUP BY user_id) AS t\n" +
+            " GROUP BY user_id) AS t2\n" +
             " ORDER BY amount_sum DESC\n" +
             " LIMIT 1) AS t1 ON t1.user_id = orders.user_id\n" +
             " GROUP BY tag_id\n" +
@@ -27,21 +26,21 @@ public enum TagQueries {
     DELETE_TAG("DELETE FROM certificates.tag  " +
             "WHERE id = ?;");
 
-    private String value;
+    private final String value;
 
     /**
-     * Default constructor
+     * Default constructor.
      *
-     * @param value column name
+     * @param value Column name.
      */
     TagQueries(String value) {
         this.value = value;
     }
 
     /**
-     * Value getter
+     * Value getter.
      *
-     * @return query String line
+     * @return Query String line.
      */
     public String getValue() {
         return value;

@@ -2,58 +2,69 @@ package com.epam.esm.persistence.dao;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
+import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.order.OrderDAOImpl;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.epam.esm.persistence.mapper.OrderMapper;
-import com.epam.esm.persistence.util.OrderFinder;
+import com.epam.esm.persistence.util.finder.impl.OrderFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@SpringBootTest(classes = PersistenceTestConfig.class)
+@Transactional
+@Sql({"/SQL/test_db.sql"})
 public class OrderDaoTests {
-    private static OrderDAOImpl orderDao;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Autowired
+    private OrderDAOImpl orderDao;
 
     private Order order;
-    private Certificate certificate;
-
-    public static DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("classpath:SQL/test_db.sql").build();
-    }
 
     @BeforeEach
     void init() {
-        JdbcTemplate template = new JdbcTemplate(dataSource());
-        orderDao = new OrderDAOImpl(template, new OrderMapper());
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        certificate = new Certificate("nastolka.by",
+        Certificate certificate = new Certificate("nastolka.by",
                 BigDecimal.valueOf(40.1), 50);
         certificate.setDescription("board games certificate");
         certificate.setCreateDate(LocalDateTime.parse("2021-01-22 09:20:11", formatter));
         certificate.setLastUpdateDate(LocalDateTime.parse("2021-03-22 09:20:11", formatter));
         certificate.setId(2);
+
+        Tag tag1 = new Tag("games");
+        tag1.setId(2);
+        Tag tag2 = new Tag("bicycle");
+        tag2.setId(5);
+        certificate.setTags(Arrays.asList(tag1, tag2));
+
         User user = new User("Ivan", "Ivanov", "Ivanov", "qwerty");
         user.setId(2);
         order = new Order(certificate, user, BigDecimal.valueOf(150.0), 1,
                 LocalDateTime.parse("2021-03-22 09:20:11", formatter));
         order.setId(1);
-
     }
 
     @Test
@@ -63,7 +74,8 @@ public class OrderDaoTests {
 
     @Test
     void read_returnOrder() {
-        assertEquals(orderDao.read(1), order);
+        Order persistentOrder = orderDao.read(1);
+        assertEquals(persistentOrder, order);
     }
 
     @Test
@@ -78,7 +90,7 @@ public class OrderDaoTests {
 
     @Test
     @Transactional
-    void create_createOrder() throws DAOSQLException {
+    void create_createOrder() {
         int size = orderDao.readAll().size();
         order.setId(0);
 
@@ -90,21 +102,21 @@ public class OrderDaoTests {
     void create_nullUser_throwException() {
         order.setUser(null);
 
-        assertThrows(NullPointerException.class, () -> orderDao.create(order));
+        assertThrows(DataAccessException.class, () -> orderDao.create(order));
     }
 
     @Test
     void create_nullCertificate_throwException() {
         order.setUser(null);
 
-        assertThrows(NullPointerException.class, () -> orderDao.create(order));
+        assertThrows(DataAccessException.class, () -> orderDao.create(order));
     }
 
     @Test
     void create_nullDate_throwException() {
         order.setPurchaseDate(null);
 
-        assertThrows(NullPointerException.class, () -> orderDao.create(order));
+        assertThrows(DataAccessException.class, () -> orderDao.create(order));
     }
 
     @Test
@@ -116,9 +128,15 @@ public class OrderDaoTests {
 
     @Test
     void readBy_readByName_returnOrders() {
-        OrderFinder finderMock = mock(OrderFinder.class);
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Order> query = builder.createQuery(Order.class);
+        Root<Order> root = query.from(Order.class);
+        query = query.select(root);
+        query.where(builder.equal(root.join("certificate").get("id"), "2"));
 
-        when(finderMock.getQuery()).thenReturn(" WHERE user_id = 2");
+        OrderFinder finderMock = mock(OrderFinder.class);
+        when(finderMock.getQuery()).thenReturn(query);
+
         assertEquals(Collections.singletonList(order), orderDao.readBy(finderMock));
     }
 
@@ -131,10 +149,10 @@ public class OrderDaoTests {
     }
 
     @Test
-    void delete_nonExistingOrder_doNothing() {
+    void delete_nonExistingOrder_throwDataAccessException() {
         int size = orderDao.readAll().size();
 
-        orderDao.delete(1000);
+        assertThrows(DataAccessException.class, () -> orderDao.delete(1000));
         assertEquals(orderDao.readAll().size(), size);
     }
 }

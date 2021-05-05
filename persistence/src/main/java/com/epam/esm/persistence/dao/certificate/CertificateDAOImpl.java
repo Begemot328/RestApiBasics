@@ -1,128 +1,89 @@
 package com.epam.esm.persistence.dao.certificate;
 
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.persistence.constants.CertificateQueries;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.epam.esm.persistence.mapper.CertificateMapper;
-import com.epam.esm.persistence.util.EntityFinder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.sql.Types;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.Metamodel;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+/**
+ * Certificate DAO implementation.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Repository
 public class CertificateDAOImpl implements CertificateDAO {
-    private final JdbcTemplate template;
-    private final CertificateMapper certificateMapper;
 
-    @Autowired
-    public CertificateDAOImpl(JdbcTemplate template, CertificateMapper certificateMapper) {
-        this.template = template;
-        this.certificateMapper = certificateMapper;
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    /**
+     * Default constructor.
+     */
+    public CertificateDAOImpl(){
     }
 
     @Override
-    public Certificate create(Certificate certificate) throws DAOSQLException {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        template.update(connection -> {
-            PreparedStatement ps = connection
-                    .prepareStatement(CertificateQueries.INSERT_CERTIFICATE.getValue(),
-                            Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, certificate.getName());
-            ps.setString(2, certificate.getDescription());
-            ps.setBigDecimal(3, certificate.getPrice());
-            ps.setInt(4, certificate.getDuration());
-            ps.setTimestamp(5, Timestamp.valueOf(certificate.getCreateDate()));
-            ps.setTimestamp(6, Timestamp.valueOf(certificate.getLastUpdateDate()));
-            return ps;
-        }, keyHolder);
-        if (keyHolder.getKey() == null) {
-            throw new DAOSQLException("empty keyholder");
-        }
-        certificate.setId(keyHolder.getKey().intValue());
+    public Certificate create(Certificate certificate) {
+        entityManager.persist(certificate);
         return certificate;
     }
 
     @Override
     public Certificate read(int id) {
-        try {
-            return template.queryForObject(CertificateQueries.SELECT_FROM_CERTIFICATE.getValue()
-                            .concat(CertificateQueries.WHERE_ID.getValue()),
-                    certificateMapper, id);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return entityManager.find(Certificate.class, id);
     }
 
     @Override
     public Certificate update(Certificate certificate) {
-        template.update(CertificateQueries.UPDATE_CERTIFICATE.getValue(), certificate.getName(),
-                certificate.getDescription(),
-                certificate.getPrice(),
-                certificate.getDuration(),
-                Timestamp.valueOf(certificate.getLastUpdateDate()),
-                certificate.getId());
-        return read(certificate.getId());
+        return entityManager.merge(certificate);
     }
 
     @Override
     public void delete(int id) {
-        template.update(CertificateQueries.DELETE_CERTIFICATE.getValue(), id);
+        entityManager.remove(read(id));
     }
 
     @Override
     public List<Certificate> readAll() {
-        return template.query(CertificateQueries.SELECT_FROM_CERTIFICATE.getValue(), certificateMapper);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Certificate> criteriaQuery = criteriaBuilder.createQuery(Certificate.class);
+        Root<Certificate> rootEntry = criteriaQuery.from(Certificate.class);
+        CriteriaQuery<Certificate> all = criteriaQuery.select(rootEntry);
+        TypedQuery<Certificate> allQuery = entityManager.createQuery(all);
+        return allQuery.getResultList();
     }
 
     @Override
-    public void addCertificateTag(int certificateId, int tagId) {
-        template.update(CertificateQueries.ADD_CERTIFICATE_TAG.getValue(),
-                certificateId, tagId);
+    public CriteriaBuilder getBuilder() {
+        return entityManager.getCriteriaBuilder();
     }
 
     @Override
-    public void deleteCertificateTag(int certificateId, int tagId) {
-        template.update(CertificateQueries.DELETE_CERTIFICATE_TAG.getValue(),
-                certificateId, tagId);
-    }
-
-
-    public boolean isTagCertificateTied(int certificateId, int tagId) {
-        return template.queryForObject(CertificateQueries.COUNT_CERTIFICATE_TAG.getValue(),
-                new Object[]{tagId, certificateId},
-                new int[]{Types.INTEGER, Types.INTEGER},
-                Integer.class) != 0;
+    public Metamodel getMetamodel() {
+        return entityManager.getMetamodel();
     }
 
     @Override
     public List<Certificate> readBy(EntityFinder<Certificate> finder) {
-        Stream<Certificate> certificateStream = template.queryForStream(
-                CertificateQueries.SELECT_FROM_CERTIFICATE_TAG.getValue()
-                        .concat(finder.getQuery()),
-                certificateMapper);
-        List<Certificate> certificates = certificateStream.distinct().collect(Collectors.toList());
-        certificateStream.close();
-        return certificates;
+        TypedQuery<Certificate> allQuery = entityManager.createQuery(finder.getQuery());
+        allQuery.setFirstResult(finder.getOffset());
+        if(finder.getLimit() > 0) {
+            allQuery.setMaxResults(finder.getLimit());
+        }
+        return allQuery.getResultList();
     }
 
     @Override
     public List<Certificate> readBy(String query) {
-        Stream<Certificate> certificateStream = template.queryForStream(query,
-                certificateMapper);
-        List<Certificate> certificates = certificateStream.distinct().collect(Collectors.toList());
-        certificateStream.close();
-        return certificates;
+        return entityManager.createQuery(query, Certificate.class).getResultList();
     }
 }

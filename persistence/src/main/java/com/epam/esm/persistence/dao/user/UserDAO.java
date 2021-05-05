@@ -2,13 +2,12 @@ package com.epam.esm.persistence.dao.user;
 
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.EntityDAO;
-import com.epam.esm.persistence.util.EntityFinder;
 
-import java.util.List;
-
+/**
+ * User DAO interface.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public interface UserDAO extends EntityDAO<User> {
-
-    String getPassword(String login);
-
-    List<User> readBy(EntityFinder<User> finder);
 }

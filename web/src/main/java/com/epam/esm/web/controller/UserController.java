@@ -6,7 +6,6 @@ import com.epam.esm.model.entity.User;
 import com.epam.esm.service.constants.OrderSearchParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
-import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.certificate.CertificateService;
 import com.epam.esm.service.service.order.OrderService;
@@ -20,13 +19,17 @@ import com.epam.esm.web.dto.user.UserDTOMapper;
 import com.epam.esm.web.util.Paginator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
@@ -67,16 +70,9 @@ public class UserController {
         }
         CollectionModel<UserDTO> userDTOs = userDTOMapper.toUserDTOList(
                 users);
-        Link link = linkTo(methodOn(this.getClass()).readUsers(params)).withRel("users");
-        userDTOs.add(link);
-        Paginator paginator = new Paginator(params);
+        userDTOs.add(linkTo(methodOn(this.getClass()).readUsers(params)).withRel("users"));
 
-        if (paginator.isLimited(params)) {
-            userDTOs.add(linkTo(methodOn(this.getClass()).readUsers(
-                    paginator.nextPage(params))).withRel("nextPage"));
-            userDTOs.add(linkTo(methodOn(this.getClass()).readUsers(
-                    paginator.previousPage(params))).withRel("previousPage"));
-        }
+        paginateUsers(params, userDTOs);
 
         return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
@@ -92,16 +88,10 @@ public class UserController {
         }
         CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(
                 orders);
-        Link link = linkTo(methodOn(this.getClass()).readAllOrders(params)).withRel("orders");
-        orderDTOs.add(link);
-        Paginator paginator = new Paginator(params);
+        orderDTOs.add(linkTo(methodOn(this.getClass()).readAllOrders(params)).withRel("orders"));
 
-        if (paginator.isLimited(params)) {
-            orderDTOs.add(linkTo(methodOn(this.getClass()).readAllOrders(
-                    paginator.nextPage(params))).withRel("nextPage"));
-            orderDTOs.add(linkTo(methodOn(this.getClass()).readAllOrders(
-                    paginator.previousPage(params))).withRel("previousPage"));
-        }
+        paginateOrders(params, orderDTOs);
+
         return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
     }
 
@@ -121,16 +111,10 @@ public class UserController {
         List<Order> orders = orderService.read(params);
         CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(
                 orders);
-        Link link = linkTo(methodOn(this.getClass()).readUsersOrders(id, params)).withRel("tags");
-        orderDTOs.add(link);
-        Paginator paginator = new Paginator(params);
+        orderDTOs.add(linkTo(methodOn(this.getClass()).readUsersOrders(id, params)).withRel("tags"));
 
-        if(paginator.isLimited(params)) {
-            orderDTOs.add(linkTo(methodOn(this.getClass()).readUsersOrders(
-                    id, paginator.nextPage(params))).withRel("nextPage"));
-            orderDTOs.add(linkTo(methodOn(this.getClass()).readUsersOrders(
-                    id, paginator.previousPage(params))).withRel("previousPage"));
-        }
+        paginateOrders(params, orderDTOs);
+
         return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
     }
 
@@ -150,14 +134,38 @@ public class UserController {
 
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
-            value = "/{id}")
+            value = "/users/{id}")
     public ResponseEntity<?> createOrder(@PathVariable(value = "id") int id,
                                          @RequestParam int certificateId,
                                          @RequestParam int quantity)
-            throws NotFoundException, ServiceException, ValidationException {
+            throws NotFoundException, ValidationException, BadRequestException {
         User user = userService.read(id);
         Certificate certificate = certificateService.read(certificateId);
         Order order = orderService.createOrder(certificate, user, quantity);
         return new ResponseEntity<>(orderDTOMapper.toOrderDTO(order), HttpStatus.OK);
+    }
+
+    private void paginateOrders(MultiValueMap<String, String> params, CollectionModel collectionModel)
+            throws NotFoundException, BadRequestException {
+        Paginator paginator = new Paginator(params);
+
+        if(paginator.isLimited(params)) {
+            collectionModel.add(linkTo(methodOn(this.getClass()).readAllOrders(
+                    paginator.nextPage(params))).withRel("nextPage"));
+            collectionModel.add(linkTo(methodOn(this.getClass()).readAllOrders(
+                    paginator.previousPage(params))).withRel("previousPage"));
+        }
+    }
+
+    private void paginateUsers(MultiValueMap<String, String> params, CollectionModel collectionModel)
+            throws NotFoundException, BadRequestException {
+        Paginator paginator = new Paginator(params);
+
+        if(paginator.isLimited(params)) {
+            collectionModel.add(linkTo(methodOn(this.getClass()).readUsers(
+                    paginator.nextPage(params))).withRel("nextPage"));
+            collectionModel.add(linkTo(methodOn(this.getClass()).readUsers(
+                    paginator.previousPage(params))).withRel("previousPage"));
+        }
     }
 }

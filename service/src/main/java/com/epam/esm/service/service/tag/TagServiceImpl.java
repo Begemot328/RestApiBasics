@@ -2,32 +2,33 @@ package com.epam.esm.service.service.tag;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.tag.TagDAO;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.epam.esm.persistence.util.EntityFinder;
-import com.epam.esm.persistence.util.SortDirection;
-import com.epam.esm.persistence.util.TagFinder;
+import com.epam.esm.persistence.util.finder.EntityFinder;
+import com.epam.esm.persistence.util.finder.SortDirection;
+import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.constants.TagSearchParameters;
 import com.epam.esm.service.constants.TagSortingParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
-import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 @Service
 public class TagServiceImpl implements TagService {
-    private TagDAO dao;
-    private EntityValidator<Tag> validator;
+    private final TagDAO dao;
+    private final EntityValidator<Tag> validator;
 
     @Autowired
     public TagServiceImpl(TagDAO dao,
@@ -37,29 +38,34 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag create(Tag tag) throws ServiceException {
+    @Transactional
+    public Tag create(Tag tag) throws ValidationException, BadRequestException {
+        validator.validate(tag);
         try {
-            validator.validate(tag);
             return dao.create(tag);
-        } catch (DAOSQLException e) {
-            throw new ServiceException(e, ErrorCodes.TAG_INTERNAL_ERROR);
-        } catch (ValidationException e) {
-            throw new ServiceException(e, ErrorCodes.TAG_VALIDATION_EXCEPTION);
+        } catch (DataIntegrityViolationException e) {
+            throw new BadRequestException(e, ErrorCodes.TAG_BAD_REQUEST);
         }
     }
 
     @Override
     public Tag read(int id) throws NotFoundException {
-        Tag tag = dao.read(id);
-        if (tag == null) {
+        Optional<Tag> tagOptional = readOptional(id);
+        if (tagOptional.isEmpty()) {
             throw new NotFoundException("Requested resource not found(id = " + id + ")!",
                     ErrorCodes.TAG_NOT_FOUND);
         } else {
-            return tag;
+            return tagOptional.get();
         }
     }
 
     @Override
+    public Optional<Tag> readOptional(int id) {
+        return Optional.ofNullable(dao.read(id));
+    }
+
+    @Override
+    @Transactional
     public void delete(int id) throws BadRequestException {
         if (dao.read(id) == null) {
             throw new BadRequestException("Entity does not exist", ErrorCodes.TAG_BAD_REQUEST);
@@ -68,6 +74,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public Tag update(Tag tag) {
         throw new UnsupportedOperationException("Update operation for tag is unavailable");
     }
@@ -83,6 +90,7 @@ public class TagServiceImpl implements TagService {
         }
     }
 
+
     private List<Tag> readBy(EntityFinder<Tag> entityFinder) throws NotFoundException {
         List<Tag> tags = dao.readBy(entityFinder);
         if (CollectionUtils.isEmpty(tags)) {
@@ -96,15 +104,8 @@ public class TagServiceImpl implements TagService {
     private void parseFindParameter(TagFinder finder, String parameterString, List<String> list) {
         TagSearchParameters parameter =
                 TagSearchParameters.getEntryByParameter(parameterString);
-        switch (parameter) {
-            case NAME:
-                addToFinder(finder::findByName, list);
-                break;
-            case CERTIFICATE_ID:
-                if (CollectionUtils.isNotEmpty(list)) {
-                    finder.findByCertificate(Integer.parseInt(list.get(0)));
-                }
-                break;
+        if (parameter == TagSearchParameters.NAME) {
+            addToFinder(finder::findByName, list);
         }
     }
 
@@ -122,7 +123,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> read(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException {
-        TagFinder finder = new TagFinder();
+        TagFinder finder = new TagFinder(dao);
         for (String key : params.keySet()) {
             if (CollectionUtils.isEmpty(params.get(key))) {
                 throw new BadRequestException("Empty parameter!", ErrorCodes.TAG_BAD_REQUEST);

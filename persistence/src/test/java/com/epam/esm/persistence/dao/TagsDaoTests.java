@@ -1,40 +1,45 @@
 package com.epam.esm.persistence.dao;
 
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.constants.TagColumns;
 import com.epam.esm.persistence.dao.tag.TagDAOImpl;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.epam.esm.persistence.mapper.TagMapper;
-import com.epam.esm.persistence.util.TagFinder;
+import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@SpringBootTest(classes = PersistenceTestConfig.class)
+@Transactional
+@Sql({"/SQL/test_db.sql"})
 public class TagsDaoTests {
-    private static TagDAOImpl tagsDao;
     private Tag tag;
 
-    public static DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("classpath:SQL/test_db.sql").build();
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Autowired
+    private TagDAOImpl tagsDao;
 
     @BeforeEach
     void init() {
-        JdbcTemplate template = new JdbcTemplate(dataSource());
-        tagsDao = new TagDAOImpl(template, new TagMapper());
         tag = new Tag("sport");
-
     }
 
     @Test
@@ -59,7 +64,7 @@ public class TagsDaoTests {
     }
 
     @Test
-    void create_createTag() throws DAOSQLException {
+    void create_createTag() {
         tag = new Tag("new");
         int size = tagsDao.readAll().size();
 
@@ -82,8 +87,15 @@ public class TagsDaoTests {
 
     @Test
     void readBy_readByName_returnTags() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
+        Root<Tag> tagRoot = query.from(Tag.class);
+        query = query.select(tagRoot);
+        query.where(builder.equal(tagRoot.get(TagColumns.NAME.getValue()), "books"));
+
         TagFinder finderMock = mock(TagFinder.class);
-        when(finderMock.getQuery()).thenReturn(" WHERE NAME = 'books'");
+        when(finderMock.getQuery()).thenReturn(query);
+
         tag = new Tag("books");
         tag.setId(3);
         assertEquals(Collections.singletonList(tag), tagsDao.readBy(finderMock));
@@ -98,10 +110,10 @@ public class TagsDaoTests {
     }
 
     @Test
-    void delete_nonExistingTag_doNothing() {
+    void delete_nonExistingTag_throwDataAccessException() {
         int size = tagsDao.readAll().size();
 
-        tagsDao.delete(1000);
+        assertThrows(DataAccessException.class, () -> tagsDao.delete(1000));
         assertEquals(tagsDao.readAll().size(), size);
     }
 

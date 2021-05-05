@@ -2,8 +2,8 @@ package com.epam.esm.service.service.user;
 
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.user.UserDAO;
-import com.epam.esm.persistence.util.EntityFinder;
-import com.epam.esm.persistence.util.UserFinder;
+import com.epam.esm.persistence.util.finder.EntityFinder;
+import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
@@ -16,11 +16,18 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * {@link User} service implementation.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Service
 public class UserServiceImpl implements UserService {
-    private UserDAO dao;
-    private EntityValidator<User> validator;
+    private final UserDAO dao;
+    private final EntityValidator<User> validator;
 
     @Autowired
     public UserServiceImpl(UserDAO dao,
@@ -37,13 +44,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User read(int id) throws NotFoundException {
-        User user = dao.read(id);
-        if (user == null) {
+        Optional<User> userOptional = readOptional(id);
+        if (userOptional.isEmpty()) {
             throw new NotFoundException("Requested resource not found(id = " + id + ")!",
                     ErrorCodes.USER_NOT_FOUND);
         } else {
-            return user;
+            return userOptional.get();
         }
+    }
+
+    @Override
+    public Optional<User> readOptional(int id) {
+        return Optional.ofNullable(dao.read(id));
     }
 
     @Override
@@ -70,7 +82,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> read(MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
-        UserFinder finder = new UserFinder();
+        UserFinder finder = new UserFinder(dao);
         for (String key : params.keySet()) {
             if (org.apache.commons.collections4.CollectionUtils.isEmpty(params.get(key))) {
                 throw new BadRequestException("Empty parameter!", ErrorCodes.USER_BAD_REQUEST);

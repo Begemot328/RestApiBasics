@@ -8,7 +8,7 @@ certificates;
 create table tag
 (
     id    int primary key auto_increment,
-    name  varchar(40) not null,
+    name  varchar(40) not null unique,
 
     index certificate_id_index (id),
     index certificate_name_index ( name)
@@ -122,8 +122,8 @@ create table if not exists user
     last_name varchar (40) not null,
     index user_id_index (id),
     index user_first_name_index (first_name),
-    index user_last_name_index (last_name),
-    foreign key(id) references user(id) on update cascade on DELETE cascade);
+    index user_last_name_index (last_name)
+    );
 
 drop table if exists account;
 
@@ -158,9 +158,9 @@ create table if not exists orders
     index order_certificate_id_index(certificate_id),
     index order_current_price_index(amount),
     index order_purchase_date_index(purchase_date),
-    foreign key(user_id) references user(id) on update cascade  on delete cascade,
-    foreign key(user_id) references account(id)  on update cascade on delete cascade,
-    foreign key(certificate_id) references certificate(id) on update cascade on delete cascade
+    foreign key(user_id) references user(id) on update cascade,
+    foreign key(user_id) references account(id)  on update cascade,
+    foreign key(certificate_id) references certificate(id) on update cascade
     );
 
 drop view if exists order_full;
@@ -213,8 +213,6 @@ insert
 orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (3, 3, '2021-04-22 19:21:21', 12, 2);
 insert
 orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (2, 3, '2021-03-22 09:20:11', 150, 1);
-insert
-orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (2, 6, '2021-04-22 19:21:21', 22, 1);
 insert
 orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (1, 2, '2021-03-22 09:20:11', 10, 2);
 insert

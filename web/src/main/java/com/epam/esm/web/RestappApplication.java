@@ -7,6 +7,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+/**
+ * Spring boot application class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @SpringBootApplication(scanBasePackages = "com.epam.esm")
 public class RestappApplication {
 
@@ -14,6 +20,11 @@ public class RestappApplication {
         SpringApplication.run(RestappApplication.class, args);
     }
 
+    /**
+     * {@link ModelMapper} Bean creator.
+     *
+     * @return {@link ModelMapper} Bean.
+     */
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();

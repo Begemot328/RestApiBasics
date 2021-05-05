@@ -1,17 +1,25 @@
 package test.com.epam.esm.service.service;
 
+import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.user.UserDAOImpl;
-import com.epam.esm.persistence.util.UserFinder;
+import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.service.user.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -19,10 +27,19 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@SpringBootTest(classes = ServiceTestConfig.class)
+@Transactional
 public class UserServiceImplTests {
-    private UserDAOImpl userDaoMock = mock(UserDAOImpl.class);
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    private final UserDAOImpl userDaoMock = mock(UserDAOImpl.class);
     private UserServiceImpl service;
     private User user1;
     private User user2;
@@ -35,6 +52,10 @@ public class UserServiceImplTests {
 
     @BeforeEach
     void init() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
+        Root<Tag> tagRoot = query.from(Tag.class);
+        query = query.select(tagRoot);
 
         user1 = new User("Yury", "Zmushko", "root", "qwerty");
         user1.setId(1);
@@ -47,6 +68,7 @@ public class UserServiceImplTests {
         when(userDaoMock.read(1)).thenReturn(user1);
         when(userDaoMock.read(2)).thenReturn(user2);
         when(userDaoMock.readBy(any(UserFinder.class))).thenReturn(shortList);
+        when(userDaoMock.getBuilder()).thenReturn(builder);
 
         service = new UserServiceImpl(userDaoMock, null);
     }
@@ -79,9 +101,9 @@ public class UserServiceImplTests {
     @Test
     public void read_parsePaginationLimit_invokeFinderLimit()
             throws NotFoundException, BadRequestException {
-        UserFinder finder = new UserFinder();
+        UserFinder finder = new UserFinder(userDaoMock);
         finder.limit(1);
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
         service.read(params);
@@ -89,10 +111,11 @@ public class UserServiceImplTests {
     }
 
     @Test
-    public void read_parsePaginationLimit_invokeFinderOffset() throws NotFoundException, BadRequestException {
-        UserFinder finder = new UserFinder();
+    public void read_parsePaginationLimit_invokeFinderOffset()
+            throws NotFoundException, BadRequestException {
+        UserFinder finder = new UserFinder(userDaoMock);
         finder.offset(1);
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
         service.read(params);
@@ -101,9 +124,9 @@ public class UserServiceImplTests {
 
     @Test
     public void read_badParameter_ThrowsBadRequestException() {
-        UserFinder finder = new UserFinder();
+        UserFinder finder = new UserFinder(userDaoMock);
         finder.offset(1);
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put("unknown", Collections.singletonList("1"));
         assertThrows(BadRequestException.class, () -> service.read(params));
@@ -111,9 +134,9 @@ public class UserServiceImplTests {
 
     @Test
     public void read_badParameterValue_ThrowsBadRequestException() {
-        UserFinder finder = new UserFinder();
+        UserFinder finder = new UserFinder(userDaoMock);
         finder.offset(1);
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put("limit", Collections.singletonList("a"));
         assertThrows(BadRequestException.class, () -> service.read(params));

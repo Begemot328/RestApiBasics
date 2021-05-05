@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.constants;
 
 /**
- * Tag column names enum
+ * Order column names enum.
  *
  * @author Yury Zmushko
  * @version 1.0
@@ -18,9 +18,9 @@ public enum OrderColumns {
     private final int column;
 
     /**
-     * Default constructor
+     * Default constructor.
      *
-     * @param value column name
+     * @param value Column name.
      */
     OrderColumns(int column, String value) {
         this.value = value;
@@ -28,18 +28,18 @@ public enum OrderColumns {
     }
 
     /**
-     * Value getter
+     * Value getter.
      *
-     * @return number of the column
+     * @return Number of the column.
      */
     public int getColumn() {
         return column;
     }
 
     /**
-     * Value getter
+     * Value getter.
      *
-     * @return name of the column
+     * @return Name of the column.
      */
     public String getValue() {
         return value;

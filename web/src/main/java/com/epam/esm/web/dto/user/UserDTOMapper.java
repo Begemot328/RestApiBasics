@@ -18,7 +18,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class UserDTOMapper {
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
 
     @Autowired
     public UserDTOMapper(ModelMapper mapper) {

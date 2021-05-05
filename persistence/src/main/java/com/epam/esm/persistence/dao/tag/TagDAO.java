@@ -2,7 +2,7 @@ package com.epam.esm.persistence.dao.tag;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.EntityDAO;
-import com.epam.esm.persistence.util.EntityFinder;
+import com.epam.esm.persistence.util.finder.EntityFinder;
 
 import java.util.List;
 
@@ -14,14 +14,17 @@ import java.util.List;
  */
 public interface TagDAO extends EntityDAO<Tag> {
     /**
-     * Find using {@link EntityFinder} method
+     * Find using {@link EntityFinder} method.
      *
-     * @param finder {@link EntityFinder} to obtain search parameters
-     * @return {@link java.util.ArrayList}  of {@link Tag} objects
+     * @param query {@link String} query to obtain entities.
+     * @return {@link java.util.ArrayList}  of {@link Tag} objects.
      */
-    List<Tag> readBy(EntityFinder<Tag> finder);
-
     List<Tag> readBy(String query);
 
+    /**
+     * Find mostly used by the most contributing user tag.
+     *
+     * @return {@link Tag} object.
+     */
     Tag readMostlyUsedTag();
 }

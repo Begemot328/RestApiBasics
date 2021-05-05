@@ -195,6 +195,6 @@ insert into
 insert into
     orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (3, 3, '2021-04-22 19:21:21', 12, 2);
 insert into
-    orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (1, 2, '2021-03-22 09:20:11', 10, 2);
+    orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (1, 3, '2021-03-22 09:20:11', 10, 2);
 insert into
     orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (4, 5, '2021-04-22 19:21:21', 11, 1);
