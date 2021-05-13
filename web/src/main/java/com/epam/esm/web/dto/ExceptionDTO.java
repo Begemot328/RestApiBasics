@@ -6,7 +6,7 @@ public class ExceptionDTO {
     private String errorMessage;
     private int errorCode;
 
-    private ExceptionDTO() {
+    public ExceptionDTO() {
     }
 
     public ExceptionDTO(Exception e, int errorCode) {
@@ -17,5 +17,21 @@ public class ExceptionDTO {
     public ExceptionDTO(ServiceLayerException e) {
         this.errorMessage = e.getMessage();
         this.errorCode = e.getErrorCode();
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(int errorCode) {
+        this.errorCode = errorCode;
     }
 }
