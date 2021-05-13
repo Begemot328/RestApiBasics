@@ -3,6 +3,7 @@ package com.epam.esm.persistence.util.finder.impl;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Component;
  * @author Yury Zmushko
  * @version 2.0
  */
+
 @Component
+@Scope("prototype")
 public class UserFinder extends EntityFinder<User> {
 
     /**

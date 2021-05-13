@@ -16,6 +16,7 @@ import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,9 +122,15 @@ public class TagServiceImpl implements TagService {
         }
     }
 
+    @Lookup
+    @Override
+    public TagFinder getFinder() {
+        return null;
+    }
+
     @Override
     public List<Tag> read(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException {
-        TagFinder finder = new TagFinder(dao);
+        TagFinder finder = getFinder();
         for (String key : params.keySet()) {
             if (CollectionUtils.isEmpty(params.get(key))) {
                 throw new BadRequestException("Empty parameter!", ErrorCodes.TAG_BAD_REQUEST);

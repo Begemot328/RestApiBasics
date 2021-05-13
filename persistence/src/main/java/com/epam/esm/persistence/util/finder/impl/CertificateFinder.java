@@ -5,6 +5,7 @@ import com.epam.esm.persistence.constants.CertificateColumns;
 import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Component;
  * @author Yury Zmushko
  * @version 1.0
  */
+
 @Component
+@Scope("prototype")
 public class CertificateFinder extends EntityFinder<Certificate> {
 
     /**

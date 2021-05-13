@@ -2,6 +2,8 @@ package com.epam.esm.persistence.util.finder;
 
 import com.epam.esm.model.entity.CustomEntity;
 import com.epam.esm.persistence.dao.EntityDAO;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -21,6 +23,8 @@ import java.util.Objects;
  * @author Yury Zmushko
  * @version 1.0
  */
+@Component
+@Scope("prototype")
 public abstract class EntityFinder<T extends CustomEntity> {
     protected int limit = 0;
     protected int offset = 0;
@@ -48,6 +52,7 @@ public abstract class EntityFinder<T extends CustomEntity> {
      * @return Type of the class to search for.
      */
     protected abstract Class<T> getClassType();
+
 
     /**
      * Query getter.

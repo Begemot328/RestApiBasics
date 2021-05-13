@@ -3,6 +3,7 @@ package com.epam.esm.service.service.user;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.user.UserDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
+import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PaginationParameters;
@@ -10,6 +11,7 @@ import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.validator.EntityValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -79,10 +81,16 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Lookup
+    @Override
+    public UserFinder getFinder() {
+        return null;
+    }
+
     @Override
     public List<User> read(MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
-        UserFinder finder = new UserFinder(dao);
+        UserFinder finder = getFinder();
         for (String key : params.keySet()) {
             if (org.apache.commons.collections4.CollectionUtils.isEmpty(params.get(key))) {
                 throw new BadRequestException("Empty parameter!", ErrorCodes.USER_BAD_REQUEST);

@@ -5,6 +5,7 @@ import com.epam.esm.model.entity.Order;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.order.OrderDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
+import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
 import com.epam.esm.persistence.util.finder.impl.OrderFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.OrderSearchParameters;
@@ -15,6 +16,7 @@ import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.EntityService;
 import com.epam.esm.service.validator.EntityValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -127,9 +129,15 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Lookup
+    @Override
+    public OrderFinder getFinder() {
+        return null;
+    }
+
     @Override
     public List<Order> read(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException {
-        OrderFinder finder = new OrderFinder(dao);
+        OrderFinder finder = getFinder();
         for (String key : params.keySet()) {
             if (org.apache.commons.collections4.CollectionUtils.isEmpty(params.get(key))) {
                 throw new BadRequestException("Empty parameter!", ErrorCodes.ORDER_BAD_REQUEST);

@@ -6,6 +6,7 @@ import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.SortDirection;
 import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
+import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.service.constants.CertificateSearchParameters;
 import com.epam.esm.service.constants.CertificateSortingParameters;
 import com.epam.esm.service.constants.ErrorCodes;
@@ -18,6 +19,7 @@ import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -179,10 +181,16 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
+    @Lookup
+    @Override
+    public CertificateFinder getFinder() {
+        return null;
+    }
+
     @Override
     public List<Certificate> read(MultiValueMap<String, String> params)
             throws BadRequestException, NotFoundException {
-        CertificateFinder finder = new CertificateFinder(dao);
+        CertificateFinder finder = getFinder();
         for (String key : params.keySet()) {
             try {
                 if (CollectionUtils.isEmpty(params.get(key))) {

@@ -4,6 +4,8 @@ import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.TagColumns;
 import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * Search criteria class to find {@link Tag} objects.
@@ -12,6 +14,9 @@ import com.epam.esm.persistence.util.finder.EntityFinder;
  * @author Yury Zmushko
  * @version 2.0
  */
+
+@Component
+@Scope("prototype")
 public class TagFinder extends EntityFinder<Tag> {
 
     /**
