@@ -28,7 +28,7 @@ public class Order extends CustomEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "amount", nullable = false)
+    @Column(name = "amount", nullable = false, columnDefinition = "double")
     private BigDecimal orderAmount;
 
     @Column(name = "quantity", nullable = false)

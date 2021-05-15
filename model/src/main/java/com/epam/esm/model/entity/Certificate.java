@@ -27,10 +27,10 @@ public class Certificate extends CustomEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(columnDefinition = "text")
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "double")
     private BigDecimal price;
 
     @Column(nullable = false)

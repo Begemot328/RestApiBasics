@@ -151,7 +151,7 @@ create table if not exists orders
     user_id int not  null,
     certificate_id int not null,
     purchase_date timestamp not null,
-    amount float not null,
+    amount double not null,
     quantity    int not null,
     index order_id_index(id),
     index order_user_id_index(user_id),
