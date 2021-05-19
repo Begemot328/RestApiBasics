@@ -9,7 +9,7 @@ package com.epam.esm.persistence.util.finder;
 public enum SortDirection {
     ASC, DESC;
 
-    private final static String DESC_DIRECTION = "2";
+    private static final String DESC_DIRECTION = "2";
 
     /**
      * Sort direction parser.

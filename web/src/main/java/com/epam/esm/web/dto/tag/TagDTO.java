@@ -15,6 +15,7 @@ public class TagDTO extends RepresentationModel<CertificateDTO> {
     }
 
     public TagDTO() {
+        // Default constructor for Model mapper purposes.
     }
 
     public int getId() {

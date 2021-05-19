@@ -29,6 +29,7 @@ public class UserDAOImpl implements UserDAO {
      * Default constructor.
      */
     public UserDAOImpl() {
+        // Default constructor for Spring purposes.
     }
 
     @Override
@@ -38,7 +39,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User read(int id) {
+    public User getById(int id) {
         return entityManager.find(User.class, id);
     }
 
@@ -49,11 +50,11 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void delete(int id) {
-        entityManager.remove(read(id));
+        entityManager.remove(getById(id));
     }
 
     @Override
-    public List<User> readAll() {
+    public List<User> findAll() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> rootEntry = criteriaQuery.from(User.class);
@@ -63,7 +64,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<User> readBy(EntityFinder<User> finder) {
+    public List<User> findByParameters(EntityFinder<User> finder) {
         TypedQuery<User> allQuery = entityManager.createQuery(finder.getQuery());
         allQuery.setFirstResult(finder.getOffset());
         if(finder.getLimit() > 0) {

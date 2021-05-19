@@ -29,6 +29,7 @@ public class OrderDAOImpl implements OrderDAO {
      * Default constructor.
      */
     public OrderDAOImpl() {
+        // Default constructor for Spring purposes.
     }
 
     @Override
@@ -38,7 +39,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public Order read(int id) {
+    public Order getById(int id) {
         return entityManager.find(Order.class, id);
     }
 
@@ -49,11 +50,11 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public void delete(int id) {
-        entityManager.remove(read(id));
+        entityManager.remove(getById(id));
     }
 
     @Override
-    public List<Order> readAll() {
+    public List<Order> findAll() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
         Root<Order> rootEntry = criteriaQuery.from(Order.class);
@@ -63,7 +64,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public List<Order> readBy(EntityFinder<Order> finder) {
+    public List<Order> findByParameters(EntityFinder<Order> finder) {
         TypedQuery<Order> allQuery = entityManager.createQuery(finder.getQuery());
         allQuery.setFirstResult(finder.getOffset());
         if(finder.getLimit() > 0) {

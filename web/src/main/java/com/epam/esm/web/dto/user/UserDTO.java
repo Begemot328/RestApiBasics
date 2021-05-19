@@ -5,6 +5,7 @@ import org.springframework.hateoas.RepresentationModel;
 import java.util.Objects;
 
 public class UserDTO extends RepresentationModel<UserDTO> {
+    private int id;
     private String firstName;
     private String lastName;
     private String login;
@@ -16,6 +17,15 @@ public class UserDTO extends RepresentationModel<UserDTO> {
     }
 
     public UserDTO() {
+        // Default constructor for Model mapper purposes.
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {

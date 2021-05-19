@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -55,20 +56,19 @@ public class TagServiceImpl implements TagService {
         if (tagOptional.isEmpty()) {
             throw new NotFoundException("Requested resource not found(id = " + id + ")!",
                     ErrorCodes.TAG_NOT_FOUND);
-        } else {
-            return tagOptional.get();
         }
+        return tagOptional.get();
     }
 
     @Override
     public Optional<Tag> readOptional(int id) {
-        return Optional.ofNullable(dao.read(id));
+        return Optional.ofNullable(dao.getById(id));
     }
 
     @Override
     @Transactional
     public void delete(int id) throws BadRequestException {
-        if (dao.read(id) == null) {
+        if (dao.getById(id) == null) {
             throw new BadRequestException("Entity does not exist", ErrorCodes.TAG_BAD_REQUEST);
         }
         dao.delete(id);
@@ -82,7 +82,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> readAll() throws NotFoundException {
-        List<Tag> tags = dao.readAll();
+        List<Tag> tags = dao.findAll();
         if (CollectionUtils.isEmpty(tags)) {
             throw new NotFoundException("No tags found!",
                     ErrorCodes.TAG_NOT_FOUND);
@@ -91,9 +91,8 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-
     private List<Tag> readBy(EntityFinder<Tag> entityFinder) throws NotFoundException {
-        List<Tag> tags = dao.readBy(entityFinder);
+        List<Tag> tags = dao.findByParameters(entityFinder);
         if (CollectionUtils.isEmpty(tags)) {
             throw new NotFoundException("Requested resource not found!",
                     ErrorCodes.TAG_NOT_FOUND);
@@ -131,19 +130,10 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> read(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException {
         TagFinder finder = getFinder();
-        for (String key : params.keySet()) {
-            if (CollectionUtils.isEmpty(params.get(key))) {
-                throw new BadRequestException("Empty parameter!", ErrorCodes.TAG_BAD_REQUEST);
-            }
+        for (Map.Entry<String, List<String>> entry : params.entrySet()) {
             try {
-                if (key.contains("sort")) {
-                    finder.sortBy(TagSortingParameters.getEntryByParameter(key).getValue(),
-                            SortDirection.parseAscDesc(params.get(key).get(0)));
-                } else if (PaginationParameters.contains(key)) {
-                    parsePaginationParameter(finder, key, params.get(key));
-                } else {
-                    parseFindParameter(finder, key, params.get(key));
-                }
+                validateParameterValues(entry.getValue());
+                parseParameter(finder, entry.getKey(), entry.getValue());
             } catch (IllegalArgumentException e) {
                 throw new BadRequestException(e, ErrorCodes.TAG_BAD_REQUEST);
             }
@@ -151,21 +141,42 @@ public class TagServiceImpl implements TagService {
         return readBy(finder);
     }
 
-    private void parsePaginationParameter(EntityFinder finder, String parameterString, List<String> list) {
-        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterString);
+    private void parseParameter(TagFinder finder, String parameterName, List<String> parameterValues) {
+        if (parameterName.contains("sort")) {
+            parseSortParameter(finder, parameterName, parameterValues);
+        } else if (PaginationParameters.contains(parameterName)) {
+            parsePaginationParameter(finder, parameterName, parameterValues);
+        } else {
+            parseFindParameter(finder, parameterName, parameterValues);
+        }
+    }
+
+    private void parseSortParameter(TagFinder finder, String parameterName, List<String> parameterValues) {
+        finder.sortBy(TagSortingParameters.getEntryByParameter(parameterName).getValue(),
+                SortDirection.parseAscDesc(parameterValues.get(0)));
+    }
+
+    private void parsePaginationParameter(EntityFinder finder, String parameterName, List<String> parameterValues) {
+        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterName);
         switch (parameter) {
             case LIMIT:
-                finder.limit(Integer.parseInt(list.get(0)));
+                finder.limit(Integer.parseInt(parameterValues.get(0)));
                 break;
             case OFFSET:
-                finder.offset(Integer.parseInt(list.get(0)));
+                finder.offset(Integer.parseInt(parameterValues.get(0)));
                 break;
+        }
+    }
+
+    private void validateParameterValues(List<String> parameterValues) throws BadRequestException {
+        if (CollectionUtils.isEmpty(parameterValues)) {
+            throw new BadRequestException("Empty parameter!", ErrorCodes.TAG_BAD_REQUEST);
         }
     }
 
     @Override
     public Tag readMostlyUsedTag() throws NotFoundException {
-        Tag tag = dao.readMostlyUsedTag();
+        Tag tag = dao.findMostPopularTag();
         if (tag == null) {
             throw new NotFoundException("Requested resource not found (most popular tag)!",
                     ErrorCodes.TAG_NOT_FOUND);

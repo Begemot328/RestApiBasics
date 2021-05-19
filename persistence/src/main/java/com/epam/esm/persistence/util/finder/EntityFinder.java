@@ -39,7 +39,7 @@ public abstract class EntityFinder<T extends CustomEntity> {
      *
      * @param dao {@link EntityDAO } correspondind to finder class.
      */
-    public EntityFinder(EntityDAO<T> dao) {
+    protected EntityFinder(EntityDAO<T> dao) {
         builder = dao.getBuilder();
         metamodel = dao.getMetamodel();
         query = builder.createQuery(getClassType());
@@ -148,12 +148,10 @@ public abstract class EntityFinder<T extends CustomEntity> {
         List<Order> orderList = CollectionUtils.isEmpty(query.getOrderList())
                 ? new ArrayList<>()
                         : query.getOrderList();
-        switch (sortDirection) {
-            case DESC:
-                orderList.add(builder.desc(root.get(sorting)));
-                break;
-            default:
-                orderList.add(builder.asc(root.get(sorting)));
+        if (sortDirection == SortDirection.DESC) {
+            orderList.add(builder.desc(root.get(sorting)));
+        } else {
+            orderList.add(builder.asc(root.get(sorting)));
         }
         query.orderBy(orderList);
     }
@@ -174,5 +172,23 @@ public abstract class EntityFinder<T extends CustomEntity> {
      */
     public int getOffset() {
         return offset;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EntityFinder<?> that = (EntityFinder<?>) o;
+        return limit == that.limit && offset == that.offset
+                && Objects.equals(query, that.query)
+                && Objects.equals(builder, that.builder)
+                && Objects.equals(predicate, that.predicate)
+                && Objects.equals(root, that.root)
+                && Objects.equals(metamodel, that.metamodel);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(limit, offset, query, builder, predicate, root, metamodel);
     }
 }

@@ -86,8 +86,7 @@ public class UserController {
         } else {
             orders = orderService.read(params);
         }
-        CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(
-                orders);
+        CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(orders);
         orderDTOs.add(linkTo(methodOn(this.getClass()).readAllOrders(params)).withRel("orders"));
 
         paginateOrders(params, orderDTOs);
@@ -109,8 +108,7 @@ public class UserController {
         params.put(OrderSearchParameters.USER_ID.getParameterName(),
                 Collections.singletonList(Integer.toString(id)));
         List<Order> orders = orderService.read(params);
-        CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(
-                orders);
+        CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(orders);
         orderDTOs.add(linkTo(methodOn(this.getClass()).readUsersOrders(id, params)).withRel("tags"));
 
         paginateOrders(params, orderDTOs);
@@ -149,7 +147,7 @@ public class UserController {
             throws NotFoundException, BadRequestException {
         Paginator paginator = new Paginator(params);
 
-        if(paginator.isLimited(params)) {
+        if (paginator.isLimited(params)) {
             collectionModel.add(linkTo(methodOn(this.getClass()).readAllOrders(
                     paginator.nextPage(params))).withRel("nextPage"));
             collectionModel.add(linkTo(methodOn(this.getClass()).readAllOrders(
@@ -161,7 +159,7 @@ public class UserController {
             throws NotFoundException, BadRequestException {
         Paginator paginator = new Paginator(params);
 
-        if(paginator.isLimited(params)) {
+        if (paginator.isLimited(params)) {
             collectionModel.add(linkTo(methodOn(this.getClass()).readUsers(
                     paginator.nextPage(params))).withRel("nextPage"));
             collectionModel.add(linkTo(methodOn(this.getClass()).readUsers(

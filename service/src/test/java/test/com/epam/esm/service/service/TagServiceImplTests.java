@@ -2,6 +2,7 @@ package test.com.epam.esm.service.service;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.tag.TagDAOImpl;
+import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PaginationParameters;
@@ -12,12 +13,14 @@ import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.tag.TagServiceImpl;
 import com.epam.esm.service.validator.EntityValidator;
-import com.epam.esm.service.validator.TagValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -38,23 +41,27 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = ServiceTestConfig.class)
 @Transactional
-public class TagServiceImplTests {
+class TagServiceImplTests {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     static Logger logger = LoggerFactory.getLogger(CertificateServiceImplTests.class);
 
-    private final TagDAOImpl tagDaoMock = mock(TagDAOImpl.class);
-    private EntityValidator<Tag> validator;
-    private TagServiceImpl service;
+    @MockBean
+    TagDAOImpl tagDaoMock;
+
+    @MockBean
+    EntityValidator<Tag> validator;
+
+    @Autowired
+    TagServiceImpl service;
 
     private final Tag tag1 = new Tag("Tag1");
     private final Tag tag2 = new Tag("Tag2");
@@ -73,10 +80,10 @@ public class TagServiceImplTests {
         query = query.select(tagRoot);
 
         try {
-            when(tagDaoMock.readAll()).thenReturn(fullList);
-            when(tagDaoMock.read(1)).thenReturn(tag1);
-            when(tagDaoMock.read(2)).thenReturn(tag2);
-            when(tagDaoMock.readBy(any(TagFinder.class))).thenReturn(shortList);
+            when(tagDaoMock.findAll()).thenReturn(fullList);
+            when(tagDaoMock.getById(1)).thenReturn(tag1);
+            when(tagDaoMock.getById(2)).thenReturn(tag2);
+            when(tagDaoMock.findByParameters(any(TagFinder.class))).thenReturn(shortList);
             doNothing().when(tagDaoMock).delete(any(Integer.class));
             when(tagDaoMock.getBuilder()).thenReturn(builder);
             when(tagDaoMock.create(any(Tag.class))).thenAnswer(invocation -> {
@@ -84,10 +91,10 @@ public class TagServiceImplTests {
                 tag.setId(fullList.size());
                 return tag;
             });
-            validator = mock(TagValidator.class);
+
             doNothing().when(validator).validate(any(Tag.class));
 
-            when(tagDaoMock.readMostlyUsedTag()).thenReturn(tag4);
+            when(tagDaoMock.findMostPopularTag()).thenReturn(tag4);
 
         } catch (ValidationException e) {
             logger.error(e.getMessage());
@@ -96,50 +103,49 @@ public class TagServiceImplTests {
         tag2.setId(2);
         tag1.setId(3);
         tag2.setId(4);
-        service = new TagServiceImpl(tagDaoMock, validator);
     }
 
     @Test
-    public void read_returnTag() throws NotFoundException {
+    void read_returnTag() throws NotFoundException {
         assertEquals(tag1, service.read(1));
     }
 
     @Test
-    public void readAll_returnTags() throws NotFoundException {
+    void readAll_returnTags() throws NotFoundException {
         assertEquals(fullList, service.readAll());
     }
 
     @Test
-    public void create_createTag() throws ValidationException, BadRequestException {
+    void create_createTag() throws ValidationException, BadRequestException {
         Tag tag = service.create(tag1);
         assertEquals(tag.getId(), fullList.size());
         verify(tagDaoMock, times(1)).create(tag1);
     }
 
     @Test
-    public void delete_deleteTag() throws BadRequestException {
+    void delete_deleteTag() throws BadRequestException {
         service.delete(1);
-        verify(tagDaoMock, atLeast(1)).read(1);
+        verify(tagDaoMock, atLeast(1)).getById(1);
         verify(tagDaoMock, atLeast(1)).delete(1);
     }
 
     @Test
-    public void update_throwsUnsupportedOperationException() {
+    void update_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> service.update(tag2));
     }
 
     @Test
-    public void read_readByName_returnTags() throws BadRequestException, NotFoundException {
+    void read_readByName_returnTags() throws BadRequestException, NotFoundException {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(TagSearchParameters.NAME.name(), Collections.singletonList("1"));
         params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), Collections.singletonList("2"));
         assertEquals(shortList, service.read(params));
-        verify(tagDaoMock, atLeast(1)).readBy(any(TagFinder.class));
+        verify(tagDaoMock, atLeast(1)).findByParameters(any(TagFinder.class));
     }
 
     @Test
-    public void create_invalidTag_throwsException()
+    void create_invalidTag_throwsException()
             throws ValidationException {
         doThrow(new ValidationException("error", ErrorCodes.TAG_VALIDATION_EXCEPTION))
                 .when(validator).validate(any(Tag.class));
@@ -147,7 +153,7 @@ public class TagServiceImplTests {
     }
 
     @Test
-    public void create_catchDataAccessException_throwsException() {
+    void create_catchDataAccessException_throwsException() {
 
         doThrow(new DataIntegrityViolationException("error"))
                 .when(tagDaoMock).create(any(Tag.class));
@@ -156,34 +162,36 @@ public class TagServiceImplTests {
     }
 
     @Test
-    public void readMostlyUsedTag_returnTag() throws NotFoundException {
+    void readMostlyUsedTag_returnTag() throws NotFoundException {
         assertEquals(service.readMostlyUsedTag(), tag4);
     }
 
     @Test
-    public void read_parsePaginationLimit_invokeFinderLimit() throws NotFoundException, BadRequestException {
-        TagFinder finder = new TagFinder(tagDaoMock);
-        finder.limit(1);
+    void read_parsePaginationLimit_invokeFinderLimit() throws NotFoundException, BadRequestException {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
         service.read(params);
-        verify(tagDaoMock, atLeast(1)).readBy(finder);
+
+        ArgumentCaptor<EntityFinder<Tag>> captor = ArgumentCaptor.forClass(EntityFinder.class);
+        verify(tagDaoMock, atLeast(1)).findByParameters(captor.capture());
+        assertEquals(1, captor.getValue().getLimit());
     }
 
     @Test
-    public void read_parsePaginationLimit_invokeFinderOffset() throws NotFoundException, BadRequestException {
-        TagFinder finder = new TagFinder(tagDaoMock);
-        finder.offset(1);
+    void read_parsePaginationLimit_invokeFinderOffset() throws NotFoundException, BadRequestException {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
         service.read(params);
-        verify(tagDaoMock, atLeast(1)).readBy(finder);
+
+        ArgumentCaptor<EntityFinder<Tag>> captor = ArgumentCaptor.forClass(EntityFinder.class);
+        verify(tagDaoMock, atLeast(1)).findByParameters(captor.capture());
+        assertEquals(1, captor.getValue().getOffset());
     }
 
     @Test
-    public void read_badParameter_ThrowsBadRequestException() {
+    void read_badParameter_ThrowsBadRequestException() {
         TagFinder finder = new TagFinder(tagDaoMock);
         finder.offset(1);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
@@ -191,6 +199,4 @@ public class TagServiceImplTests {
         params.put("unknown", Collections.singletonList("1"));
         assertThrows(BadRequestException.class, () -> service.read(params));
     }
-
-
 }

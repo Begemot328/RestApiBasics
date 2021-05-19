@@ -6,7 +6,6 @@ import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.SortDirection;
 import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
-import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.service.constants.CertificateSearchParameters;
 import com.epam.esm.service.constants.CertificateSortingParameters;
 import com.epam.esm.service.constants.ErrorCodes;
@@ -28,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -67,7 +67,7 @@ public class CertificateServiceImpl implements CertificateService {
             }
         }
         try {
-        return dao.create(certificate);
+            return dao.create(certificate);
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException(e, ErrorCodes.CERTIFICATE_BAD_REQUEST);
         }
@@ -79,20 +79,19 @@ public class CertificateServiceImpl implements CertificateService {
         if (certificateOptional.isEmpty()) {
             throw new NotFoundException("Requested resource not found(id = " + id + ")!",
                     ErrorCodes.CERTIFICATE_NOT_FOUND);
-        } else {
-            return certificateOptional.get();
         }
+        return certificateOptional.get();
     }
 
     @Override
     public Optional<Certificate> readOptional(int id) {
-        return Optional.ofNullable(dao.read(id));
+        return Optional.ofNullable(dao.getById(id));
     }
 
     @Transactional
     @Override
     public void delete(int id) throws BadRequestException {
-        if (dao.read(id) == null) {
+        if (dao.getById(id) == null) {
             throw new BadRequestException("Entity does not exist", ErrorCodes.CERTIFICATE_BAD_REQUEST);
         }
         dao.delete(id);
@@ -111,7 +110,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     public List<Certificate> readAll() throws NotFoundException {
-        List<Certificate> certificates = dao.readAll();
+        List<Certificate> certificates = dao.findAll();
         if (CollectionUtils.isEmpty(certificates)) {
             throw new NotFoundException("No certificates found!",
                     ErrorCodes.CERTIFICATE_NOT_FOUND);
@@ -121,7 +120,7 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     private List<Certificate> readBy(EntityFinder<Certificate> entityFinder) throws NotFoundException {
-        List<Certificate> certificates = dao.readBy(entityFinder);
+        List<Certificate> certificates = dao.findByParameters(entityFinder);
         if (CollectionUtils.isEmpty(certificates)) {
             throw new NotFoundException("Requested certificate not found!",
                     ErrorCodes.CERTIFICATE_NOT_FOUND);
@@ -130,40 +129,78 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    private void parsePaginationParameter(CertificateFinder finder, String parameterString, List<String> list) {
-        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterString);
+    @Lookup
+    @Override
+    public CertificateFinder getFinder() {
+        return null;
+    }
+
+    @Override
+    public List<Certificate> read(MultiValueMap<String, String> params)
+            throws BadRequestException, NotFoundException {
+        CertificateFinder finder = getFinder();
+        for (Map.Entry<String, List<String>> entry : params.entrySet()) {
+            try {
+                validateParameterValues(entry.getValue());
+                parseParameter(finder, entry.getKey(), entry.getValue());
+            } catch (IllegalArgumentException e) {
+                throw new BadRequestException(e, ErrorCodes.CERTIFICATE_BAD_REQUEST);
+            }
+        }
+        return readBy(finder);
+    }
+
+    private void parseParameter(CertificateFinder finder, String parameterName, List<String> parameterValues) {
+        if (parameterName.contains("sort")) {
+            parseSortParameter(finder, parameterName, parameterValues);
+        } else if (PaginationParameters.contains(parameterName)) {
+            parsePaginationParameter(finder, parameterName, parameterValues);
+        } else {
+            parseFindParameter(finder, parameterName, parameterValues);
+        }
+    }
+
+    private void parsePaginationParameter(CertificateFinder finder,
+                                          String parameterName,
+                                          List<String> parameterValues) {
+        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterName);
         switch (parameter) {
             case LIMIT:
-                finder.limit(Integer.parseInt(list.get(0)));
+                finder.limit(Integer.parseInt(parameterValues.get(0)));
                 break;
             case OFFSET:
-                finder.offset(Integer.parseInt(list.get(0)));
+                finder.offset(Integer.parseInt(parameterValues.get(0)));
                 break;
         }
     }
 
-    private void parseFindParameter(CertificateFinder finder, String parameterString, List<String> list) {
+    private void parseSortParameter(CertificateFinder finder, String parameterName, List<String> parameterValues) {
+        finder.sortBy(CertificateSortingParameters.getEntryByParameter(parameterName).getValue(),
+                SortDirection.parseAscDesc(parameterValues.get(0)));
+    }
+
+    private void parseFindParameter(CertificateFinder finder, String parameterName, List<String> parameterValues) {
         CertificateSearchParameters parameter =
-                CertificateSearchParameters.getEntryByParameter(parameterString);
+                CertificateSearchParameters.getEntryByParameter(parameterName);
         switch (parameter) {
             case NAME:
-                addToFinder(finder::findByName, list);
+                addToFinder(finder::findByName, parameterValues);
                 break;
             case DESCRIPTION:
-                addToFinder(finder::findByDescription, list);
+                addToFinder(finder::findByDescription, parameterValues);
                 break;
             case TAG_ID:
-                if (list.size() > 1) {
-                    finder.findByTags(list.stream().mapToInt(Integer::parseInt).toArray());
+                if (parameterValues.size() > 1) {
+                    finder.findByTags(parameterValues.stream().mapToInt(Integer::parseInt).toArray());
                 } else {
-                    finder.findByTagId(Integer.parseInt(list.get(0)));
+                    finder.findByTagId(Integer.parseInt(parameterValues.get(0)));
                 }
                 break;
             case TAG_NAME:
-                if (list.size() > 1) {
-                    finder.findByTags(list.toArray(String[]::new));
+                if (parameterValues.size() > 1) {
+                    finder.findByTags(parameterValues.toArray(String[]::new));
                 } else {
-                    finder.findByTag(list.get(0));
+                    finder.findByTag(parameterValues.get(0));
                 }
                 break;
         }
@@ -181,66 +218,49 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    @Lookup
-    @Override
-    public CertificateFinder getFinder() {
-        return null;
+    private void validateParameterValues(List<String> parameterValues) throws BadRequestException {
+        if (CollectionUtils.isEmpty(parameterValues)) {
+            throw new BadRequestException("Empty parameter!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
+        }
     }
 
-    @Override
-    public List<Certificate> read(MultiValueMap<String, String> params)
-            throws BadRequestException, NotFoundException {
-        CertificateFinder finder = getFinder();
-        for (String key : params.keySet()) {
-            try {
-                if (CollectionUtils.isEmpty(params.get(key))) {
-                    throw new BadRequestException("Empty parameter!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
-                }
-                if (key.contains("sort")) {
-                    finder.sortBy(CertificateSortingParameters.getEntryByParameter(key).getValue(),
-                            SortDirection.parseAscDesc(params.get(key).get(0)));
-                } else if (PaginationParameters.contains(key)) {
-                    parsePaginationParameter(finder, key, params.get(key));
-                } else {
-                    parseFindParameter(finder, key, params.get(key));
-                }
-            } catch (IllegalArgumentException e) {
-                throw new BadRequestException(e, ErrorCodes.CERTIFICATE_BAD_REQUEST);
-            }
+    private Certificate findOldCertificate(int certificateId) throws BadRequestException {
+        if (certificateId <= 0) {
+            throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
         }
-        return readBy(finder);
+        return dao.getById(certificateId);
     }
 
     @Transactional
     @Override
     public Certificate patch(Certificate certificate)
             throws ValidationException, BadRequestException, NotFoundException {
-        if (certificate.getId() <= 0) {
-            throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
-        }
-
-        Certificate oldCertificate = dao.read(certificate.getId());
+        Certificate oldCertificate = findOldCertificate(certificate.getId());
 
         if (oldCertificate == null) {
             throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
         }
-        if (certificate.getPrice() != null
-                && certificate.getPrice().compareTo(BigDecimal.ZERO) > 0) {
-            oldCertificate.setPrice(certificate.getPrice());
+        return update(updateCertificate(certificate, oldCertificate));
+    }
+
+    private Certificate updateCertificate(Certificate newCertificate, Certificate oldCertificate) {
+        if (newCertificate.getPrice() != null
+                && newCertificate.getPrice().compareTo(BigDecimal.ZERO) > 0) {
+            oldCertificate.setPrice(newCertificate.getPrice());
         }
-        if (certificate.getDescription() != null) {
-            oldCertificate.setDescription(certificate.getDescription());
+        if (newCertificate.getDescription() != null) {
+            oldCertificate.setDescription(newCertificate.getDescription());
         }
-        if (certificate.getDuration() != 0) {
-            oldCertificate.setDuration(certificate.getDuration());
+        if (newCertificate.getDuration() != 0) {
+            oldCertificate.setDuration(newCertificate.getDuration());
         }
-        if (certificate.getName() != null) {
-            oldCertificate.setName(certificate.getName());
+        if (newCertificate.getName() != null) {
+            oldCertificate.setName(newCertificate.getName());
         }
-        if (CollectionUtils.isNotEmpty(certificate.getTags())) {
-            oldCertificate.setTags(certificate.getTags());
+        if (CollectionUtils.isNotEmpty(newCertificate.getTags())) {
+            oldCertificate.setTags(newCertificate.getTags());
         }
-        return update(oldCertificate);
+        return oldCertificate;
     }
 }
 

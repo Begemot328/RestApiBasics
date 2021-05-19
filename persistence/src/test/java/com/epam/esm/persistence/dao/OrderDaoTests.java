@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = PersistenceTestConfig.class)
 @Transactional
 @Sql({"/SQL/test_db.sql"})
-public class OrderDaoTests {
+class OrderDaoTests {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -69,33 +69,33 @@ public class OrderDaoTests {
 
     @Test
     void readAll_returnAllOrders() {
-        assertEquals(orderDao.readAll().size(), 6);
+        assertEquals(6, orderDao.findAll().size());
     }
 
     @Test
     void read_returnOrder() {
-        Order persistentOrder = orderDao.read(1);
+        Order persistentOrder = orderDao.getById(1);
         assertEquals(persistentOrder, order);
     }
 
     @Test
     void read_negativeId_returnNull() {
-        assertNull(orderDao.read(-1));
+        assertNull(orderDao.getById(-1));
     }
 
     @Test
     void read_nonExistingId_returnNull() {
-        assertNull(orderDao.read(1000));
+        assertNull(orderDao.getById(1000));
     }
 
     @Test
     @Transactional
     void create_createOrder() {
-        int size = orderDao.readAll().size();
+        int size = orderDao.findAll().size();
         order.setId(0);
 
         orderDao.create(order);
-        assertEquals(orderDao.readAll().size(), ++size);
+        assertEquals(orderDao.findAll().size(), ++size);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class OrderDaoTests {
     void update_updateOrderOperation_ExceptionThrown() {
         order.setOrderAmount(BigDecimal.valueOf(120.0));
         orderDao.update(order);
-        assertEquals(order, orderDao.read(order.getId()));
+        assertEquals(order, orderDao.getById(order.getId()));
     }
 
     @Test
@@ -137,22 +137,22 @@ public class OrderDaoTests {
         OrderFinder finderMock = mock(OrderFinder.class);
         when(finderMock.getQuery()).thenReturn(query);
 
-        assertEquals(Collections.singletonList(order), orderDao.readBy(finderMock));
+        assertEquals(Collections.singletonList(order), orderDao.findByParameters(finderMock));
     }
 
     @Test
     void delete_deleteOrder() {
-        int size = orderDao.readAll().size();
+        int size = orderDao.findAll().size();
 
         orderDao.delete(1);
-        assertEquals(orderDao.readAll().size(), --size);
+        assertEquals(orderDao.findAll().size(), --size);
     }
 
     @Test
     void delete_nonExistingOrder_throwDataAccessException() {
-        int size = orderDao.readAll().size();
+        int size = orderDao.findAll().size();
 
         assertThrows(DataAccessException.class, () -> orderDao.delete(1000));
-        assertEquals(orderDao.readAll().size(), size);
+        assertEquals(orderDao.findAll().size(), size);
     }
 }

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UserValidatorTest {
+class UserValidatorTest {
     UserValidator validator = new UserValidator();
     private User user;
 

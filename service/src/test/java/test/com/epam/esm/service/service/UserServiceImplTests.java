@@ -3,6 +3,7 @@ package test.com.epam.esm.service.service;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.user.UserDAOImpl;
+import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
@@ -10,7 +11,10 @@ import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.service.user.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -28,19 +32,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = ServiceTestConfig.class)
 @Transactional
-public class UserServiceImplTests {
+class UserServiceImplTests {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final UserDAOImpl userDaoMock = mock(UserDAOImpl.class);
-    private UserServiceImpl service;
+    @MockBean
+    UserDAOImpl userDaoMock;
+
+    @Autowired
+    UserServiceImpl service;
+
     private User user1;
     private User user2;
     private User user3;
@@ -64,66 +71,70 @@ public class UserServiceImplTests {
         user3 = new User("Yury", "Zmushko", "root", "qwerty");
         user3.setId(3);
 
-        when(userDaoMock.readAll()).thenReturn(fullList);
-        when(userDaoMock.read(1)).thenReturn(user1);
-        when(userDaoMock.read(2)).thenReturn(user2);
-        when(userDaoMock.readBy(any(UserFinder.class))).thenReturn(shortList);
+        when(userDaoMock.findAll()).thenReturn(fullList);
+        when(userDaoMock.getById(1)).thenReturn(user1);
+        when(userDaoMock.getById(2)).thenReturn(user2);
+        when(userDaoMock.findByParameters(any(UserFinder.class))).thenReturn(shortList);
         when(userDaoMock.getBuilder()).thenReturn(builder);
-
-        service = new UserServiceImpl(userDaoMock, null);
     }
 
     @Test
-    public void read_returnUser() throws NotFoundException {
+    void read_returnUser() throws NotFoundException {
         assertEquals(user1, service.read(1));
     }
 
     @Test
-    public void readAll_returnUsers() throws NotFoundException {
+    void readAll_returnUsers() throws NotFoundException {
         assertEquals(fullList, service.readAll());
     }
 
     @Test
-    public void create_createUser() {
+    void create_createUser() {
         assertThrows(UnsupportedOperationException.class, () -> service.create(user2));
     }
 
     @Test
-    public void delete_deleteUser() {
+    void delete_deleteUser() {
         assertThrows(UnsupportedOperationException.class, () -> service.delete(1));
     }
 
     @Test
-    public void update_throwsUnsupportedOperationException() {
+    void update_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> service.update(user2));
     }
 
     @Test
-    public void read_parsePaginationLimit_invokeFinderLimit()
+    void read_parsePaginationLimit_invokeFinderLimit()
             throws NotFoundException, BadRequestException {
         UserFinder finder = new UserFinder(userDaoMock);
         finder.limit(1);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
-        params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
+        params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
         service.read(params);
-        verify(userDaoMock, atLeast(1)).readBy(finder);
+
+        ArgumentCaptor<EntityFinder<User>> captor = ArgumentCaptor.forClass(EntityFinder.class);
+        verify(userDaoMock, atLeast(1)).findByParameters(captor.capture());
+        assertEquals(1, captor.getValue().getOffset());
     }
 
     @Test
-    public void read_parsePaginationLimit_invokeFinderOffset()
+    void read_parsePaginationLimit_invokeFinderOffset()
             throws NotFoundException, BadRequestException {
         UserFinder finder = new UserFinder(userDaoMock);
         finder.offset(1);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
-        params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
+        params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
         service.read(params);
-        verify(userDaoMock, atLeast(1)).readBy(finder);
+
+        ArgumentCaptor<EntityFinder<User>> captor = ArgumentCaptor.forClass(EntityFinder.class);
+        verify(userDaoMock, atLeast(1)).findByParameters(captor.capture());
+        assertEquals(1, captor.getValue().getLimit());
     }
 
     @Test
-    public void read_badParameter_ThrowsBadRequestException() {
+    void read_badParameter_ThrowsBadRequestException() {
         UserFinder finder = new UserFinder(userDaoMock);
         finder.offset(1);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
@@ -133,7 +144,7 @@ public class UserServiceImplTests {
     }
 
     @Test
-    public void read_badParameterValue_ThrowsBadRequestException() {
+    void read_badParameterValue_ThrowsBadRequestException() {
         UserFinder finder = new UserFinder(userDaoMock);
         finder.offset(1);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {

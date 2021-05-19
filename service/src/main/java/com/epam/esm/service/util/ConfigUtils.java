@@ -9,8 +9,13 @@ import com.epam.esm.service.constants.CertificateSearchParameters;
  * @version 1.0
  */
 public class ConfigUtils {
-    private final static String UNDESCORE = "_";
-    private final static String DASH = "-";
+    private static final  String UNDESCORE = "_";
+    private static final  String DASH = "-";
+
+
+    private ConfigUtils() {
+        // Private constructor to avoid creation.
+    }
 
     /**
      * Convert {@link String} line from request parameter format to enum name format.

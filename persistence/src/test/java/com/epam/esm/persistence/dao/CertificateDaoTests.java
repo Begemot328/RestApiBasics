@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = PersistenceTestConfig.class)
 @Transactional
 @Sql({"/SQL/test_db.sql"})
-public class CertificateDaoTests {
+class CertificateDaoTests {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -58,21 +58,21 @@ public class CertificateDaoTests {
 
     @Test
     void readAll_returnAll() {
-        assertEquals(certificateDao.readAll().size(), 5);
+        assertEquals(5, certificateDao.findAll().size());
     }
 
     @Test
     void read_returnCertificate() {
-        assertEquals(certificate, certificateDao.read(1));
+        assertEquals(certificate, certificateDao.getById(1));
     }
 
     @Test
     void create_createCertificate() {
-        int size = certificateDao.readAll().size();
+        int size = certificateDao.findAll().size();
         certificate.setId(0);
 
         certificateDao.create(certificate);
-        assertEquals(certificateDao.readAll().size(), ++size);
+        assertEquals(certificateDao.findAll().size(), ++size);
     }
 
     @Test
@@ -104,14 +104,14 @@ public class CertificateDaoTests {
         int id = 3;
         certificate.setId(id);
         certificate = certificateDao.update(certificate);
-        assertEquals(certificateDao.read(id), certificate);
+        assertEquals(certificateDao.getById(id), certificate);
     }
 
     @Test
     void delete_deleteCertificate() {
-        int size = certificateDao.readAll().size();
+        int size = certificateDao.findAll().size();
         certificateDao.delete(2);
-        assertEquals(certificateDao.readAll().size(), --size);
+        assertEquals(certificateDao.findAll().size(), --size);
     }
 
     @Test
@@ -126,6 +126,6 @@ public class CertificateDaoTests {
         CertificateFinder finderMock = mock(CertificateFinder.class);
         when(finderMock.getQuery()).thenReturn(query);
 
-        assertEquals(Collections.singletonList(certificate), certificateDao.readBy(finderMock));
+        assertEquals(Collections.singletonList(certificate), certificateDao.findByParameters(finderMock));
     }
 }

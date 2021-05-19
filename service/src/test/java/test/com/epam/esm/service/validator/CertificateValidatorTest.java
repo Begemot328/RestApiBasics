@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CertificateValidatorTest {
+class CertificateValidatorTest {
     CertificateValidator validator = new CertificateValidator();
 
     @Test

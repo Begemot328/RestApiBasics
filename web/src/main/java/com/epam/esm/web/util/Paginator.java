@@ -13,7 +13,7 @@ import java.util.Collections;
  * @version 1.0
  */
 public class Paginator {
-    private final static int DEFAULT_LIMIT = 20;
+    private static final int DEFAULT_LIMIT = 20;
     private final int limit;
     private final int offset;
 
@@ -55,16 +55,16 @@ public class Paginator {
     }
 
     private int getLimit(MultiValueMap<String, String> params) {
-        return CollectionUtils.isEmpty(params.get(PaginationParameters.LIMIT.getParameterName()))
-                ? DEFAULT_LIMIT
-                : Integer.parseInt(
-                        params.get(PaginationParameters.LIMIT.getParameterName()).get(0));
+        return isLimited(params)
+                ? Integer.parseInt(
+                params.get(PaginationParameters.LIMIT.getParameterName()).get(0))
+                : DEFAULT_LIMIT;
     }
 
     private int getOffset(MultiValueMap<String, String> params) {
         return CollectionUtils.isEmpty(params.get(PaginationParameters.OFFSET.getParameterName())) ?
                 0 : Integer.parseInt(
-                        params.get(PaginationParameters.OFFSET.getParameterName()).get(0));
+                params.get(PaginationParameters.OFFSET.getParameterName()).get(0));
     }
 
     /*
@@ -74,7 +74,7 @@ public class Paginator {
      */
     public MultiValueMap<String, String> nextPage(MultiValueMap<String, String> params) {
         params.put(PaginationParameters.OFFSET.getParameterName(),
-                        Collections.singletonList(Integer.toString(offset + limit)));
+                Collections.singletonList(Integer.toString(offset + limit)));
         return params;
     }
 

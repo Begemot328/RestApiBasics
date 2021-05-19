@@ -12,6 +12,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CertificateDTO extends RepresentationModel<CertificateDTO> {
@@ -20,7 +21,7 @@ public class CertificateDTO extends RepresentationModel<CertificateDTO> {
     private String description;
     private BigDecimal price;
     private int duration;
-    private List<TagDTO> tags;
+    private List<TagDTO> tags = new ArrayList<>();
 
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -45,6 +46,7 @@ public class CertificateDTO extends RepresentationModel<CertificateDTO> {
     }
 
     public CertificateDTO() {
+        // Default constructor for Model mapper purposes.
     }
 
     public int getId() {

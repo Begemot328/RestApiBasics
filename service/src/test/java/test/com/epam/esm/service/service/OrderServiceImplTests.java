@@ -5,21 +5,23 @@ import com.epam.esm.model.entity.Order;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.order.OrderDAOImpl;
+import com.epam.esm.persistence.dao.tag.TagDAOImpl;
+import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.impl.OrderFinder;
 import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
-import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.certificate.CertificateService;
-import com.epam.esm.service.service.certificate.CertificateServiceImpl;
 import com.epam.esm.service.service.order.OrderServiceImpl;
 import com.epam.esm.service.service.user.UserService;
-import com.epam.esm.service.service.user.UserServiceImpl;
-import com.epam.esm.service.validator.OrderValidator;
+import com.epam.esm.service.validator.EntityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -42,19 +44,34 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = ServiceTestConfig.class)
 @Transactional
-public class OrderServiceImplTests {
+class OrderServiceImplTests {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final OrderDAOImpl orderDaoMock = mock(OrderDAOImpl.class);
-    private OrderServiceImpl service;
+    @MockBean
+    OrderDAOImpl orderDaoMock;
+
+    @MockBean
+    TagDAOImpl tagDaoMock;
+
+    @MockBean
+    UserService userServiceMock;
+
+    @MockBean
+    CertificateService certificateServiceMock;
+
+    @MockBean
+    EntityValidator<Order> validator;
+
+    @Autowired
+    OrderServiceImpl service;
+
     private Order order1;
     private Order order2;
     private Order order3;
@@ -92,9 +109,9 @@ public class OrderServiceImplTests {
                 LocalDateTime.parse("2021-03-22 09:22:11", formatter));
         order3.setId(3);
 
-        when(orderDaoMock.readAll()).thenReturn(fullList);
-        when(orderDaoMock.read(1)).thenReturn(order1);
-        when(orderDaoMock.readBy(any(OrderFinder.class))).thenReturn(shortList);
+        when(orderDaoMock.findAll()).thenReturn(fullList);
+        when(orderDaoMock.getById(1)).thenReturn(order1);
+        when(orderDaoMock.findByParameters(any(OrderFinder.class))).thenReturn(shortList);
         when(orderDaoMock.update(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(
                 0, Order.class));
         when(orderDaoMock.getBuilder()).thenReturn(builder);
@@ -104,69 +121,67 @@ public class OrderServiceImplTests {
             return order;
         });
 
-        OrderValidator validator = mock(OrderValidator.class);
         doNothing().when(validator).validate(any(Order.class));
 
-        UserService userServiceMock = mock(UserServiceImpl.class);
         when(userServiceMock.readOptional(any(Integer.class))).thenReturn(Optional.of(user));
-        CertificateService certificateServiceMock = mock(CertificateServiceImpl.class);
         when(certificateServiceMock.readOptional(any(Integer.class))).thenReturn(Optional.of(certificate));
-        service = new OrderServiceImpl(orderDaoMock, validator, userServiceMock, certificateServiceMock);
     }
 
     @Test
-    public void read_returnOrder() throws NotFoundException {
+    void read_returnOrder() throws NotFoundException {
         assertEquals(order1, service.read(1));
     }
 
     @Test
-    public void readAll_returnOrders() throws NotFoundException {
+    void readAll_returnOrders() throws NotFoundException {
         assertEquals(fullList, service.readAll());
     }
 
     @Test
-    public void create_createOrder() throws ValidationException, BadRequestException {
+    void create_createOrder() throws ValidationException, BadRequestException {
         Order order = service.create(order1);
         assertEquals(order.getId(), fullList.size());
         verify(orderDaoMock, atLeast(1)).create(order1);
     }
 
     @Test
-    public void delete_deleteOrder() throws BadRequestException {
+    void delete_deleteOrder() throws BadRequestException {
         service.delete(1);
-        verify(orderDaoMock, atLeast(1)).read(1);
+        verify(orderDaoMock, atLeast(1)).getById(1);
     }
 
     @Test
-    public void update_throwsUnsupportedOperationException() {
+    void update_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> service.update(order2));
     }
 
     @Test
-    public void read_parsePaginationLimit_invokeFinderLimit()
+    void read_parsePaginationLimit_invokeFinderLimit()
             throws NotFoundException, BadRequestException {
-        OrderFinder finder = new OrderFinder(orderDaoMock);
-        finder.limit(1);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
         service.read(params);
-        verify(orderDaoMock, atLeast(1)).readBy(finder);
+
+        ArgumentCaptor<EntityFinder<Order>> captor = ArgumentCaptor.forClass(EntityFinder.class);
+        verify(orderDaoMock, atLeast(1)).findByParameters(captor.capture());
+        assertEquals(1, captor.getValue().getLimit());
     }
 
     @Test
-    public void read_parsePaginationLimit_invokeFinderOffset() throws NotFoundException, BadRequestException {
-        OrderFinder finder = new OrderFinder(orderDaoMock);
-        finder.offset(1);
+    void read_parsePaginationLimit_invokeFinderOffset() throws NotFoundException, BadRequestException {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
         service.read(params);
-        verify(orderDaoMock, atLeast(1)).readBy(finder);
+
+        ArgumentCaptor<EntityFinder<Order>> captor = ArgumentCaptor.forClass(EntityFinder.class);
+        verify(orderDaoMock, atLeast(1)).findByParameters(captor.capture());
+        assertEquals(1, captor.getValue().getOffset());
     }
 
     @Test
-    public void read_badParameter_ThrowsBadRequestException() {
+    void read_badParameter_ThrowsBadRequestException() {
         OrderFinder finder = new OrderFinder(orderDaoMock);
         finder.offset(1);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
@@ -176,7 +191,7 @@ public class OrderServiceImplTests {
     }
 
     @Test
-    public void read_badParameterValue_ThrowsBadRequestException() {
+    void read_badParameterValue_ThrowsBadRequestException() {
         OrderFinder finder = new OrderFinder(orderDaoMock);
         finder.offset(1);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
@@ -189,9 +204,11 @@ public class OrderServiceImplTests {
     void createOrder_createNewOrder() throws ValidationException, BadRequestException {
         order1.setOrderAmount(order1.getCertificate().getPrice()
                 .multiply(BigDecimal.valueOf(order1.getCertificateQuantity())));
-        order1.setPurchaseDate(LocalDateTime.now());
-        assertEquals(order1, service.createOrder(order1.getCertificate(),
+        Order order2 = service.createOrder(order1.getCertificate(),
                 order1.getUser(),
-                order1.getCertificateQuantity()));
+                order1.getCertificateQuantity());
+        order1.setPurchaseDate(LocalDateTime.now());
+
+        assertEquals(order1.getPurchaseDate().withNano(0), order2.getPurchaseDate().withNano(0));
     }
 }

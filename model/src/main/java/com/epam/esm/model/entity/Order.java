@@ -41,6 +41,7 @@ public class Order extends CustomEntity {
      * Default constructor.
      */
     public Order() {
+        // Default constructor for JPA purposes.
     }
 
     /**

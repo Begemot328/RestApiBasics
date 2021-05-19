@@ -19,12 +19,12 @@ public interface TagDAO extends EntityDAO<Tag> {
      * @param query {@link String} query to obtain entities.
      * @return {@link java.util.ArrayList}  of {@link Tag} objects.
      */
-    List<Tag> readBy(String query);
+    List<Tag> findByQuery(String query);
 
     /**
      * Find mostly used by the most contributing user tag.
      *
      * @return {@link Tag} object.
      */
-    Tag readMostlyUsedTag();
+    Tag findMostPopularTag();
 }

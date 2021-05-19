@@ -29,6 +29,7 @@ public class CertificateDAOImpl implements CertificateDAO {
      * Default constructor.
      */
     public CertificateDAOImpl(){
+        // Default constructor for Spring purposes.
     }
 
     @Override
@@ -38,7 +39,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public Certificate read(int id) {
+    public Certificate getById(int id) {
         return entityManager.find(Certificate.class, id);
     }
 
@@ -49,11 +50,11 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public void delete(int id) {
-        entityManager.remove(read(id));
+        entityManager.remove(getById(id));
     }
 
     @Override
-    public List<Certificate> readAll() {
+    public List<Certificate> findAll() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Certificate> criteriaQuery = criteriaBuilder.createQuery(Certificate.class);
         Root<Certificate> rootEntry = criteriaQuery.from(Certificate.class);
@@ -73,7 +74,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public List<Certificate> readBy(EntityFinder<Certificate> finder) {
+    public List<Certificate> findByParameters(EntityFinder<Certificate> finder) {
         TypedQuery<Certificate> allQuery = entityManager.createQuery(finder.getQuery());
         allQuery.setFirstResult(finder.getOffset());
         if(finder.getLimit() > 0) {
@@ -83,7 +84,7 @@ public class CertificateDAOImpl implements CertificateDAO {
     }
 
     @Override
-    public List<Certificate> readBy(String query) {
+    public List<Certificate> finadByQuery(String query) {
         return entityManager.createQuery(query, Certificate.class).getResultList();
     }
 }

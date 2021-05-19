@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = PersistenceTestConfig.class)
 @Transactional
 @Sql({"/SQL/test_db.sql"})
-public class UserDaoTests {
+class UserDaoTests {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -37,7 +37,6 @@ public class UserDaoTests {
     @Autowired
     private UserDAOImpl userDao;
     private User user;
-
 
     @BeforeEach
     void init() {
@@ -47,32 +46,32 @@ public class UserDaoTests {
 
     @Test
     void readAll_returnAllUsers() {
-        assertEquals(userDao.readAll().size(), 4);
+        assertEquals(4, userDao.findAll().size());
     }
 
     @Test
     void read_returnUser() {
-        assertEquals(userDao.read(1), user);
+        assertEquals(userDao.getById(1), user);
     }
 
     @Test
     void read_negativeId_returnNull() {
-        assertNull(userDao.read(-1));
+        assertNull(userDao.getById(-1));
     }
 
     @Test
     void read_nonExistingId_returnNull() {
-        assertNull(userDao.read(1000));
+        assertNull(userDao.getById(1000));
     }
 
     @Test
     @Transactional
     void create_createUser() {
         User user = new User("Yury2", "Zmushko2", "root2", "qwerty2");
-        int size = userDao.readAll().size();
+        int size = userDao.findAll().size();
 
         userDao.create(user);
-        assertEquals(userDao.readAll().size(), ++size);
+        assertEquals(userDao.findAll().size(), ++size);
     }
 
     @Test
@@ -109,7 +108,7 @@ public class UserDaoTests {
         user.setFirstName("new FirstName");
         user.setId(1);
         userDao.update(user);
-        assertEquals(user, userDao.read(user.getId()));
+        assertEquals(user, userDao.getById(user.getId()));
     }
 
     @Test
@@ -124,21 +123,21 @@ public class UserDaoTests {
         when(finderMock.getQuery()).thenReturn(query);
 
         user.setId(1);
-        assertEquals(Collections.singletonList(user), userDao.readBy(finderMock));
+        assertEquals(Collections.singletonList(user), userDao.findByParameters(finderMock));
     }
 
     @Test
     void delete_deleteUser() {
-        int size = userDao.readAll().size();
+        int size = userDao.findAll().size();
 
         userDao.delete(1);
-        assertEquals(userDao.readAll().size(), --size);
+        assertEquals(userDao.findAll().size(), --size);
     }
 
     @Test
     void delete_nonExistingUser_throwDataAccessException() {
-        int size = userDao.readAll().size();
+        int size = userDao.findAll().size();
         assertThrows(DataAccessException.class, () -> userDao.delete(1000));
-        assertEquals(userDao.readAll().size(), size);
+        assertEquals(userDao.findAll().size(), size);
     }
 }

@@ -1,6 +1,7 @@
-package com.epam.esm.persistence;
+package com.epam.esm.service;
 
 import com.epam.esm.model.ModelConfig;
+import com.epam.esm.persistence.PersistenceConfig;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -13,6 +14,6 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @ComponentScan
-@Import(ModelConfig.class)
-public class PersistenceConfig {
+@Import(PersistenceConfig.class)
+public class ServiceConfig {
 }

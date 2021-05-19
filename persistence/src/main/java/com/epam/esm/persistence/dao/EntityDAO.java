@@ -4,6 +4,7 @@ package com.epam.esm.persistence.dao;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.CustomEntity;
 import com.epam.esm.persistence.util.finder.EntityFinder;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.metamodel.Metamodel;
@@ -15,6 +16,7 @@ import java.util.List;
  * @author Yury Zmushko
  * @version 1.0
  */
+@Repository
 public interface EntityDAO<T extends CustomEntity> {
 
     /**
@@ -29,7 +31,7 @@ public interface EntityDAO<T extends CustomEntity> {
      *
      * @param id ID of the entity.
      */
-    T read(int id);
+    T getById(int id);
 
     /**
      * Update method.
@@ -51,7 +53,7 @@ public interface EntityDAO<T extends CustomEntity> {
      *
      * @return {@link java.util.ArrayList} of entities.
      */
-    List<T> readAll();
+    List<T> findAll();
 
     /**
      * Get {@link CriteriaBuilder} of the context.
@@ -72,5 +74,5 @@ public interface EntityDAO<T extends CustomEntity> {
      *
      * @return {@link java.util.ArrayList} of entities.
      */
-    List<T> readBy(EntityFinder<T> finder);
+    List<T> findByParameters(EntityFinder<T> finder);
 }
