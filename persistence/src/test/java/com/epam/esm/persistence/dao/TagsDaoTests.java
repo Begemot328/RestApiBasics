@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = PersistenceTestConfig.class)
 @Transactional
 @Sql({"/SQL/test_db.sql"})
-public class TagsDaoTests {
+class TagsDaoTests {
     private Tag tag;
 
     @PersistenceContext
@@ -44,32 +44,32 @@ public class TagsDaoTests {
 
     @Test
     void readAll_returnAllTags() {
-        assertEquals(tagsDao.readAll().size(), 5);
+        assertEquals(5, tagsDao.findAll().size());
     }
 
     @Test
     void read_returnTag() {
         tag.setId(1);
-        assertEquals(tagsDao.read(1), tag);
+        assertEquals(tagsDao.getById(1), tag);
     }
 
     @Test
     void read_negativeId_returnNull() {
-        assertNull(tagsDao.read(-1));
+        assertNull(tagsDao.getById(-1));
     }
 
     @Test
     void read_nonExistingId_returnNull() {
-        assertNull(tagsDao.read(1000));
+        assertNull(tagsDao.getById(1000));
     }
 
     @Test
     void create_createTag() {
         tag = new Tag("new");
-        int size = tagsDao.readAll().size();
+        int size = tagsDao.findAll().size();
 
         tagsDao.create(tag);
-        assertEquals(tagsDao.readAll().size(), ++size);
+        assertEquals(tagsDao.findAll().size(), ++size);
     }
 
     @Test
@@ -98,37 +98,37 @@ public class TagsDaoTests {
 
         tag = new Tag("books");
         tag.setId(3);
-        assertEquals(Collections.singletonList(tag), tagsDao.readBy(finderMock));
+        assertEquals(Collections.singletonList(tag), tagsDao.findByParameters(finderMock));
     }
 
     @Test
     void delete_deleteTag() {
-        int size = tagsDao.readAll().size();
+        int size = tagsDao.findAll().size();
 
         tagsDao.delete(1);
-        assertEquals(tagsDao.readAll().size(), --size);
+        assertEquals(tagsDao.findAll().size(), --size);
     }
 
     @Test
     void delete_nonExistingTag_throwDataAccessException() {
-        int size = tagsDao.readAll().size();
+        int size = tagsDao.findAll().size();
 
         assertThrows(DataAccessException.class, () -> tagsDao.delete(1000));
-        assertEquals(tagsDao.readAll().size(), size);
+        assertEquals(tagsDao.findAll().size(), size);
     }
 
     @Test
     void readMostlyUsedTag_returnTag() {
         tag = new Tag("games");
         tag.setId(2);
-        assertEquals(tagsDao.readMostlyUsedTag(), tag);
+        assertEquals(tagsDao.findMostPopularTag(), tag);
     }
 
     @Test
     void readBy_queryString_returnTags() {
         tag = new Tag("bicycle");
         tag.setId(5);
-        assertEquals(tagsDao.readBy(
+        assertEquals(tagsDao.findByQuery(
                 "SELECT DISTINCT id, name FROM certificates.tag_certificates where name = 'bicycle'"),
                 Collections.singletonList(tag));
     }

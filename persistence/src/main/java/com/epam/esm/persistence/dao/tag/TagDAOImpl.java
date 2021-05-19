@@ -31,6 +31,7 @@ public class TagDAOImpl implements TagDAO {
      * Default constructor.
      */
     public TagDAOImpl() {
+        // Default constructor for Spring purposes.
     }
 
     @Override
@@ -40,7 +41,7 @@ public class TagDAOImpl implements TagDAO {
     }
 
     @Override
-    public Tag read(int id) {
+    public Tag getById(int id) {
         return entityManager.find(Tag.class, id);
     }
 
@@ -51,11 +52,11 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public void delete(int id) {
-        entityManager.remove(read(id));
+        entityManager.remove(getById(id));
     }
 
     @Override
-    public List<Tag> readAll() {
+    public List<Tag> findAll() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
         Root<Tag> tagRoot = query.from(Tag.class);
@@ -76,23 +77,23 @@ public class TagDAOImpl implements TagDAO {
     }
 
     @Override
-    public List<Tag> readBy(EntityFinder<Tag> finder) {
-      TypedQuery<Tag> allQuery = entityManager.createQuery(finder.getQuery());
+    public List<Tag> findByParameters(EntityFinder<Tag> finder) {
+      TypedQuery<Tag> allQuery = /* move to separated method*/ entityManager.createQuery(finder.getQuery());
         allQuery.setFirstResult(finder.getOffset());
         if(finder.getLimit() > 0) {
             allQuery.setMaxResults(finder.getLimit());
-        }
+        } /* until this place*/
         return allQuery.getResultList();
     }
 
     @Override
-    public List<Tag> readBy(String query) {
+    public List<Tag> findByQuery(String query) {
         return entityManager.createNativeQuery(query, Tag.class).getResultList();
     }
 
     @Override
-    public Tag readMostlyUsedTag() {
-        List<Tag> tags = readBy(TagQueries.SELECT_MOST_POPULAR_TAG.getValue());
+    public Tag findMostPopularTag() {
+        List<Tag> tags = findByQuery(TagQueries.SELECT_MOST_POPULAR_TAG.getValue());
 
         if (CollectionUtils.isEmpty(tags)) {
             return null;

@@ -20,6 +20,7 @@ public class Tag extends CustomEntity {
      * Default constructor.
      */
     public Tag() {
+        // Default constructor for JPA purposes.
     }
 
     /**

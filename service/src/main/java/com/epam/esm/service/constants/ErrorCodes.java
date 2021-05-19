@@ -27,4 +27,8 @@ public class ErrorCodes {
     public static final int ORDER_NOT_FOUND = 40404;
     public static final int ORDER_VALIDATION_EXCEPTION = 42204;
     public static final int ORDER_INTERNAL_ERROR = 50004;
+
+    private ErrorCodes() {
+        // Private constructor to avoid creation.
+    }
 }

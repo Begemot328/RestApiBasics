@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class OrderValidatorTest {
+class OrderValidatorTest {
     OrderValidator validator = new OrderValidator();
     private Order order;
 

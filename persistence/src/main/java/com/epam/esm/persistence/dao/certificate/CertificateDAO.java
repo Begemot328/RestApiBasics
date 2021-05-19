@@ -20,5 +20,5 @@ public interface CertificateDAO extends EntityDAO<Certificate> {
      * @param query {@link String} query to obtain entities.
      * @return {@link java.util.ArrayList}  of {@link Certificate} objects.
      */
-    List<Certificate> readBy(String query);
+    List<Certificate> finadByQuery(String query);
 }

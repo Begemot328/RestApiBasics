@@ -35,6 +35,7 @@ public class OrderDTO extends RepresentationModel<OrderDTO> {
     }
 
     public OrderDTO() {
+        // Default constructor for Model mapper purposes.
     }
 
     public CertificateDTO getCertificate() {

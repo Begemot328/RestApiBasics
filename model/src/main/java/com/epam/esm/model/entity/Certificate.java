@@ -53,6 +53,7 @@ public class Certificate extends CustomEntity {
      * Default constructor.
      */
     public Certificate() {
+        // Default constructor for JPA purposes.
     }
 
     /**

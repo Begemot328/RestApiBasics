@@ -48,7 +48,9 @@ public class User extends CustomEntity {
     /**
      * Default constructor.
      */
-    public User() {}
+    public User() {
+        // Default constructor for JPA purposes.
+        }
 
     /**
      * First name getter.
