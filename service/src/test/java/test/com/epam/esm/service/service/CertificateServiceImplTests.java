@@ -123,12 +123,12 @@ class CertificateServiceImplTests {
 
     @Test
     void read_returnCertificate() throws NotFoundException {
-        assertEquals(certificate1, service.read(1));
+        assertEquals(certificate1, service.getById(1));
     }
 
     @Test
     void readAll_returnCertificates() throws NotFoundException {
-        assertEquals(fullList, service.readAll());
+        assertEquals(fullList, service.findAll());
     }
 
     @Test
@@ -145,7 +145,7 @@ class CertificateServiceImplTests {
     }
 
     @Test
-    void update_updateCertificate() throws ValidationException, NotFoundException {
+    void update_updateCertificate() throws ValidationException, NotFoundException, BadRequestException {
         service.update(certificate2);
         verify(certificateDaoMock, times(1)).update(certificate2);
     }
@@ -157,7 +157,7 @@ class CertificateServiceImplTests {
         params.put(CertificateSearchParameters.NAME.name(), Collections.singletonList("1"));
         params.put(CertificateSortingParameters.SORT_BY_NAME.name().toLowerCase(),
                 Collections.singletonList("2"));
-        assertEquals(shortList, service.read(params));
+        assertEquals(shortList, service.findByParameters(params));
         verify(certificateDaoMock, times(1)).findByParameters(any(CertificateFinder.class));
     }
 
@@ -166,7 +166,7 @@ class CertificateServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
-        service.read(params);
+        service.findByParameters(params);
 
         ArgumentCaptor<EntityFinder<Certificate>> captor = ArgumentCaptor.forClass(EntityFinder.class);
         verify(certificateDaoMock, atLeast(1)).findByParameters(captor.capture());
@@ -178,7 +178,7 @@ class CertificateServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
-        service.read(params);
+        service.findByParameters(params);
 
         ArgumentCaptor<EntityFinder<Certificate>> captor = ArgumentCaptor.forClass(EntityFinder.class);
         verify(certificateDaoMock, atLeast(1)).findByParameters(captor.capture());

@@ -64,9 +64,9 @@ public class UserController {
             throws NotFoundException, BadRequestException {
         List<User> users;
         if (CollectionUtils.isEmpty(params)) {
-            users = userService.readAll();
+            users = userService.findAll();
         } else {
-            users = userService.read(params);
+            users = userService.findByParameters(params);
         }
         CollectionModel<UserDTO> userDTOs = userDTOMapper.toUserDTOList(
                 users);
@@ -81,11 +81,7 @@ public class UserController {
     public ResponseEntity<?> readAllOrders(@RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
         List<Order> orders;
-        if (CollectionUtils.isEmpty(params)) {
-            orders = orderService.readAll();
-        } else {
-            orders = orderService.read(params);
-        }
+        orders = orderService.findByParameters(params);
         CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(orders);
         orderDTOs.add(linkTo(methodOn(this.getClass()).readAllOrders(params)).withRel("orders"));
 
@@ -96,7 +92,7 @@ public class UserController {
 
     @GetMapping(value = "/users/{id}")
     public ResponseEntity<?> readUser(@PathVariable(value = "id") int id) throws NotFoundException {
-        User user = userService.read(id);
+        User user = userService.getById(id);
         final UserDTO userDTO = userDTOMapper.toUserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
@@ -107,7 +103,7 @@ public class UserController {
             throws NotFoundException, BadRequestException {
         params.put(OrderSearchParameters.USER_ID.getParameterName(),
                 Collections.singletonList(Integer.toString(id)));
-        List<Order> orders = orderService.read(params);
+        List<Order> orders = orderService.findByParameters(params);
         CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(orders);
         orderDTOs.add(linkTo(methodOn(this.getClass()).readUsersOrders(id, params)).withRel("tags"));
 
@@ -118,7 +114,7 @@ public class UserController {
 
     @GetMapping(value = "/orders/{id}")
     public ResponseEntity<?> readOrder(@PathVariable(value = "id") int orderId) throws NotFoundException {
-        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.read(orderId));
+        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.getById(orderId));
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
@@ -126,7 +122,7 @@ public class UserController {
     public ResponseEntity<?> readOrder(@PathVariable(value = "id") int id,
                                        @PathVariable(value = "order_id") int orderId)
             throws NotFoundException {
-        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.read(orderId));
+        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.getById(orderId));
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
@@ -137,8 +133,8 @@ public class UserController {
                                          @RequestParam int certificateId,
                                          @RequestParam int quantity)
             throws NotFoundException, ValidationException, BadRequestException {
-        User user = userService.read(id);
-        Certificate certificate = certificateService.read(certificateId);
+        User user = userService.getById(id);
+        Certificate certificate = certificateService.getById(certificateId);
         Order order = orderService.createOrder(certificate, user, quantity);
         return new ResponseEntity<>(orderDTOMapper.toOrderDTO(order), HttpStatus.OK);
     }
@@ -147,23 +143,23 @@ public class UserController {
             throws NotFoundException, BadRequestException {
         Paginator paginator = new Paginator(params);
 
-        if (paginator.isLimited(params)) {
-            collectionModel.add(linkTo(methodOn(this.getClass()).readAllOrders(
-                    paginator.nextPage(params))).withRel("nextPage"));
-            collectionModel.add(linkTo(methodOn(this.getClass()).readAllOrders(
-                    paginator.previousPage(params))).withRel("previousPage"));
-        }
+        paginator.setDefaultLimitIfNotLimited(params);
+        collectionModel.add(linkTo(methodOn(this.getClass()).readAllOrders(
+                paginator.nextPage(params))).withRel("nextPage"));
+        collectionModel.add(linkTo(methodOn(this.getClass()).readAllOrders(
+                paginator.previousPage(params))).withRel("previousPage"));
+
     }
 
     private void paginateUsers(MultiValueMap<String, String> params, CollectionModel collectionModel)
             throws NotFoundException, BadRequestException {
         Paginator paginator = new Paginator(params);
 
-        if (paginator.isLimited(params)) {
-            collectionModel.add(linkTo(methodOn(this.getClass()).readUsers(
-                    paginator.nextPage(params))).withRel("nextPage"));
-            collectionModel.add(linkTo(methodOn(this.getClass()).readUsers(
-                    paginator.previousPage(params))).withRel("previousPage"));
-        }
+        paginator.setDefaultLimitIfNotLimited(params);
+        collectionModel.add(linkTo(methodOn(this.getClass()).readUsers(
+                paginator.nextPage(params))).withRel("nextPage"));
+        collectionModel.add(linkTo(methodOn(this.getClass()).readUsers(
+                paginator.previousPage(params))).withRel("previousPage"));
+
     }
 }

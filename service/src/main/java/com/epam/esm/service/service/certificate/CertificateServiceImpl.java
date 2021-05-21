@@ -61,11 +61,7 @@ public class CertificateServiceImpl implements CertificateService {
         certificate.setCreateDate(LocalDateTime.now());
         certificate.setLastUpdateDate(LocalDateTime.now());
         validator.validate(certificate);
-        for (Tag tag : certificate.getTags()) {
-            if (tagService.readOptional(tag.getId()).isEmpty()) {
-                tagService.create(tag);
-            }
-        }
+        makeAllTagsDetached(certificate);
         try {
             return dao.create(certificate);
         } catch (DataIntegrityViolationException e) {
@@ -73,9 +69,10 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
+    @Transactional
     @Override
-    public Certificate read(int id) throws NotFoundException {
-        Optional<Certificate> certificateOptional = readOptional(id);
+    public Certificate getById(int id) throws NotFoundException {
+        Optional<Certificate> certificateOptional = getByIdOptional(id);
         if (certificateOptional.isEmpty()) {
             throw new NotFoundException("Requested resource not found(id = " + id + ")!",
                     ErrorCodes.CERTIFICATE_NOT_FOUND);
@@ -84,7 +81,7 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public Optional<Certificate> readOptional(int id) {
+    public Optional<Certificate> getByIdOptional(int id) {
         return Optional.ofNullable(dao.getById(id));
     }
 
@@ -100,16 +97,17 @@ public class CertificateServiceImpl implements CertificateService {
     @Transactional
     @Override
     public Certificate update(Certificate certificate)
-            throws ValidationException, NotFoundException {
+            throws ValidationException, NotFoundException, BadRequestException {
         certificate.setLastUpdateDate(LocalDateTime.now());
-        certificate.setCreateDate(read(certificate.getId()).getCreateDate());
+        certificate.setCreateDate(getById(certificate.getId()).getCreateDate());
+        makeAllTagsDetached(certificate);
         validator.validate(certificate);
         return dao.update(certificate);
 
     }
 
     @Override
-    public List<Certificate> readAll() throws NotFoundException {
+    public List<Certificate> findAll() throws NotFoundException {
         List<Certificate> certificates = dao.findAll();
         if (CollectionUtils.isEmpty(certificates)) {
             throw new NotFoundException("No certificates found!",
@@ -119,7 +117,7 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    private List<Certificate> readBy(EntityFinder<Certificate> entityFinder) throws NotFoundException {
+    private List<Certificate> findByFinder(EntityFinder<Certificate> entityFinder) throws NotFoundException {
         List<Certificate> certificates = dao.findByParameters(entityFinder);
         if (CollectionUtils.isEmpty(certificates)) {
             throw new NotFoundException("Requested certificate not found!",
@@ -136,7 +134,7 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public List<Certificate> read(MultiValueMap<String, String> params)
+    public List<Certificate> findByParameters(MultiValueMap<String, String> params)
             throws BadRequestException, NotFoundException {
         CertificateFinder finder = getFinder();
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
@@ -147,7 +145,52 @@ public class CertificateServiceImpl implements CertificateService {
                 throw new BadRequestException(e, ErrorCodes.CERTIFICATE_BAD_REQUEST);
             }
         }
-        return readBy(finder);
+        return findByFinder(finder);
+    }
+
+    @Transactional
+    @Override
+    public Certificate patch(Certificate certificate)
+            throws ValidationException, BadRequestException, NotFoundException {
+        Certificate oldCertificate = findOldCertificate(certificate.getId());
+
+        if (oldCertificate == null) {
+            throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
+        }
+        return update(updateCertificate(certificate, oldCertificate));
+    }
+
+    private Certificate updateCertificate(Certificate newCertificate, Certificate oldCertificate) {
+        if (newCertificate.getPrice() != null
+                && newCertificate.getPrice().compareTo(BigDecimal.ZERO) > 0) {
+            oldCertificate.setPrice(newCertificate.getPrice());
+        }
+        if (newCertificate.getDescription() != null) {
+            oldCertificate.setDescription(newCertificate.getDescription());
+        }
+        if (newCertificate.getDuration() != 0) {
+            oldCertificate.setDuration(newCertificate.getDuration());
+        }
+        if (newCertificate.getName() != null) {
+            oldCertificate.setName(newCertificate.getName());
+        }
+        if (CollectionUtils.isNotEmpty(newCertificate.getTags())) {
+            oldCertificate.setTags(newCertificate.getTags());
+        }
+        return oldCertificate;
+    }
+
+    private void makeAllTagsDetached(Certificate certificate) throws BadRequestException, ValidationException {
+        for (Tag tag : certificate.getTags()) {
+            if (tagService.getByIdOptional(tag.getId()).isEmpty()) {
+                Optional<Tag> tagOptional = tagService.getByUniqueNameOptional(tag.getName());
+                if (tagOptional.isPresent()) {
+                    tag.setId(tagOptional.get().getId());
+                } else {
+                    tagService.create(tag);
+                }
+            }
+        }
     }
 
     private void parseParameter(CertificateFinder finder, String parameterName, List<String> parameterValues) {
@@ -174,13 +217,16 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    private void parseSortParameter(CertificateFinder finder, String parameterName, List<String> parameterValues) {
+    private void parseSortParameter(CertificateFinder finder,
+                                    String parameterName, List<String> parameterValues) {
         finder.sortBy(CertificateSortingParameters.getEntryByParameter(parameterName).getValue(),
                 SortDirection.parseAscDesc(parameterValues.get(0)));
     }
 
-    private void parseFindParameter(CertificateFinder finder, String parameterName, List<String> parameterValues) {
-        CertificateSearchParameters parameter =
+    private void parseFindParameter(CertificateFinder finder,
+                                    String parameterName, List<String> parameterValues) {
+        CertificateSearchParameters parameter;
+        parameter =
                 CertificateSearchParameters.getEntryByParameter(parameterName);
         switch (parameter) {
             case NAME:
@@ -229,38 +275,6 @@ public class CertificateServiceImpl implements CertificateService {
             throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
         }
         return dao.getById(certificateId);
-    }
-
-    @Transactional
-    @Override
-    public Certificate patch(Certificate certificate)
-            throws ValidationException, BadRequestException, NotFoundException {
-        Certificate oldCertificate = findOldCertificate(certificate.getId());
-
-        if (oldCertificate == null) {
-            throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
-        }
-        return update(updateCertificate(certificate, oldCertificate));
-    }
-
-    private Certificate updateCertificate(Certificate newCertificate, Certificate oldCertificate) {
-        if (newCertificate.getPrice() != null
-                && newCertificate.getPrice().compareTo(BigDecimal.ZERO) > 0) {
-            oldCertificate.setPrice(newCertificate.getPrice());
-        }
-        if (newCertificate.getDescription() != null) {
-            oldCertificate.setDescription(newCertificate.getDescription());
-        }
-        if (newCertificate.getDuration() != 0) {
-            oldCertificate.setDuration(newCertificate.getDuration());
-        }
-        if (newCertificate.getName() != null) {
-            oldCertificate.setName(newCertificate.getName());
-        }
-        if (CollectionUtils.isNotEmpty(newCertificate.getTags())) {
-            oldCertificate.setTags(newCertificate.getTags());
-        }
-        return oldCertificate;
     }
 }
 

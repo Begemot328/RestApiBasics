@@ -19,12 +19,7 @@ public enum TagQueries {
             " LIMIT 1) AS t1 ON t1.user_id = orders.user_id\n" +
             " GROUP BY tag_id\n" +
             " ORDER BY COUNT(tag_id) DESC\n" +
-            " LIMIT 1;"),
-    SELECT_FROM_TAG("SELECT DISTINCT * FROM certificates.tag"),
-    SELECT_FROM_TAG_CERTIFICATES("SELECT DISTINCT id, name FROM certificates.tag_certificates"),
-    INSERT_TAG("INSERT INTO certificates.tag (name) VALUES (?);"),
-    DELETE_TAG("DELETE FROM certificates.tag  " +
-            "WHERE id = ?;");
+            " LIMIT 1;");
 
     private final String value;
 

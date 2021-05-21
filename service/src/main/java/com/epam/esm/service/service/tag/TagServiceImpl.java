@@ -44,6 +44,10 @@ public class TagServiceImpl implements TagService {
     public Tag create(Tag tag) throws ValidationException, BadRequestException {
         validator.validate(tag);
         try {
+            if (getByUniqueNameOptional(tag.getName()).isPresent()) {
+                throw new BadRequestException("Such name already exists! name= " + tag.getName(),
+                        ErrorCodes.TAG_BAD_REQUEST);
+            }
             return dao.create(tag);
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException(e, ErrorCodes.TAG_BAD_REQUEST);
@@ -51,8 +55,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag read(int id) throws NotFoundException {
-        Optional<Tag> tagOptional = readOptional(id);
+    public Tag getById(int id) throws NotFoundException {
+        Optional<Tag> tagOptional = getByIdOptional(id);
         if (tagOptional.isEmpty()) {
             throw new NotFoundException("Requested resource not found(id = " + id + ")!",
                     ErrorCodes.TAG_NOT_FOUND);
@@ -61,7 +65,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Optional<Tag> readOptional(int id) {
+    public Optional<Tag> getByIdOptional(int id) {
         return Optional.ofNullable(dao.getById(id));
     }
 
@@ -81,7 +85,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> readAll() throws NotFoundException {
+    public List<Tag> findAll() throws NotFoundException {
         List<Tag> tags = dao.findAll();
         if (CollectionUtils.isEmpty(tags)) {
             throw new NotFoundException("No tags found!",
@@ -91,21 +95,13 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-    private List<Tag> readBy(EntityFinder<Tag> entityFinder) throws NotFoundException {
+    private List<Tag> findByFinder(EntityFinder<Tag> entityFinder) throws NotFoundException {
         List<Tag> tags = dao.findByParameters(entityFinder);
         if (CollectionUtils.isEmpty(tags)) {
             throw new NotFoundException("Requested resource not found!",
                     ErrorCodes.TAG_NOT_FOUND);
         } else {
             return tags;
-        }
-    }
-
-    private void parseFindParameter(TagFinder finder, String parameterString, List<String> list) {
-        TagSearchParameters parameter =
-                TagSearchParameters.getEntryByParameter(parameterString);
-        if (parameter == TagSearchParameters.NAME) {
-            addToFinder(finder::findByName, list);
         }
     }
 
@@ -128,7 +124,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> read(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException {
+    public List<Tag> findByParameters(MultiValueMap<String, String> params)
+            throws NotFoundException, BadRequestException {
         TagFinder finder = getFinder();
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
             try {
@@ -138,7 +135,7 @@ public class TagServiceImpl implements TagService {
                 throw new BadRequestException(e, ErrorCodes.TAG_BAD_REQUEST);
             }
         }
-        return readBy(finder);
+        return findByFinder(finder);
     }
 
     private void parseParameter(TagFinder finder, String parameterName, List<String> parameterValues) {
@@ -148,6 +145,14 @@ public class TagServiceImpl implements TagService {
             parsePaginationParameter(finder, parameterName, parameterValues);
         } else {
             parseFindParameter(finder, parameterName, parameterValues);
+        }
+    }
+
+    private void parseFindParameter(TagFinder finder, String parameterString, List<String> list) {
+        TagSearchParameters parameter =
+                TagSearchParameters.getEntryByParameter(parameterString);
+        if (parameter == TagSearchParameters.NAME) {
+            addToFinder(finder::findByNameLike, list);
         }
     }
 
@@ -175,7 +180,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag readMostlyUsedTag() throws NotFoundException {
+    public Tag findMostlyUsedTag() throws NotFoundException {
         Tag tag = dao.findMostPopularTag();
         if (tag == null) {
             throw new NotFoundException("Requested resource not found (most popular tag)!",
@@ -183,5 +188,26 @@ public class TagServiceImpl implements TagService {
         } else {
             return tag;
         }
+    }
+
+    @Override
+    public Tag getByUniqueName(String name) throws NotFoundException {
+        Optional<Tag> tagOptional = getByUniqueNameOptional(name);
+        if (tagOptional.isEmpty()) {
+            throw new NotFoundException("Requested resource not found(name = " + name + ")!",
+                    ErrorCodes.TAG_NOT_FOUND);
+        }
+        return tagOptional.get();
+    }
+
+    @Override
+    public Optional<Tag> getByUniqueNameOptional(String name) {
+        TagFinder finder = getFinder();
+        addToFinder(finder::findByName, name);
+        List<Tag> tags = dao.findByParameters(finder);
+        if (CollectionUtils.isEmpty(tags)) {
+            return Optional.empty();
+        }
+        return Optional.of(tags.get(0));
     }
 }

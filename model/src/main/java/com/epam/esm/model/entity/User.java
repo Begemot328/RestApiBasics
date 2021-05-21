@@ -24,7 +24,7 @@ public class User extends CustomEntity {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(table = "account", nullable = false)
+    @Column(table = "account", nullable = false, unique = true)
     private String login;
 
     @Column(table = "account", nullable = false)

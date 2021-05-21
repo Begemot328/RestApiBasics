@@ -18,7 +18,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,11 +59,8 @@ public class CertificateController {
     public ResponseEntity<?> read(@RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
         List<Certificate> certificates;
-        if (CollectionUtils.isEmpty(params)) {
-            certificates = certificateService.readAll();
-        } else {
-            certificates = certificateService.read(params);
-        }
+        certificates = certificateService.findByParameters(params);
+
         CollectionModel<CertificateDTO> certificateDTOs = certificateDTOMapper.toCertificateDTOList(
                 certificates);
         certificateDTOs.add(linkTo(methodOn(this.getClass()).read(params)).withRel("certificates"));
@@ -76,7 +72,7 @@ public class CertificateController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> read(@PathVariable(value = "id") int id) throws NotFoundException {
-        Certificate certificate = certificateService.read(id);
+        Certificate certificate = certificateService.getById(id);
         final CertificateDTO certificateDTO = certificateDTOMapper.toCertificateDTO(certificate);
         return new ResponseEntity<>(certificateDTO, HttpStatus.OK);
     }
@@ -114,7 +110,7 @@ public class CertificateController {
         params.put(TagSearchParameters.CERTIFICATE_ID.getParameterName(),
                 Collections.singletonList(Integer.toString(id)));
         CollectionModel<TagDTO> tagDTOs = tagDTOMapper.toTagDTOList(
-                tagService.read(params));
+                tagService.findByParameters(params));
         tagDTOs.add(linkTo(methodOn(this.getClass()).readTags(id, params)).withRel("tags"));
 
         paginate(params, tagDTOs);
@@ -136,11 +132,11 @@ public class CertificateController {
             throws NotFoundException, BadRequestException {
         Paginator paginator = new Paginator(params);
 
-        if(paginator.isLimited(params)) {
-            collectionModel.add(linkTo(methodOn(this.getClass()).read(
-                    paginator.nextPage(params))).withRel("nextPage"));
-            collectionModel.add(linkTo(methodOn(this.getClass()).read(
-                    paginator.previousPage(params))).withRel("previousPage"));
-        }
+        paginator.setDefaultLimitIfNotLimited(params);
+
+        collectionModel.add(linkTo(methodOn(this.getClass()).read(
+                paginator.nextPage(params))).withRel("nextPage"));
+        collectionModel.add(linkTo(methodOn(this.getClass()).read(
+                paginator.previousPage(params))).withRel("previousPage"));
     }
 }

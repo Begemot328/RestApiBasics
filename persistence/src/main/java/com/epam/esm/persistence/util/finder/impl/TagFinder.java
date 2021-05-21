@@ -39,7 +39,16 @@ public class TagFinder extends EntityFinder<Tag> {
      *
      * @param name String that found names will include.
      */
-    public void findByName(String name) {
+    public void findByNameLike(String name) {
         add(builder.like(root.get(TagColumns.NAME.getValue()), "%" + name + "%"));
+    }
+
+    /**
+     * Find by name condition adding method.
+     *
+     * @param name String that found names will include.
+     */
+    public void findByName(String name) {
+        add(builder.equal(root.get(TagColumns.NAME.getValue()), name));
     }
 }

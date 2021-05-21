@@ -1,6 +1,8 @@
 package com.epam.esm.persistence.util.finder.impl;
 
 import com.epam.esm.model.entity.User;
+import com.epam.esm.persistence.constants.TagColumns;
+import com.epam.esm.persistence.constants.UserColumns;
 import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.context.annotation.Scope;
@@ -31,5 +33,14 @@ public class UserFinder extends EntityFinder<User> {
     @Override
     protected Class<User> getClassType() {
         return User.class;
+    }
+
+    /**
+     * Find by login condition adding method.
+     *
+     * @param login String that found login will include.
+     */
+    public void findByLogin(String login) {
+        add(builder.equal(root.get(UserColumns.LOGIN.getValue()), login));
     }
 }

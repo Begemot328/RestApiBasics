@@ -1,6 +1,8 @@
 package com.epam.esm.web.util;
 
 import com.epam.esm.service.constants.PaginationParameters;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 
@@ -13,7 +15,8 @@ import java.util.Collections;
  * @version 1.0
  */
 public class Paginator {
-    private static final int DEFAULT_LIMIT = 20;
+
+    private static final int DEFAULT_LIMIT=20;
     private final int limit;
     private final int offset;
 
@@ -25,6 +28,11 @@ public class Paginator {
     public Paginator(MultiValueMap<String, String> params) {
         limit = getLimit(params);
         offset = getOffset(params);
+    }
+
+    public Paginator() {
+        limit = DEFAULT_LIMIT;
+        offset = 0;
     }
 
     /*
@@ -51,7 +59,16 @@ public class Paginator {
      * @return true if parameter map contains limit parameters.
      */
     public boolean isLimited(MultiValueMap<String, String> params) {
-        return !CollectionUtils.isEmpty(params.get(PaginationParameters.LIMIT.getParameterName()));
+        return !isNotLimited(params);
+    }
+
+    /*
+     * Check whether parameter map contains limit parameters.
+     *
+     * @return true if parameter map contains limit parameters.
+     */
+    public boolean isNotLimited(MultiValueMap<String, String> params) {
+        return CollectionUtils.isEmpty(params.get(PaginationParameters.LIMIT.getParameterName()));
     }
 
     private int getLimit(MultiValueMap<String, String> params) {
@@ -70,6 +87,7 @@ public class Paginator {
     /*
      * Returns parameters map with limit and offset parameters for next page.
      *
+     * @param params Parameters to process.
      * @return {@link MultiValueMap} parameters map for next page.
      */
     public MultiValueMap<String, String> nextPage(MultiValueMap<String, String> params) {
@@ -81,6 +99,7 @@ public class Paginator {
     /*
      * Returns parameters map with limit and offset parameters for previous page.
      *
+     * @param params Parameterc to process.
      * @return {@link MultiValueMap} parameters map for previous page.
      */
     public MultiValueMap<String, String> previousPage(MultiValueMap<String, String> params) {
@@ -88,5 +107,28 @@ public class Paginator {
         params.put(PaginationParameters.OFFSET.getParameterName(),
                 Collections.singletonList(Integer.toString(newOffset)));
         return params;
+    }
+
+    /*
+     * Returns parameters map with limit and offset parameters for previous page.
+     *
+     * @param params Parameters to process.
+     * @return {@link MultiValueMap} parameters map for previous page.
+     */
+    public void setDefaultLimit(MultiValueMap<String, String> params) {
+        params.put(PaginationParameters.LIMIT.getParameterName(),
+                Collections.singletonList(Integer.toString(DEFAULT_LIMIT)));
+    }
+
+    /*
+     * Set default limit value if it is empty.
+     *
+     * @param params Parameters to process.
+     * @return {@link MultiValueMap} parameters map for previous page.
+     */
+    public void setDefaultLimitIfNotLimited(MultiValueMap<String, String> params) {
+        if(isNotLimited(params)) {
+            setDefaultLimit(params);
+        }
     }
 }

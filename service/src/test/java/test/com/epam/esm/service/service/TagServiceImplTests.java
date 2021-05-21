@@ -107,12 +107,12 @@ class TagServiceImplTests {
 
     @Test
     void read_returnTag() throws NotFoundException {
-        assertEquals(tag1, service.read(1));
+        assertEquals(tag1, service.getById(1));
     }
 
     @Test
     void readAll_returnTags() throws NotFoundException {
-        assertEquals(fullList, service.readAll());
+        assertEquals(fullList, service.findAll());
     }
 
     @Test
@@ -140,7 +140,7 @@ class TagServiceImplTests {
         };
         params.put(TagSearchParameters.NAME.name(), Collections.singletonList("1"));
         params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), Collections.singletonList("2"));
-        assertEquals(shortList, service.read(params));
+        assertEquals(shortList, service.findByParameters(params));
         verify(tagDaoMock, atLeast(1)).findByParameters(any(TagFinder.class));
     }
 
@@ -163,7 +163,7 @@ class TagServiceImplTests {
 
     @Test
     void readMostlyUsedTag_returnTag() throws NotFoundException {
-        assertEquals(service.readMostlyUsedTag(), tag4);
+        assertEquals(service.findMostlyUsedTag(), tag4);
     }
 
     @Test
@@ -171,7 +171,7 @@ class TagServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
-        service.read(params);
+        service.findByParameters(params);
 
         ArgumentCaptor<EntityFinder<Tag>> captor = ArgumentCaptor.forClass(EntityFinder.class);
         verify(tagDaoMock, atLeast(1)).findByParameters(captor.capture());
@@ -183,7 +183,7 @@ class TagServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
-        service.read(params);
+        service.findByParameters(params);
 
         ArgumentCaptor<EntityFinder<Tag>> captor = ArgumentCaptor.forClass(EntityFinder.class);
         verify(tagDaoMock, atLeast(1)).findByParameters(captor.capture());
@@ -197,6 +197,6 @@ class TagServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put("unknown", Collections.singletonList("1"));
-        assertThrows(BadRequestException.class, () -> service.read(params));
+        assertThrows(BadRequestException.class, () -> service.findByParameters(params));
     }
 }

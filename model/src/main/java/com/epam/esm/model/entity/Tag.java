@@ -13,7 +13,7 @@ import javax.persistence.Entity;
 @Entity
 public class Tag extends CustomEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     /**

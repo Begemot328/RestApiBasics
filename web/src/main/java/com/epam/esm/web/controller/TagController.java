@@ -17,7 +17,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,28 +58,25 @@ public class TagController {
     public ResponseEntity<?> read(@RequestParam MultiValueMap<String, String> params)
             throws BadRequestException, NotFoundException {
         List<Tag> tags = new ArrayList<>();
-        if (CollectionUtils.isEmpty(params)) {
-            tags = tagServiceImpl.readAll();
-        } else {
-            tags = tagServiceImpl.read(params);
-        }
+
+        tags = tagServiceImpl.findByParameters(params);
         CollectionModel<TagDTO> tagDTOs = tagDTOMapper.toTagDTOList(tags);
-        tagDTOs.add(linkTo(methodOn(this.getClass()).read(params)).withSelfRel());
 
         paginate(params, tagDTOs);
+        tagDTOs.add(linkTo(methodOn(this.getClass()).read(params)).withSelfRel());
 
         return new ResponseEntity<>(tagDTOs, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> read(@PathVariable(value = "id") int id) throws NotFoundException {
-        final Tag tag = tagServiceImpl.read(id);
+        final Tag tag = tagServiceImpl.getById(id);
         return new ResponseEntity<>(tagDTOMapper.toTagDTO(tag), HttpStatus.OK);
     }
 
     @GetMapping(value = "/popular")
     public ResponseEntity<?> readMostPopular() throws NotFoundException {
-        final Tag tag = tagServiceImpl.readMostlyUsedTag();
+        final Tag tag = tagServiceImpl.findMostlyUsedTag();
         TagDTO tagDTO = tagDTOMapper.toTagDTO(tag);
         tagDTO.add(linkTo(methodOn(this.getClass()).readMostPopular()).withRel("most-popular"));
         return new ResponseEntity<>(tagDTO, HttpStatus.OK);
@@ -107,7 +103,7 @@ public class TagController {
             throws NotFoundException, BadRequestException {
         params.put(CertificateSearchParameters.TAG_ID.getParameterName(), Collections.singletonList(Integer.toString(id)));
         CollectionModel<CertificateDTO> certificateDTOs = certificateDTOMapper.toCertificateDTOList(
-                certificateServiceImpl.read(params));
+                certificateServiceImpl.findByParameters(params));
         certificateDTOs.add(
                 linkTo(methodOn(this.getClass()).readCertificates(id, params)).withRel("certificates"));
 
@@ -120,11 +116,11 @@ public class TagController {
             throws NotFoundException, BadRequestException {
         Paginator paginator = new Paginator(params);
 
-        if(paginator.isLimited(params)) {
-            collectionModel.add(linkTo(methodOn(this.getClass()).read(
-                    paginator.nextPage(params))).withRel("nextPage"));
-            collectionModel.add(linkTo(methodOn(this.getClass()).read(
-                    paginator.previousPage(params))).withRel("previousPage"));
-        }
+        paginator.setDefaultLimitIfNotLimited(params);
+
+        collectionModel.add(linkTo(methodOn(this.getClass()).read(
+                paginator.nextPage(params))).withRel("nextPage"));
+        collectionModel.add(linkTo(methodOn(this.getClass()).read(
+                paginator.previousPage(params))).withRel("previousPage"));
     }
 }

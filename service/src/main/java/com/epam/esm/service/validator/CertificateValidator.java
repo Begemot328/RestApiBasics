@@ -32,7 +32,7 @@ public class CertificateValidator implements EntityValidator<Certificate> {
     }
 
     private void validatePrice(Certificate certificate) throws ValidationException {
-        validatePositiveNumber(certificate.getPrice(), "Certificate duration",
+        validatePositiveNumber(certificate.getPrice(), "Certificate price",
                 ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
     }
 }

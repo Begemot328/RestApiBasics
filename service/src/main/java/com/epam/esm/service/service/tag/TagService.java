@@ -4,6 +4,8 @@ import com.epam.esm.model.entity.Tag;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.service.EntityService;
 
+import java.util.Optional;
+
 /**
  * {@link Tag} service interface.
  *
@@ -13,9 +15,19 @@ import com.epam.esm.service.service.EntityService;
 public interface TagService extends EntityService<Tag> {
 
     /**
-     * Find {@link Tag} the most widely used tag of a user with the highest cost of all orders..
+     * Find {@link Tag} the most widely used tag of a user with the highest cost of all orders.
      *
      * @return The most widely used {@link Tag} of a user with the highest cost of all orders.
      */
-    Tag readMostlyUsedTag() throws NotFoundException;
+    Tag findMostlyUsedTag() throws NotFoundException;
+
+    /**
+     * Find {@link Tag} by his unique name.
+     *
+     * @param name Name to find.
+     * @return {@link Tag} with defined name.
+     */
+    Tag getByUniqueName(String name) throws NotFoundException;
+
+    Optional<Tag> getByUniqueNameOptional(String name);
 }

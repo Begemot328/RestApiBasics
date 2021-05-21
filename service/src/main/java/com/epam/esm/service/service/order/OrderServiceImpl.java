@@ -68,10 +68,10 @@ public class OrderServiceImpl implements OrderService {
         order.setPurchaseDate(LocalDateTime.now());
         validator.validate(order);
 
-        if (certificateService.readOptional(order.getCertificate().getId()).isEmpty()) {
+        if (certificateService.getByIdOptional(order.getCertificate().getId()).isEmpty()) {
             throw new BadRequestException("Unknown certificate!", ErrorCodes.ORDER_BAD_REQUEST);
         }
-        if (userService.readOptional(order.getUser().getId()).isEmpty()) {
+        if (userService.getByIdOptional(order.getUser().getId()).isEmpty()) {
             throw new BadRequestException("Unknown user!", ErrorCodes.ORDER_BAD_REQUEST);
         }
 
@@ -80,8 +80,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order read(int id) throws NotFoundException {
-        Optional<Order> orderOptional = readOptional(id);
+    public Order getById(int id) throws NotFoundException {
+        Optional<Order> orderOptional = getByIdOptional(id);
         if (orderOptional.isEmpty()) {
             throw new NotFoundException("Requested resource not found(id = " + id + ")!",
                     ErrorCodes.ORDER_NOT_FOUND);
@@ -90,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<Order> readOptional(int id) {
+    public Optional<Order> getByIdOptional(int id) {
         return Optional.ofNullable(dao.getById(id));
     }
 
@@ -108,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> readAll() throws NotFoundException {
+    public List<Order> findAll() throws NotFoundException {
         List<Order> orders = dao.findAll();
         if (CollectionUtils.isEmpty(orders)) {
             throw new NotFoundException("No orders found!",
@@ -135,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> read(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException {
+    public List<Order> findByParameters(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException {
         OrderFinder finder = getFinder();
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
             try {

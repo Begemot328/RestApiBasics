@@ -37,14 +37,14 @@ public interface EntityService<T extends CustomEntity> {
      *
      * @param id ID of the Entity.
      */
-    T read(int id) throws NotFoundException;
+    T getById(int id) throws NotFoundException;
 
     /**
      * Read {@link CustomEntity} from database method.
      *
      * @param id ID of the Entity.
      */
-    Optional<T> readOptional(int id);
+    Optional<T> getByIdOptional(int id);
 
     /**
      * Delete {@link CustomEntity} from database method.
@@ -68,14 +68,14 @@ public interface EntityService<T extends CustomEntity> {
      * @throws NotFoundException in case of malfunctioning, e.g..
      *
      */
-    List<T> readAll() throws NotFoundException;
+    List<T> findAll() throws NotFoundException;
 
     /**
      * Find {@link Entity} objects by parameters method.
      *
      * @param params finding and sorting parameters.
      */
-    List<T> read(MultiValueMap<String, String> params) throws BadRequestException, NotFoundException;
+    List<T> findByParameters(MultiValueMap<String, String> params) throws BadRequestException, NotFoundException;
 
     /**
      * Decode request parameters using UTF-8.

@@ -1,9 +1,11 @@
 package com.epam.esm.service.service.user;
 
+import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.user.UserDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.SortDirection;
+import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PaginationParameters;
@@ -12,6 +14,7 @@ import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ import org.springframework.util.MultiValueMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * {@link User} service implementation.
@@ -47,8 +51,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User read(int id) throws NotFoundException {
-        Optional<User> userOptional = readOptional(id);
+    public User getById(int id) throws NotFoundException {
+        Optional<User> userOptional = getByIdOptional(id);
         if (userOptional.isEmpty()) {
             throw new NotFoundException("Requested resource not found(id = " + id + ")!",
                     ErrorCodes.USER_NOT_FOUND);
@@ -58,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> readOptional(int id) {
+    public Optional<User> getByIdOptional(int id) {
         return Optional.ofNullable(dao.getById(id));
     }
 
@@ -73,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> readAll() throws NotFoundException {
+    public List<User> findAll() throws NotFoundException {
         List<User> users = dao.findAll();
         if (CollectionUtils.isEmpty(users)) {
             throw new NotFoundException("No users found!",
@@ -89,7 +93,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> read(MultiValueMap<String, String> params)
+    public List<User> findByParameters(MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
         UserFinder finder = getFinder();
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
@@ -144,6 +148,33 @@ public class UserServiceImpl implements UserService {
                     ErrorCodes.USER_NOT_FOUND);
         } else {
             return orders;
+        }
+    }
+
+    @Override
+    public User getByUniqueLogin(String login) throws NotFoundException {
+        Optional<User> userOptional = getByUniqueLoginOptional(login);
+        if (userOptional.isEmpty()) {
+            throw new NotFoundException("Requested resource not found(login = " + login + ")!",
+                    ErrorCodes.USER_NOT_FOUND);
+        }
+        return userOptional.get();
+    }
+
+    @Override
+    public Optional<User> getByUniqueLoginOptional(String login) {
+        UserFinder finder = getFinder();
+        addToFinder(finder::findByLogin, login);
+        List<User> users = dao.findByParameters(finder);
+        if (CollectionUtils.isEmpty(users)) {
+            return Optional.empty();
+        }
+        return Optional.of(users.get(0));
+    }
+
+    private void addToFinder(Consumer<String> consumer, String value) {
+        if (StringUtils.isNotEmpty(value)) {
+            consumer.accept(decodeParam(value));
         }
     }
 }

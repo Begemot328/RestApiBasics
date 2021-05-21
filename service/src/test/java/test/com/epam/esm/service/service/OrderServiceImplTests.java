@@ -123,18 +123,18 @@ class OrderServiceImplTests {
 
         doNothing().when(validator).validate(any(Order.class));
 
-        when(userServiceMock.readOptional(any(Integer.class))).thenReturn(Optional.of(user));
-        when(certificateServiceMock.readOptional(any(Integer.class))).thenReturn(Optional.of(certificate));
+        when(userServiceMock.getByIdOptional(any(Integer.class))).thenReturn(Optional.of(user));
+        when(certificateServiceMock.getByIdOptional(any(Integer.class))).thenReturn(Optional.of(certificate));
     }
 
     @Test
     void read_returnOrder() throws NotFoundException {
-        assertEquals(order1, service.read(1));
+        assertEquals(order1, service.getById(1));
     }
 
     @Test
     void readAll_returnOrders() throws NotFoundException {
-        assertEquals(fullList, service.readAll());
+        assertEquals(fullList, service.findAll());
     }
 
     @Test
@@ -161,7 +161,7 @@ class OrderServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
-        service.read(params);
+        service.findByParameters(params);
 
         ArgumentCaptor<EntityFinder<Order>> captor = ArgumentCaptor.forClass(EntityFinder.class);
         verify(orderDaoMock, atLeast(1)).findByParameters(captor.capture());
@@ -173,7 +173,7 @@ class OrderServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
-        service.read(params);
+        service.findByParameters(params);
 
         ArgumentCaptor<EntityFinder<Order>> captor = ArgumentCaptor.forClass(EntityFinder.class);
         verify(orderDaoMock, atLeast(1)).findByParameters(captor.capture());
@@ -187,7 +187,7 @@ class OrderServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put("unknown", Collections.singletonList("1"));
-        assertThrows(BadRequestException.class, () -> service.read(params));
+        assertThrows(BadRequestException.class, () -> service.findByParameters(params));
     }
 
     @Test
@@ -197,7 +197,7 @@ class OrderServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put("limit", Collections.singletonList("a"));
-        assertThrows(BadRequestException.class, () -> service.read(params));
+        assertThrows(BadRequestException.class, () -> service.findByParameters(params));
     }
 
     @Test

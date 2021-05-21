@@ -80,12 +80,12 @@ class UserServiceImplTests {
 
     @Test
     void read_returnUser() throws NotFoundException {
-        assertEquals(user1, service.read(1));
+        assertEquals(user1, service.getById(1));
     }
 
     @Test
     void readAll_returnUsers() throws NotFoundException {
-        assertEquals(fullList, service.readAll());
+        assertEquals(fullList, service.findAll());
     }
 
     @Test
@@ -111,7 +111,7 @@ class UserServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
-        service.read(params);
+        service.findByParameters(params);
 
         ArgumentCaptor<EntityFinder<User>> captor = ArgumentCaptor.forClass(EntityFinder.class);
         verify(userDaoMock, atLeast(1)).findByParameters(captor.capture());
@@ -126,7 +126,7 @@ class UserServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
-        service.read(params);
+        service.findByParameters(params);
 
         ArgumentCaptor<EntityFinder<User>> captor = ArgumentCaptor.forClass(EntityFinder.class);
         verify(userDaoMock, atLeast(1)).findByParameters(captor.capture());
@@ -140,7 +140,7 @@ class UserServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put("unknown", Collections.singletonList("1"));
-        assertThrows(BadRequestException.class, () -> service.read(params));
+        assertThrows(BadRequestException.class, () -> service.findByParameters(params));
     }
 
     @Test
@@ -150,6 +150,6 @@ class UserServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put("limit", Collections.singletonList("a"));
-        assertThrows(BadRequestException.class, () -> service.read(params));
+        assertThrows(BadRequestException.class, () -> service.findByParameters(params));
     }
 }

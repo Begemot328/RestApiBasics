@@ -4,7 +4,6 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -43,7 +42,7 @@ public class Certificate extends CustomEntity {
     @Column(name = "last_update_date", nullable = false)
     private LocalDateTime lastUpdateDate;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "certificate_tag",
             joinColumns = @JoinColumn(name = "certificate_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))

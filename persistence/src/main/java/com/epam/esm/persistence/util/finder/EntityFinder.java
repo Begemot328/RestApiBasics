@@ -26,7 +26,8 @@ import java.util.Objects;
 @Component
 @Scope("prototype")
 public abstract class EntityFinder<T extends CustomEntity> {
-    protected int limit = 0;
+    private static final int DEFAULT_LIMIT = 20;
+    protected int limit = DEFAULT_LIMIT;
     protected int offset = 0;
     protected CriteriaQuery<T> query;
     protected CriteriaBuilder builder;
