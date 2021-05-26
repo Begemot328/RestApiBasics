@@ -11,10 +11,10 @@ import java.io.Serializable;
 public class UserPermissionEvaluator implements PermissionEvaluator {
     @Override
     public boolean hasPermission(Authentication authentication, Object o, Object o1) {
-        if(!(authentication.getPrincipal() instanceof Account)) {
+        if (!(authentication.getPrincipal() instanceof Account)) {
             return false;
         }
-        if(!(o instanceof Integer)) {
+        if (!(o instanceof Integer)) {
             return false;
         }
         return ((Account) authentication.getPrincipal()).getUser().getId() == (Integer) o;

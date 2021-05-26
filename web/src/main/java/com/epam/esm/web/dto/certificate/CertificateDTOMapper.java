@@ -37,8 +37,8 @@ public class CertificateDTOMapper {
                         .toTag(tagDTO)).collect(Collectors.toList());
 
         mapper.typeMap(Certificate.class, CertificateDTO.class).addMappings(
-               newMapper -> newMapper.using(converterToDTO).map(
-                       Certificate::getTags, CertificateDTO::setTags));
+                newMapper -> newMapper.using(converterToDTO).map(
+                        Certificate::getTags, CertificateDTO::setTags));
 
         mapper.typeMap(CertificateDTO.class, Certificate.class).addMappings(
                 newMapper -> newMapper.using(converterToObject).map(

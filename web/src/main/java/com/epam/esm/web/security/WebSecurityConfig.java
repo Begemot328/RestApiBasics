@@ -24,9 +24,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-
-import static java.lang.String.format;
-
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         securedEnabled = true,
@@ -37,35 +34,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
     private final JwtTokenFilter jwtTokenFilter;
-
-    @Autowired
     private RESTAuthenticationEntryPoint entryPoint;
-
-    @Autowired
     private RestAccessDeniedHandler handler;
 
+    @Autowired
     public WebSecurityConfig(UserService userService,
-                             JwtTokenFilter jwtTokenFilter) {
+                             JwtTokenFilter jwtTokenFilter,
+                             RESTAuthenticationEntryPoint entryPoint,
+                             RestAccessDeniedHandler handler) {
         super();
-
         this.userService = userService;
         this.jwtTokenFilter = jwtTokenFilter;
+        this.entryPoint = entryPoint;
+        this.handler = handler;
 
-        // Inherit security context in async function calls
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(username -> userService.getByUniqueLoginOptional(username).map(Account::new)
-                .orElseThrow(
-                        () -> new UsernameNotFoundException(
-                                format("User: %s, not found", username)
-                        )
-                ));
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "User " + username + " %s, not found")));
     }
 
-    // Set password encoding schema
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -73,40 +65,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // Enable CORS and disable CSRF
         http = http.cors().and().csrf().disable();
 
-        // Set session management to stateless
         http = http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and();
 
-        // Set unauthorized requests exception handler
         http = http
                 .exceptionHandling().accessDeniedHandler(handler)
                 .authenticationEntryPoint(entryPoint)
                 .and();
 
-        // Set permissions on endpoints
         http.authorizeRequests()
-                // Swagger endpoints must be publicly accessible
                 .antMatchers("/").permitAll()
-                // Our public endpoints
-                .antMatchers(HttpMethod.GET,"/tags/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/certificates/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/users/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/orders/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/tags/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/certificates/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/users/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/orders/**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/register/**").permitAll()
-                // Our private endpoints
                 .anyRequest().authenticated();
 
-        // Add JWT token filter
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
-    // Used by spring security if CORS is enabled.
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -119,8 +102,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new CorsFilter(source);
     }
 
-    // Expose authentication manager bean
-    @Override @Bean
+    @Override
+    @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }

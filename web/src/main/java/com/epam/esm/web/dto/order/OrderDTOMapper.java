@@ -32,16 +32,16 @@ public class OrderDTOMapper {
         this.mapper = mapper;
 
         Converter<User, UserDTO> userConverterToDTO =
-                src ->  new UserDTOMapper(this.mapper).toUserDTO(src.getSource());
+                src -> new UserDTOMapper(this.mapper).toUserDTO(src.getSource());
 
         Converter<UserDTO, User> userConverterToObject =
-                src ->  new UserDTOMapper(this.mapper).toUser(src.getSource());
+                src -> new UserDTOMapper(this.mapper).toUser(src.getSource());
 
         Converter<Certificate, CertificateDTO> certificateConverterToDTO =
-                src ->  new CertificateDTOMapper(this.mapper).toCertificateDTO(src.getSource());
+                src -> new CertificateDTOMapper(this.mapper).toCertificateDTO(src.getSource());
 
         Converter<CertificateDTO, Certificate> certificateConverterToObject =
-                src ->  new CertificateDTOMapper(this.mapper).toCertificate(src.getSource());
+                src -> new CertificateDTOMapper(this.mapper).toCertificate(src.getSource());
 
         mapper.typeMap(OrderDTO.class, Order.class).addMappings(
                 newMapper -> newMapper.using(certificateConverterToObject).map(

@@ -1,6 +1,5 @@
 package com.epam.esm.service.service.user;
 
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.service.EntityService;

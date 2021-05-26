@@ -8,7 +8,7 @@ import java.util.function.Function;
 public class RoleMapper {
     private static final String PREFIX = "ROLE_";
 
-     public static final Function<String, Role> toRoleMapper = new Function<String, Role>() {
+    public static final Function<String, Role> toRoleMapper = new Function<String, Role>() {
         @Override
         public Role apply(String s) {
             return Role.valueOf(s.replace(PREFIX, StringUtils.EMPTY));

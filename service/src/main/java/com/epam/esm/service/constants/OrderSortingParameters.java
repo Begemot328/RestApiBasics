@@ -1,7 +1,6 @@
 package com.epam.esm.service.constants;
 
 import com.epam.esm.persistence.constants.OrderColumns;
-import com.epam.esm.persistence.constants.UserColumns;
 import com.epam.esm.service.util.ConfigUtils;
 
 /**

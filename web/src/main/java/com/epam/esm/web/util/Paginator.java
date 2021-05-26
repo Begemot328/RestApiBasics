@@ -1,8 +1,6 @@
 package com.epam.esm.web.util;
 
 import com.epam.esm.service.constants.PaginationParameters;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 
@@ -16,7 +14,7 @@ import java.util.Collections;
  */
 public class Paginator {
 
-    private static final int DEFAULT_LIMIT=20;
+    private static final int DEFAULT_LIMIT = 20;
     private final int limit;
     private final int offset;
 
@@ -127,7 +125,7 @@ public class Paginator {
      * @return {@link MultiValueMap} parameters map for previous page.
      */
     public void setDefaultLimitIfNotLimited(MultiValueMap<String, String> params) {
-        if(isNotLimited(params)) {
+        if (isNotLimited(params)) {
             setDefaultLimit(params);
         }
     }

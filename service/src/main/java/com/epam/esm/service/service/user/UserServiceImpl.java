@@ -1,15 +1,12 @@
 package com.epam.esm.service.service.user;
 
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.user.UserDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.SortDirection;
-import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PaginationParameters;
-import com.epam.esm.service.constants.TagSortingParameters;
 import com.epam.esm.service.constants.UserSortingParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;

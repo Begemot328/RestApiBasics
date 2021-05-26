@@ -21,6 +21,7 @@ public class RestAccessDeniedHandler implements AccessDeniedHandler {
         ExceptionDTO response = new ExceptionDTO(
                 "Access denied", HttpStatus.FORBIDDEN.value());
         httpServletResponse.setHeader("Content-Type", "application/json");
+        httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
         OutputStream out = httpServletResponse.getOutputStream();
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(out, response);

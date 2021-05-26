@@ -10,7 +10,8 @@ import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
 
 @Component
 public class JwtTokenUtil {
@@ -18,12 +19,12 @@ public class JwtTokenUtil {
     private final String jwtSecret = "zdtlD3JK56m6wTTgsNFhqzjqP";
     private final String jwtIssuer = "epam.com";
 
-
     public String generateAccessToken(Account user) {
         return Jwts.builder()
                 .setSubject(user.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)) // 1 week
+                .setIssuer(jwtIssuer)
+                .setIssuedAt(Date.valueOf(LocalDate.now()))
+                .setExpiration(Date.valueOf(LocalDate.now().plusDays(7)))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
@@ -37,7 +38,7 @@ public class JwtTokenUtil {
         return claims.getSubject();
     }
 
-    public Date getExpirationDate(String token) {
+    public java.util.Date getExpirationDate(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)

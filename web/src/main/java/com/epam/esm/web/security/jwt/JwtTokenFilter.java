@@ -1,7 +1,7 @@
 package com.epam.esm.web.security.jwt;
 
-import com.epam.esm.web.security.userdetails.Account;
 import com.epam.esm.service.service.user.UserService;
+import com.epam.esm.web.security.userdetails.Account;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -41,21 +41,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-        // Get authorization header and validate
+
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.isEmpty(header) || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
         }
 
-        // Get jwt token and validate
         final String token = header.split(" ")[1].trim();
         if (!jwtTokenUtil.validate(token)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token!");
             return;
         }
 
-        // Get user identity and set it on the spring security context
         UserDetails userDetails = userService.getByUniqueLoginOptional(jwtTokenUtil.getUsername(token))
                 .map(Account::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
