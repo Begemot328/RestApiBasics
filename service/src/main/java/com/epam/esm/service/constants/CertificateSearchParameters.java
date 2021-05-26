@@ -9,7 +9,7 @@ import com.epam.esm.service.util.ConfigUtils;
  * @version 1.0
  */
 public enum CertificateSearchParameters {
-    NAME, TAGNAME, DESCRIPTION, PRICE_LESS, PRICE_MORE;
+    NAME, DESCRIPTION, TAG_NAME, TAG_ID;
 
     /**
      * Obtain enum element by {@link String} name
@@ -18,6 +18,15 @@ public enum CertificateSearchParameters {
      * @return {@link CertificateSearchParameters} enum element
      */
     public static CertificateSearchParameters getEntryByParameter(String parameter) {
-        return valueOf(ConfigUtils.convertName(parameter));
+        return valueOf(ConfigUtils.convertToEnumName(parameter));
+    }
+
+    /**
+     * Returns  request parameter name corresponding to enum element.
+     *
+     * @return {@link String} Corresponding request parameter.
+     */
+    public String getParameterName() {
+        return ConfigUtils.convertToRequestParameter(name());
     }
 }

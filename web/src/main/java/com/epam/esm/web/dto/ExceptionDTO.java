@@ -6,7 +6,8 @@ public class ExceptionDTO {
     private String errorMessage;
     private int errorCode;
 
-    private ExceptionDTO() {}
+    public ExceptionDTO() {
+    }
 
     public ExceptionDTO(Exception e, int errorCode) {
         this.errorMessage = e.getMessage();

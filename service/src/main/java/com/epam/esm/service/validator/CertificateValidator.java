@@ -1,10 +1,9 @@
 package com.epam.esm.service.validator;
 
 import com.epam.esm.model.entity.Certificate;
+import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.ValidationException;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 /**
  * {@link Certificate} Validation class.
@@ -17,20 +16,23 @@ public class CertificateValidator implements EntityValidator<Certificate> {
 
     @Override
     public void validate(Certificate certificate) throws ValidationException {
-        if (certificate.getName() == null) {
-            throw new ValidationException("Null name!");
-        }
-        if (certificate.getName().isEmpty()) {
-            throw new ValidationException("Empty name!");
-        }
-        if (certificate.getDuration() <= 0) {
-            throw new ValidationException("Non-positive duration!");
-        }
-        if (certificate.getPrice() == null) {
-            throw new ValidationException("Null price!");
-        }
-        if (certificate.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new ValidationException("Non-positive price!");
-        }
+        validateName(certificate);
+        validateDuration(certificate);
+        validatePrice(certificate);
+    }
+
+    private void validateName(Certificate certificate) throws ValidationException {
+        validateNotEmptyString(certificate.getName(), "Certificate name",
+                ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
+    }
+
+    private void validateDuration(Certificate certificate) throws ValidationException {
+        validatePositiveNumber(certificate.getDuration(), "Certificate duration",
+                ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
+    }
+
+    private void validatePrice(Certificate certificate) throws ValidationException {
+        validatePositiveNumber(certificate.getPrice(), "Certificate duration",
+                ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
     }
 }

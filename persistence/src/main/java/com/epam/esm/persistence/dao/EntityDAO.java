@@ -2,9 +2,12 @@ package com.epam.esm.persistence.dao;
 
 
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Entity;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
+import com.epam.esm.model.entity.CustomEntity;
+import com.epam.esm.persistence.util.finder.EntityFinder;
+import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.metamodel.Metamodel;
 import java.util.List;
 
 /**
@@ -13,45 +16,63 @@ import java.util.List;
  * @author Yury Zmushko
  * @version 1.0
  */
-public interface EntityDAO<T extends Entity> {
+@Repository
+public interface EntityDAO<T extends CustomEntity> {
 
     /**
-     * Create method
+     * Create method.
      *
-     * @param t entity to create
-     *
+     * @param t Entity to create.
      */
-    T create(T t) throws DAOSQLException;
+    T create(T t);
 
     /**
-     * Read method
+     * Read method.
      *
-     * @param id of the entity
-     *
+     * @param id ID of the entity.
      */
-    T read(int id);
+    T getById(int id);
 
     /**
-     * Update method
+     * Update method.
      *
-     * @param t entity to create
-     *
-     * @return  updated {@link Certificate}
+     * @param t entity to create.
+     * @return Updated {@link Certificate}.
      */
-    Certificate update(T t);
+    T update(T t);
 
     /**
-     * Delete method
+     * Delete method.
      *
-     * @param id of the entity to delete
-     *
+     * @param id ID of the entity to delete.
      */
     void delete(int id);
 
     /**
-     * Find all method
+     * Find all method.
      *
-     * @return {@link java.util.ArrayList} of entities
+     * @return {@link java.util.ArrayList} of entities.
      */
-    List<T> readAll();
+    List<T> findAll();
+
+    /**
+     * Get {@link CriteriaBuilder} of the context.
+     *
+     * @return {@link CriteriaBuilder} of the context.
+     */
+    CriteriaBuilder getBuilder();
+
+    /**
+     * Get {@link Metamodel} of the context.
+     *
+     * @return {@link Metamodel} of the context.
+     */
+    Metamodel getMetamodel();
+
+    /**
+     * Find all entities by corresponding {@link EntityFinder} method.
+     *
+     * @return {@link java.util.ArrayList} of entities.
+     */
+    List<T> findByParameters(EntityFinder<T> finder);
 }

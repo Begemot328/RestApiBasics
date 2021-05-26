@@ -1,19 +1,18 @@
 package com.epam.esm.persistence;
 
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.context.annotation.*;
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.epam.esm.model.ModelConfig;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
+/**
+ * Spring config for persistence module.
+ *
+ * @author Yury Zmushko
+ * @version 2.0
+ */
 @Configuration
-@ComponentScan("com.epam.esm.persistence")
-@PropertySource("classpath:database.properties")
+@ComponentScan
+@Import(ModelConfig.class)
 public class PersistenceConfig {
-
-    @Bean
-    public static JdbcTemplate getTemplate(BasicDataSource source) {
-        return new JdbcTemplate(source);
-    }
-
 }
-
-
