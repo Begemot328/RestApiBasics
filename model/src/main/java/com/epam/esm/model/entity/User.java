@@ -1,11 +1,23 @@
 package com.epam.esm.model.entity;
 
+import org.hibernate.annotations.Fetch;
+
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * User entity class.
@@ -30,6 +42,16 @@ public class User extends CustomEntity {
     @Column(table = "account", nullable = false)
     private String password;
 
+    @Column(table = "account", columnDefinition = "is_active")
+    private boolean isActive;
+
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "role_id")
+    private Set<Role> roles = new HashSet<>();
+
     /**
      * Constructor.
      *
@@ -51,6 +73,32 @@ public class User extends CustomEntity {
     public User() {
         // Default constructor for JPA purposes.
         }
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public void removeRole(Role role) {
+        roles.remove(role);
+    }
+
+    /**
+     * Activity getter.
+     *
+     * @return First name of the user.
+     */
+    public boolean isActive() {
+        return isActive;
+    }
+
+    /**
+     * Activity setter.
+     *
+     * @param active First name of the user.
+     */
+    public void setActive(boolean active) {
+        this.isActive = isActive;
+    }
 
     /**
      * First name getter.
@@ -122,6 +170,14 @@ public class User extends CustomEntity {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     /**

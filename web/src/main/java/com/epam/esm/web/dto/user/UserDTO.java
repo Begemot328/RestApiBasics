@@ -3,12 +3,15 @@ package com.epam.esm.web.dto.user;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class UserDTO extends RepresentationModel<UserDTO> {
     private int id;
     private String firstName;
     private String lastName;
     private String login;
+
+    private Set<String> roles;
 
     public UserDTO(String firstName, String lastName, String login) {
         this.firstName = firstName;
@@ -18,6 +21,14 @@ public class UserDTO extends RepresentationModel<UserDTO> {
 
     public UserDTO() {
         // Default constructor for Model mapper purposes.
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
     public int getId() {

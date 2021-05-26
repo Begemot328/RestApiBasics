@@ -10,13 +10,16 @@ import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.constants.TagSortingParameters;
+import com.epam.esm.service.constants.UserSortingParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
+import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -46,8 +49,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User create(User user) {
-        throw new UnsupportedOperationException();
+    public User create(User user) throws ValidationException, BadRequestException {
+        validator.validate(user);
+        try {
+            if (getByUniqueLoginOptional(user.getLogin()).isPresent()) {
+                throw new BadRequestException("Such login already exists! login= " + user.getLogin(),
+                        ErrorCodes.USER_BAD_REQUEST);
+            }
+            return dao.create(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new BadRequestException(e, ErrorCodes.USER_BAD_REQUEST);
+        }
     }
 
     @Override
@@ -119,7 +131,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void parseSortParameter(UserFinder finder, String parameterName, List<String> parameterValues) {
-        finder.sortBy(TagSortingParameters.getEntryByParameter(parameterName).getValue(),
+        finder.sortBy(UserSortingParameters.getEntryByParameter(parameterName).getValue(),
                 SortDirection.parseAscDesc(parameterValues.get(0)));
     }
 

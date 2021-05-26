@@ -14,6 +14,11 @@ public class ExceptionDTO {
         this.errorCode = errorCode;
     }
 
+    public ExceptionDTO(String errorMessage, int errorCode) {
+        this.errorMessage = errorMessage;
+        this.errorCode = errorCode;
+    }
+
     public ExceptionDTO(ServiceLayerException e) {
         this.errorMessage = e.getMessage();
         this.errorCode = e.getErrorCode();

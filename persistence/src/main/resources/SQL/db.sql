@@ -129,12 +129,30 @@ drop table if exists account;
 
 create table if not exists account
 (
-    id    int primary key auto_increment,
-    login    varchar(40) not null unique,
+    id       int primary key auto_increment,
+    login    varchar(40)  not null unique,
     password varchar(100) not null,
+    is_active boolean default true,
     index user_id_index (id),
-    index user_login_index(login),
-    foreign key(id) references user(id) on update cascade on DELETE cascade);
+    index user_login_index (login),
+    foreign key (id) references user (id) on update cascade on DELETE cascade
+    );
+
+drop table if exists role;
+create table if not exists role
+(
+    id   int primary key,
+    name varchar(40) not null unique
+);
+
+create table user_role
+(
+    user_id int,
+    role_id int,
+    primary key (user_id, role_id),
+    foreign key (user_id) references user (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    foreign key (role_id) references role (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 drop view if exists user_account;
 
@@ -195,13 +213,26 @@ insert
 user(first_name, last_name)  values ('Sidor','Sidorov');
 
 insert
-account(login, password) VALUES ('root','qwerty');
+account(login, password) VALUES ('root','$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq');
 insert
-account(login, password) VALUES ('Ivanov','qwerty');
+account(login, password) VALUES ('Ivanov','$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq');
 insert
-account(login, password) VALUES ('Petrov','qwerty');
+account(login, password) VALUES ('Petrov','$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq');
 insert
-account(login, password) VALUES ('Sidorov','qwerty');
+account(login, password) VALUES ('Sidorov','$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq');
+
+insert
+role(id, name) VALUES (2,'ROLE_USER');
+insert
+role(id, name) VALUES (1,'ROLE_ADMIN');
+insert
+user_role(user_id, role_id) VALUES (1,1);
+insert
+user_role(user_id, role_id) VALUES (2,2);
+insert
+user_role(user_id, role_id) VALUES (3,1);
+insert
+user_role(user_id, role_id) VALUES (4,1);
 
 insert
 orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (2, 2, '2021-03-22 09:20:11', 150, 1);
