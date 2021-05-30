@@ -43,6 +43,7 @@ public class CertificateServiceImpl implements CertificateService {
     private final CertificateDAO dao;
     private final EntityValidator<Certificate> validator;
     private final TagService tagService;
+    private static final String notFoundErrorMessage = "Requested certificate not found(%s = %s)!";
 
     @Autowired
     public CertificateServiceImpl(CertificateDAO dao,
@@ -69,19 +70,9 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
+    @Override
     @Transactional
-    @Override
-    public Certificate getById(int id) throws NotFoundException {
-        Optional<Certificate> certificateOptional = getByIdOptional(id);
-        if (certificateOptional.isEmpty()) {
-            throw new NotFoundException("Requested resource not found(id = " + id + ")!",
-                    ErrorCodes.CERTIFICATE_NOT_FOUND);
-        }
-        return certificateOptional.get();
-    }
-
-    @Override
-    public Optional<Certificate> getByIdOptional(int id) {
+    public Optional<Certificate> getById(int id) {
         return Optional.ofNullable(dao.getById(id));
     }
 
@@ -99,11 +90,10 @@ public class CertificateServiceImpl implements CertificateService {
     public Certificate update(Certificate certificate)
             throws ValidationException, NotFoundException, BadRequestException {
         certificate.setLastUpdateDate(LocalDateTime.now());
-        certificate.setCreateDate(getById(certificate.getId()).getCreateDate());
-        makeAllTagsDetached(certificate);
+        certificate.setCreateDate(getById(certificate.getId()).get().getCreateDate());
         validator.validate(certificate);
+        makeAllTagsDetached(certificate);
         return dao.update(certificate);
-
     }
 
     @Override
@@ -157,10 +147,10 @@ public class CertificateServiceImpl implements CertificateService {
         if (oldCertificate == null) {
             throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
         }
-        return update(updateCertificate(certificate, oldCertificate));
+        return update(applyChanges(certificate, oldCertificate));
     }
 
-    private Certificate updateCertificate(Certificate newCertificate, Certificate oldCertificate) {
+    private Certificate applyChanges(Certificate newCertificate, Certificate oldCertificate) {
         if (newCertificate.getPrice() != null
                 && newCertificate.getPrice().compareTo(BigDecimal.ZERO) > 0) {
             oldCertificate.setPrice(newCertificate.getPrice());
@@ -180,10 +170,11 @@ public class CertificateServiceImpl implements CertificateService {
         return oldCertificate;
     }
 
-    private void makeAllTagsDetached(Certificate certificate) throws BadRequestException, ValidationException {
+    private void makeAllTagsDetached(Certificate certificate)
+            throws BadRequestException, ValidationException {
         for (Tag tag : certificate.getTags()) {
-            if (tagService.getByIdOptional(tag.getId()).isEmpty()) {
-                Optional<Tag> tagOptional = tagService.getByUniqueNameOptional(tag.getName());
+            if (tagService.getById(tag.getId()).isEmpty()) {
+                Optional<Tag> tagOptional = tagService.getByName(tag.getName());
                 if (tagOptional.isPresent()) {
                     tag.setId(tagOptional.get().getId());
                 } else {
@@ -225,8 +216,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     private void parseFindParameter(CertificateFinder finder,
                                     String parameterName, List<String> parameterValues) {
-        CertificateSearchParameters parameter;
-        parameter =
+        CertificateSearchParameters parameter =
                 CertificateSearchParameters.getEntryByParameter(parameterName);
         switch (parameter) {
             case NAME:

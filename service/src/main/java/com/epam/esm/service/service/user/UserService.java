@@ -14,13 +14,12 @@ import java.util.Optional;
  */
 public interface UserService extends EntityService<User> {
 
+
     /**
      * Find {@link User} by his unique login.
      *
      * @param login Login value.
-     * @return {@link User} with defined login.
+     * @return {@link Optional} of {@link User} with defined login.
      */
-    User getByUniqueLogin(String login) throws NotFoundException;
-
-    Optional<User> getByUniqueLoginOptional(String login);
+    Optional<User> getByLogin(String login);
 }

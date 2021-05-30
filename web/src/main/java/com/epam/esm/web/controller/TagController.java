@@ -2,6 +2,7 @@ package com.epam.esm.web.controller;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.service.constants.CertificateSearchParameters;
+import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
@@ -11,12 +12,13 @@ import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.certificate.CertificateDTOMapper;
 import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.dto.tag.TagDTOMapper;
-import com.epam.esm.web.util.Paginator;
+import com.epam.esm.web.security.roles.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +36,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/tags")
-public class TagController {
+public class TagController implements PaginableSearch {
 
     private final TagServiceImpl tagServiceImpl;
     private final CertificateServiceImpl certificateServiceImpl;
@@ -53,7 +55,7 @@ public class TagController {
     }
 
     @GetMapping
-    public ResponseEntity<?> read(@RequestParam MultiValueMap<String, String> params)
+    public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params)
             throws BadRequestException, NotFoundException {
         List<Tag> tags = new ArrayList<>();
 
@@ -61,31 +63,34 @@ public class TagController {
         CollectionModel<TagDTO> tagDTOs = tagDTOMapper.toTagDTOList(tags);
 
         paginate(params, tagDTOs);
-        tagDTOs.add(linkTo(methodOn(this.getClass()).read(params)).withSelfRel());
+        tagDTOs.add(linkTo(methodOn(this.getClass()).find(params)).withSelfRel());
 
         return new ResponseEntity<>(tagDTOs, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> read(@PathVariable(value = "id") int id) throws NotFoundException {
-        final Tag tag = tagServiceImpl.getById(id);
+    public ResponseEntity<?> get(@PathVariable(value = "id") int id) throws NotFoundException {
+        final Tag tag = tagServiceImpl.checkIfPresent(tagServiceImpl.getById(id),
+                "id", Integer.toString(id), ErrorCodes.TAG_NOT_FOUND);
         return new ResponseEntity<>(tagDTOMapper.toTagDTO(tag), HttpStatus.OK);
     }
 
     @GetMapping(value = "/popular")
-    public ResponseEntity<?> readMostPopular() throws NotFoundException {
+    public ResponseEntity<?> getMostPopular() throws NotFoundException {
         final Tag tag = tagServiceImpl.findMostlyUsedTag();
         TagDTO tagDTO = tagDTOMapper.toTagDTO(tag);
-        tagDTO.add(linkTo(methodOn(this.getClass()).readMostPopular()).withRel("most-popular"));
+        tagDTO.add(linkTo(methodOn(this.getClass()).getMostPopular()).withRel("most-popular"));
         return new ResponseEntity<>(tagDTO, HttpStatus.OK);
     }
 
+    @Secured(Roles.ADMIN)
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Tag> delete(@PathVariable(value = "id") int id) throws BadRequestException {
         tagServiceImpl.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @Secured(Roles.ADMIN)
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -96,29 +101,17 @@ public class TagController {
     }
 
     @GetMapping(value = "/{id}/certificates")
-    public ResponseEntity<?> readCertificates(@PathVariable(value = "id") int id,
+    public ResponseEntity<?> findCertificates(@PathVariable(value = "id") int id,
                                               @RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
         params.put(CertificateSearchParameters.TAG_ID.getParameterName(), Collections.singletonList(Integer.toString(id)));
         CollectionModel<CertificateDTO> certificateDTOs = certificateDTOMapper.toCertificateDTOList(
                 certificateServiceImpl.findByParameters(params));
         certificateDTOs.add(
-                linkTo(methodOn(this.getClass()).readCertificates(id, params)).withRel("certificates"));
+                linkTo(methodOn(this.getClass()).findCertificates(id, params)).withRel("certificates"));
 
         paginate(params, certificateDTOs);
 
         return new ResponseEntity<>(certificateDTOs, HttpStatus.OK);
-    }
-
-    private void paginate(MultiValueMap<String, String> params, CollectionModel collectionModel)
-            throws NotFoundException, BadRequestException {
-        Paginator paginator = new Paginator(params);
-
-        paginator.setDefaultLimitIfNotLimited(params);
-
-        collectionModel.add(linkTo(methodOn(this.getClass()).read(
-                paginator.nextPage(params))).withRel("nextPage"));
-        collectionModel.add(linkTo(methodOn(this.getClass()).read(
-                paginator.previousPage(params))).withRel("previousPage"));
     }
 }

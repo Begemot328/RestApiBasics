@@ -118,9 +118,9 @@ create table if not exists orders
     index order_certificate_id_index (certificate_id),
     index order_current_price_index (amount),
     index order_purchase_date_index (purchase_date),
-    foreign key (user_id) references user (id) on update cascade,
-    foreign key (user_id) references account (id) on update cascade,
-    foreign key (certificate_id) references certificate (id) on update cascade
+    foreign key (user_id) references user (id) on update cascade on delete cascade,
+    foreign key (user_id) references account (id) on update cascade on delete cascade,
+    foreign key (certificate_id) references certificate (id) on update cascade on delete cascade
 );
 
 drop view if exists order_full;
@@ -149,7 +149,8 @@ drop table if exists role;
 create table if not exists role
 (
     id   int primary key,
-    name varchar(40) not null unique
+    name varchar(40) not null unique,
+    description varchar(100)
 );
 
 create table user_role
@@ -161,3 +162,7 @@ create table user_role
     foreign key (role_id) references role (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+insert
+    role(id, name, description) VALUES (2,'USER', 'Regular user');
+insert
+    role(id, name, description) VALUES (1,'ADMIN', 'Super admin');

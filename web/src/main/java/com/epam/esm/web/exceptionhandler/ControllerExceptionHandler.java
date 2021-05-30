@@ -9,6 +9,7 @@ import com.epam.esm.web.dto.ExceptionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -18,8 +19,8 @@ import javax.naming.AuthenticationException;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler({AuthenticationException.class})
-    public ResponseEntity<ExceptionDTO> handleAuthenticationException(
+    @ExceptionHandler({BadCredentialsException.class})
+    public ResponseEntity<ExceptionDTO> handleBadCredentialsException(
             Exception ex, WebRequest request) {
         return new ResponseEntity<>(
                 new ExceptionDTO(ex, HttpStatus.UNAUTHORIZED.value()),

@@ -28,7 +28,7 @@ public class UserDTOMapper {
         this.mapper = mapper;
 
         Converter<Set<Role>, Set<String>> converterToDTOSet =
-                set -> set.getSource().stream().map(Role::getValue).collect(Collectors.toSet());
+                set -> set.getSource().stream().map(Role::getName).collect(Collectors.toSet());
 
         mapper.typeMap(User.class, UserDTO.class).addMappings(
                 newMapper -> newMapper.using(converterToDTOSet).map(
@@ -38,7 +38,7 @@ public class UserDTOMapper {
     public UserDTO toUserDTO(User user) {
         UserDTO userDTO = mapper.map(user, UserDTO.class);
         try {
-            Link link = linkTo(methodOn(UserController.class).readUser(user.getId())).withSelfRel();
+            Link link = linkTo(methodOn(UserController.class).get(user.getId())).withSelfRel();
             userDTO.add(link);
         } catch (NotFoundException e) {
             throw new DTOException(e);

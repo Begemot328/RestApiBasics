@@ -48,7 +48,7 @@ public class CertificateDTOMapper {
     public CertificateDTO toCertificateDTO(Certificate certificate) {
         CertificateDTO certificateDTO = mapper.map(certificate, CertificateDTO.class);
         try {
-            Link link = linkTo(methodOn(CertificateController.class).read(certificate.getId())).withSelfRel();
+            Link link = linkTo(methodOn(CertificateController.class).get(certificate.getId())).withSelfRel();
             certificateDTO.add(link);
         } catch (NotFoundException e) {
             throw new DTOException(e);

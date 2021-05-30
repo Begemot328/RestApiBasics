@@ -44,7 +44,7 @@ public class TagServiceImpl implements TagService {
     public Tag create(Tag tag) throws ValidationException, BadRequestException {
         validator.validate(tag);
         try {
-            if (getByUniqueNameOptional(tag.getName()).isPresent()) {
+            if (getByName(tag.getName()).isPresent()) {
                 throw new BadRequestException("Such name already exists! name= " + tag.getName(),
                         ErrorCodes.TAG_BAD_REQUEST);
             }
@@ -55,17 +55,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag getById(int id) throws NotFoundException {
-        Optional<Tag> tagOptional = getByIdOptional(id);
-        if (tagOptional.isEmpty()) {
-            throw new NotFoundException("Requested resource not found(id = " + id + ")!",
-                    ErrorCodes.TAG_NOT_FOUND);
-        }
-        return tagOptional.get();
-    }
-
-    @Override
-    public Optional<Tag> getByIdOptional(int id) {
+    public Optional<Tag> getById(int id) {
         return Optional.ofNullable(dao.getById(id));
     }
 
@@ -81,7 +71,8 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public Tag update(Tag tag) {
-        throw new UnsupportedOperationException("Update operation for tag is unavailable");
+        throw new UnsupportedOperationException(
+                "Update operation for tag is unavailable");
     }
 
     @Override
@@ -140,12 +131,16 @@ public class TagServiceImpl implements TagService {
 
     private void parseParameter(TagFinder finder, String parameterName, List<String> parameterValues) {
         if (parameterName.contains("sort")) {
-            parseSortParameter(finder, parameterName, parameterValues);
+            addSortingToFinder(finder, getSortingParameter(parameterName), getSortDirection(parameterValues));
         } else if (PaginationParameters.contains(parameterName)) {
-            parsePaginationParameter(finder, parameterName, parameterValues);
+            parsePaginationParameter(finder, parameterName, Integer.parseInt(parameterValues.get(0)));
         } else {
             parseFindParameter(finder, parameterName, parameterValues);
         }
+    }
+
+    private SortDirection getSortDirection(List<String> parameterValues) {
+        return SortDirection.parseAscDesc(parameterValues.get(0));
     }
 
     private void parseFindParameter(TagFinder finder, String parameterString, List<String> list) {
@@ -156,21 +151,27 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-    private void parseSortParameter(TagFinder finder, String parameterName, List<String> parameterValues) {
-        finder.sortBy(TagSortingParameters.getEntryByParameter(parameterName).getValue(),
-                SortDirection.parseAscDesc(parameterValues.get(0)));
+    private void addSortingToFinder(TagFinder finder, String sortingParameter, SortDirection sortDirection) {
+        finder.sortBy(sortingParameter, sortDirection);
     }
 
-    private void parsePaginationParameter(EntityFinder finder, String parameterName, List<String> parameterValues) {
-        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterName);
-        switch (parameter) {
+    private String getSortingParameter(String parameterName) {
+        return TagSortingParameters.getEntryByParameter(parameterName).getValue();
+    }
+
+    private void parsePaginationParameter(EntityFinder finder, String parameterName, int quantityOfElements) {
+        switch (getPaginationParameterName(parameterName)) {
             case LIMIT:
-                finder.limit(Integer.parseInt(parameterValues.get(0)));
+                finder.limit(quantityOfElements);
                 break;
             case OFFSET:
-                finder.offset(Integer.parseInt(parameterValues.get(0)));
+                finder.offset(quantityOfElements);
                 break;
         }
+    }
+
+    private PaginationParameters getPaginationParameterName(String parameterName) {
+        return PaginationParameters.getEntryByParameter(parameterName);
     }
 
     private void validateParameterValues(List<String> parameterValues) throws BadRequestException {
@@ -191,17 +192,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag getByUniqueName(String name) throws NotFoundException {
-        Optional<Tag> tagOptional = getByUniqueNameOptional(name);
-        if (tagOptional.isEmpty()) {
-            throw new NotFoundException("Requested resource not found(name = " + name + ")!",
-                    ErrorCodes.TAG_NOT_FOUND);
-        }
-        return tagOptional.get();
-    }
-
-    @Override
-    public Optional<Tag> getByUniqueNameOptional(String name) {
+    public Optional<Tag> getByName(String name) {
         TagFinder finder = getFinder();
         addToFinder(finder::findByName, name);
         List<Tag> tags = dao.findByParameters(finder);

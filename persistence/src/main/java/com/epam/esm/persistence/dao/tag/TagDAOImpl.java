@@ -78,12 +78,17 @@ public class TagDAOImpl implements TagDAO {
 
     @Override
     public List<Tag> findByParameters(EntityFinder<Tag> finder) {
-      TypedQuery<Tag> allQuery = /* move to separated method*/ entityManager.createQuery(finder.getQuery());
-        allQuery.setFirstResult(finder.getOffset());
-        if(finder.getLimit() > 0) {
-            allQuery.setMaxResults(finder.getLimit());
-        } /* until this place*/
+      TypedQuery<Tag> allQuery = getTypedQuery(finder);
         return allQuery.getResultList();
+    }
+
+    private TypedQuery<Tag> getTypedQuery(EntityFinder<Tag> finder) {
+        TypedQuery<Tag> allQuery = entityManager.createQuery(finder.getQuery());
+        allQuery.setFirstResult(finder.getOffset());
+        if (finder.getLimit() > 0) {
+            allQuery.setMaxResults(finder.getLimit());
+        }
+        return allQuery;
     }
 
     @Override

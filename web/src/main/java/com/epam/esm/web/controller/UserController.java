@@ -3,6 +3,7 @@ package com.epam.esm.web.controller;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
 import com.epam.esm.model.entity.User;
+import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.OrderSearchParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
@@ -17,7 +18,6 @@ import com.epam.esm.web.dto.order.OrderDTOMapper;
 import com.epam.esm.web.dto.user.UserDTO;
 import com.epam.esm.web.dto.user.UserDTOMapper;
 import com.epam.esm.web.security.roles.Roles;
-import com.epam.esm.web.util.Paginator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -41,8 +41,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(value = "/")
-public class UserController {
+@RequestMapping(value = "/users")
+public class UserController implements PaginableSearch {
     private final OrderService orderService;
     private final UserService userService;
     private final CertificateService certificateService;
@@ -63,8 +63,8 @@ public class UserController {
     }
 
     @Secured(Roles.ADMIN)
-    @GetMapping(value = "/users")
-    public ResponseEntity<?> readUsers(@RequestParam MultiValueMap<String, String> params)
+    @GetMapping
+    public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
         List<User> users;
         if (CollectionUtils.isEmpty(params)) {
@@ -74,37 +74,24 @@ public class UserController {
         }
         CollectionModel<UserDTO> userDTOs = userDTOMapper.toUserDTOList(
                 users);
-        userDTOs.add(linkTo(methodOn(this.getClass()).readUsers(params)).withRel("users"));
+        userDTOs.add(linkTo(methodOn(this.getClass()).find(params)).withRel("users"));
 
-        paginateUsers(params, userDTOs);
+        paginate(params, userDTOs);
 
         return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
 
-    @Secured(Roles.ADMIN)
-    @GetMapping(value = "/orders")
-    public ResponseEntity<?> readAllOrders(@RequestParam MultiValueMap<String, String> params)
-            throws NotFoundException, BadRequestException {
-        List<Order> orders;
-        orders = orderService.findByParameters(params);
-        CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(orders);
-        orderDTOs.add(linkTo(methodOn(this.getClass()).readAllOrders(params)).withRel("orders"));
-
-        paginateOrders(params, orderDTOs);
-
-        return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
-    }
-
     @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') and hasPermission(#id,'user_permission')")
-    @GetMapping(value = "/users/{id}")
-    public ResponseEntity<?> readUser(@PathVariable(value = "id") int id) throws NotFoundException {
-        User user = userService.getById(id);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> get(@PathVariable(value = "id") int id) throws NotFoundException {
+        User user = userService.checkIfPresent(userService.getById(id),
+                "id", Integer.toString(id), ErrorCodes.USER_NOT_FOUND);
         final UserDTO userDTO = userDTOMapper.toUserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') and hasPermission(#id,'user_permission')")
-    @GetMapping(value = "/users/{id}/orders")
+    @GetMapping(value = "/{id}/orders")
     public ResponseEntity<?> readUsersOrders(@PathVariable(value = "id") int id,
                                              @RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
@@ -114,61 +101,41 @@ public class UserController {
         CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(orders);
         orderDTOs.add(linkTo(methodOn(this.getClass()).readUsersOrders(id, params)).withRel("tags"));
 
-        paginateOrders(params, orderDTOs);
+        paginate(params, orderDTOs);
 
         return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
     }
 
-    @Secured(Roles.ADMIN)
-    @GetMapping(value = "/orders/{id}")
-    public ResponseEntity<?> readOrder(@PathVariable(value = "id") int orderId) throws NotFoundException {
-        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.getById(orderId));
-        return new ResponseEntity<>(order, HttpStatus.OK);
-    }
-
     @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') and hasPermission(#id,'user_permission')")
-    @GetMapping(value = "/users/{id}/orders/{order_id}")
+    @GetMapping(value = "/{id}/orders/{order_id}")
     public ResponseEntity<?> readOrder(@PathVariable(value = "id") int id,
-                                       @PathVariable(value = "order_id") int orderId)
+                                       @PathVariable(value = "order_id") int orderId,
+                                       @RequestParam MultiValueMap<String, String> params)
             throws NotFoundException {
-        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.getById(orderId));
+        params.put(OrderSearchParameters.USER_ID.getParameterName(),
+                Collections.singletonList(Integer.toString(id)));
+        params.put(OrderSearchParameters.ORDER_ID.getParameterName(),
+                Collections.singletonList(Integer.toString(id)));
+        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.checkIfPresent(orderService.getById(orderId),
+                "id", Integer.toString(orderId), ErrorCodes.ORDER_NOT_FOUND));
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') and hasPermission(#id,'user_permission')")
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
-            value = "/users/{id}")
+            value = "/{id}")
     public ResponseEntity<?> createOrder(@PathVariable(value = "id") int id,
                                          @RequestParam int certificateId,
                                          @RequestParam int quantity)
             throws NotFoundException, ValidationException, BadRequestException {
-        User user = userService.getById(id);
-        Certificate certificate = certificateService.getById(certificateId);
+        User user = userService.checkIfPresent(userService.getById(id),
+                "id", Integer.toString(id), ErrorCodes.USER_NOT_FOUND);
+        Certificate certificate = certificateService.checkIfPresent(
+                certificateService.getById(certificateId),
+                "id", Integer.toString(certificateId),
+                ErrorCodes.CERTIFICATE_NOT_FOUND);
         Order order = orderService.createOrder(certificate, user, quantity);
         return new ResponseEntity<>(orderDTOMapper.toOrderDTO(order), HttpStatus.OK);
-    }
-
-    private void paginateOrders(MultiValueMap<String, String> params, CollectionModel collectionModel)
-            throws NotFoundException, BadRequestException {
-        Paginator paginator = new Paginator(params);
-
-        paginator.setDefaultLimitIfNotLimited(params);
-        collectionModel.add(linkTo(methodOn(this.getClass()).readAllOrders(
-                paginator.nextPage(params))).withRel("nextPage"));
-        collectionModel.add(linkTo(methodOn(this.getClass()).readAllOrders(
-                paginator.previousPage(params))).withRel("previousPage"));
-
-    }
-
-    private void paginateUsers(MultiValueMap<String, String> params, CollectionModel collectionModel)
-            throws NotFoundException, BadRequestException {
-        Paginator paginator = new Paginator(params);
-
-        paginator.setDefaultLimitIfNotLimited(params);
-        collectionModel.add(linkTo(methodOn(this.getClass()).readUsers(
-                paginator.nextPage(params))).withRel("nextPage"));
-        collectionModel.add(linkTo(methodOn(this.getClass()).readUsers(
-                paginator.previousPage(params))).withRel("previousPage"));
     }
 }

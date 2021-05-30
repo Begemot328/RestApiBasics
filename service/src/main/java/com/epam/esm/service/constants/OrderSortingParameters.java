@@ -19,19 +19,19 @@ public enum OrderSortingParameters {
     }
 
     /**
-     * Obtain enum element by {@link String} name
+     * Obtain corresponding enum element by {@link String} name.
      *
-     * @param parameter parameter to find search parameter by
-     * @return {@link CertificateSearchParameters} enum element
+     * @param parameter Parameter to find order parameter by.
+     * @return {@link OrderSortingParameters} enum element.
      */
     public static OrderSortingParameters getEntryByParameter(String parameter) {
         return valueOf(ConfigUtils.convertToEnumName(parameter));
     }
 
     /**
-     * Value getter
+     * Enum element value getter.
      *
-     * @return query String line
+     * @return query String line.
      */
     public String getValue() {
         return value;

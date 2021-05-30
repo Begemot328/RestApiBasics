@@ -35,6 +35,7 @@ import java.util.Optional;
  */
 @Service
 public class OrderServiceImpl implements OrderService {
+    private static final String notFoundErrorMessage = "Requested tag not found(%s = %s)!";
     private final OrderDAO dao;
     private final EntityValidator<Order> validator;
     private final EntityService<Certificate> certificateService;
@@ -68,10 +69,10 @@ public class OrderServiceImpl implements OrderService {
         order.setPurchaseDate(LocalDateTime.now());
         validator.validate(order);
 
-        if (certificateService.getByIdOptional(order.getCertificate().getId()).isEmpty()) {
+        if (certificateService.getById(order.getCertificate().getId()).isEmpty()) {
             throw new BadRequestException("Unknown certificate!", ErrorCodes.ORDER_BAD_REQUEST);
         }
-        if (userService.getByIdOptional(order.getUser().getId()).isEmpty()) {
+        if (userService.getById(order.getUser().getId()).isEmpty()) {
             throw new BadRequestException("Unknown user!", ErrorCodes.ORDER_BAD_REQUEST);
         }
 
@@ -80,17 +81,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getById(int id) throws NotFoundException {
-        Optional<Order> orderOptional = getByIdOptional(id);
-        if (orderOptional.isEmpty()) {
-            throw new NotFoundException("Requested resource not found(id = " + id + ")!",
-                    ErrorCodes.ORDER_NOT_FOUND);
-        }
-        return orderOptional.get();
-    }
-
-    @Override
-    public Optional<Order> getByIdOptional(int id) {
+    public Optional<Order> getById(int id) {
         return Optional.ofNullable(dao.getById(id));
     }
 
@@ -159,9 +150,13 @@ public class OrderServiceImpl implements OrderService {
     private void parseFindParameter(OrderFinder finder, String parameterName, List<String> list) {
         OrderSearchParameters parameter =
                 OrderSearchParameters.getEntryByParameter(parameterName);
-        if (parameter.equals(OrderSearchParameters.USER_ID)
-                && CollectionUtils.isNotEmpty(list)) {
-            finder.findByUser(Integer.parseInt(list.get(0)));
+        switch (parameter) {
+            case ORDER_ID:
+                finder.findById(Integer.parseInt(list.get(0)));
+                break;
+            case USER_ID:
+                finder.findByUser(Integer.parseInt(list.get(0)));
+                break;
         }
     }
 

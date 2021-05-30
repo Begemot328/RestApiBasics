@@ -1,4 +1,4 @@
-package com.epam.esm.web.security.userdetails;
+package com.epam.esm.web.security.auth;
 
 import com.epam.esm.model.entity.User;
 import com.epam.esm.web.security.roles.RoleMapper;

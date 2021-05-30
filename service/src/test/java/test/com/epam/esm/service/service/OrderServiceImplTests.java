@@ -123,8 +123,8 @@ class OrderServiceImplTests {
 
         doNothing().when(validator).validate(any(Order.class));
 
-        when(userServiceMock.getByIdOptional(any(Integer.class))).thenReturn(Optional.of(user));
-        when(certificateServiceMock.getByIdOptional(any(Integer.class))).thenReturn(Optional.of(certificate));
+        when(userServiceMock.getById(any(Integer.class))).thenReturn(Optional.of(user));
+        when(certificateServiceMock.getById(any(Integer.class))).thenReturn(Optional.of(certificate));
     }
 
     @Test

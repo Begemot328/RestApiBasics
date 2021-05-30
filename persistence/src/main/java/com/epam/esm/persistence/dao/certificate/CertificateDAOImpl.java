@@ -75,12 +75,16 @@ public class CertificateDAOImpl implements CertificateDAO {
 
     @Override
     public List<Certificate> findByParameters(EntityFinder<Certificate> finder) {
+        return getTypedQuery(finder).getResultList();
+    }
+
+    private TypedQuery<Certificate> getTypedQuery(EntityFinder<Certificate> finder) {
         TypedQuery<Certificate> allQuery = entityManager.createQuery(finder.getQuery());
         allQuery.setFirstResult(finder.getOffset());
-        if(finder.getLimit() > 0) {
+        if (finder.getLimit() > 0) {
             allQuery.setMaxResults(finder.getLimit());
         }
-        return allQuery.getResultList();
+        return allQuery;
     }
 
     @Override

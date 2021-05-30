@@ -11,14 +11,14 @@ public class RoleMapper {
     public static final Function<String, Role> toRoleMapper = new Function<String, Role>() {
         @Override
         public Role apply(String s) {
-            return Role.valueOf(s.replace(PREFIX, StringUtils.EMPTY));
+            return new Role(s.replace(PREFIX, StringUtils.EMPTY));
         }
     };
 
     public static final Function<Role, String> toStringMapper = new Function<Role, String>() {
         @Override
         public String apply(Role role) {
-            return PREFIX + role.getValue();
+            return PREFIX + role.getName();
         }
     };
 

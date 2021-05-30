@@ -63,7 +63,7 @@ public class OrderDTOMapper {
     public OrderDTO toOrderDTO(Order order) {
         OrderDTO orderDTO = mapper.map(order, OrderDTO.class);
         try {
-            Link link = linkTo(methodOn(UserController.class).readOrder(order.getId())).withSelfRel();
+            Link link = linkTo(methodOn(UserController.class).get(order.getId())).withSelfRel();
             orderDTO.add(link);
         } catch (NotFoundException e) {
             throw new DTOException(e);

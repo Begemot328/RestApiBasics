@@ -27,6 +27,10 @@ public class OrderFinder extends EntityFinder<Order> {
         add(builder.equal(root.join("certificate").get("id"), id));
     }
 
+    public void findById(int id) {
+        add(builder.equal(root.get("id"), id));
+    }
+
     @Override
     protected Class<Order> getClassType() {
         return Order.class;

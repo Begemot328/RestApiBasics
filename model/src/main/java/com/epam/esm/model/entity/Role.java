@@ -1,40 +1,66 @@
 package com.epam.esm.model.entity;
 
-import java.util.Arrays;
-import java.util.Optional;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.util.Objects;
 
-public enum Role {
-    GUEST(0, "GUEST"),
-    ADMIN(1, "ADMIN"),
-    USER(2, "USER");
+@Entity
+public class Role extends CustomEntity {
 
-    private int id;
-    private String value;
+    @Column
+    private String name;
 
-    Role(int id, String value) {
-        this.id = id;
-        this.value = value;
+    @Column
+    private String description;
+
+    public Role(String name) {
+        this.name = name;
     }
 
-    public int getId() {
-        return id;
+    /**
+     * Default constructor.
+     */
+    public Role() {
+        // Default constructor for JPA purposes.
     }
 
-    public String getValue() {
-        return value;
+    public String getName() {
+        return name;
     }
 
-    public Role getById(int id) {
-        Optional<Role> roleOptional =  Arrays.stream(values())
-                .filter(role -> role.id == id).findAny();
-        return roleOptional.orElseThrow(
-                () -> new IllegalArgumentException("Role id=" + id + " not found!"));
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Role getByName(String name) {
-        Optional<Role> roleOptional =  Arrays.stream(values())
-                .filter(role -> role.value.equals(name)).findAny();
-        return roleOptional.orElseThrow(
-                () -> new IllegalArgumentException("Role name =" + name + " not found!"));
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return id == role.id && Objects.equals(name, role.name)
+                && Objects.equals(description, role.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description);
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", value='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

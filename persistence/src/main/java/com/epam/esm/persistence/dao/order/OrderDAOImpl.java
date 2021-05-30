@@ -65,12 +65,16 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public List<Order> findByParameters(EntityFinder<Order> finder) {
+        return getTypedQuery(finder).getResultList();
+    }
+
+    private TypedQuery<Order> getTypedQuery(EntityFinder<Order> finder) {
         TypedQuery<Order> allQuery = entityManager.createQuery(finder.getQuery());
         allQuery.setFirstResult(finder.getOffset());
-        if(finder.getLimit() > 0) {
+        if (finder.getLimit() > 0) {
             allQuery.setMaxResults(finder.getLimit());
         }
-        return allQuery.getResultList();
+        return allQuery;
     }
 
     @Override

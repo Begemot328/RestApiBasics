@@ -20,6 +20,4 @@ public interface CertificateService extends EntityService<Certificate> {
      * @param certificate {@link Certificate} to patch.
      */
     Certificate patch(Certificate certificate) throws ValidationException, BadRequestException, NotFoundException;
-
-
 }

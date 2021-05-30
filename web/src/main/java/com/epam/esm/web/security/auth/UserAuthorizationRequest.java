@@ -1,16 +1,16 @@
-package com.epam.esm.web.security.userdetails;
+package com.epam.esm.web.security.auth;
 
 import java.util.Objects;
 
-public class AuthorizationRequest {
+public class UserAuthorizationRequest {
     private String username;
     private String password;
 
-    public AuthorizationRequest() {
+    public UserAuthorizationRequest() {
         // Default constructor for Model mapper purposes.
     }
 
-    public AuthorizationRequest(String username, String password) {
+    public UserAuthorizationRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -35,7 +35,7 @@ public class AuthorizationRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AuthorizationRequest that = (AuthorizationRequest) o;
+        UserAuthorizationRequest that = (UserAuthorizationRequest) o;
         return Objects.equals(username, that.username) && Objects.equals(password, that.password);
     }
 

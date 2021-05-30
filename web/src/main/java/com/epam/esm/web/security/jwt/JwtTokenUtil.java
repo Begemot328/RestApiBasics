@@ -1,6 +1,6 @@
 package com.epam.esm.web.security.jwt;
 
-import com.epam.esm.web.security.userdetails.Account;
+import com.epam.esm.web.security.auth.Account;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -8,16 +8,21 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.time.LocalDate;
 
 @Component
+@PropertySource("classpath:jwtutil.properties")
 public class JwtTokenUtil {
 
-    private final String jwtSecret = "zdtlD3JK56m6wTTgsNFhqzjqP";
-    private final String jwtIssuer = "epam.com";
+    @Value("${jwtSecret}")
+    private String jwtSecret;
+    @Value("${jwtIssuer}")
+    private String jwtIssuer;
 
     public String generateAccessToken(Account user) {
         return Jwts.builder()

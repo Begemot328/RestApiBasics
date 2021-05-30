@@ -2,6 +2,7 @@ package com.epam.esm.service.service;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.CustomEntity;
+import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
@@ -21,6 +22,7 @@ import java.util.Optional;
  * @version 1.0
  */
 public interface EntityService<T extends CustomEntity> {
+    static final String notFoundErrorMessage = "Requested entity not found(%s = %s)!";
 
     /**
      * Create {@link CustomEntity} and add it to database method.
@@ -37,14 +39,7 @@ public interface EntityService<T extends CustomEntity> {
      *
      * @param id ID of the Entity.
      */
-    T getById(int id) throws NotFoundException;
-
-    /**
-     * Read {@link CustomEntity} from database method.
-     *
-     * @param id ID of the Entity.
-     */
-    Optional<T> getByIdOptional(int id);
+    Optional<T> getById(int id);
 
     /**
      * Delete {@link CustomEntity} from database method.
@@ -85,5 +80,15 @@ public interface EntityService<T extends CustomEntity> {
      */
     default String decodeParam(String param) {
         return URLDecoder.decode(param, StandardCharsets.UTF_8);
+    }
+
+    default T checkIfPresent(Optional<T> entityOptional, String parameterName,
+                              String parameterValue, int errorCode)
+            throws NotFoundException {
+        if (entityOptional.isEmpty()) {
+            throw new NotFoundException(String.format(notFoundErrorMessage, parameterName, parameterValue),
+                    errorCode);
+        }
+        return entityOptional.get();
     }
 }

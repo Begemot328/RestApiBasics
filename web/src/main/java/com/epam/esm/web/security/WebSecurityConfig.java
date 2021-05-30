@@ -4,7 +4,7 @@ import com.epam.esm.service.service.user.UserService;
 import com.epam.esm.web.exceptionhandler.RESTAuthenticationEntryPoint;
 import com.epam.esm.web.exceptionhandler.RestAccessDeniedHandler;
 import com.epam.esm.web.security.jwt.JwtTokenFilter;
-import com.epam.esm.web.security.userdetails.Account;
+import com.epam.esm.web.security.auth.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(username -> userService.getByUniqueLoginOptional(username).map(Account::new)
+        auth.userDetailsService(username -> userService.getByLogin(username).map(Account::new)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "User " + username + " %s, not found")));
     }
@@ -81,8 +81,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers(HttpMethod.GET, "/tags/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/certificates/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/users/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/orders/**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/register/**").permitAll()
                 .anyRequest().authenticated();

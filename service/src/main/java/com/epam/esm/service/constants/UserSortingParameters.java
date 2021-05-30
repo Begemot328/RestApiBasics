@@ -20,10 +20,10 @@ public enum UserSortingParameters {
     }
 
     /**
-     * Obtain enum element by {@link String} name
+     * Obtain enum element by {@link String} name.
      *
-     * @param parameter parameter to find search parameter by
-     * @return {@link CertificateSearchParameters} enum element
+     * @param parameter Parameter to find sorting parameter by.
+     * @return {@link UserSortingParameters} enum element.
      */
     public static UserSortingParameters getEntryByParameter(String parameter) {
         return valueOf(ConfigUtils.convertToEnumName(parameter));

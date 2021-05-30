@@ -9,7 +9,7 @@ import com.epam.esm.service.util.ConfigUtils;
  * @version 1.0
  */
 public enum OrderSearchParameters {
-    USER_ID;
+    USER_ID, ORDER_ID;
 
     /**
      * Obtain enum element by {@link String} name

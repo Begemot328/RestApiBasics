@@ -1,23 +1,17 @@
 package com.epam.esm.web.controller;
 
-import com.epam.esm.model.entity.Role;
-import com.epam.esm.model.entity.User;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.service.user.UserService;
 import com.epam.esm.web.dto.user.UserDTO;
 import com.epam.esm.web.dto.user.UserDTOMapper;
+import com.epam.esm.web.security.AuthenticationService;
 import com.epam.esm.web.security.jwt.JwtTokenUtil;
-import com.epam.esm.web.security.userdetails.Account;
-import com.epam.esm.web.security.userdetails.AuthorizationRequest;
-import com.epam.esm.web.security.userdetails.RegistrationRequest;
+import com.epam.esm.web.security.auth.Account;
+import com.epam.esm.web.security.auth.UserAuthorizationRequest;
+import com.epam.esm.web.security.auth.UserRegistrationRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,45 +24,36 @@ import java.util.Collections;
 @RestController
 public class AuthorizationController {
 
-    private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-    private final UserService userService;
+    private final AuthenticationService authenticationService;
     private final UserDTOMapper userDTOMapper;
 
-    public AuthorizationController(AuthenticationManager authenticationManager,
-                                   JwtTokenUtil jwtTokenUtil,
-                                   UserService userService,
+    public AuthorizationController(JwtTokenUtil jwtTokenUtil,
+                                   AuthenticationService authenticationService,
                                    UserDTOMapper userDTOMapper) {
-        this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
-        this.userService = userService;
+        this.authenticationService = authenticationService;
         this.userDTOMapper = userDTOMapper;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestBody AuthorizationRequest request) {
+    public ResponseEntity<UserDTO> login(@RequestBody UserAuthorizationRequest request)
+            throws BadRequestException, ValidationException {
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                request.getUsername(), request.getPassword());
-        Authentication authenticate = authenticationManager
-                .authenticate(token);
-
-        Account user = (Account) authenticate.getPrincipal();
-
+        Account user = authenticationService.login(request);
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.put(HttpHeaders.AUTHORIZATION,
                 Collections.singletonList(jwtTokenUtil.generateAccessToken(user)));
-        return new ResponseEntity<>(userDTOMapper.toUserDTO(user.getUser()), headers, HttpStatus.OK);
+        return new ResponseEntity<>(userDTOMapper.toUserDTO(user.getUser()),
+                headers, HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody RegistrationRequest request)
+    public ResponseEntity<UserDTO> register(@RequestBody UserRegistrationRequest request)
             throws BadRequestException, ValidationException {
-        User user = new User(request.getFirstName(), request.getLastName(),
-                request.getUsername(), BCrypt.hashpw(request.getPassword(), BCrypt.gensalt(12)));
-        user.setActive(true);
-        user.addRole(Role.USER);
-        userService.create(user);
-        return new ResponseEntity<>(userDTOMapper.toUserDTO(user), HttpStatus.CREATED);
+
+        return new ResponseEntity<>(
+                userDTOMapper.toUserDTO(
+                        authenticationService.register(request)), HttpStatus.CREATED);
     }
 }

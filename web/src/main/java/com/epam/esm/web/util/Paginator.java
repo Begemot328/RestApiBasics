@@ -1,6 +1,9 @@
 package com.epam.esm.web.util;
 
 import com.epam.esm.service.constants.PaginationParameters;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 
@@ -12,9 +15,12 @@ import java.util.Collections;
  * @author Yury Zmushko
  * @version 1.0
  */
+@Configuration
+@PropertySource("classpath:pagination.properties")
 public class Paginator {
 
-    private static final int DEFAULT_LIMIT = 20;
+    @Value("${limit.default}")
+    private static int DEFAULT_LIMIT;
     private final int limit;
     private final int offset;
 
@@ -56,24 +62,15 @@ public class Paginator {
      *
      * @return true if parameter map contains limit parameters.
      */
-    public boolean isLimited(MultiValueMap<String, String> params) {
-        return !isNotLimited(params);
-    }
-
-    /*
-     * Check whether parameter map contains limit parameters.
-     *
-     * @return true if parameter map contains limit parameters.
-     */
     public boolean isNotLimited(MultiValueMap<String, String> params) {
         return CollectionUtils.isEmpty(params.get(PaginationParameters.LIMIT.getParameterName()));
     }
 
     private int getLimit(MultiValueMap<String, String> params) {
-        return isLimited(params)
-                ? Integer.parseInt(
-                params.get(PaginationParameters.LIMIT.getParameterName()).get(0))
-                : DEFAULT_LIMIT;
+        return isNotLimited(params)
+                ? DEFAULT_LIMIT :
+                Integer.parseInt(
+                params.get(PaginationParameters.LIMIT.getParameterName()).get(0));
     }
 
     private int getOffset(MultiValueMap<String, String> params) {

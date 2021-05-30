@@ -37,6 +37,8 @@ public class UserServiceImpl implements UserService {
     private final UserDAO dao;
     private final EntityValidator<User> validator;
 
+    private String loginExistsErrorMessage = "Such login already exists! login= %s";
+
     @Autowired
     public UserServiceImpl(UserDAO dao,
                            EntityValidator<User> validator) {
@@ -49,29 +51,22 @@ public class UserServiceImpl implements UserService {
     public User create(User user) throws ValidationException, BadRequestException {
         validator.validate(user);
         try {
-            if (getByUniqueLoginOptional(user.getLogin()).isPresent()) {
-                throw new BadRequestException("Such login already exists! login= " + user.getLogin(),
-                        ErrorCodes.USER_BAD_REQUEST);
-            }
+            validateUserLogin(user.getLogin());
             return dao.create(user);
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException(e, ErrorCodes.USER_BAD_REQUEST);
         }
     }
 
-    @Override
-    public User getById(int id) throws NotFoundException {
-        Optional<User> userOptional = getByIdOptional(id);
-        if (userOptional.isEmpty()) {
-            throw new NotFoundException("Requested resource not found(id = " + id + ")!",
-                    ErrorCodes.USER_NOT_FOUND);
-        } else {
-            return userOptional.get();
+    private void validateUserLogin(String login) throws BadRequestException {
+        if (this.getByLogin(login).isPresent()) {
+            throw new BadRequestException(String.format(loginExistsErrorMessage, login),
+                    ErrorCodes.USER_BAD_REQUEST);
         }
     }
 
     @Override
-    public Optional<User> getByIdOptional(int id) {
+    public Optional<User> getById(int id) {
         return Optional.ofNullable(dao.getById(id));
     }
 
@@ -161,17 +156,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByUniqueLogin(String login) throws NotFoundException {
-        Optional<User> userOptional = getByUniqueLoginOptional(login);
-        if (userOptional.isEmpty()) {
-            throw new NotFoundException("Requested resource not found(login = " + login + ")!",
-                    ErrorCodes.USER_NOT_FOUND);
-        }
-        return userOptional.get();
-    }
-
-    @Override
-    public Optional<User> getByUniqueLoginOptional(String login) {
+    public Optional<User> getByLogin(String login) {
         UserFinder finder = getFinder();
         addToFinder(finder::findByLogin, login);
         List<User> users = dao.findByParameters(finder);

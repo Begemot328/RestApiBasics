@@ -1,18 +1,18 @@
-package com.epam.esm.web.security.userdetails;
+package com.epam.esm.web.security.auth;
 
 import java.util.Objects;
 
-public class RegistrationRequest {
+public class UserRegistrationRequest {
     private String username;
     private String password;
     private String firstName;
     private String lastName;
 
-    public RegistrationRequest() {
+    public UserRegistrationRequest() {
         // Default constructor for Model mapper purposes.
     }
 
-    public RegistrationRequest(String username, String password, String firstName, String lastName) {
+    public UserRegistrationRequest(String username, String password, String firstName, String lastName) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -55,7 +55,7 @@ public class RegistrationRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RegistrationRequest that = (RegistrationRequest) o;
+        UserRegistrationRequest that = (UserRegistrationRequest) o;
         return Objects.equals(username, that.username) && Objects.equals(password, that.password);
     }
 

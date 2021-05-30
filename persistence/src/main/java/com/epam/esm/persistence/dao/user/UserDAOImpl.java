@@ -65,12 +65,16 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> findByParameters(EntityFinder<User> finder) {
+        return getTypedQuery(finder).getResultList();
+    }
+
+    private TypedQuery<User> getTypedQuery(EntityFinder<User> finder) {
         TypedQuery<User> allQuery = entityManager.createQuery(finder.getQuery());
         allQuery.setFirstResult(finder.getOffset());
-        if(finder.getLimit() > 0) {
+        if (finder.getLimit() > 0) {
             allQuery.setMaxResults(finder.getLimit());
         }
-        return allQuery.getResultList();
+        return allQuery;
     }
 
     @Override

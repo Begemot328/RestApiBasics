@@ -28,7 +28,7 @@ public class TagDTOMapper {
     public TagDTO toTagDTO(Tag tag) {
         TagDTO tagDTO = mapper.map(tag, TagDTO.class);
         try {
-            Link link = linkTo(methodOn(TagController.class).read(tag.getId())).withSelfRel();
+            Link link = linkTo(methodOn(TagController.class).get(tag.getId())).withSelfRel();
             tagDTO.add(link);
         } catch (NotFoundException e) {
             throw new DTOException(e);

@@ -25,9 +25,7 @@ public interface TagService extends EntityService<Tag> {
      * Find {@link Tag} by his unique name.
      *
      * @param name Name to find.
-     * @return {@link Tag} with defined name.
+     * @return {@link Optional} of {@link Tag} with defined name.
      */
-    Tag getByUniqueName(String name) throws NotFoundException;
-
-    Optional<Tag> getByUniqueNameOptional(String name);
+    Optional<Tag> getByName(String name);
 }
