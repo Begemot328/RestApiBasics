@@ -4,7 +4,7 @@ import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.web.dto.user.UserDTO;
 import com.epam.esm.web.dto.user.UserDTOMapper;
-import com.epam.esm.web.security.AuthenticationService;
+import com.epam.esm.web.security.service.AuthenticationService;
 import com.epam.esm.web.security.jwt.JwtTokenUtil;
 import com.epam.esm.web.security.auth.Account;
 import com.epam.esm.web.security.auth.UserAuthorizationRequest;

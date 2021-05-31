@@ -1,4 +1,4 @@
-package com.epam.esm.web.security;
+package com.epam.esm.web.security.auth;
 
 import com.epam.esm.web.security.auth.Account;
 import org.springframework.security.access.PermissionEvaluator;

@@ -6,10 +6,12 @@ import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ServiceLayerException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.web.dto.ExceptionDTO;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -19,32 +21,16 @@ import javax.naming.AuthenticationException;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler({BadCredentialsException.class})
-    public ResponseEntity<ExceptionDTO> handleBadCredentialsException(
-            Exception ex, WebRequest request) {
-        return new ResponseEntity<>(
-                new ExceptionDTO(ex, HttpStatus.UNAUTHORIZED.value()),
-                HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler({AccessDeniedException.class})
-    public ResponseEntity<ExceptionDTO> handleAccessDeniedException(
+    @ExceptionHandler({LockedException.class})
+    public ResponseEntity<ExceptionDTO> handleLockedException(
             Exception ex, WebRequest request) {
         return new ResponseEntity<>(
                 new ExceptionDTO(ex, HttpStatus.FORBIDDEN.value()),
                 HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<ExceptionDTO> handleRuntimeException(
-            Exception ex, WebRequest request) {
-        return new ResponseEntity<>(
-                new ExceptionDTO(ex, HttpStatus.INTERNAL_SERVER_ERROR.value()),
-                HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity<ExceptionDTO> handleException(
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ResponseEntity<ExceptionDTO> handleDataIntegrityViolationException(
             Exception ex, WebRequest request) {
         return new ResponseEntity<>(
                 new ExceptionDTO(ex, HttpStatus.INTERNAL_SERVER_ERROR.value()),

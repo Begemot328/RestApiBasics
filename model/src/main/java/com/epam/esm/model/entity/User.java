@@ -94,7 +94,7 @@ public class User extends CustomEntity {
      * @param active First name of the user.
      */
     public void setActive(boolean active) {
-        this.isActive = isActive;
+        this.isActive = active;
     }
 
     /**

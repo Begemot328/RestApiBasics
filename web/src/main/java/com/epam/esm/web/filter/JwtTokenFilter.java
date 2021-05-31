@@ -1,10 +1,14 @@
-package com.epam.esm.web.security.jwt;
+package com.epam.esm.web.filter;
 
 import com.epam.esm.service.service.user.UserService;
+import com.epam.esm.web.dto.ExceptionDTO;
 import com.epam.esm.web.security.auth.Account;
+import com.epam.esm.web.security.jwt.JwtTokenUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,24 +54,23 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         final String token = header.split(" ")[1].trim();
-        if (!jwtTokenUtil.validate(token)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token!");
-            return;
-        }
+            if (!jwtTokenUtil.validate(token)) {
+                chain.doFilter(request, response);
+            }
 
-        UserDetails userDetails = userService.getByLogin(jwtTokenUtil.getUsername(token))
-                .map(Account::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+            UserDetails userDetails = userService.getByLogin(jwtTokenUtil.getUsername(token))
+                    .map(Account::new)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, null,
-                Optional.ofNullable(userDetails).map(UserDetails::getAuthorities).orElse(List.of())
-        );
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    userDetails, null,
+                    Optional.ofNullable(userDetails).map(UserDetails::getAuthorities).orElse(List.of())
+            );
 
-        authentication
-                .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            authentication
+                    .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        chain.doFilter(request, response);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            chain.doFilter(request, response);
     }
 }

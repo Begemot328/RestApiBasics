@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Locale;
 
 @Component
 public class RestAccessDeniedHandler implements AccessDeniedHandler {
@@ -22,7 +23,7 @@ public class RestAccessDeniedHandler implements AccessDeniedHandler {
                        AccessDeniedException e)
             throws IOException, ServletException {
         ExceptionDTO response = new ExceptionDTO(
-                "Access denied", HttpStatus.FORBIDDEN.value());
+                e, HttpStatus.FORBIDDEN.value());
         httpServletResponse.setHeader("Content-Type", "application/json");
         httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
         OutputStream out = httpServletResponse.getOutputStream();

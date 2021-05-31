@@ -1,5 +1,6 @@
 package com.epam.esm.web.security;
 
+import com.epam.esm.web.security.auth.UserPermissionEvaluator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;

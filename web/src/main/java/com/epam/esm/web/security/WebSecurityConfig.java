@@ -1,9 +1,10 @@
 package com.epam.esm.web.security;
 
 import com.epam.esm.service.service.user.UserService;
+import com.epam.esm.web.filter.ExceptionHandlerFilter;
 import com.epam.esm.web.exceptionhandler.RESTAuthenticationEntryPoint;
 import com.epam.esm.web.exceptionhandler.RestAccessDeniedHandler;
-import com.epam.esm.web.security.jwt.JwtTokenFilter;
+import com.epam.esm.web.filter.JwtTokenFilter;
 import com.epam.esm.web.security.auth.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
     private final JwtTokenFilter jwtTokenFilter;
+    private final ExceptionHandlerFilter exceptionFilter;
     private RESTAuthenticationEntryPoint entryPoint;
     private RestAccessDeniedHandler handler;
 
@@ -41,10 +43,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public WebSecurityConfig(UserService userService,
                              JwtTokenFilter jwtTokenFilter,
                              RESTAuthenticationEntryPoint entryPoint,
-                             RestAccessDeniedHandler handler) {
+                             RestAccessDeniedHandler handler,
+                             ExceptionHandlerFilter exceptionFilter) {
         super();
         this.userService = userService;
         this.jwtTokenFilter = jwtTokenFilter;
+        this.exceptionFilter = exceptionFilter;
         this.entryPoint = entryPoint;
         this.handler = handler;
 
@@ -86,6 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(exceptionFilter, JwtTokenFilter.class);
     }
 
     @Bean

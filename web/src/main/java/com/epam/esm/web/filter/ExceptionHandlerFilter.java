@@ -1,26 +1,35 @@
-package com.epam.esm.web.exceptionhandler;
+package com.epam.esm.web.filter;
 
 import com.epam.esm.web.dto.ExceptionDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-
+import org.springframework.web.filter.OncePerRequestFilter;
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.AccessDeniedException;
 
 @Component
-public class RESTAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     @Override
-    public void commence(HttpServletRequest httpServletRequest,
-                         HttpServletResponse httpServletResponse,
-                         AuthenticationException e)
+    public void doFilterInternal(HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 FilterChain filterChain)
+            throws ServletException, IOException {
+        try {
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            commence(request, response, e);
+        }
+    }
+
+    private void commence(HttpServletRequest httpServletRequest,
+                          HttpServletResponse httpServletResponse,
+                          Exception e)
             throws IOException, ServletException {
         ExceptionDTO response = new ExceptionDTO(
                 e.getMessage(), HttpStatus.UNAUTHORIZED.value());

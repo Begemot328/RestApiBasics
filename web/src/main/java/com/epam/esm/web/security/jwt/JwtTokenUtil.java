@@ -1,5 +1,6 @@
 package com.epam.esm.web.security.jwt;
 
+import com.epam.esm.web.exceptionhandler.RESTAuthenticationEntryPoint;
 import com.epam.esm.web.security.auth.Account;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import javax.security.sasl.AuthenticationException;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -52,14 +54,14 @@ public class JwtTokenUtil {
         return claims.getExpiration();
     }
 
-    public boolean validate(String token) {
+    public boolean validate(String token) throws AuthenticationException {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
         } catch (SignatureException | MalformedJwtException
                 | ExpiredJwtException | UnsupportedJwtException
                 | IllegalArgumentException ex) {
-            throw new RuntimeException(ex);
+            throw new AuthenticationException(ex.getClass().getName() + " " + ex.getMessage());
         }
     }
 }
