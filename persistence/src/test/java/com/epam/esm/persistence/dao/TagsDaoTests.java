@@ -126,7 +126,7 @@ class TagsDaoTests {
     void readMostlyUsedTag_returnTag() {
         tag = new Tag("games");
         tag.setId(2);
-        assertEquals(tagsDao.findMostPopularTag(), tag);
+        assertEquals(tag, tagsDao.findMostPopularTag().get());
     }
 
     @Test

@@ -36,8 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
     private final JwtTokenFilter jwtTokenFilter;
     private final ExceptionHandlerFilter exceptionFilter;
-    private RESTAuthenticationEntryPoint entryPoint;
-    private RestAccessDeniedHandler handler;
+    private final RESTAuthenticationEntryPoint entryPoint;
+    private final RestAccessDeniedHandler handler;
 
     @Autowired
     public WebSecurityConfig(UserService userService,

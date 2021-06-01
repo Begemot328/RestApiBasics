@@ -7,6 +7,7 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Tag DAO implementation.
@@ -36,12 +37,12 @@ public class TagDAOImpl implements TagDAOCustom {
     }
 
     @Override
-    public Tag findMostPopularTag() {
+    public Optional<Tag> findMostPopularTag() {
         List<Tag> tags = findByQuery(TagQueries.SELECT_MOST_POPULAR_TAG.getValue());
 
         if (CollectionUtils.isEmpty(tags)) {
-            return null;
+            return Optional.empty();
         }
-        return tags.get(0);
+        return Optional.of(tags.get(0));
     }
 }

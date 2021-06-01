@@ -10,6 +10,4 @@ import com.epam.esm.persistence.dao.EntityDAO;
  * @version 1.0
  */
 public interface RoleDAOCustom extends EntityDAO<Role> {
-
-    Role getByName(String name);
 }

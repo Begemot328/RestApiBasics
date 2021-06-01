@@ -54,7 +54,6 @@ public abstract class EntityFinder<T extends CustomEntity> {
      */
     protected abstract Class<T> getClassType();
 
-
     /**
      * Query getter.
      *

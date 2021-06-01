@@ -5,6 +5,7 @@ import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Tag DAO interface.
@@ -26,5 +27,5 @@ public interface TagDAOCustom extends EntityDAO<Tag> {
      *
      * @return {@link Tag} object.
      */
-    Tag findMostPopularTag();
+    Optional<Tag> findMostPopularTag();
 }

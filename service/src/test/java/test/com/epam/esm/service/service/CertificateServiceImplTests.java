@@ -53,6 +53,7 @@ import static org.mockito.Mockito.when;
 @Transactional
 class CertificateServiceImplTests {
 
+    static final Logger logger = LoggerFactory.getLogger(CertificateServiceImplTests.class);
     private static final Tag tag1 = new Tag("Tag1");
     private static final Certificate certificate1 = new Certificate("Certificate1",
             BigDecimal.valueOf(10.0), 3);
@@ -66,7 +67,6 @@ class CertificateServiceImplTests {
     private static final Certificate[] certificatesShort = {certificate1, certificate2};
     private static final List<Certificate> fullList = Arrays.asList(certificates);
     private static final List<Certificate> shortList = Arrays.asList(certificatesShort);
-    static Logger logger = LoggerFactory.getLogger(CertificateServiceImplTests.class);
     @MockBean
     CertificateDAO certificateDaoMock;
     @MockBean
@@ -79,35 +79,32 @@ class CertificateServiceImplTests {
     private EntityManager entityManager;
 
     @BeforeEach
-    void init() {
+    void init() throws ValidationException {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
         Root<Tag> tagRoot = query.from(Tag.class);
         query = query.select(tagRoot);
 
-        try {
-            when(tagDaoMock.findById(any(Integer.class))).thenReturn(Optional.of(tag1));
-            when(tagDaoMock.save(any(Tag.class))).thenAnswer(invocation -> {
-                Tag tag = invocation.getArgument(0, Tag.class);
-                tag.setId(tag.getId() + 1);
-                return tag;
-            });
-            when(certificateDaoMock.findAll()).thenReturn(fullList);
-            when(certificateDaoMock.findById(1)).thenReturn(Optional.of(certificate1));
-            when(certificateDaoMock.findById(2)).thenReturn(Optional.of(certificate2));
-            when(certificateDaoMock.findByParameters(any(CertificateFinder.class))).thenReturn(shortList);
-            doNothing().when(certificateDaoMock).delete(any(Certificate.class));
-            when(certificateDaoMock.getBuilder()).thenReturn(builder);
-            when(certificateDaoMock.save(any(Certificate.class))).thenAnswer(invocation -> invocation.getArgument(0, Certificate.class));
-            when(certificateDaoMock.save(any(Certificate.class))).thenAnswer(invocation -> {
-                Certificate certificate = invocation.getArgument(0, Certificate.class);
-                certificate.setId(fullList.size());
-                return certificate;
-            });
-            doNothing().when(validator).validate(any(Certificate.class));
-        } catch (ValidationException e) {
-            logger.error(e.getMessage());
-        }
+        when(tagDaoMock.findById(any(Integer.class))).thenReturn(Optional.of(tag1));
+        when(tagDaoMock.save(any(Tag.class))).thenAnswer(invocation -> {
+            Tag tag = invocation.getArgument(0, Tag.class);
+            tag.setId(tag.getId() + 1);
+            return tag;
+        });
+        when(certificateDaoMock.findAll()).thenReturn(fullList);
+        when(certificateDaoMock.findById(1)).thenReturn(Optional.of(certificate1));
+        when(certificateDaoMock.findById(2)).thenReturn(Optional.of(certificate2));
+        when(certificateDaoMock.findByParameters(any(CertificateFinder.class))).thenReturn(shortList);
+        doNothing().when(certificateDaoMock).delete(any(Certificate.class));
+        when(certificateDaoMock.getBuilder()).thenReturn(builder);
+        when(certificateDaoMock.save(any(Certificate.class))).thenAnswer(invocation -> invocation.getArgument(0, Certificate.class));
+        when(certificateDaoMock.save(any(Certificate.class))).thenAnswer(invocation -> {
+            Certificate certificate = invocation.getArgument(0, Certificate.class);
+            certificate.setId(fullList.size());
+            return certificate;
+        });
+        doNothing().when(validator).validate(any(Certificate.class));
+
         certificate1.setId(1);
         certificate2.setId(2);
         certificate3.setId(3);
@@ -115,7 +112,7 @@ class CertificateServiceImplTests {
     }
 
     @Test
-    void getById_returnCertificate() throws NotFoundException {
+    void getById_returnCertificate() {
         assertEquals(Optional.of(certificate1), service.getById(1));
     }
 

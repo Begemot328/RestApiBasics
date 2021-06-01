@@ -131,7 +131,7 @@ class OrderServiceImplTests {
     }
 
     @Test
-    void find_returnOrder() throws NotFoundException {
+    void find_returnOrder() {
         assertEquals(order1, service.getById(1).get());
     }
 

@@ -28,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -75,7 +73,7 @@ public class TagController implements PaginableSearch {
 
     @GetMapping(value = "/popular")
     public ResponseEntity<?> getMostPopular() throws NotFoundException {
-        final Tag tag = tagServiceImpl.findMostlyUsedTag();
+        final Tag tag = tagServiceImpl.findMostPopularTag();
         TagDTO tagDTO = tagDTOMapper.toTagDTO(tag);
         tagDTO.add(linkTo(methodOn(this.getClass()).getMostPopular()).withRel("most-popular"));
         return new ResponseEntity<>(tagDTO, HttpStatus.OK);

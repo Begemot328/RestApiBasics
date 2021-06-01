@@ -34,22 +34,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping(value = "/orders")
 public class OrderController implements PaginableSearch {
     private final OrderService orderService;
-    private final UserService userService;
-    private final CertificateService certificateService;
-    private final UserDTOMapper userDTOMapper;
     private final OrderDTOMapper orderDTOMapper;
 
     @Autowired
     public OrderController(OrderServiceImpl orderService,
-                           UserServiceImpl userServiceImpl,
-                           UserDTOMapper userDTOMapper,
-                           OrderDTOMapper orderDTOMapper,
-                           CertificateService certificateService) {
+                           OrderDTOMapper orderDTOMapper) {
         this.orderService = orderService;
-        this.userService = userServiceImpl;
-        this.userDTOMapper = userDTOMapper;
         this.orderDTOMapper = orderDTOMapper;
-        this.certificateService = certificateService;
     }
 
     @Secured(Roles.ADMIN)

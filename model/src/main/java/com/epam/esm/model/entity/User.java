@@ -183,10 +183,7 @@ public class User extends CustomEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return firstName.equals(user.firstName)
-                && lastName.equals(user.lastName)
-                && login.equals(user.login)
-                && password.equals(user.password);
+        return isActive == user.isActive && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
     }
 
     /**
@@ -196,7 +193,7 @@ public class User extends CustomEntity {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, login, password);
+        return Objects.hash(firstName, lastName, login, password, isActive, roles);
     }
 
     /**
@@ -211,7 +208,8 @@ public class User extends CustomEntity {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
+                ", isActive=" + isActive +
+                ", roles=" + roles +
                 '}';
     }
 }

@@ -19,7 +19,7 @@ public interface TagService extends EntityService<Tag> {
      *
      * @return The most widely used {@link Tag} of a user with the highest cost of all orders.
      */
-    Tag findMostlyUsedTag() throws NotFoundException;
+    Tag findMostPopularTag() throws NotFoundException;
 
     /**
      * Find {@link Tag} by his unique name.

@@ -34,16 +34,4 @@ public class RoleDAOImpl implements RoleDAOCustom {
     public EntityManager getEntityManager() {
         return entityManager;
     }
-
-    @Override
-    public Role getByName(String name) {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Role> query = builder.createQuery(Role.class);
-        Root<Role> rootEntry = query.from(Role.class);
-        query = query.select(rootEntry);
-        query.where(builder.equal(rootEntry.get(TagColumns.NAME.getValue()), name));
-        TypedQuery<Role> allQuery = entityManager.createQuery(query);
-        List<Role> roles = allQuery.getResultList();
-        return CollectionUtils.isEmpty(roles) ? null : roles.get(0);
-    }
 }

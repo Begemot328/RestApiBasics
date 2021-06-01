@@ -10,5 +10,5 @@ import org.springframework.data.repository.CrudRepository;
  * @version 1.0
  */
 public interface RoleDAO extends CrudRepository<Role, Integer>, RoleDAOCustom {
-
+    Role getByName(String name);
 }

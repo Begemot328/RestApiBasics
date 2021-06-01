@@ -96,7 +96,7 @@ class TagServiceImplTests {
 
             doNothing().when(validator).validate(any(Tag.class));
 
-            when(tagDaoMock.findMostPopularTag()).thenReturn(tag4);
+            when(tagDaoMock.findMostPopularTag()).thenReturn(Optional.of(tag4));
 
         } catch (ValidationException e) {
             logger.error(e.getMessage());
@@ -108,7 +108,7 @@ class TagServiceImplTests {
     }
 
     @Test
-    void read_returnTag() throws NotFoundException {
+    void read_returnTag() {
         assertEquals(Optional.of(tag1), service.getById(1));
     }
 
@@ -118,7 +118,7 @@ class TagServiceImplTests {
     }
 
     @Test
-    void save_throwException() throws ValidationException, BadRequestException {
+    void save_throwException() {
         tag1.setId(0);
         assertThrows(BadRequestException.class, () -> service.create(tag1));
 
@@ -176,7 +176,7 @@ class TagServiceImplTests {
 
     @Test
     void readMostlyUsedTag_returnTag() throws NotFoundException {
-        assertEquals(service.findMostlyUsedTag(), tag4);
+        assertEquals(service.findMostPopularTag(), tag4);
     }
 
     @Test

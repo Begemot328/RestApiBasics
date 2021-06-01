@@ -21,5 +21,4 @@ public class RoleMapper {
             return PREFIX + role.getName();
         }
     };
-
 }

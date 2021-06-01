@@ -182,14 +182,12 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag findMostlyUsedTag() throws NotFoundException {
-        Tag tag = dao.findMostPopularTag();
-        if (tag == null) {
-            throw new NotFoundException("Requested resource not found (most popular tag)!",
-                    ErrorCodes.TAG_NOT_FOUND);
-        } else {
-            return tag;
-        }
+    public Tag findMostPopularTag() throws NotFoundException {
+        Optional<Tag> tag = dao.findMostPopularTag();
+        return tag.orElseThrow(
+                () -> new NotFoundException("Requested resource not found (most popular tag)!",
+                        ErrorCodes.TAG_NOT_FOUND));
+
     }
 
     @Override

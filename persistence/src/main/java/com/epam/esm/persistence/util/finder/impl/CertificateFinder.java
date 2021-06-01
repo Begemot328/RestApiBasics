@@ -30,7 +30,6 @@ public class CertificateFinder extends EntityFinder<Certificate> {
         super(dao);
     }
 
-
     @Override
     protected Class<Certificate> getClassType() {
         return Certificate.class;
@@ -70,7 +69,6 @@ public class CertificateFinder extends EntityFinder<Certificate> {
      */
     public void findByTagId(int id) {
         add(builder.equal(root.join("tags").get("id"), id));
-
     }
 
     /**
