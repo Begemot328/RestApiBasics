@@ -16,6 +16,7 @@ import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.tag.TagService;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
@@ -64,7 +65,7 @@ public class CertificateServiceImpl implements CertificateService {
         validator.validate(certificate);
         makeAllTagsDetached(certificate);
         try {
-            return dao.create(certificate);
+            return dao.save(certificate);
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException(e, ErrorCodes.CERTIFICATE_BAD_REQUEST);
         }
@@ -73,32 +74,34 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     @Transactional
     public Optional<Certificate> getById(int id) {
-        return Optional.ofNullable(dao.getById(id));
+        return dao.findById(id);
     }
 
     @Transactional
     @Override
     public void delete(int id) throws BadRequestException {
-        if (dao.getById(id) == null) {
+        Optional<Certificate> certificate = dao.findById(id);
+        if (certificate.isEmpty()) {
             throw new BadRequestException("Entity does not exist", ErrorCodes.CERTIFICATE_BAD_REQUEST);
         }
-        dao.delete(id);
+        dao.delete(certificate.get());
     }
 
     @Transactional
     @Override
     public Certificate update(Certificate certificate)
             throws ValidationException, NotFoundException, BadRequestException {
+        Certificate oldCertificate = findOldCertificate(certificate.getId());
         certificate.setLastUpdateDate(LocalDateTime.now());
-        certificate.setCreateDate(getById(certificate.getId()).get().getCreateDate());
+        certificate.setCreateDate(oldCertificate.getCreateDate());
         validator.validate(certificate);
         makeAllTagsDetached(certificate);
-        return dao.update(certificate);
+        return dao.save(certificate);
     }
 
     @Override
     public List<Certificate> findAll() throws NotFoundException {
-        List<Certificate> certificates = dao.findAll();
+        List<Certificate> certificates = IterableUtils.toList(dao.findAll());
         if (CollectionUtils.isEmpty(certificates)) {
             throw new NotFoundException("No certificates found!",
                     ErrorCodes.CERTIFICATE_NOT_FOUND);
@@ -143,10 +146,6 @@ public class CertificateServiceImpl implements CertificateService {
     public Certificate patch(Certificate certificate)
             throws ValidationException, BadRequestException, NotFoundException {
         Certificate oldCertificate = findOldCertificate(certificate.getId());
-
-        if (oldCertificate == null) {
-            throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
-        }
         return update(applyChanges(certificate, oldCertificate));
     }
 
@@ -184,9 +183,12 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    private void parseParameter(CertificateFinder finder, String parameterName, List<String> parameterValues) {
+    private void parseParameter(CertificateFinder finder,
+                                String parameterName,
+                                List<String> parameterValues) {
         if (parameterName.contains("sort")) {
-            parseSortParameter(finder, parameterName, parameterValues);
+            addSortingToFinder(finder, getSortingParameter(parameterName),
+                    getSortDirection(parameterValues));
         } else if (PaginationParameters.contains(parameterName)) {
             parsePaginationParameter(finder, parameterName, parameterValues);
         } else {
@@ -208,10 +210,18 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    private void parseSortParameter(CertificateFinder finder,
-                                    String parameterName, List<String> parameterValues) {
-        finder.sortBy(CertificateSortingParameters.getEntryByParameter(parameterName).getValue(),
-                SortDirection.parseAscDesc(parameterValues.get(0)));
+    private void addSortingToFinder(CertificateFinder finder,
+                                    String sortingParameter,
+                                    SortDirection sortDirection) {
+        finder.sortBy(sortingParameter, sortDirection);
+    }
+
+    private String getSortingParameter(String parameterName) {
+        return CertificateSortingParameters.getEntryByParameter(parameterName).getValue();
+    }
+
+    private SortDirection getSortDirection(List<String> parameterValues) {
+        return SortDirection.parseAscDesc(parameterValues.get(0));
     }
 
     private void parseFindParameter(CertificateFinder finder,
@@ -260,11 +270,12 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    private Certificate findOldCertificate(int certificateId) throws BadRequestException {
-        if (certificateId <= 0) {
-            throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
-        }
-        return dao.getById(certificateId);
+    private Certificate findOldCertificate(int certificateId)
+            throws NotFoundException {
+        Optional<Certificate> certificate = dao.findById(certificateId);
+        checkIfPresent(certificate, "id", Integer.toString(certificateId),
+                ErrorCodes.CERTIFICATE_NOT_FOUND);
+        return certificate.get();
     }
 }
 

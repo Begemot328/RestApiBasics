@@ -15,6 +15,7 @@ import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.EntityService;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
@@ -76,21 +77,20 @@ public class OrderServiceImpl implements OrderService {
             throw new BadRequestException("Unknown user!", ErrorCodes.ORDER_BAD_REQUEST);
         }
 
-        return dao.create(order);
+        return dao.save(order);
 
     }
 
     @Override
     public Optional<Order> getById(int id) {
-        return Optional.ofNullable(dao.getById(id));
+        return dao.findById(id);
     }
 
     @Override
     public void delete(int id) throws BadRequestException {
-        if (dao.getById(id) == null) {
-            throw new BadRequestException("Entity does not exist", ErrorCodes.ORDER_BAD_REQUEST);
-        }
-        dao.delete(id);
+        Optional<Order> order = dao.findById(id);
+        dao.delete(order.orElseThrow(
+                () -> new BadRequestException("Entity does not exist", ErrorCodes.ORDER_BAD_REQUEST)));
     }
 
     @Override
@@ -100,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findAll() throws NotFoundException {
-        List<Order> orders = dao.findAll();
+        List<Order> orders = IterableUtils.toList(dao.findAll());
         if (CollectionUtils.isEmpty(orders)) {
             throw new NotFoundException("No orders found!",
                     ErrorCodes.ORDER_NOT_FOUND);
@@ -126,7 +126,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findByParameters(MultiValueMap<String, String> params) throws NotFoundException, BadRequestException {
+    public List<Order> findByParameters(MultiValueMap<String, String> params)
+            throws NotFoundException, BadRequestException {
         OrderFinder finder = getFinder();
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
             try {
@@ -139,7 +140,9 @@ public class OrderServiceImpl implements OrderService {
         return readBy(finder);
     }
 
-    private void parseParameter(OrderFinder finder, String parameterName, List<String> parameterValues) {
+    private void parseParameter(OrderFinder finder,
+                                String parameterName,
+                                List<String> parameterValues) {
         if (PaginationParameters.contains(parameterName)) {
             parsePaginationParameter(finder, parameterName, parameterValues);
         } else {

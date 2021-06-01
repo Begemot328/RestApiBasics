@@ -3,6 +3,7 @@ package com.epam.esm.persistence.util.finder.impl;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.constants.UserColumns;
 import com.epam.esm.persistence.dao.EntityDAO;
+import com.epam.esm.persistence.dao.user.UserDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class UserFinder extends EntityFinder<User> {
      * @param dao {@link EntityDAO} object to obtain {@link javax.persistence.criteria.CriteriaBuilder}
      *                             and {@link javax.persistence.metamodel.Metamodel objects}
      */
-    public UserFinder(EntityDAO<User> dao) {
+    public UserFinder(UserDAO dao) {
         super(dao);
     }
 

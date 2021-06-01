@@ -4,11 +4,11 @@ import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.web.dto.user.UserDTO;
 import com.epam.esm.web.dto.user.UserDTOMapper;
-import com.epam.esm.web.security.service.AuthenticationService;
-import com.epam.esm.web.security.jwt.JwtTokenUtil;
 import com.epam.esm.web.security.auth.Account;
 import com.epam.esm.web.security.auth.UserAuthorizationRequest;
 import com.epam.esm.web.security.auth.UserRegistrationRequest;
+import com.epam.esm.web.security.jwt.JwtTokenUtil;
+import com.epam.esm.web.security.service.AuthenticationService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +37,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestBody UserAuthorizationRequest request)
-            throws BadRequestException, ValidationException {
-
+    public ResponseEntity<UserDTO> login(@RequestBody UserAuthorizationRequest request) {
         Account user = authenticationService.login(request);
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.put(HttpHeaders.AUTHORIZATION,

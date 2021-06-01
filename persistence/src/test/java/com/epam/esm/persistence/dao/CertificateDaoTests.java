@@ -3,14 +3,16 @@ package com.epam.esm.persistence.dao;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.CertificateColumns;
-import com.epam.esm.persistence.dao.certificate.CertificateDAOImpl;
+import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
+import org.apache.commons.collections4.IterableUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -28,8 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = PersistenceTestConfig.class)
 @Transactional
+@SpringBootTest(classes = PersistenceTestConfig.class)
 @Sql({"/SQL/test_db.sql"})
 class CertificateDaoTests {
 
@@ -37,7 +39,7 @@ class CertificateDaoTests {
     private EntityManager entityManager;
 
     @Autowired
-    private CertificateDAOImpl certificateDao;
+    private CertificateDAO certificateDao;
 
     private Certificate certificate;
 
@@ -57,65 +59,69 @@ class CertificateDaoTests {
     }
 
     @Test
-    void readAll_returnAll() {
-        assertEquals(5, certificateDao.findAll().size());
+    void findAll_returnAll() {
+        assertEquals(5, IterableUtils.toList(certificateDao.findAll()).size());
     }
 
     @Test
     void read_returnCertificate() {
-        assertEquals(certificate, certificateDao.getById(1));
+        assertEquals(certificate, certificateDao.findById(1).get());
     }
 
     @Test
-    void create_createCertificate() {
-        int size = certificateDao.findAll().size();
+    void save_saveCertificate() {
+        long size = certificateDao.count();
         certificate.setId(0);
-
-        certificateDao.create(certificate);
-        assertEquals(certificateDao.findAll().size(), ++size);
+        certificateDao.save(certificate);
+        assertEquals(certificateDao.count(), ++size);
     }
 
     @Test
-    void create_nullName_throwException() {
+    void save_nullName_throwException() {
+        TestTransaction.end();
         certificate.setName(null);
-        assertThrows(DataAccessException.class, () -> certificateDao.create(certificate));
+        assertThrows(DataAccessException.class, () -> certificateDao.save(certificate));
     }
 
     @Test
-    void create_nullPrice_throwException() {
+    void save_nullPrice_throwException() {
+        TestTransaction.end();
         certificate.setPrice(null);
-        assertThrows(DataAccessException.class, () -> certificateDao.create(certificate));
+        assertThrows(DataAccessException.class, () -> certificateDao.save(certificate));
     }
 
     @Test
-    void create_nullCreateDate_throwException() {
+    void save_nullCreateDate_throwException() {
+        TestTransaction.end();
         certificate.setCreateDate(null);
-        assertThrows(DataAccessException.class, () -> certificateDao.create(certificate));
+        assertThrows(DataAccessException.class, () -> certificateDao.save(certificate));
     }
 
     @Test
-    void create_nullLastUpdateDate_throwException() {
+    void save_nullLastUpdateDate_throwException() {
+        TestTransaction.end();
         certificate.setLastUpdateDate(null);
-        assertThrows(DataAccessException.class, () -> certificateDao.create(certificate));
+        assertThrows(DataAccessException.class, () -> certificateDao.save(certificate));
     }
 
     @Test
     void update_updateCertificate() {
         int id = 3;
         certificate.setId(id);
-        certificate = certificateDao.update(certificate);
-        assertEquals(certificateDao.getById(id), certificate);
+        certificate = certificateDao.save(certificate);
+
+        assertEquals(certificateDao.findById(id).get(), certificate);
     }
 
     @Test
     void delete_deleteCertificate() {
-        int size = certificateDao.findAll().size();
-        certificateDao.delete(2);
-        assertEquals(certificateDao.findAll().size(), --size);
+        long size = certificateDao.count();
+        certificateDao.delete(certificateDao.findById(1).get());
+        assertEquals(certificateDao.count(), --size);
     }
 
     @Test
-    void readBy_byFinder_returnCertificate() {
+    void findByParameters_findByFinder_returnCertificate() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Certificate> query = builder.createQuery(Certificate.class);
         Root<Certificate> root = query.from(Certificate.class);
@@ -126,6 +132,7 @@ class CertificateDaoTests {
         CertificateFinder finderMock = mock(CertificateFinder.class);
         when(finderMock.getQuery()).thenReturn(query);
 
-        assertEquals(Collections.singletonList(certificate), certificateDao.findByParameters(finderMock));
-    }
+        assertEquals(Collections.singletonList(certificate),
+                certificateDao.findByParameters(finderMock));
+    }/**/
 }

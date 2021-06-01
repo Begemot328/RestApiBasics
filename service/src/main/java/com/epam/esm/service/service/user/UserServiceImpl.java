@@ -13,6 +13,7 @@ import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
         validator.validate(user);
         try {
             validateUserLogin(user.getLogin());
-            return dao.create(user);
+            return dao.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException(e, ErrorCodes.USER_BAD_REQUEST);
         }
@@ -67,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getById(int id) {
-        return Optional.ofNullable(dao.getById(id));
+        return dao.findById(id);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() throws NotFoundException {
-        List<User> users = dao.findAll();
+        List<User> users = IterableUtils.toList(dao.findAll());
         if (CollectionUtils.isEmpty(users)) {
             throw new NotFoundException("No users found!",
                     ErrorCodes.USER_NOT_FOUND);
@@ -114,7 +115,8 @@ public class UserServiceImpl implements UserService {
     private void parseParameter(UserFinder finder, String parameterName, List<String> parameterValues)
             throws BadRequestException {
         if (parameterName.contains("sort")) {
-            parseSortParameter(finder, parameterName, parameterValues);
+            addSortingToFinder(finder, getSortingParameter(parameterName),
+                    getSortDirection(parameterValues));
         } else if (PaginationParameters.contains(parameterName)) {
             parsePaginationParameter(finder, parameterName, parameterValues);
         } else {
@@ -122,9 +124,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void parseSortParameter(UserFinder finder, String parameterName, List<String> parameterValues) {
-        finder.sortBy(UserSortingParameters.getEntryByParameter(parameterName).getValue(),
-                SortDirection.parseAscDesc(parameterValues.get(0)));
+
+    private void addSortingToFinder(UserFinder finder,
+                                    String sortingParameter,
+                                    SortDirection sortDirection) {
+        finder.sortBy(sortingParameter, sortDirection);
+    }
+
+    private String getSortingParameter(String parameterName) {
+        return UserSortingParameters.getEntryByParameter(parameterName).getValue();
+    }
+
+    private SortDirection getSortDirection(List<String> parameterValues) {
+        return SortDirection.parseAscDesc(parameterValues.get(0));
     }
 
     private void parsePaginationParameter(EntityFinder finder, String parameterName, List<String> parameterValues) {

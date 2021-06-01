@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +31,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     private void commence(HttpServletRequest httpServletRequest,
                           HttpServletResponse httpServletResponse,
                           Exception e)
-            throws IOException, ServletException {
+            throws IOException {
         ExceptionDTO response = new ExceptionDTO(
                 e.getMessage(), HttpStatus.UNAUTHORIZED.value());
         httpServletResponse.setHeader("Content-Type", "application/json");

@@ -1,13 +1,15 @@
 package test.com.epam.esm.service.service;
 
+import com.epam.esm.model.entity.Role;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.dao.user.UserDAOImpl;
+import com.epam.esm.persistence.dao.user.UserDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
+import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.user.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,7 @@ import javax.persistence.criteria.Root;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -39,23 +42,18 @@ import static org.mockito.Mockito.when;
 @Transactional
 class UserServiceImplTests {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     @MockBean
-    UserDAOImpl userDaoMock;
-
+    UserDAO userDaoMock;
     @Autowired
     UserServiceImpl service;
-
+    @PersistenceContext
+    private EntityManager entityManager;
     private User user1;
     private User user2;
     private User user3;
 
-    private final User[] users = {user1, user2, user3};
-    private final User[] usersShort = {user1, user2};
-    private final List<User> fullList = Arrays.asList(users);
-    private final List<User> shortList = Arrays.asList(usersShort);
+    private List<User> fullList;
+    private List<User> shortList;
 
     @BeforeEach
     void init() {
@@ -64,23 +62,33 @@ class UserServiceImplTests {
         Root<Tag> tagRoot = query.from(Tag.class);
         query = query.select(tagRoot);
 
-        user1 = new User("Yury", "Zmushko", "root", "qwerty");
+        user1 = new User("Yury", "Zmushko", "root",
+                "$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq");
         user1.setId(1);
-        user2 = new User("Yury", "Zmushko", "root", "qwerty");
+        user1.addRole(new Role("ADMIN"));
+        user2 = new User("Yury", "Zmushko", "root",
+                "$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq");
         user2.setId(2);
-        user3 = new User("Yury", "Zmushko", "root", "qwerty");
+        user2.addRole(new Role("USER"));
+        user3 = new User("Yury", "Zmushko", "root",
+                "$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq");
         user3.setId(3);
 
+        User[] users = {user1, user2, user3};
+        User[] usersShort = {user1, user2};
+        fullList = Arrays.asList(users);
+        shortList = Arrays.asList(usersShort);
+
         when(userDaoMock.findAll()).thenReturn(fullList);
-        when(userDaoMock.getById(1)).thenReturn(user1);
-        when(userDaoMock.getById(2)).thenReturn(user2);
+        when(userDaoMock.findById(1)).thenReturn(Optional.ofNullable(user1));
+        when(userDaoMock.findById(2)).thenReturn(Optional.ofNullable(user2));
         when(userDaoMock.findByParameters(any(UserFinder.class))).thenReturn(shortList);
         when(userDaoMock.getBuilder()).thenReturn(builder);
     }
 
     @Test
-    void read_returnUser() throws NotFoundException {
-        assertEquals(user1, service.getById(1));
+    void read_returnUser() {
+        assertEquals(user1, service.getById(1).get());
     }
 
     @Test
@@ -89,8 +97,10 @@ class UserServiceImplTests {
     }
 
     @Test
-    void create_createUser() {
-        assertThrows(UnsupportedOperationException.class, () -> service.create(user2));
+    void create_createUser() throws BadRequestException, ValidationException {
+        when(userDaoMock.findByParameters(any(UserFinder.class))).thenReturn(Collections.EMPTY_LIST);
+        service.create(user2);
+        verify(userDaoMock, atLeast(1)).save(user2);
     }
 
     @Test

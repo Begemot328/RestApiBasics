@@ -2,16 +2,19 @@ package com.epam.esm.persistence.dao;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
+import com.epam.esm.model.entity.Role;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.dao.order.OrderDAOImpl;
+import com.epam.esm.persistence.dao.order.OrderDAO;
 import com.epam.esm.persistence.util.finder.impl.OrderFinder;
+import org.apache.commons.collections4.IterableUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -26,8 +29,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,7 +43,7 @@ class OrderDaoTests {
     private EntityManager entityManager;
 
     @Autowired
-    private OrderDAOImpl orderDao;
+    private OrderDAO orderDao;
 
     private Order order;
 
@@ -60,8 +63,10 @@ class OrderDaoTests {
         tag2.setId(5);
         certificate.setTags(Arrays.asList(tag1, tag2));
 
-        User user = new User("Ivan", "Ivanov", "Ivanov", "qwerty");
+        User user = new User("Ivan", "Ivanov", "Ivanov",
+                "$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq");
         user.setId(2);
+        user.addRole(new Role("USER"));
         order = new Order(certificate, user, BigDecimal.valueOf(150.0), 1,
                 LocalDateTime.parse("2021-03-22 09:20:11", formatter));
         order.setId(1);
@@ -69,65 +74,68 @@ class OrderDaoTests {
 
     @Test
     void readAll_returnAllOrders() {
-        assertEquals(6, orderDao.findAll().size());
+        assertEquals(6, IterableUtils.toList(orderDao.findAll()).size());
     }
 
     @Test
-    void read_returnOrder() {
-        Order persistentOrder = orderDao.getById(1);
+    void findById_returnOrder() {
+        Order persistentOrder = orderDao.findById(1).get();
         assertEquals(persistentOrder, order);
     }
 
     @Test
-    void read_negativeId_returnNull() {
-        assertNull(orderDao.getById(-1));
+    void findById_negativeId_returnNull() {
+        assertTrue(orderDao.findById(-1).isEmpty());
     }
 
     @Test
-    void read_nonExistingId_returnNull() {
-        assertNull(orderDao.getById(1000));
+    void findById_nonExistingId_returnNull() {
+        assertTrue(orderDao.findById(1000).isEmpty());
     }
 
     @Test
     @Transactional
-    void create_createOrder() {
-        int size = orderDao.findAll().size();
+    void save_createOrder() {
+        int size = (int) orderDao.count();
         order.setId(0);
 
-        orderDao.create(order);
-        assertEquals(orderDao.findAll().size(), ++size);
+        orderDao.save(order);
+        assertEquals(orderDao.count(), ++size);
     }
 
     @Test
-    void create_nullUser_throwException() {
+    void save_nullUser_throwException() {
+        TestTransaction.end();
         order.setUser(null);
 
-        assertThrows(DataAccessException.class, () -> orderDao.create(order));
+        assertThrows(DataAccessException.class, () -> orderDao.save(order));
     }
 
     @Test
-    void create_nullCertificate_throwException() {
+    void save_nullCertificate_throwException() {
+        TestTransaction.end();
         order.setUser(null);
 
-        assertThrows(DataAccessException.class, () -> orderDao.create(order));
+        assertThrows(DataAccessException.class, () -> orderDao.save(order));
     }
 
     @Test
-    void create_nullDate_throwException() {
+    void save_nullDate_throwException() {
+        TestTransaction.end();
         order.setPurchaseDate(null);
 
-        assertThrows(DataAccessException.class, () -> orderDao.create(order));
+        assertThrows(DataAccessException.class, () -> orderDao.save(order));
     }
 
     @Test
     void update_updateOrderOperation_ExceptionThrown() {
         order.setOrderAmount(BigDecimal.valueOf(120.0));
-        orderDao.update(order);
-        assertEquals(order, orderDao.getById(order.getId()));
+        orderDao.save(order);
+        assertEquals(order, orderDao.findById(order.getId()).get());
     }
 
     @Test
-    void readBy_readByName_returnOrders() {
+    void findByParameters_findByName_returnOrders() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Order> query = builder.createQuery(Order.class);
         Root<Order> root = query.from(Order.class);
@@ -142,17 +150,17 @@ class OrderDaoTests {
 
     @Test
     void delete_deleteOrder() {
-        int size = orderDao.findAll().size();
+        long size = orderDao.count();
 
-        orderDao.delete(1);
-        assertEquals(orderDao.findAll().size(), --size);
+        orderDao.delete(orderDao.findById(1).get());
+        assertEquals(orderDao.count(), --size);
     }
 
     @Test
     void delete_nonExistingOrder_throwDataAccessException() {
-        int size = orderDao.findAll().size();
+        long size = orderDao.count();
 
-        assertThrows(DataAccessException.class, () -> orderDao.delete(1000));
-        assertEquals(orderDao.findAll().size(), size);
+        assertThrows(DataAccessException.class, () -> orderDao.delete(null));
+        assertEquals(orderDao.count(), size);
     }
 }

@@ -59,9 +59,7 @@ public class CertificateController implements PaginableSearch {
     @GetMapping
     public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
-        List<Certificate> certificates;
-        certificates = certificateService.findByParameters(params);
-
+        List<Certificate> certificates = certificateService.findByParameters(params);
         CollectionModel<CertificateDTO> certificateDTOs = certificateDTOMapper.toCertificateDTOList(
                 certificates);
         certificateDTOs.add(linkTo(methodOn(this.getClass()).find(params)).withRel("certificates"));

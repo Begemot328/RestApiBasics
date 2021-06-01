@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.util.finder.impl;
 
 import com.epam.esm.model.entity.Order;
-import com.epam.esm.persistence.dao.EntityDAO;
+import com.epam.esm.persistence.dao.order.OrderDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class OrderFinder extends EntityFinder<Order> {
 
-    public OrderFinder(EntityDAO<Order> dao) {
+    public OrderFinder(OrderDAO dao) {
         super(dao);
     }
 

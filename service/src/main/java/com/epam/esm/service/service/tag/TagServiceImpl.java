@@ -14,6 +14,7 @@ import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
@@ -48,7 +49,7 @@ public class TagServiceImpl implements TagService {
                 throw new BadRequestException("Such name already exists! name= " + tag.getName(),
                         ErrorCodes.TAG_BAD_REQUEST);
             }
-            return dao.create(tag);
+            return dao.save(tag);
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException(e, ErrorCodes.TAG_BAD_REQUEST);
         }
@@ -56,16 +57,15 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Optional<Tag> getById(int id) {
-        return Optional.ofNullable(dao.getById(id));
+        return dao.findById(id);
     }
 
     @Override
     @Transactional
     public void delete(int id) throws BadRequestException {
-        if (dao.getById(id) == null) {
-            throw new BadRequestException("Entity does not exist", ErrorCodes.TAG_BAD_REQUEST);
-        }
-        dao.delete(id);
+        Optional<Tag> tag = dao.findById(id);
+        dao.delete(tag.orElseThrow(
+                () -> new BadRequestException("Entity does not exist", ErrorCodes.TAG_BAD_REQUEST)));
     }
 
     @Override
@@ -77,7 +77,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> findAll() throws NotFoundException {
-        List<Tag> tags = dao.findAll();
+        List<Tag> tags = IterableUtils.toList(dao.findAll());
         if (CollectionUtils.isEmpty(tags)) {
             throw new NotFoundException("No tags found!",
                     ErrorCodes.TAG_NOT_FOUND);
@@ -131,16 +131,13 @@ public class TagServiceImpl implements TagService {
 
     private void parseParameter(TagFinder finder, String parameterName, List<String> parameterValues) {
         if (parameterName.contains("sort")) {
-            addSortingToFinder(finder, getSortingParameter(parameterName), getSortDirection(parameterValues));
+            addSortingToFinder(finder, getSortingParameter(parameterName),
+                    getSortDirection(parameterValues));
         } else if (PaginationParameters.contains(parameterName)) {
             parsePaginationParameter(finder, parameterName, Integer.parseInt(parameterValues.get(0)));
         } else {
             parseFindParameter(finder, parameterName, parameterValues);
         }
-    }
-
-    private SortDirection getSortDirection(List<String> parameterValues) {
-        return SortDirection.parseAscDesc(parameterValues.get(0));
     }
 
     private void parseFindParameter(TagFinder finder, String parameterString, List<String> list) {
@@ -157,6 +154,10 @@ public class TagServiceImpl implements TagService {
 
     private String getSortingParameter(String parameterName) {
         return TagSortingParameters.getEntryByParameter(parameterName).getValue();
+    }
+
+    private SortDirection getSortDirection(List<String> parameterValues) {
+        return SortDirection.parseAscDesc(parameterValues.get(0));
     }
 
     private void parsePaginationParameter(EntityFinder finder, String parameterName, int quantityOfElements) {

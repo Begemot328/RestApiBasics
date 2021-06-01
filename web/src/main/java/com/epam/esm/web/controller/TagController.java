@@ -28,9 +28,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -57,14 +59,10 @@ public class TagController implements PaginableSearch {
     @GetMapping
     public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params)
             throws BadRequestException, NotFoundException {
-        List<Tag> tags = new ArrayList<>();
-
-        tags = tagServiceImpl.findByParameters(params);
+        List<Tag> tags = tagServiceImpl.findByParameters(params);
         CollectionModel<TagDTO> tagDTOs = tagDTOMapper.toTagDTOList(tags);
-
         paginate(params, tagDTOs);
         tagDTOs.add(linkTo(methodOn(this.getClass()).find(params)).withSelfRel());
-
         return new ResponseEntity<>(tagDTOs, HttpStatus.OK);
     }
 

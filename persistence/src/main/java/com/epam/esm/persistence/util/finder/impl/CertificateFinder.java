@@ -26,7 +26,7 @@ public class CertificateFinder extends EntityFinder<Certificate> {
      * @param dao {@link EntityDAO} object to obtain {@link javax.persistence.criteria.CriteriaBuilder}
      *                             and {@link javax.persistence.metamodel.Metamodel objects}
      */
-    public CertificateFinder(EntityDAO<Certificate> dao) {
+    public CertificateFinder(CertificateDAO dao) {
         super(dao);
     }
 

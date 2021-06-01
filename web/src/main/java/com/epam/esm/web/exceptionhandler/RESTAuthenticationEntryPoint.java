@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.AccessDeniedException;
 
 @Component
 public class RESTAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -21,7 +20,7 @@ public class RESTAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest,
                          HttpServletResponse httpServletResponse,
                          AuthenticationException e)
-            throws IOException, ServletException {
+            throws IOException {
         ExceptionDTO response = new ExceptionDTO(
                 e.getMessage(), HttpStatus.UNAUTHORIZED.value());
         httpServletResponse.setHeader("Content-Type", "application/json");

@@ -2,10 +2,11 @@ package test.com.epam.esm.service.service;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
+import com.epam.esm.model.entity.Role;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.dao.order.OrderDAOImpl;
-import com.epam.esm.persistence.dao.tag.TagDAOImpl;
+import com.epam.esm.persistence.dao.order.OrderDAO;
+import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.impl.OrderFinder;
 import com.epam.esm.service.constants.PaginationParameters;
@@ -55,10 +56,10 @@ class OrderServiceImplTests {
     private EntityManager entityManager;
 
     @MockBean
-    OrderDAOImpl orderDaoMock;
+    OrderDAO orderDaoMock;
 
     @MockBean
-    TagDAOImpl tagDaoMock;
+    TagDAO tagDaoMock;
 
     @MockBean
     UserService userServiceMock;
@@ -96,8 +97,10 @@ class OrderServiceImplTests {
         certificate.setLastUpdateDate(LocalDateTime.parse("2021-03-22 09:20:11", formatter));
         certificate.setId(2);
 
-        User user = new User("Ivan", "Ivanov", "Ivanov", "qwerty");
+        User user = new User("Ivan", "Ivanov", "Ivanov", 
+                "$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq");
         user.setId(2);
+        user.addRole(new Role("USER"));
 
         order1 = new Order(certificate, user, BigDecimal.valueOf(10.0), 1,
                 LocalDateTime.parse("2021-01-22 09:20:11", formatter));
@@ -110,12 +113,12 @@ class OrderServiceImplTests {
         order3.setId(3);
 
         when(orderDaoMock.findAll()).thenReturn(fullList);
-        when(orderDaoMock.getById(1)).thenReturn(order1);
+        when(orderDaoMock.findById(1)).thenReturn(Optional.ofNullable(order1));
         when(orderDaoMock.findByParameters(any(OrderFinder.class))).thenReturn(shortList);
-        when(orderDaoMock.update(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(
+        when(orderDaoMock.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(
                 0, Order.class));
         when(orderDaoMock.getBuilder()).thenReturn(builder);
-        when(orderDaoMock.create(any(Order.class))).thenAnswer(invocation -> {
+        when(orderDaoMock.save(any(Order.class))).thenAnswer(invocation -> {
             Order order = invocation.getArgument(0, Order.class);
             order.setId(fullList.size());
             return order;
@@ -128,8 +131,8 @@ class OrderServiceImplTests {
     }
 
     @Test
-    void read_returnOrder() throws NotFoundException {
-        assertEquals(order1, service.getById(1));
+    void find_returnOrder() throws NotFoundException {
+        assertEquals(order1, service.getById(1).get());
     }
 
     @Test
@@ -141,13 +144,13 @@ class OrderServiceImplTests {
     void create_createOrder() throws ValidationException, BadRequestException {
         Order order = service.create(order1);
         assertEquals(order.getId(), fullList.size());
-        verify(orderDaoMock, atLeast(1)).create(order1);
+        verify(orderDaoMock, atLeast(1)).save(order1);
     }
 
     @Test
     void delete_deleteOrder() throws BadRequestException {
         service.delete(1);
-        verify(orderDaoMock, atLeast(1)).getById(1);
+        verify(orderDaoMock, atLeast(1)).findById(1);
     }
 
     @Test
@@ -156,7 +159,7 @@ class OrderServiceImplTests {
     }
 
     @Test
-    void read_parsePaginationLimit_invokeFinderLimit()
+    void find_parsePaginationLimit_invokeFinderLimit()
             throws NotFoundException, BadRequestException {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
@@ -169,7 +172,7 @@ class OrderServiceImplTests {
     }
 
     @Test
-    void read_parsePaginationLimit_invokeFinderOffset() throws NotFoundException, BadRequestException {
+    void find_parsePaginationLimit_invokeFinderOffset() throws NotFoundException, BadRequestException {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
@@ -181,7 +184,7 @@ class OrderServiceImplTests {
     }
 
     @Test
-    void read_badParameter_ThrowsBadRequestException() {
+    void find_badParameter_ThrowsBadRequestException() {
         OrderFinder finder = new OrderFinder(orderDaoMock);
         finder.offset(1);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
@@ -191,7 +194,7 @@ class OrderServiceImplTests {
     }
 
     @Test
-    void read_badParameterValue_ThrowsBadRequestException() {
+    void find_badParameterValue_ThrowsBadRequestException() {
         OrderFinder finder = new OrderFinder(orderDaoMock);
         finder.offset(1);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {

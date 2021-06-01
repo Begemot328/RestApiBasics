@@ -56,8 +56,7 @@ public class OrderController implements PaginableSearch {
     @GetMapping
     public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
-        List<Order> orders;
-        orders = orderService.findByParameters(params);
+        List<Order> orders = orderService.findByParameters(params);
         CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(orders);
         orderDTOs.add(linkTo(methodOn(this.getClass()).find(params)).withRel("orders"));
 

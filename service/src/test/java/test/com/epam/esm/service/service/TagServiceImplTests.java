@@ -1,7 +1,7 @@
 package test.com.epam.esm.service.service;
 
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.tag.TagDAOImpl;
+import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.service.constants.ErrorCodes;
@@ -34,6 +34,7 @@ import javax.persistence.criteria.Root;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -52,10 +53,10 @@ class TagServiceImplTests {
     @PersistenceContext
     private EntityManager entityManager;
 
-    static Logger logger = LoggerFactory.getLogger(CertificateServiceImplTests.class);
+    static Logger logger = LoggerFactory.getLogger(TagServiceImplTests.class);
 
     @MockBean
-    TagDAOImpl tagDaoMock;
+    TagDAO tagDaoMock;
 
     @MockBean
     EntityValidator<Tag> validator;
@@ -72,6 +73,7 @@ class TagServiceImplTests {
     private final List<Tag> fullList = Arrays.asList(tags);
     private final List<Tag> shortList = Arrays.asList(tagsShort);
 
+    
     @BeforeEach
     void init() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -81,12 +83,12 @@ class TagServiceImplTests {
 
         try {
             when(tagDaoMock.findAll()).thenReturn(fullList);
-            when(tagDaoMock.getById(1)).thenReturn(tag1);
-            when(tagDaoMock.getById(2)).thenReturn(tag2);
+            when(tagDaoMock.findById(1)).thenReturn(Optional.of(tag1));
+            when(tagDaoMock.findById(2)).thenReturn(Optional.of(tag2));
             when(tagDaoMock.findByParameters(any(TagFinder.class))).thenReturn(shortList);
-            doNothing().when(tagDaoMock).delete(any(Integer.class));
+            doNothing().when(tagDaoMock).delete(any(Tag.class));
             when(tagDaoMock.getBuilder()).thenReturn(builder);
-            when(tagDaoMock.create(any(Tag.class))).thenAnswer(invocation -> {
+            when(tagDaoMock.save(any(Tag.class))).thenAnswer(invocation -> {
                 Tag tag = invocation.getArgument(0, Tag.class);
                 tag.setId(fullList.size());
                 return tag;
@@ -107,7 +109,7 @@ class TagServiceImplTests {
 
     @Test
     void read_returnTag() throws NotFoundException {
-        assertEquals(tag1, service.getById(1));
+        assertEquals(Optional.of(tag1), service.getById(1));
     }
 
     @Test
@@ -116,17 +118,28 @@ class TagServiceImplTests {
     }
 
     @Test
-    void create_createTag() throws ValidationException, BadRequestException {
+    void save_throwException() throws ValidationException, BadRequestException {
+        tag1.setId(0);
+        assertThrows(BadRequestException.class, () -> service.create(tag1));
+
+    }
+
+    @Test
+    void save_createTag() throws ValidationException, BadRequestException {
+        tag1.setId(0);
+        when(tagDaoMock.findByParameters(any(TagFinder.class))).thenReturn(Collections.EMPTY_LIST);
         Tag tag = service.create(tag1);
         assertEquals(tag.getId(), fullList.size());
-        verify(tagDaoMock, times(1)).create(tag1);
+        verify(tagDaoMock, times(1)).save(tag1);
+
+
     }
 
     @Test
     void delete_deleteTag() throws BadRequestException {
         service.delete(1);
-        verify(tagDaoMock, atLeast(1)).getById(1);
-        verify(tagDaoMock, atLeast(1)).delete(1);
+        verify(tagDaoMock, atLeast(1)).findById(1);
+        verify(tagDaoMock, atLeast(1)).delete(tag1);
     }
 
     @Test
@@ -145,7 +158,7 @@ class TagServiceImplTests {
     }
 
     @Test
-    void create_invalidTag_throwsException()
+    void save_invalidTag_throwsException()
             throws ValidationException {
         doThrow(new ValidationException("error", ErrorCodes.TAG_VALIDATION_EXCEPTION))
                 .when(validator).validate(any(Tag.class));
@@ -156,7 +169,7 @@ class TagServiceImplTests {
     void create_catchDataAccessException_throwsException() {
 
         doThrow(new DataIntegrityViolationException("error"))
-                .when(tagDaoMock).create(any(Tag.class));
+                .when(tagDaoMock).save(any(Tag.class));
 
         assertThrows(BadRequestException.class, () -> service.create(tag1));
     }

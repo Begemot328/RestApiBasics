@@ -2,14 +2,16 @@ package com.epam.esm.persistence.dao;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.TagColumns;
-import com.epam.esm.persistence.dao.tag.TagDAOImpl;
+import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.persistence.util.finder.impl.TagFinder;
+import org.apache.commons.collections4.IterableUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -20,8 +22,8 @@ import javax.persistence.criteria.Root;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +37,7 @@ class TagsDaoTests {
     private EntityManager entityManager;
 
     @Autowired
-    private TagDAOImpl tagsDao;
+    private TagDAO tagsDao;
 
     @BeforeEach
     void init() {
@@ -43,50 +45,52 @@ class TagsDaoTests {
     }
 
     @Test
-    void readAll_returnAllTags() {
-        assertEquals(5, tagsDao.findAll().size());
+    void findAll_returnAllTags() {
+        assertEquals(5,
+                IterableUtils.toList(tagsDao.findAll()).size());
     }
 
     @Test
-    void read_returnTag() {
+    void findById_returnTag() {
         tag.setId(1);
-        assertEquals(tagsDao.getById(1), tag);
+        assertEquals(tagsDao.findById(1).get(), tag);
     }
 
     @Test
-    void read_negativeId_returnNull() {
-        assertNull(tagsDao.getById(-1));
+    void findById_negativeId_returnNull() {
+        assertTrue(tagsDao.findById(-1).isEmpty());
     }
 
     @Test
-    void read_nonExistingId_returnNull() {
-        assertNull(tagsDao.getById(1000));
+    void findById_nonExistingId_returnNull() {
+        assertTrue(tagsDao.findById(1000).isEmpty());
     }
 
     @Test
-    void create_createTag() {
+    void save_createTag() {
         tag = new Tag("new");
-        int size = tagsDao.findAll().size();
+        long size = tagsDao.count();
 
-        tagsDao.create(tag);
-        assertEquals(tagsDao.findAll().size(), ++size);
+        tagsDao.save(tag);
+        assertEquals(tagsDao.count(), ++size);
     }
 
     @Test
-    void create_nullName_throwException() {
+    void save_nullName_throwException() {
+        TestTransaction.end();
         tag = new Tag(null);
 
-        assertThrows(DataAccessException.class, () -> tagsDao.create(tag));
+        assertThrows(DataAccessException.class, () -> tagsDao.save(tag));
     }
 
     @Test
     void update_updateTagOperation_ExceptionThrown() {
         tag = new Tag("new");
-        assertThrows(UnsupportedOperationException.class, () -> tagsDao.update(tag));
+        assertThrows(UnsupportedOperationException.class, () -> tagsDao.save(tag));
     }
 
     @Test
-    void readBy_readByName_returnTags() {
+    void findByParameters_findByName_returnTags() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
         Root<Tag> tagRoot = query.from(Tag.class);
@@ -103,18 +107,19 @@ class TagsDaoTests {
 
     @Test
     void delete_deleteTag() {
-        int size = tagsDao.findAll().size();
+        long size = tagsDao.count();
 
-        tagsDao.delete(1);
-        assertEquals(tagsDao.findAll().size(), --size);
+        tagsDao.delete(tagsDao.findById(1).get());
+        assertEquals(tagsDao.count(), --size);
     }
 
     @Test
     void delete_nonExistingTag_throwDataAccessException() {
-        int size = tagsDao.findAll().size();
+        long size = tagsDao.count();
 
-        assertThrows(DataAccessException.class, () -> tagsDao.delete(1000));
-        assertEquals(tagsDao.findAll().size(), size);
+        assertThrows(DataAccessException.class,
+                () -> tagsDao.delete(null));
+        assertEquals(tagsDao.count(), size);
     }
 
     @Test
@@ -132,5 +137,4 @@ class TagsDaoTests {
                 "SELECT DISTINCT id, name FROM certificates.tag_certificates where name = 'bicycle'"),
                 Collections.singletonList(tag));
     }
-
 }

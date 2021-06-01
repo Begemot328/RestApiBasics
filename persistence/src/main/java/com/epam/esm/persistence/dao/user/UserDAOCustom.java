@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.dao.user;
 
 import com.epam.esm.model.entity.User;
-import org.springframework.data.repository.CrudRepository;
+import com.epam.esm.persistence.dao.EntityDAO;
 
 /**
  * User DAO interface.
@@ -9,5 +9,5 @@ import org.springframework.data.repository.CrudRepository;
  * @author Yury Zmushko
  * @version 1.0
  */
-public interface UserDAO extends CrudRepository<User, Integer>, UserDAOCustom {
+public interface UserDAOCustom extends EntityDAO<User> {
 }

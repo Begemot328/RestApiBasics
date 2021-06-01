@@ -25,7 +25,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -66,12 +66,7 @@ public class UserController implements PaginableSearch {
     @GetMapping
     public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
-        List<User> users;
-        if (CollectionUtils.isEmpty(params)) {
-            users = userService.findAll();
-        } else {
-            users = userService.findByParameters(params);
-        }
+        List<User> users = userService.findByParameters(params);
         CollectionModel<UserDTO> userDTOs = userDTOMapper.toUserDTOList(
                 users);
         userDTOs.add(linkTo(methodOn(this.getClass()).find(params)).withRel("users"));
@@ -111,12 +106,13 @@ public class UserController implements PaginableSearch {
     public ResponseEntity<?> readOrder(@PathVariable(value = "id") int id,
                                        @PathVariable(value = "order_id") int orderId,
                                        @RequestParam MultiValueMap<String, String> params)
-            throws NotFoundException {
+            throws NotFoundException, BadRequestException {
         params.put(OrderSearchParameters.USER_ID.getParameterName(),
                 Collections.singletonList(Integer.toString(id)));
         params.put(OrderSearchParameters.ORDER_ID.getParameterName(),
-                Collections.singletonList(Integer.toString(id)));
-        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.checkIfPresent(orderService.getById(orderId),
+                Collections.singletonList(Integer.toString(orderId)));
+        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.checkIfPresent(
+                Optional.ofNullable(orderService.findByParameters(params).get(0)),
                 "id", Integer.toString(orderId), ErrorCodes.ORDER_NOT_FOUND));
         return new ResponseEntity<>(order, HttpStatus.OK);
     }

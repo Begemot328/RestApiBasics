@@ -2,7 +2,6 @@ package com.epam.esm.service.service;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.CustomEntity;
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
@@ -22,7 +21,7 @@ import java.util.Optional;
  * @version 1.0
  */
 public interface EntityService<T extends CustomEntity> {
-    static final String notFoundErrorMessage = "Requested entity not found(%s = %s)!";
+    String notFoundErrorMessage = "Requested entity not found(%s = %s)!";
 
     /**
      * Create {@link CustomEntity} and add it to database method.

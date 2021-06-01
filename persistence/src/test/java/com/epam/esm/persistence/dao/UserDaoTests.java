@@ -1,15 +1,18 @@
 package com.epam.esm.persistence.dao;
 
+import com.epam.esm.model.entity.Role;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.constants.UserColumns;
-import com.epam.esm.persistence.dao.user.UserDAOImpl;
+import com.epam.esm.persistence.dao.user.UserDAO;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
+import org.apache.commons.collections4.IterableUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -20,8 +23,8 @@ import javax.persistence.criteria.Root;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,71 +38,77 @@ class UserDaoTests {
     private EntityManager entityManager;
 
     @Autowired
-    private UserDAOImpl userDao;
+    private UserDAO userDao;
     private User user;
 
     @BeforeEach
     void init() {
-        user = new User("Yury", "Zmushko", "root", "qwerty");
+        user = new User("Yury", "Zmushko", "root", 
+                "$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq");
         user.setId(1);
+        user.addRole(new Role("ADMIN"));
     }
 
     @Test
-    void readAll_returnAllUsers() {
-        assertEquals(4, userDao.findAll().size());
+    void findAll_returnAllUsers() {
+        assertEquals(4, IterableUtils.toList(userDao.findAll()).size());
     }
 
     @Test
-    void read_returnUser() {
-        assertEquals(userDao.getById(1), user);
+    void find_returnUser() {
+        assertEquals(userDao.findById(1).get(), user);
     }
 
     @Test
-    void read_negativeId_returnNull() {
-        assertNull(userDao.getById(-1));
+    void findById_negativeId_returnNull() {
+        assertTrue(userDao.findById(-1).isEmpty());
     }
 
     @Test
-    void read_nonExistingId_returnNull() {
-        assertNull(userDao.getById(1000));
+    void findById_nonExistingId_returnNull() {
+        assertTrue(userDao.findById(-1).isEmpty());
     }
 
     @Test
     @Transactional
-    void create_createUser() {
+    void save_createUser() {
         User user = new User("Yury2", "Zmushko2", "root2", "qwerty2");
-        int size = userDao.findAll().size();
+        long size = userDao.count();
 
-        userDao.create(user);
-        assertEquals(userDao.findAll().size(), ++size);
+        userDao.save(user);
+        assertEquals(userDao.count(), ++size);
     }
 
     @Test
-    void create_nullFirstName_throwException() {
+    void save_nullFirstName_throwException() {
+        TestTransaction.end();
         user.setFirstName(null);
 
-        assertThrows(DataAccessException.class, () -> userDao.create(user));
+        assertThrows(DataAccessException.class, () -> userDao.save(user));
     }
 
     @Test
-    void create_nullLastName_throwException() {
+    void save_nullLastName_throwException() {
+        TestTransaction.end();
         user.setLastName(null);
 
-        assertThrows(DataAccessException.class, () -> userDao.create(user));
+        assertThrows(DataAccessException.class, () -> userDao.save(user));
     }
 
     @Test
-    void create_nullLoginName_throwException() {
+    void save_nullLoginName_throwException() {
+        TestTransaction.end();
         user.setLogin(null);
 
-        assertThrows(DataAccessException.class, () -> userDao.create(user));
+        assertThrows(DataAccessException.class, () -> userDao.save(user));
     }
 
     @Test
-    void create_nullPasswordName_throwException() {
+    void save_nullPasswordName_throwException() {
+        TestTransaction.end();
         user.setPassword(null);
 
-        assertThrows(DataAccessException.class, () -> userDao.create(user));
+        assertThrows(DataAccessException.class, () -> userDao.save(user));
     }
 
 
@@ -107,12 +116,12 @@ class UserDaoTests {
     void update_updateUserOperation_ExceptionThrown() {
         user.setFirstName("new FirstName");
         user.setId(1);
-        userDao.update(user);
-        assertEquals(user, userDao.getById(user.getId()));
+        userDao.save(user);
+        assertEquals(user, userDao.findById(user.getId()).get());
     }
 
     @Test
-    void readBy_readByName_returnUsers() {
+    void findByParameters_findByName_returnUsers() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = builder.createQuery(User.class);
         Root<User> root = query.from(User.class);
@@ -128,16 +137,16 @@ class UserDaoTests {
 
     @Test
     void delete_deleteUser() {
-        int size = userDao.findAll().size();
+        long size = userDao.count();
 
-        userDao.delete(1);
-        assertEquals(userDao.findAll().size(), --size);
+        userDao.delete(userDao.findById(1).get());
+        assertEquals(userDao.count(), --size);
     }
 
     @Test
     void delete_nonExistingUser_throwDataAccessException() {
-        int size = userDao.findAll().size();
-        assertThrows(DataAccessException.class, () -> userDao.delete(1000));
-        assertEquals(userDao.findAll().size(), size);
-    }
+        long size = userDao.count();
+        assertThrows(DataAccessException.class, () -> userDao.delete(null));
+        assertEquals(userDao.count(), size);
+    } 
 }
