@@ -66,7 +66,10 @@ class OrderDaoTests {
         User user = new User("Ivan", "Ivanov", "Ivanov",
                 "$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq");
         user.setId(2);
-        user.addRole(new Role("USER"));
+        Role role = new Role("USER");
+        role.setId(2);
+        role.setDescription("Regular user");
+        user.addRole(role);
         order = new Order(certificate, user, BigDecimal.valueOf(150.0), 1,
                 LocalDateTime.parse("2021-03-22 09:20:11", formatter));
         order.setId(1);
@@ -131,7 +134,7 @@ class OrderDaoTests {
     void update_updateOrderOperation_ExceptionThrown() {
         order.setOrderAmount(BigDecimal.valueOf(120.0));
         orderDao.save(order);
-        assertEquals(order, orderDao.findById(order.getId()).get());
+        assertEquals(orderDao.findById(order.getId()).get(), order);
     }
 
     @Test

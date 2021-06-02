@@ -210,6 +210,8 @@ insert into
     role(id, name, description) VALUES (1,'ADMIN', 'Super admin');
 insert into
     user_role(user_id, role_id) VALUES (1,1);
+insert into
+    user_role(user_id, role_id) VALUES (2,2);
 
 insert into
     orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (2, 2, '2021-03-22 09:20:11', 150, 1);

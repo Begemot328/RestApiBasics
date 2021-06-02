@@ -37,7 +37,7 @@ public class User extends CustomEntity {
     private String password;
 
     @Column(table = "account", columnDefinition = "is_active")
-    private boolean isActive;
+    private boolean isActive = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",

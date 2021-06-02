@@ -46,7 +46,10 @@ class UserDaoTests {
         user = new User("Yury", "Zmushko", "root", 
                 "$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq");
         user.setId(1);
-        user.addRole(new Role("ADMIN"));
+        Role role = new Role("ADMIN");
+        role.setId(1);
+        role.setDescription("Super admin");
+        user.addRole(role);
     }
 
     @Test
@@ -113,7 +116,7 @@ class UserDaoTests {
 
 
     @Test
-    void update_updateUserOperation_ExceptionThrown() {
+    void update_updateUserOperation_updateUser() {
         user.setFirstName("new FirstName");
         user.setId(1);
         userDao.save(user);

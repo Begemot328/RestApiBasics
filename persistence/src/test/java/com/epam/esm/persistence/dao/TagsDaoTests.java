@@ -86,7 +86,8 @@ class TagsDaoTests {
     @Test
     void update_updateTagOperation_ExceptionThrown() {
         tag = new Tag("new");
-        assertThrows(UnsupportedOperationException.class, () -> tagsDao.save(tag));
+        tagsDao.save(tag);
+        assertEquals(tag, tagsDao.findById(tag.getId()).get());
     }
 
     @Test
