@@ -44,7 +44,6 @@ public class CertificateServiceImpl implements CertificateService {
     private final CertificateDAO dao;
     private final EntityValidator<Certificate> validator;
     private final TagService tagService;
-    private static final String notFoundErrorMessage = "Requested certificate not found(%s = %s)!";
 
     @Autowired
     public CertificateServiceImpl(CertificateDAO dao,

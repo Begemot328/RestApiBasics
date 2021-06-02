@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     private final UserDAO dao;
     private final EntityValidator<User> validator;
 
-    private String loginExistsErrorMessage = "Such login already exists! login= %s";
+    private static final String LOGIN_EXISTS_ERROR_MESSAGE = "Such login already exists! login= %s";
 
     @Autowired
     public UserServiceImpl(UserDAO dao,
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     private void validateUserLogin(String login) throws BadRequestException {
         if (this.getByLogin(login).isPresent()) {
-            throw new BadRequestException(String.format(loginExistsErrorMessage, login),
+            throw new BadRequestException(String.format(LOGIN_EXISTS_ERROR_MESSAGE, login),
                     ErrorCodes.USER_BAD_REQUEST);
         }
     }
@@ -123,7 +123,6 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Unknown parameter!", ErrorCodes.USER_BAD_REQUEST);
         }
     }
-
 
     private void addSortingToFinder(UserFinder finder,
                                     String sortingParameter,

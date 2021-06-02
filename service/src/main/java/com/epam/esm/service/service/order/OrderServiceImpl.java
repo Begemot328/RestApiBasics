@@ -36,7 +36,6 @@ import java.util.Optional;
  */
 @Service
 public class OrderServiceImpl implements OrderService {
-    private static final String notFoundErrorMessage = "Requested tag not found(%s = %s)!";
     private final OrderDAO dao;
     private final EntityValidator<Order> validator;
     private final EntityService<Certificate> certificateService;
