@@ -79,8 +79,9 @@ public class UserController implements PaginableSearch {
     @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') and hasPermission(#id,'user_permission')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> get(@PathVariable(value = "id") int id) throws NotFoundException {
-        User user = userService.checkIfPresent(userService.getById(id),
-                "id", Integer.toString(id), ErrorCodes.USER_NOT_FOUND);
+        User user = userService.getById(id).orElseThrow(
+                () -> new NotFoundException(String.format(userService.notFoundErrorMessage, "id", id),
+                        ErrorCodes.USER_NOT_FOUND));
         final UserDTO userDTO = userDTOMapper.toUserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
@@ -111,9 +112,11 @@ public class UserController implements PaginableSearch {
                 Collections.singletonList(Integer.toString(id)));
         params.put(OrderSearchParameters.ORDER_ID.getParameterName(),
                 Collections.singletonList(Integer.toString(orderId)));
-        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.checkIfPresent(
-                Optional.ofNullable(orderService.findByParameters(params).get(0)),
-                "id", Integer.toString(orderId), ErrorCodes.ORDER_NOT_FOUND));
+        OrderDTO order = orderDTOMapper.toOrderDTO(
+                Optional.ofNullable(orderService.findByParameters(params).get(0)).orElseThrow(
+                        () -> new NotFoundException(
+                                String.format(userService.notFoundErrorMessage, "id", id),
+                                ErrorCodes.USER_NOT_FOUND)));
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
@@ -125,12 +128,12 @@ public class UserController implements PaginableSearch {
                                          @RequestParam int certificateId,
                                          @RequestParam int quantity)
             throws NotFoundException, ValidationException, BadRequestException {
-        User user = userService.checkIfPresent(userService.getById(id),
-                "id", Integer.toString(id), ErrorCodes.USER_NOT_FOUND);
-        Certificate certificate = certificateService.checkIfPresent(
-                certificateService.getById(certificateId),
-                "id", Integer.toString(certificateId),
-                ErrorCodes.CERTIFICATE_NOT_FOUND);
+        User user = userService.getById(id).orElseThrow(
+                () -> new NotFoundException(String.format(userService.notFoundErrorMessage, "id", id),
+                        ErrorCodes.USER_NOT_FOUND));
+        Certificate certificate = certificateService.getById(id).orElseThrow(
+                () -> new NotFoundException(String.format(certificateService.notFoundErrorMessage, "id", id),
+                        ErrorCodes.CERTIFICATE_NOT_FOUND));
         Order order = orderService.createOrder(certificate, user, quantity);
         return new ResponseEntity<>(orderDTOMapper.toOrderDTO(order), HttpStatus.OK);
     }

@@ -52,14 +52,14 @@ public class UserServiceImpl implements UserService {
     public User create(User user) throws ValidationException, BadRequestException {
         validator.validate(user);
         try {
-            validateUserLogin(user.getLogin());
+            checkLoginIfVacant(user.getLogin());
             return dao.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException(e, ErrorCodes.USER_BAD_REQUEST);
         }
     }
 
-    private void validateUserLogin(String login) throws BadRequestException {
+    private void checkLoginIfVacant(String login) throws BadRequestException {
         if (this.getByLogin(login).isPresent()) {
             throw new BadRequestException(String.format(LOGIN_EXISTS_ERROR_MESSAGE, login),
                     ErrorCodes.USER_BAD_REQUEST);

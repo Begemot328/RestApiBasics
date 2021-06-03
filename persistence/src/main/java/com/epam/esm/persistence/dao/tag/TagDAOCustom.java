@@ -14,13 +14,6 @@ import java.util.Optional;
  * @version 1.0
  */
 public interface TagDAOCustom extends EntityDAO<Tag> {
-    /**
-     * Find using {@link EntityFinder} method.
-     *
-     * @param query {@link String} query to obtain entities.
-     * @return {@link java.util.ArrayList}  of {@link Tag} objects.
-     */
-    List<Tag> findByQuery(String query);
 
     /**
      * Find mostly used by the most contributing user tag.

@@ -31,8 +31,7 @@ public class TagDAOImpl implements TagDAOCustom {
         return entityManager;
     }
 
-    @Override
-    public List<Tag> findByQuery(String query) {
+    private List<Tag> findByQuery(String query) {
         return entityManager.createNativeQuery(query, Tag.class).getResultList();
     }
 

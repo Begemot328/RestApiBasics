@@ -129,13 +129,4 @@ class TagsDaoTests {
         tag.setId(2);
         assertEquals(tag, tagsDao.findMostPopularTag().get());
     }
-
-    @Test
-    void readBy_queryString_returnTags() {
-        tag = new Tag("bicycle");
-        tag.setId(5);
-        assertEquals(tagsDao.findByQuery(
-                "SELECT DISTINCT id, name FROM certificates.tag_certificates where name = 'bicycle'"),
-                Collections.singletonList(tag));
-    }
 }

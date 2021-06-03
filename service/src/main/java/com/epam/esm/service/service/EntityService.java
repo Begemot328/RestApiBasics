@@ -80,14 +80,4 @@ public interface EntityService<T extends CustomEntity> {
     default String decodeParam(String param) {
         return URLDecoder.decode(param, StandardCharsets.UTF_8);
     }
-
-    default T checkIfPresent(Optional<T> entityOptional, String parameterName,
-                              String parameterValue, int errorCode)
-            throws NotFoundException {
-        if (entityOptional.isEmpty()) {
-            throw new NotFoundException(String.format(notFoundErrorMessage, parameterName, parameterValue),
-                    errorCode);
-        }
-        return entityOptional.get();
-    }
 }

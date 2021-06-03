@@ -6,8 +6,8 @@ import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.service.certificate.CertificateServiceImpl;
-import com.epam.esm.service.service.tag.TagServiceImpl;
+import com.epam.esm.service.service.certificate.CertificateService;
+import com.epam.esm.service.service.tag.TagService;
 import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.certificate.CertificateDTOMapper;
 import com.epam.esm.web.dto.tag.TagDTO;
@@ -38,18 +38,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping(value = "/tags")
 public class TagController implements PaginableSearch {
 
-    private final TagServiceImpl tagServiceImpl;
-    private final CertificateServiceImpl certificateServiceImpl;
+    private final TagService tagService;
+    private final CertificateService certificateService;
     private final TagDTOMapper tagDTOMapper;
     private final CertificateDTOMapper certificateDTOMapper;
 
     @Autowired
-    public TagController(TagServiceImpl tagServiceImpl,
-                         CertificateServiceImpl certificateServiceImpl,
+    public TagController(TagService tagService,
+                         CertificateService certificateService,
                          CertificateDTOMapper certificateDTOMapper,
                          TagDTOMapper tagDTOMapper) {
-        this.tagServiceImpl = tagServiceImpl;
-        this.certificateServiceImpl = certificateServiceImpl;
+        this.tagService = tagService;
+        this.certificateService = certificateService;
         this.certificateDTOMapper = certificateDTOMapper;
         this.tagDTOMapper = tagDTOMapper;
     }
@@ -57,7 +57,7 @@ public class TagController implements PaginableSearch {
     @GetMapping
     public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params)
             throws BadRequestException, NotFoundException {
-        List<Tag> tags = tagServiceImpl.findByParameters(params);
+        List<Tag> tags = tagService.findByParameters(params);
         CollectionModel<TagDTO> tagDTOs = tagDTOMapper.toTagDTOList(tags);
         paginate(params, tagDTOs);
         tagDTOs.add(linkTo(methodOn(this.getClass()).find(params)).withSelfRel());
@@ -66,14 +66,15 @@ public class TagController implements PaginableSearch {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> get(@PathVariable(value = "id") int id) throws NotFoundException {
-        final Tag tag = tagServiceImpl.checkIfPresent(tagServiceImpl.getById(id),
-                "id", Integer.toString(id), ErrorCodes.TAG_NOT_FOUND);
+        final Tag tag = tagService.getById(id).orElseThrow(
+                () -> new NotFoundException(String.format(tagService.notFoundErrorMessage, "id", id),
+                        ErrorCodes.CERTIFICATE_NOT_FOUND));
         return new ResponseEntity<>(tagDTOMapper.toTagDTO(tag), HttpStatus.OK);
     }
 
     @GetMapping(value = "/popular")
     public ResponseEntity<?> getMostPopular() throws NotFoundException {
-        final Tag tag = tagServiceImpl.findMostPopularTag();
+        final Tag tag = tagService.findMostPopularTag();
         TagDTO tagDTO = tagDTOMapper.toTagDTO(tag);
         tagDTO.add(linkTo(methodOn(this.getClass()).getMostPopular()).withRel("most-popular"));
         return new ResponseEntity<>(tagDTO, HttpStatus.OK);
@@ -82,7 +83,7 @@ public class TagController implements PaginableSearch {
     @Secured(Roles.ADMIN)
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Tag> delete(@PathVariable(value = "id") int id) throws BadRequestException {
-        tagServiceImpl.delete(id);
+        tagService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -92,7 +93,7 @@ public class TagController implements PaginableSearch {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TagDTO> create(@RequestBody TagDTO tagDTO)
             throws ValidationException, BadRequestException {
-        Tag tag = tagServiceImpl.create(tagDTOMapper.toTag(tagDTO));
+        Tag tag = tagService.create(tagDTOMapper.toTag(tagDTO));
         return new ResponseEntity<>(tagDTOMapper.toTagDTO(tag), HttpStatus.CREATED);
     }
 
@@ -102,7 +103,7 @@ public class TagController implements PaginableSearch {
             throws NotFoundException, BadRequestException {
         params.put(CertificateSearchParameters.TAG_ID.getParameterName(), Collections.singletonList(Integer.toString(id)));
         CollectionModel<CertificateDTO> certificateDTOs = certificateDTOMapper.toCertificateDTOList(
-                certificateServiceImpl.findByParameters(params));
+                certificateService.findByParameters(params));
         certificateDTOs.add(
                 linkTo(methodOn(this.getClass()).findCertificates(id, params)).withRel("certificates"));
 

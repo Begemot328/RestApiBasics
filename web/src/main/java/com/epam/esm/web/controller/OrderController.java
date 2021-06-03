@@ -58,9 +58,10 @@ public class OrderController implements PaginableSearch {
 
     @Secured(Roles.ADMIN)
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> readOrder(@PathVariable(value = "id") int orderId) throws NotFoundException {
-        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.checkIfPresent(orderService.getById(orderId),
-                "id", Integer.toString(orderId), ErrorCodes.ORDER_NOT_FOUND));
+    public ResponseEntity<?> get(@PathVariable(value = "id") int id) throws NotFoundException {
+        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.getById(id).orElseThrow(
+                () -> new NotFoundException(String.format(orderService.notFoundErrorMessage, "id", id),
+                        ErrorCodes.ORDER_NOT_FOUND)));
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 }

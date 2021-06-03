@@ -269,12 +269,11 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    private Certificate findOldCertificate(int certificateId)
-            throws NotFoundException {
-        Optional<Certificate> certificate = dao.findById(certificateId);
-        checkIfPresent(certificate, "id", Integer.toString(certificateId),
-                ErrorCodes.CERTIFICATE_NOT_FOUND);
-        return certificate.get();
+    private Certificate findOldCertificate(int certificateId) throws NotFoundException {
+        return dao.findById(certificateId).orElseThrow(
+                () -> new NotFoundException(String.format(notFoundErrorMessage, "id",
+                        certificateId),
+                        ErrorCodes.CERTIFICATE_NOT_FOUND));
     }
 }
 
