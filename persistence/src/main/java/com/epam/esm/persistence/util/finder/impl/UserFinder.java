@@ -1,9 +1,7 @@
 package com.epam.esm.persistence.util.finder.impl;
 
+import com.epam.esm.model.entity.QUser;
 import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.constants.UserColumns;
-import com.epam.esm.persistence.dao.EntityDAO;
-import com.epam.esm.persistence.dao.user.UserDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -22,25 +20,35 @@ public class UserFinder extends EntityFinder<User> {
 
     /**
      * Constructor
-     *
-     * @param dao {@link EntityDAO} object to obtain {@link javax.persistence.criteria.CriteriaBuilder}
-     *                             and {@link javax.persistence.metamodel.Metamodel objects}
-     */
-    public UserFinder(UserDAO dao) {
-        super(dao);
-    }
-
-    @Override
-    protected Class<User> getClassType() {
-        return User.class;
+     **/
+    public UserFinder() {
+        super();
     }
 
     /**
-     * Find by login condition adding method.
+     * Find by firstname condition adding method.
      *
-     * @param login String that found login will include.
+     * @param name String that found firstname must include.
+     */
+    public void findByFirstName(String name) {
+        add(QUser.user.firstName.like("%" + name + "%"));
+    }
+
+    /**
+     * Find by lastname condition adding method.
+     *
+     * @param name String that found lastname must include.
+     */
+    public void findByLastName(String name) {
+        add(QUser.user.lastName.like("%" + name + "%"));
+    }
+
+    /**
+     * Find by lastname condition adding method.
+     *
+     * @param login String that found lastname must include.
      */
     public void findByLogin(String login) {
-        add(builder.equal(root.get(UserColumns.LOGIN.getValue()), login));
+        add(QUser.user.login.like("%" + login + "%"));
     }
 }

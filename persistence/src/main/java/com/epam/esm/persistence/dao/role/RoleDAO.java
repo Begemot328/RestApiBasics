@@ -1,7 +1,8 @@
 package com.epam.esm.persistence.dao.role;
 
+import com.epam.esm.model.entity.QRole;
 import com.epam.esm.model.entity.Role;
-import org.springframework.data.repository.CrudRepository;
+import com.epam.esm.persistence.dao.EntityRepository;
 
 /**
  * Tag DAO interface.
@@ -9,6 +10,6 @@ import org.springframework.data.repository.CrudRepository;
  * @author Yury Zmushko
  * @version 1.0
  */
-public interface RoleDAO extends CrudRepository<Role, Integer>, RoleDAOCustom {
+public interface RoleDAO extends EntityRepository<Role, QRole, Integer> {
     Role getByName(String name);
 }

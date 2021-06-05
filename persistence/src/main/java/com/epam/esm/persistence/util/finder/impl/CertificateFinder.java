@@ -1,8 +1,8 @@
 package com.epam.esm.persistence.util.finder.impl;
 
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.persistence.constants.CertificateColumns;
-import com.epam.esm.persistence.dao.EntityDAO;
+import com.epam.esm.model.entity.QCertificate;
+import com.epam.esm.model.entity.QTag;
 import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.context.annotation.Scope;
@@ -22,26 +22,19 @@ public class CertificateFinder extends EntityFinder<Certificate> {
 
     /**
      * Constructor.
-     *
-     * @param dao {@link EntityDAO} object to obtain {@link javax.persistence.criteria.CriteriaBuilder}
-     *                             and {@link javax.persistence.metamodel.Metamodel objects}
-     */
-    public CertificateFinder(CertificateDAO dao) {
-        super(dao);
+     **/
+    public CertificateFinder() {
+        super();
     }
 
-    @Override
-    protected Class<Certificate> getClassType() {
-        return Certificate.class;
-    }
 
     /**
      * Find by name condition adding method.
      *
      * @param name String that found names will include.
      */
-    public void findByName(String name) {
-        add(builder.like(root.get(CertificateColumns.NAME.getValue()), "%" + name + "%"));
+    public void findByNameLike(String name) {
+        add(QCertificate.certificate.name.like("%" + name + "%"));
     }
 
     /**
@@ -49,9 +42,9 @@ public class CertificateFinder extends EntityFinder<Certificate> {
      *
      * @param description String that found descriptions will include.
      */
-    public void findByDescription(String description) {
-        add(builder.like(root.get(CertificateColumns.DESCRIPTION.getValue()), "%" + description + "%"));
-    }
+    public void findByDescriptionLike(String description) {
+        add(QCertificate.certificate.tags.any().tag.name.like("%" + description + "%"));
+     }
 
     /**
      * Find by tag name condition adding method
@@ -59,7 +52,8 @@ public class CertificateFinder extends EntityFinder<Certificate> {
      * @param name String that found tag names will include.
      */
     public void findByTag(String name) {
-        add(builder.equal(root.join("tags").get("name"), name));
+
+        add(QCertificate.certificate.tags.any().name.eq(name));
     }
 
     /**
@@ -68,7 +62,7 @@ public class CertificateFinder extends EntityFinder<Certificate> {
      * @param id ID of the tag to find by.
      */
     public void findByTagId(int id) {
-        add(builder.equal(root.join("tags").get("id"), id));
+        add(QCertificate.certificate.tags.any().id.eq(id));
     }
 
     /**

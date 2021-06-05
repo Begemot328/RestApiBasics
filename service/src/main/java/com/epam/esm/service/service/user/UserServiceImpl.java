@@ -4,9 +4,12 @@ import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.user.UserDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.SortDirection;
+import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PaginationParameters;
+import com.epam.esm.service.constants.TagSearchParameters;
+import com.epam.esm.service.constants.UserSearchParameters;
 import com.epam.esm.service.constants.UserSortingParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
@@ -111,7 +114,7 @@ public class UserServiceImpl implements UserService {
                 throw new BadRequestException(e, ErrorCodes.USER_BAD_REQUEST);
             }
         }
-        return readBy(finder);
+        return findByFinder(finder);
     }
 
     private void parseParameter(UserFinder finder, String parameterName, List<String> parameterValues)
@@ -122,7 +125,29 @@ public class UserServiceImpl implements UserService {
         } else if (PaginationParameters.contains(parameterName)) {
             parsePaginationParameter(finder, parameterName, parameterValues);
         } else {
-            throw new BadRequestException("Unknown parameter!", ErrorCodes.USER_BAD_REQUEST);
+            parseFindParameter (finder, parameterName, parameterValues);
+        }
+    }
+
+    private void parseFindParameter(UserFinder finder, String parameterString, List<String> parameterValues) {
+        UserSearchParameters parameter =
+                UserSearchParameters.getEntryByParameter(parameterString);
+        switch (parameter) {
+            case LOGIN:
+                addToFinder(finder::findByLogin, parameterValues);
+                break;
+            case FIRST_NAME:
+                addToFinder(finder::findByFirstName, parameterValues);
+                break;
+            case LAST_NAME:
+                addToFinder(finder::findByLastName, parameterValues);
+                break;
+        }
+    }
+
+    private void addToFinder(Consumer<String> consumer, List<String> parameterValues) {
+        if (CollectionUtils.isNotEmpty(parameterValues)) {
+            addToFinder(consumer, parameterValues.get(0));
         }
     }
 
@@ -146,8 +171,8 @@ public class UserServiceImpl implements UserService {
             case LIMIT:
                 finder.limit(Integer.parseInt(parameterValues.get(0)));
                 break;
-            case OFFSET:
-                finder.offset(Integer.parseInt(parameterValues.get(0)));
+            case PAGE:
+                finder.page(Integer.parseInt(parameterValues.get(0)));
                 break;
         }
     }
@@ -158,8 +183,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private List<User> readBy(EntityFinder<User> entityFinder) throws NotFoundException {
-        List<User> orders = dao.findByParameters(entityFinder);
+    private List<User> findByFinder(UserFinder entityFinder) throws NotFoundException {
+        List<User> orders = dao.findAll(
+                entityFinder.getPredicate(), entityFinder.getPaginationAndSorting()).getContent();
         if (CollectionUtils.isEmpty(orders)) {
             throw new NotFoundException("Requested resource not found!",
                     ErrorCodes.USER_NOT_FOUND);
@@ -170,13 +196,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getByLogin(String login) {
-        UserFinder finder = getFinder();
-        addToFinder(finder::findByLogin, login);
-        List<User> users = dao.findByParameters(finder);
-        if (CollectionUtils.isEmpty(users)) {
-            return Optional.empty();
-        }
-        return Optional.of(users.get(0));
+        return dao.getByLogin(login);
     }
 
     private void addToFinder(Consumer<String> consumer, String value) {

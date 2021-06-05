@@ -1,6 +1,6 @@
 package com.epam.esm.service.service.tag;
 
-import com.epam.esm.model.entity.Certificate;
+import com.epam.esm.model.entity.QTag;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -91,14 +92,15 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-    private List<Tag> findByFinder(EntityFinder<Tag> entityFinder) throws NotFoundException {
-        List<Tag> tags = dao.findByParameters(entityFinder);
+    private List<Tag> findByFinder(TagFinder entityFinder) throws NotFoundException {
+      List<Tag> tags = dao.findAll(
+              entityFinder.getPredicate(), entityFinder.getPaginationAndSorting())
+              .getContent();
         if (CollectionUtils.isEmpty(tags)) {
             throw new NotFoundException("Requested resource not found!",
                     ErrorCodes.TAG_NOT_FOUND);
-        } else {
-            return tags;
         }
+            return tags;
     }
 
     private void addToFinder(Consumer<String> consumer, String value) {
@@ -153,7 +155,8 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-    private void addSortingToFinder(TagFinder finder, String sortingParameter, SortDirection sortDirection) {
+    private void addSortingToFinder(TagFinder finder, String sortingParameter,
+                                    SortDirection sortDirection) {
         finder.sortBy(sortingParameter, sortDirection);
     }
 
@@ -165,13 +168,14 @@ public class TagServiceImpl implements TagService {
         return SortDirection.parseAscDesc(parameterValues.get(0));
     }
 
-    private void parsePaginationParameter(EntityFinder finder, String parameterName, int quantityOfElements) {
+    private void parsePaginationParameter(EntityFinder finder, String parameterName,
+                                          int number) {
         switch (getPaginationParameterName(parameterName)) {
             case LIMIT:
-                finder.limit(quantityOfElements);
+                finder.limit(number);
                 break;
-            case OFFSET:
-                finder.offset(quantityOfElements);
+            case PAGE:
+                finder.page(number);
                 break;
         }
     }
@@ -197,13 +201,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Optional<Tag> getByName(String name) {
-        TagFinder finder = getFinder();
-        addToFinder(finder::findByName, name);
-        List<Tag> tags = dao.findByParameters(finder);
-        if (CollectionUtils.isEmpty(tags)) {
-            return Optional.empty();
-        }
-        return Optional.of(tags.get(0));
+        return dao.getByName(name);
     }
 
     @Override

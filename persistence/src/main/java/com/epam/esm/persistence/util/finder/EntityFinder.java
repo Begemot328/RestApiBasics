@@ -1,55 +1,44 @@
 package com.epam.esm.persistence.util.finder;
 
 import com.epam.esm.model.entity.CustomEntity;
-import com.epam.esm.persistence.dao.EntityDAO;
-import com.epam.esm.persistence.dao.ExCustomRepository;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.EntityPathBase;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.core.types.dsl.Expressions;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.BooleanExpression;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.Metamodel;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
  * Abstract search criteria class to find {@link CustomEntity} objects.
- * via {@link com.epam.esm.persistence.dao.EntityDAO} data sources.
  *
  * @author Yury Zmushko
  * @version 1.0
  */
 @Component
 @Scope("prototype")
-public abstract class EntityFinder<T extends CustomEntity, P extends EntityPathBase<T>> {
+public abstract class EntityFinder<T extends CustomEntity> {
     private static final int DEFAULT_LIMIT = 20;
     protected int limit = DEFAULT_LIMIT;
-    protected int offset = 0;
-    protected BooleanExpression predicate;
-    protected EntityManager manager;
+    protected int page = 0;
+    protected Pageable paginationAndSorting;
+    protected Sort sort;
+    protected BooleanExpression expression;
 
     /**
      * Constructor.
      *
      */
-    protected EntityFinder(EntityDAO<T> dao) {
-        manager = dao.getEntityManager();
-        JPAQuery<T> query = new JPAQuery<>(manager);
-
+    protected EntityFinder() {
+        expression = Expressions.asBoolean(true).isTrue();
+        sort = Sort.unsorted();
     }
 
-    public BooleanExpression getBooleanExpression() {
-        return predicate;
+    public Predicate getPredicate() {
+        return expression;
     }
 
     /**
@@ -64,10 +53,10 @@ public abstract class EntityFinder<T extends CustomEntity, P extends EntityPathB
     /**
      * Method to define offset of the search.
      *
-     * @param offset Offset of the search.
+     * @param page Page number to search.
      */
-    public void offset(int offset) {
-        this.offset = offset;
+    public void page(int page) {
+        this.page = page;
     }
 
     /**
@@ -75,35 +64,26 @@ public abstract class EntityFinder<T extends CustomEntity, P extends EntityPathB
      *
      * @param finder {@link EntityFinder} to add, corresponding by type.
      */
-    public void and(EntityFinder<T, P> finder) {
-        and(finder.getQuery().getRestriction());
+    public void and(EntityFinder<T> finder) {
+        expression.and(finder.getPredicate());
     }
 
     /**
-     * Method to join another {@link BooleanExpression} conditions by AND logic.
+     * Method to join another {@link Predicate} conditions by AND logic.
      *
-     * @param predicate {@link BooleanExpression} to add, corresponding by type.
+     * @param predicate {@link Predicate} to add, corresponding by type.
      */
-    protected void and(BooleanExpression predicate) {
-        if(this.predicate == null) {
-            this.predicate = predicate;
-        } else {
-            this.predicate = builder.and(predicate, this.predicate);
-        }
+    public void and(Predicate predicate) {
+        expression = expression.and(predicate);
     }
 
-
     /**
-     * Method to join another {@link BooleanExpression} conditions by OR logic.
+     * Method to join another {@link Predicate} conditions by OR logic.
      *
-     * @param predicate {@link BooleanExpression} to add, corresponding by type.
+     * @param predicate {@link Predicate} to add, corresponding by type.
      */
-    protected void or(BooleanExpression predicate) {
-        if(this.predicate == null) {
-            this.predicate = predicate;
-        } else {
-            this.predicate = builder.or(predicate, this.predicate);
-        }
+    protected void or(Predicate predicate) {
+        expression = expression.or(predicate);
     }
 
     /**
@@ -111,8 +91,8 @@ public abstract class EntityFinder<T extends CustomEntity, P extends EntityPathB
      *
      * @param finder {@link EntityFinder} to add, corresponding by type.
      */
-    public void or(EntityFinder<T, P> finder) {
-        or(finder.getQuery().getRestriction());
+    public void or(EntityFinder<T> finder) {
+        or(finder.getPredicate());
     }
 
     /**
@@ -120,7 +100,7 @@ public abstract class EntityFinder<T extends CustomEntity, P extends EntityPathB
      *
      * @param predicate {@link BooleanExpression} to add, corresponding by type.
      */
-    protected void add(BooleanExpression predicate) {
+    protected void add(Predicate predicate) {
         and(predicate);
     }
 
@@ -131,15 +111,10 @@ public abstract class EntityFinder<T extends CustomEntity, P extends EntityPathB
      * @param sortDirection {@link SortDirection} enum object to specify sorting order.
      */
     public void sortBy(String sorting, SortDirection sortDirection) {
-        List<Order> orderList = CollectionUtils.isEmpty(query.getOrderList())
-                ? new ArrayList<>()
-                        : query.getOrderList();
+        sort = sort.and(Sort.by(sorting));
         if (sortDirection == SortDirection.DESC) {
-            orderList.add(builder.desc(root.get(sorting)));
-        } else {
-            orderList.add(builder.asc(root.get(sorting)));
+            sort = sort.descending();
         }
-        query.orderBy(orderList);
     }
 
     /**
@@ -156,25 +131,24 @@ public abstract class EntityFinder<T extends CustomEntity, P extends EntityPathB
      *
      * @return Offset value.
      */
-    public int getOffset() {
-        return offset;
+    public int getPage() {
+        return page;
+    }
+
+    public Pageable getPaginationAndSorting() {
+        return PageRequest.of(page, limit, sort);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EntityFinder<?, ?> that = (EntityFinder<?, ?>) o;
-        return limit == that.limit && offset == that.offset
-                && Objects.equals(query, that.query)
-                && Objects.equals(builder, that.builder)
-                && Objects.equals(predicate, that.predicate)
-                && Objects.equals(root, that.root)
-                && Objects.equals(metamodel, that.metamodel);
+        EntityFinder<?> that = (EntityFinder<?>) o;
+        return limit == that.limit && page == that.page && Objects.equals(paginationAndSorting, that.paginationAndSorting) && Objects.equals(sort, that.sort) && Objects.equals(expression, that.expression);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(limit, offset, query, builder, predicate, root, metamodel);
+        return Objects.hash(limit, page, paginationAndSorting, sort, expression);
     }
 }

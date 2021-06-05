@@ -130,9 +130,9 @@ class CertificateDaoTests {
         query.where(builder.equal(root.get(CertificateColumns.NAME.getValue()), "OZ.by"));
 
         CertificateFinder finderMock = mock(CertificateFinder.class);
-        when(finderMock.getQuery()).thenReturn(query);
+     //   when(finderMock.getPredicate()).thenReturn(query);
 
         assertEquals(Collections.singletonList(certificate),
-                certificateDao.findByParameters(finderMock));
+                certificateDao.findAll(finderMock.getPredicate()));
     }/**/
 }

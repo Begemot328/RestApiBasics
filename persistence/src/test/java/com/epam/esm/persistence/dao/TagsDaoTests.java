@@ -99,11 +99,11 @@ class TagsDaoTests {
         query.where(builder.equal(tagRoot.get(TagColumns.NAME.getValue()), "books"));
 
         TagFinder finderMock = mock(TagFinder.class);
-        when(finderMock.getQuery()).thenReturn(query);
+       // when(finderMock.getQuery()).thenReturn(query);
 
         tag = new Tag("books");
         tag.setId(3);
-        assertEquals(Collections.singletonList(tag), tagsDao.findByParameters(finderMock));
+        assertEquals(Collections.singletonList(tag), tagsDao.findAll(finderMock.getPredicate()));
     }
 
     @Test

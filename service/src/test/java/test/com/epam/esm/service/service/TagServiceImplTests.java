@@ -11,6 +11,7 @@ import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.tag.TagServiceImpl;
 import com.epam.esm.service.validator.EntityValidator;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -82,9 +83,8 @@ class TagServiceImplTests {
             when(tagDaoMock.findAll()).thenReturn(fullList);
             when(tagDaoMock.findById(1)).thenReturn(Optional.of(tag1));
             when(tagDaoMock.findById(2)).thenReturn(Optional.of(tag2));
-            when(tagDaoMock.findByParameters(any(TagFinder.class))).thenReturn(shortList);
+            when(tagDaoMock.findAll(any(BooleanExpression.class))).thenReturn(shortList);
             doNothing().when(tagDaoMock).delete(any(Tag.class));
-            when(tagDaoMock.getBuilder()).thenReturn(builder);
             when(tagDaoMock.save(any(Tag.class))).thenAnswer(invocation -> {
                 Tag tag = invocation.getArgument(0, Tag.class);
                 tag.setId(fullList.size());
@@ -124,7 +124,7 @@ class TagServiceImplTests {
     @Test
     void save_createTag() throws ValidationException, BadRequestException {
         tag1.setId(0);
-        when(tagDaoMock.findByParameters(any(TagFinder.class))).thenReturn(Collections.EMPTY_LIST);
+        when(tagDaoMock.findAll(any(BooleanExpression.class))).thenReturn(Collections.EMPTY_LIST);
         Tag tag = service.create(tag1);
         assertEquals(tag.getId(), fullList.size());
         verify(tagDaoMock, times(1)).save(tag1);
@@ -151,7 +151,7 @@ class TagServiceImplTests {
         params.put(TagSearchParameters.NAME.name(), Collections.singletonList("1"));
         params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), Collections.singletonList("2"));
         assertEquals(shortList, service.findByParameters(params));
-        verify(tagDaoMock, atLeast(1)).findByParameters(any(TagFinder.class));
+        verify(tagDaoMock, atLeast(1)).findAll(any(BooleanExpression.class));
     }
 
     @Test

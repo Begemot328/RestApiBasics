@@ -1,13 +1,11 @@
 package com.epam.esm.persistence.dao.tag;
 
 import com.epam.esm.model.entity.QTag;
-import com.epam.esm.model.entity.Role;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.ExCustomRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.repository.CrudRepository;
+import com.epam.esm.persistence.dao.EntityRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  * Tag DAO interface.
@@ -17,6 +15,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface TagDAO extends /*CrudRepository<Tag, Integer>,*/
-        ExCustomRepository<Tag, QTag, Integer>,
+        EntityRepository<Tag, QTag, Integer>,
         TagDAOCustom {
+
+    Optional<Tag> getByName(String name);
 }

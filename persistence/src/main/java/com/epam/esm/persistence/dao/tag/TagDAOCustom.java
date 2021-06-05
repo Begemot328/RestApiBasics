@@ -1,7 +1,6 @@
 package com.epam.esm.persistence.dao.tag;
 
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.EntityDAO;
 
 import java.util.Optional;
 
@@ -11,7 +10,7 @@ import java.util.Optional;
  * @author Yury Zmushko
  * @version 1.0
  */
-public interface TagDAOCustom extends EntityDAO<Tag> {
+public interface TagDAOCustom {
 
     /**
      * Find mostly used by the most contributing user tag.

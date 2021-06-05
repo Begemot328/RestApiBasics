@@ -1,10 +1,7 @@
 package com.epam.esm.service.service.certificate;
 
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Tag;
-import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.certificate.CertificateDAO;
-import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.SortDirection;
 import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
 import com.epam.esm.service.constants.CertificateSearchParameters;
@@ -112,8 +109,9 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    private List<Certificate> findByFinder(EntityFinder<Certificate> entityFinder) throws NotFoundException {
-        List<Certificate> certificates = dao.findByParameters(entityFinder);
+    private List<Certificate> findByFinder(CertificateFinder entityFinder) throws NotFoundException {
+        List<Certificate> certificates = dao.findAll(
+                entityFinder.getPredicate(), entityFinder.getPaginationAndSorting()).getContent();
         if (CollectionUtils.isEmpty(certificates)) {
             throw new NotFoundException("Requested certificate not found!",
                     ErrorCodes.CERTIFICATE_NOT_FOUND);
@@ -192,8 +190,8 @@ public class CertificateServiceImpl implements CertificateService {
             case LIMIT:
                 finder.limit(Integer.parseInt(parameterValues.get(0)));
                 break;
-            case OFFSET:
-                finder.offset(Integer.parseInt(parameterValues.get(0)));
+            case PAGE:
+                finder.page(Integer.parseInt(parameterValues.get(0)));
                 break;
         }
     }
@@ -218,10 +216,10 @@ public class CertificateServiceImpl implements CertificateService {
                 CertificateSearchParameters.getEntryByParameter(parameterName);
         switch (parameter) {
             case NAME:
-                addToFinder(finder::findByName, parameterValues);
+                addToFinder(finder::findByNameLike, parameterValues);
                 break;
             case DESCRIPTION:
-                addToFinder(finder::findByDescription, parameterValues);
+                addToFinder(finder::findByDescriptionLike, parameterValues);
                 break;
             case TAG_ID:
                 if (parameterValues.size() > 1) {

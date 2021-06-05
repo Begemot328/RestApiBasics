@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
  * @version 1.0
  */
 @Repository
-public class UserDAOImpl implements UserDAOCustom {
+public class UserDAOImpl {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -22,10 +22,5 @@ public class UserDAOImpl implements UserDAOCustom {
      */
     public UserDAOImpl() {
         // Default constructor for Spring purposes.
-    }
-
-    @Override
-    public EntityManager getEntityManager() {
-        return entityManager;
     }
 }

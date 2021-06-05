@@ -132,10 +132,10 @@ class UserDaoTests {
         query.where(builder.equal(root.get(UserColumns.LOGIN.getValue()), "root"));
 
         UserFinder finderMock = mock(UserFinder.class);
-        when(finderMock.getQuery()).thenReturn(query);
+        //when(finderMock.getQuery()).thenReturn(query);
 
         user.setId(1);
-        assertEquals(Collections.singletonList(user), userDao.findByParameters(finderMock));
+        assertEquals(Collections.singletonList(user), userDao.findAll(finderMock.getPredicate()));
     }
 
     @Test

@@ -9,7 +9,7 @@ import javax.persistence.PersistenceContext;
  * @author Yury Zmushko
  * @version 1.0
  */
-public class OrderDAOImpl implements OrderDAOCustom {
+public class OrderDAOImpl {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -19,9 +19,5 @@ public class OrderDAOImpl implements OrderDAOCustom {
      */
     public OrderDAOImpl() {
         // Default constructor for Spring purposes.
-    }
-    @Override
-    public EntityManager getEntityManager() {
-        return entityManager;
     }
 }

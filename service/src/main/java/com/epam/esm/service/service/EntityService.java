@@ -7,6 +7,7 @@ import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
+import com.querydsl.core.types.dsl.EntityPathBase;
 import org.springframework.util.MultiValueMap;
 
 import javax.persistence.Entity;

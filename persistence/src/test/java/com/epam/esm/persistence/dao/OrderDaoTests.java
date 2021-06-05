@@ -146,9 +146,9 @@ class OrderDaoTests {
         query.where(builder.equal(root.join("certificate").get("id"), "2"));
 
         OrderFinder finderMock = mock(OrderFinder.class);
-        when(finderMock.getQuery()).thenReturn(query);
+    //    when(finderMock.getQuery()).thenReturn(query);
 
-        assertEquals(Collections.singletonList(order), orderDao.findByParameters(finderMock));
+        assertEquals(Collections.singletonList(order), orderDao.findAll(finderMock.getPredicate()));
     }
 
     @Test

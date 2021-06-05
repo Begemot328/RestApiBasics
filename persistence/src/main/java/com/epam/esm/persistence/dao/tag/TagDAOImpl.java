@@ -26,10 +26,6 @@ public class TagDAOImpl implements TagDAOCustom {
     public TagDAOImpl() {
         // Default constructor for Spring purposes.
     }
-    @Override
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
 
     private List<Tag> findByQuery(String query) {
         return entityManager.createNativeQuery(query, Tag.class).getResultList();

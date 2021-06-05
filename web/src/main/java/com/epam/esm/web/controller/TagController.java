@@ -2,7 +2,6 @@ package com.epam.esm.web.controller;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.service.constants.CertificateSearchParameters;
-import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;

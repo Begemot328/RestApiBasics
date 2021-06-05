@@ -22,7 +22,7 @@ public class Paginator {
     @Value("${limit.default}")
     private static int DEFAULT_LIMIT;
     private final int limit;
-    private final int offset;
+    private final int page;
 
     /**
      * Constructor.
@@ -31,12 +31,12 @@ public class Paginator {
      */
     public Paginator(MultiValueMap<String, String> params) {
         limit = getLimit(params);
-        offset = getOffset(params);
+        page = getOffset(params);
     }
 
     public Paginator() {
         limit = DEFAULT_LIMIT;
-        offset = 0;
+        page = 0;
     }
 
     /*
@@ -53,8 +53,8 @@ public class Paginator {
      *
      * @return Offset value.
      */
-    public int getOffset() {
-        return offset;
+    public int getPage() {
+        return page;
     }
 
     /*
@@ -74,9 +74,9 @@ public class Paginator {
     }
 
     private int getOffset(MultiValueMap<String, String> params) {
-        return CollectionUtils.isEmpty(params.get(PaginationParameters.OFFSET.getParameterName())) ?
+        return CollectionUtils.isEmpty(params.get(PaginationParameters.PAGE.getParameterName())) ?
                 0 : Integer.parseInt(
-                params.get(PaginationParameters.OFFSET.getParameterName()).get(0));
+                params.get(PaginationParameters.PAGE.getParameterName()).get(0));
     }
 
     /*
@@ -86,8 +86,8 @@ public class Paginator {
      * @return {@link MultiValueMap} parameters map for next page.
      */
     public MultiValueMap<String, String> nextPage(MultiValueMap<String, String> params) {
-        params.put(PaginationParameters.OFFSET.getParameterName(),
-                Collections.singletonList(Integer.toString(offset + limit)));
+        params.put(PaginationParameters.PAGE.getParameterName(),
+                Collections.singletonList(Integer.toString(page + 1)));
         return params;
     }
 
@@ -98,8 +98,8 @@ public class Paginator {
      * @return {@link MultiValueMap} parameters map for previous page.
      */
     public MultiValueMap<String, String> previousPage(MultiValueMap<String, String> params) {
-        int newOffset = Math.max(offset - limit, 0);
-        params.put(PaginationParameters.OFFSET.getParameterName(),
+        int newOffset = Math.max(page - 1, 0);
+        params.put(PaginationParameters.PAGE.getParameterName(),
                 Collections.singletonList(Integer.toString(newOffset)));
         return params;
     }

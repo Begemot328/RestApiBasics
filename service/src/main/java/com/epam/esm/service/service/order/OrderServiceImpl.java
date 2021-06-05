@@ -103,8 +103,10 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private List<Order> readBy(EntityFinder<Order> entityFinder) throws NotFoundException {
-        List<Order> orders = dao.findByParameters(entityFinder);
+    private List<Order> readBy(OrderFinder entityFinder) throws NotFoundException {
+        List<Order> orders = dao.findAll(
+                entityFinder.getPredicate(), entityFinder.getPaginationAndSorting())
+                .getContent();
         if (CollectionUtils.isEmpty(orders)) {
             throw new NotFoundException("Requested resource not found!",
                     ErrorCodes.ORDER_NOT_FOUND);
@@ -169,8 +171,8 @@ public class OrderServiceImpl implements OrderService {
             case LIMIT:
                 finder.limit(Integer.parseInt(list.get(0)));
                 break;
-            case OFFSET:
-                finder.offset(Integer.parseInt(list.get(0)));
+            case PAGE:
+                finder.page(Integer.parseInt(list.get(0)));
                 break;
         }
     }

@@ -1,7 +1,8 @@
 package com.epam.esm.persistence.dao.certificate;
 
 import com.epam.esm.model.entity.Certificate;
-import org.springframework.data.repository.CrudRepository;
+import com.epam.esm.model.entity.QCertificate;
+import com.epam.esm.persistence.dao.EntityRepository;
 
 /**
  * Certificate DAO interface.
@@ -9,5 +10,6 @@ import org.springframework.data.repository.CrudRepository;
  * @author Yury Zmushko
  * @version 2.0
  */
-public interface CertificateDAO extends CrudRepository<Certificate, Integer>, CertificateDAOCustom {
+public interface CertificateDAO
+        extends EntityRepository<Certificate, QCertificate, Integer> {
 }

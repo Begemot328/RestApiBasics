@@ -1,7 +1,8 @@
 package com.epam.esm.persistence.dao.order;
 
 import com.epam.esm.model.entity.Order;
-import org.springframework.data.repository.CrudRepository;
+import com.epam.esm.model.entity.QOrder;
+import com.epam.esm.persistence.dao.EntityRepository;
 
 /**
  * Order DAO interface.
@@ -9,5 +10,5 @@ import org.springframework.data.repository.CrudRepository;
  * @author Yury Zmushko
  * @version 1.0
  */
-public interface OrderDAO extends CrudRepository<Order, Integer>, OrderDAOCustom {
+public interface OrderDAO extends EntityRepository<Order, QOrder, Integer> {
 }
