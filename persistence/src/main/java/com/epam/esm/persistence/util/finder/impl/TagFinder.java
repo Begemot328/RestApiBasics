@@ -1,5 +1,6 @@
 package com.epam.esm.persistence.util.finder.impl;
 
+import com.epam.esm.model.entity.QTag;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.constants.TagColumns;
 import com.epam.esm.persistence.dao.EntityDAO;
@@ -18,15 +19,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-public class TagFinder extends EntityFinder<Tag> {
+public class TagFinder extends EntityFinder<Tag, QTag> {
 
     /**
      * Constructor.
      *
-     * @param dao {@link EntityDAO} object to obtain {@link javax.persistence.criteria.CriteriaBuilder}
-     *                             and {@link javax.persistence.metamodel.Metamodel objects}
      */
-    public TagFinder(TagDAO dao) {
+    public TagFinder(EntityDAO<Tag> dao) {
         super(dao);
     }
 

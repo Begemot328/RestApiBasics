@@ -2,6 +2,7 @@ package com.epam.esm.service.service.certificate;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.SortDirection;
@@ -40,6 +41,7 @@ import java.util.function.Consumer;
  */
 @Service
 public class CertificateServiceImpl implements CertificateService {
+    private static final String NOT_FOUND_ERROR_MESSAGE = "Requested certificate not found(%s = %s)!";
 
     private final CertificateDAO dao;
     private final EntityValidator<Certificate> validator;
@@ -62,7 +64,7 @@ public class CertificateServiceImpl implements CertificateService {
         certificate.setCreateDate(LocalDateTime.now());
         certificate.setLastUpdateDate(LocalDateTime.now());
         validator.validate(certificate);
-        makeAllTagsDetached(certificate);
+        tagService.makeAllTagsDetached(certificate.getTags());
         try {
             return dao.save(certificate);
         } catch (DataIntegrityViolationException e) {
@@ -71,9 +73,10 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    @Transactional
-    public Optional<Certificate> getById(int id) {
-        return dao.findById(id);
+    public Certificate getById(int id) throws NotFoundException {
+        return dao.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format(NOT_FOUND_ERROR_MESSAGE, "id", id),
+                        ErrorCodes.CERTIFICATE_NOT_FOUND));
     }
 
     @Transactional
@@ -94,7 +97,7 @@ public class CertificateServiceImpl implements CertificateService {
         certificate.setLastUpdateDate(LocalDateTime.now());
         certificate.setCreateDate(oldCertificate.getCreateDate());
         validator.validate(certificate);
-        makeAllTagsDetached(certificate);
+        tagService.makeAllTagsDetached(certificate.getTags());
         return dao.save(certificate);
     }
 
@@ -166,20 +169,6 @@ public class CertificateServiceImpl implements CertificateService {
             oldCertificate.setTags(newCertificate.getTags());
         }
         return oldCertificate;
-    }
-
-    private void makeAllTagsDetached(Certificate certificate)
-            throws BadRequestException, ValidationException {
-        for (Tag tag : certificate.getTags()) {
-            if (tagService.getById(tag.getId()).isEmpty()) {
-                Optional<Tag> tagOptional = tagService.getByName(tag.getName());
-                if (tagOptional.isPresent()) {
-                    tag.setId(tagOptional.get().getId());
-                } else {
-                    tagService.create(tag);
-                }
-            }
-        }
     }
 
     private void parseParameter(CertificateFinder finder,

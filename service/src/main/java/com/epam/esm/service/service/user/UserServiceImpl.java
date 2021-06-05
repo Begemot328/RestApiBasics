@@ -37,7 +37,7 @@ import java.util.function.Consumer;
 public class UserServiceImpl implements UserService {
     private final UserDAO dao;
     private final EntityValidator<User> validator;
-
+    private static final String NOT_FOUND_ERROR_MESSAGE = "Requested user not found(%s = %s)!";
     private static final String LOGIN_EXISTS_ERROR_MESSAGE = "Such login already exists! login= %s";
 
     @Autowired
@@ -67,8 +67,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getById(int id) {
-        return dao.findById(id);
+    public User getById(int id) throws NotFoundException {
+        return dao.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format(NOT_FOUND_ERROR_MESSAGE, "id", id),
+                        ErrorCodes.USER_NOT_FOUND));
     }
 
     @Override

@@ -4,14 +4,10 @@ import com.epam.esm.model.entity.Order;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
-import com.epam.esm.service.service.certificate.CertificateService;
 import com.epam.esm.service.service.order.OrderService;
 import com.epam.esm.service.service.order.OrderServiceImpl;
-import com.epam.esm.service.service.user.UserService;
-import com.epam.esm.service.service.user.UserServiceImpl;
 import com.epam.esm.web.dto.order.OrderDTO;
 import com.epam.esm.web.dto.order.OrderDTOMapper;
-import com.epam.esm.web.dto.user.UserDTOMapper;
 import com.epam.esm.web.security.roles.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -59,9 +55,7 @@ public class OrderController implements PaginableSearch {
     @Secured(Roles.ADMIN)
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> get(@PathVariable(value = "id") int id) throws NotFoundException {
-        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.getById(id).orElseThrow(
-                () -> new NotFoundException(String.format(orderService.notFoundErrorMessage, "id", id),
-                        ErrorCodes.ORDER_NOT_FOUND)));
+        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.getById(id));
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 }

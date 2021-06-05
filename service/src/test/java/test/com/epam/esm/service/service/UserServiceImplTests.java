@@ -87,8 +87,8 @@ class UserServiceImplTests {
     }
 
     @Test
-    void read_returnUser() {
-        assertEquals(user1, service.getById(1).get());
+    void getById_returnUser() throws NotFoundException {
+        assertEquals(user1, service.getById(1));
     }
 
     @Test

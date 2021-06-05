@@ -2,10 +2,8 @@ package test.com.epam.esm.service.service;
 
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.tag.TagDAO;
-import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.service.constants.ErrorCodes;
-import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.constants.TagSearchParameters;
 import com.epam.esm.service.constants.TagSortingParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
@@ -15,7 +13,6 @@ import com.epam.esm.service.service.tag.TagServiceImpl;
 import com.epam.esm.service.validator.EntityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,12 +105,12 @@ class TagServiceImplTests {
     }
 
     @Test
-    void read_returnTag() {
-        assertEquals(Optional.of(tag1), service.getById(1));
+    void service_returnTag() throws NotFoundException {
+        assertEquals(tag1, service.getById(1));
     }
 
     @Test
-    void readAll_returnTags() throws NotFoundException {
+    void findAll_returnTags() throws NotFoundException {
         assertEquals(fullList, service.findAll());
     }
 
@@ -178,7 +175,7 @@ class TagServiceImplTests {
     void readMostlyUsedTag_returnTag() throws NotFoundException {
         assertEquals(service.findMostPopularTag(), tag4);
     }
-
+/*
     @Test
     void read_parsePaginationLimit_invokeFinderLimit() throws NotFoundException, BadRequestException {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
@@ -211,5 +208,5 @@ class TagServiceImplTests {
         };
         params.put("unknown", Collections.singletonList("1"));
         assertThrows(BadRequestException.class, () -> service.findByParameters(params));
-    }
+    }*/
 }

@@ -1,9 +1,12 @@
 package com.epam.esm.service.service.tag;
 
 import com.epam.esm.model.entity.Tag;
+import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
+import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.EntityService;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,4 +31,7 @@ public interface TagService extends EntityService<Tag> {
      * @return {@link Optional} of {@link Tag} with defined name.
      */
     Optional<Tag> getByName(String name);
+
+    public void makeAllTagsDetached(List<Tag> tags)
+            throws BadRequestException, ValidationException;
 }

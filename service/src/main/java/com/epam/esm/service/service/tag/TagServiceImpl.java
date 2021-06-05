@@ -1,5 +1,6 @@
 package com.epam.esm.service.service.tag;
 
+import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
@@ -30,6 +31,8 @@ import java.util.function.Consumer;
 
 @Service
 public class TagServiceImpl implements TagService {
+    private static final String NOT_FOUND_ERROR_MESSAGE = "Requested tag not found(%s = %s)!";
+
     private final TagDAO dao;
     private final EntityValidator<Tag> validator;
 
@@ -56,8 +59,10 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Optional<Tag> getById(int id) {
-        return dao.findById(id);
+    public Tag getById(int id) throws NotFoundException {
+        return dao.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format(NOT_FOUND_ERROR_MESSAGE, "id", id),
+                        ErrorCodes.TAG_NOT_FOUND));
     }
 
     @Override
@@ -199,5 +204,20 @@ public class TagServiceImpl implements TagService {
             return Optional.empty();
         }
         return Optional.of(tags.get(0));
+    }
+
+    @Override
+    public void makeAllTagsDetached(List<Tag> tags)
+            throws BadRequestException, ValidationException {
+        for (Tag tag : tags) {
+            if (dao.findById(tag.getId()).isEmpty()) {
+                Optional<Tag> tagOptional = getByName(tag.getName());
+                if (tagOptional.isPresent()) {
+                    tag.setId(tagOptional.get().getId());
+                } else {
+                    create(tag);
+                }
+            }
+        }
     }
 }

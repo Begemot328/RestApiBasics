@@ -66,9 +66,7 @@ public class TagController implements PaginableSearch {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> get(@PathVariable(value = "id") int id) throws NotFoundException {
-        final Tag tag = tagService.getById(id).orElseThrow(
-                () -> new NotFoundException(String.format(tagService.notFoundErrorMessage, "id", id),
-                        ErrorCodes.CERTIFICATE_NOT_FOUND));
+        final Tag tag = tagService.getById(id);
         return new ResponseEntity<>(tagDTOMapper.toTagDTO(tag), HttpStatus.OK);
     }
 

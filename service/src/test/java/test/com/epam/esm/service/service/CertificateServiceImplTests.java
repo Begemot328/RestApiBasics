@@ -112,8 +112,13 @@ class CertificateServiceImplTests {
     }
 
     @Test
-    void getById_returnCertificate() {
-        assertEquals(Optional.of(certificate1), service.getById(1));
+    void getById_returnCertificate() throws NotFoundException {
+        assertEquals(certificate1, service.getById(1));
+    }
+
+    @Test
+    void getById_invalidId_throwException() throws NotFoundException {
+        assertThrows(NotFoundException.class, () -> service.getById(1000));
     }
 
     @Test

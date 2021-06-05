@@ -83,7 +83,7 @@ class OrderServiceImplTests {
     private final List<Order> shortList = Arrays.asList(ordersShort);
 
     @BeforeEach
-    void init() throws ValidationException {
+    void init() throws ValidationException, NotFoundException {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
         Root<Tag> tagRoot = query.from(Tag.class);
@@ -126,13 +126,13 @@ class OrderServiceImplTests {
 
         doNothing().when(validator).validate(any(Order.class));
 
-        when(userServiceMock.getById(any(Integer.class))).thenReturn(Optional.of(user));
-        when(certificateServiceMock.getById(any(Integer.class))).thenReturn(Optional.of(certificate));
+        when(userServiceMock.getById(any(Integer.class))).thenReturn(user);
+        when(certificateServiceMock.getById(any(Integer.class))).thenReturn(certificate);
     }
 
     @Test
-    void find_returnOrder() {
-        assertEquals(order1, service.getById(1).get());
+    void getById_returnOrder() throws NotFoundException {
+        assertEquals(order1, service.getById(1));
     }
 
     @Test
@@ -204,11 +204,12 @@ class OrderServiceImplTests {
     }
 
     @Test
-    void createOrder_createNewOrder() throws ValidationException, BadRequestException {
+    void createOrder_createNewOrder()
+            throws ValidationException, BadRequestException, NotFoundException {
         order1.setOrderAmount(order1.getCertificate().getPrice()
                 .multiply(BigDecimal.valueOf(order1.getCertificateQuantity())));
-        Order order2 = service.createOrder(order1.getCertificate(),
-                order1.getUser(),
+        Order order2 = service.createOrder(order1.getCertificate().getId(),
+                order1.getUser().getId(),
                 order1.getCertificateQuantity());
         order1.setPurchaseDate(LocalDateTime.now());
 

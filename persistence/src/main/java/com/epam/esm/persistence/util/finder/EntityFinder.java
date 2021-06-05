@@ -2,16 +2,22 @@ package com.epam.esm.persistence.util.finder;
 
 import com.epam.esm.model.entity.CustomEntity;
 import com.epam.esm.persistence.dao.EntityDAO;
+import com.epam.esm.persistence.dao.ExCustomRepository;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.EntityPathBase;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.BooleanExpression;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.Metamodel;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,46 +31,25 @@ import java.util.Objects;
  */
 @Component
 @Scope("prototype")
-public abstract class EntityFinder<T extends CustomEntity> {
+public abstract class EntityFinder<T extends CustomEntity, P extends EntityPathBase<T>> {
     private static final int DEFAULT_LIMIT = 20;
     protected int limit = DEFAULT_LIMIT;
     protected int offset = 0;
-    protected CriteriaQuery<T> query;
-    protected CriteriaBuilder builder;
-    protected Predicate predicate;
-    protected Root<T> root;
-    protected Metamodel metamodel;
+    protected BooleanExpression predicate;
+    protected EntityManager manager;
 
     /**
      * Constructor.
      *
-     * @param dao {@link EntityDAO } correspondind to finder class.
      */
     protected EntityFinder(EntityDAO<T> dao) {
-        builder = dao.getBuilder();
-        metamodel = dao.getMetamodel();
-        query = builder.createQuery(getClassType());
-        root = query.from(getClassType());
+        manager = dao.getEntityManager();
+        JPAQuery<T> query = new JPAQuery<>(manager);
+
     }
 
-    /**
-     * Class type getter.
-     *
-     * @return Type of the class to search for.
-     */
-    protected abstract Class<T> getClassType();
-
-    /**
-     * Query getter.
-     *
-     * @return Query object.
-     */
-    public CriteriaQuery<T> getQuery() {
-        if(Objects.nonNull(predicate)) {
-            query.where(predicate);
-        }
-        query.select(root);
-        return query;
+    public BooleanExpression getBooleanExpression() {
+        return predicate;
     }
 
     /**
@@ -90,16 +75,16 @@ public abstract class EntityFinder<T extends CustomEntity> {
      *
      * @param finder {@link EntityFinder} to add, corresponding by type.
      */
-    public void and(EntityFinder<T> finder) {
+    public void and(EntityFinder<T, P> finder) {
         and(finder.getQuery().getRestriction());
     }
 
     /**
-     * Method to join another {@link Predicate} conditions by AND logic.
+     * Method to join another {@link BooleanExpression} conditions by AND logic.
      *
-     * @param predicate {@link Predicate} to add, corresponding by type.
+     * @param predicate {@link BooleanExpression} to add, corresponding by type.
      */
-    protected void and(Predicate predicate) {
+    protected void and(BooleanExpression predicate) {
         if(this.predicate == null) {
             this.predicate = predicate;
         } else {
@@ -107,12 +92,13 @@ public abstract class EntityFinder<T extends CustomEntity> {
         }
     }
 
+
     /**
-     * Method to join another {@link Predicate} conditions by OR logic.
+     * Method to join another {@link BooleanExpression} conditions by OR logic.
      *
-     * @param predicate {@link Predicate} to add, corresponding by type.
+     * @param predicate {@link BooleanExpression} to add, corresponding by type.
      */
-    protected void or(Predicate predicate) {
+    protected void or(BooleanExpression predicate) {
         if(this.predicate == null) {
             this.predicate = predicate;
         } else {
@@ -125,16 +111,16 @@ public abstract class EntityFinder<T extends CustomEntity> {
      *
      * @param finder {@link EntityFinder} to add, corresponding by type.
      */
-    public void or(EntityFinder<T> finder) {
+    public void or(EntityFinder<T, P> finder) {
         or(finder.getQuery().getRestriction());
     }
 
     /**
-     * Method to join another {@link Predicate} conditions by AND logic (default behaviour).
+     * Method to join another {@link BooleanExpression} conditions by AND logic (default behaviour).
      *
-     * @param predicate {@link Predicate} to add, corresponding by type.
+     * @param predicate {@link BooleanExpression} to add, corresponding by type.
      */
-    protected void add(Predicate predicate) {
+    protected void add(BooleanExpression predicate) {
         and(predicate);
     }
 
@@ -178,7 +164,7 @@ public abstract class EntityFinder<T extends CustomEntity> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EntityFinder<?> that = (EntityFinder<?>) o;
+        EntityFinder<?, ?> that = (EntityFinder<?, ?>) o;
         return limit == that.limit && offset == that.offset
                 && Objects.equals(query, that.query)
                 && Objects.equals(builder, that.builder)

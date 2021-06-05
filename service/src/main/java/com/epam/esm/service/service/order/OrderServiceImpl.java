@@ -36,6 +36,8 @@ import java.util.Optional;
  */
 @Service
 public class OrderServiceImpl implements OrderService {
+    private static final String NOT_FOUND_ERROR_MESSAGE = "Requested order not found(%s = %s)!";
+
     private final OrderDAO dao;
     private final EntityValidator<Order> validator;
     private final EntityService<Certificate> certificateService;
@@ -53,36 +55,29 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order createOrder(Certificate certificate, User user, int quantity)
-            throws ValidationException, BadRequestException {
-
+    public Order createOrder(int certificateId, int userId, int quantity)
+            throws ValidationException, BadRequestException, NotFoundException {
+        User user = userService.getById(userId);
+        Certificate certificate = certificateService.getById(certificateId);
         Order order = new Order(certificate, user,
                 certificate.getPrice().multiply(BigDecimal.valueOf(quantity)),
                 quantity, LocalDateTime.now());
-        return create(order);
+
+        validator.validate(order);
+        return dao.save(order);
     }
 
     @Override
     @Transactional
     public Order create(Order order) throws ValidationException, BadRequestException {
-
-        order.setPurchaseDate(LocalDateTime.now());
-        validator.validate(order);
-
-        if (certificateService.getById(order.getCertificate().getId()).isEmpty()) {
-            throw new BadRequestException("Unknown certificate!", ErrorCodes.ORDER_BAD_REQUEST);
-        }
-        if (userService.getById(order.getUser().getId()).isEmpty()) {
-            throw new BadRequestException("Unknown user!", ErrorCodes.ORDER_BAD_REQUEST);
-        }
-
-        return dao.save(order);
-
+        throw new UnsupportedOperationException("Create order using certificate and user ID's!");
     }
 
     @Override
-    public Optional<Order> getById(int id) {
-        return dao.findById(id);
+    public Order getById(int id) throws NotFoundException {
+        return dao.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format(NOT_FOUND_ERROR_MESSAGE, "id", id),
+                        ErrorCodes.ORDER_NOT_FOUND));
     }
 
     @Override

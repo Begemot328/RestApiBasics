@@ -79,9 +79,7 @@ public class UserController implements PaginableSearch {
     @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') and hasPermission(#id,'user_permission')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> get(@PathVariable(value = "id") int id) throws NotFoundException {
-        User user = userService.getById(id).orElseThrow(
-                () -> new NotFoundException(String.format(userService.notFoundErrorMessage, "id", id),
-                        ErrorCodes.USER_NOT_FOUND));
+        User user = userService.getById(id);
         final UserDTO userDTO = userDTOMapper.toUserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
@@ -128,13 +126,8 @@ public class UserController implements PaginableSearch {
                                          @RequestParam int certificateId,
                                          @RequestParam int quantity)
             throws NotFoundException, ValidationException, BadRequestException {
-        User user = userService.getById(id).orElseThrow(
-                () -> new NotFoundException(String.format(userService.notFoundErrorMessage, "id", id),
-                        ErrorCodes.USER_NOT_FOUND));
-        Certificate certificate = certificateService.getById(id).orElseThrow(
-                () -> new NotFoundException(String.format(certificateService.notFoundErrorMessage, "id", id),
-                        ErrorCodes.CERTIFICATE_NOT_FOUND));
-        Order order = orderService.createOrder(certificate, user, quantity);
+
+        Order order = orderService.createOrder(certificateId, id, quantity);
         return new ResponseEntity<>(orderDTOMapper.toOrderDTO(order), HttpStatus.OK);
     }
 }

@@ -2,7 +2,9 @@ package com.epam.esm.persistence.dao;
 
 
 import com.epam.esm.model.entity.CustomEntity;
+import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.util.finder.EntityFinder;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -17,7 +19,6 @@ import java.util.List;
  * @author Yury Zmushko
  * @version 1.0
  */
-@Repository
 public interface EntityDAO<T extends CustomEntity> {
 
     /**

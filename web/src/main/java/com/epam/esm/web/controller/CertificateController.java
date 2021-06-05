@@ -72,9 +72,7 @@ public class CertificateController implements PaginableSearch {
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> get(@PathVariable(value = "id") int id)
             throws NotFoundException {
-        Certificate certificate = certificateService.getById(id).orElseThrow(
-                () -> new NotFoundException(String.format(certificateService.notFoundErrorMessage, "id", id),
-                        ErrorCodes.CERTIFICATE_NOT_FOUND));
+        Certificate certificate = certificateService.getById(id);
         final CertificateDTO certificateDTO = certificateDTOMapper.toCertificateDTO(certificate);
         return new ResponseEntity<>(certificateDTO, HttpStatus.OK);
     }
