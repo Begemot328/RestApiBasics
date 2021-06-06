@@ -13,6 +13,7 @@ import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.dto.tag.TagDTOMapper;
 import com.epam.esm.web.security.roles.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +37,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/tags")
-public class TagController implements PaginableSearch {
+public class TagController implements PageableSearch {
 
     private final TagService tagService;
     private final CertificateService certificateService;
@@ -54,12 +56,14 @@ public class TagController implements PaginableSearch {
     }
 
     @GetMapping
-    public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params)
+    public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params, Pageable pageable)
             throws BadRequestException, NotFoundException {
-        List<Tag> tags = tagService.findByParameters(params);
+        List<Tag> tags = tagService.findByParameters(params, pageable);
         CollectionModel<TagDTO> tagDTOs = tagDTOMapper.toTagDTOList(tags);
-        paginate(params, tagDTOs);
-        tagDTOs.add(linkTo(methodOn(this.getClass()).find(params)).withSelfRel());
+        tagDTOs.add(linkTo(methodOn(this.getClass()).find(params, pageable)).withSelfRel());
+
+        paginate(params, tagDTOs, pageable);
+
         return new ResponseEntity<>(tagDTOs, HttpStatus.OK);
     }
 
@@ -96,15 +100,17 @@ public class TagController implements PaginableSearch {
 
     @GetMapping(value = "/{id}/certificates")
     public ResponseEntity<?> findCertificates(@PathVariable(value = "id") int id,
-                                              @RequestParam MultiValueMap<String, String> params)
+                                              @RequestParam MultiValueMap<String, String> params,
+                                              Pageable pageable)
             throws NotFoundException, BadRequestException {
-        params.put(CertificateSearchParameters.TAG_ID.getParameterName(), Collections.singletonList(Integer.toString(id)));
+        params.put(CertificateSearchParameters.TAG_ID.getParameterName(),
+                Collections.singletonList(Integer.toString(id)));
         CollectionModel<CertificateDTO> certificateDTOs = certificateDTOMapper.toCertificateDTOList(
-                certificateService.findByParameters(params));
+                certificateService.findByParameters(params, pageable));
         certificateDTOs.add(
-                linkTo(methodOn(this.getClass()).findCertificates(id, params)).withRel("certificates"));
+                linkTo(methodOn(this.getClass()).findCertificates(id, params, pageable)).withRel("certificates"));
 
-        paginate(params, certificateDTOs);
+        paginate(params, certificateDTOs, pageable);
 
         return new ResponseEntity<>(certificateDTOs, HttpStatus.OK);
     }

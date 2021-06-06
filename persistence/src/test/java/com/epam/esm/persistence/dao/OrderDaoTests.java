@@ -2,6 +2,7 @@ package com.epam.esm.persistence.dao;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
+import com.epam.esm.model.entity.QOrder;
 import com.epam.esm.model.entity.Role;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
@@ -19,9 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -139,14 +137,8 @@ class OrderDaoTests {
 
     @Test
     void findByParameters_findByName_returnOrders() {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Order> query = builder.createQuery(Order.class);
-        Root<Order> root = query.from(Order.class);
-        query = query.select(root);
-        query.where(builder.equal(root.join("certificate").get("id"), "2"));
-
         OrderFinder finderMock = mock(OrderFinder.class);
-    //    when(finderMock.getQuery()).thenReturn(query);
+        when(finderMock.getPredicate()).thenReturn(QOrder.order.certificate.id.eq(2));
 
         assertEquals(Collections.singletonList(order), orderDao.findAll(finderMock.getPredicate()));
     }

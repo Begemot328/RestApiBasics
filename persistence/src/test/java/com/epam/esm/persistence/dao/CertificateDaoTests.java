@@ -1,8 +1,8 @@
 package com.epam.esm.persistence.dao;
 
 import com.epam.esm.model.entity.Certificate;
+import com.epam.esm.model.entity.QCertificate;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.constants.CertificateColumns;
 import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
 import org.apache.commons.collections4.IterableUtils;
@@ -17,9 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -122,17 +119,10 @@ class CertificateDaoTests {
 
     @Test
     void findByParameters_findByFinder_returnCertificate() {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Certificate> query = builder.createQuery(Certificate.class);
-        Root<Certificate> root = query.from(Certificate.class);
-        query.orderBy(builder.desc(root.get("name")));
-        query = query.select(root);
-        query.where(builder.equal(root.get(CertificateColumns.NAME.getValue()), "OZ.by"));
-
         CertificateFinder finderMock = mock(CertificateFinder.class);
-     //   when(finderMock.getPredicate()).thenReturn(query);
+        when(finderMock.getPredicate()).thenReturn(QCertificate.certificate.name.eq("OZ.by"));
 
         assertEquals(Collections.singletonList(certificate),
                 certificateDao.findAll(finderMock.getPredicate()));
-    }/**/
+    }
 }

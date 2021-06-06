@@ -2,15 +2,10 @@ package com.epam.esm.service.service.user;
 
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.user.UserDAO;
-import com.epam.esm.persistence.util.finder.EntityFinder;
-import com.epam.esm.persistence.util.finder.SortDirection;
-import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PaginationParameters;
-import com.epam.esm.service.constants.TagSearchParameters;
 import com.epam.esm.service.constants.UserSearchParameters;
-import com.epam.esm.service.constants.UserSortingParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
@@ -21,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -103,7 +99,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findByParameters(MultiValueMap<String, String> params)
+    public List<User> findByParameters(MultiValueMap<String, String> params, Pageable pageable)
             throws NotFoundException, BadRequestException {
         UserFinder finder = getFinder();
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
@@ -114,16 +110,12 @@ public class UserServiceImpl implements UserService {
                 throw new BadRequestException(e, ErrorCodes.USER_BAD_REQUEST);
             }
         }
-        return findByFinder(finder);
+        return findByFinder(finder, pageable);
     }
 
-    private void parseParameter(UserFinder finder, String parameterName, List<String> parameterValues)
-            throws BadRequestException {
-        if (parameterName.contains("sort")) {
-            addSortingToFinder(finder, getSortingParameter(parameterName),
-                    getSortDirection(parameterValues));
-        } else if (PaginationParameters.contains(parameterName)) {
-            parsePaginationParameter(finder, parameterName, parameterValues);
+    private void parseParameter(UserFinder finder, String parameterName, List<String> parameterValues) {
+        if (parameterName.equals(SORT) || PaginationParameters.contains(parameterName)) {
+            return;
         } else {
             parseFindParameter (finder, parameterName, parameterValues);
         }
@@ -151,41 +143,15 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void addSortingToFinder(UserFinder finder,
-                                    String sortingParameter,
-                                    SortDirection sortDirection) {
-        finder.sortBy(sortingParameter, sortDirection);
-    }
-
-    private String getSortingParameter(String parameterName) {
-        return UserSortingParameters.getEntryByParameter(parameterName).getValue();
-    }
-
-    private SortDirection getSortDirection(List<String> parameterValues) {
-        return SortDirection.parseAscDesc(parameterValues.get(0));
-    }
-
-    private void parsePaginationParameter(EntityFinder finder, String parameterName, List<String> parameterValues) {
-        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterName);
-        switch (parameter) {
-            case LIMIT:
-                finder.limit(Integer.parseInt(parameterValues.get(0)));
-                break;
-            case PAGE:
-                finder.page(Integer.parseInt(parameterValues.get(0)));
-                break;
-        }
-    }
-
     private void validateParameterValues(List<String> parameterValues) throws BadRequestException {
         if (CollectionUtils.isEmpty(parameterValues)) {
             throw new BadRequestException("Empty parameter!", ErrorCodes.USER_BAD_REQUEST);
         }
     }
 
-    private List<User> findByFinder(UserFinder entityFinder) throws NotFoundException {
+    private List<User> findByFinder(UserFinder entityFinder, Pageable pageable) throws NotFoundException {
         List<User> orders = dao.findAll(
-                entityFinder.getPredicate(), entityFinder.getPaginationAndSorting()).getContent();
+                entityFinder.getPredicate(), pageable).getContent();
         if (CollectionUtils.isEmpty(orders)) {
             throw new NotFoundException("Requested resource not found!",
                     ErrorCodes.USER_NOT_FOUND);

@@ -44,9 +44,9 @@ public class UserFinder extends EntityFinder<User> {
     }
 
     /**
-     * Find by lastname condition adding method.
+     * Find by login condition adding method.
      *
-     * @param login String that found lastname must include.
+     * @param login String that found login must include.
      */
     public void findByLogin(String login) {
         add(QUser.user.login.like("%" + login + "%"));

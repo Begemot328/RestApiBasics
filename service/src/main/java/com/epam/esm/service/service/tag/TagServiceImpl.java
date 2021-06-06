@@ -1,15 +1,11 @@
 package com.epam.esm.service.service.tag;
 
-import com.epam.esm.model.entity.QTag;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.tag.TagDAO;
-import com.epam.esm.persistence.util.finder.EntityFinder;
-import com.epam.esm.persistence.util.finder.SortDirection;
 import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.constants.TagSearchParameters;
-import com.epam.esm.service.constants.TagSortingParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
@@ -20,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -92,9 +88,9 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-    private List<Tag> findByFinder(TagFinder entityFinder) throws NotFoundException {
+    private List<Tag> findByFinder(TagFinder entityFinder, Pageable pageable) throws NotFoundException {
       List<Tag> tags = dao.findAll(
-              entityFinder.getPredicate(), entityFinder.getPaginationAndSorting())
+              entityFinder.getPredicate(), pageable)
               .getContent();
         if (CollectionUtils.isEmpty(tags)) {
             throw new NotFoundException("Requested resource not found!",
@@ -122,7 +118,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> findByParameters(MultiValueMap<String, String> params)
+    public List<Tag> findByParameters(MultiValueMap<String, String> params, Pageable pageable)
             throws NotFoundException, BadRequestException {
         TagFinder finder = getFinder();
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
@@ -133,15 +129,12 @@ public class TagServiceImpl implements TagService {
                 throw new BadRequestException(e, ErrorCodes.TAG_BAD_REQUEST);
             }
         }
-        return findByFinder(finder);
+        return findByFinder(finder, pageable);
     }
 
     private void parseParameter(TagFinder finder, String parameterName, List<String> parameterValues) {
-        if (parameterName.contains("sort")) {
-            addSortingToFinder(finder, getSortingParameter(parameterName),
-                    getSortDirection(parameterValues));
-        } else if (PaginationParameters.contains(parameterName)) {
-            parsePaginationParameter(finder, parameterName, Integer.parseInt(parameterValues.get(0)));
+        if (parameterName.equals(SORT) || PaginationParameters.contains(parameterName)) {
+            return;
         } else {
             parseFindParameter(finder, parameterName, parameterValues);
         }
@@ -152,31 +145,6 @@ public class TagServiceImpl implements TagService {
                 TagSearchParameters.getEntryByParameter(parameterString);
         if (parameter == TagSearchParameters.NAME) {
             addToFinder(finder::findByNameLike, list);
-        }
-    }
-
-    private void addSortingToFinder(TagFinder finder, String sortingParameter,
-                                    SortDirection sortDirection) {
-        finder.sortBy(sortingParameter, sortDirection);
-    }
-
-    private String getSortingParameter(String parameterName) {
-        return TagSortingParameters.getEntryByParameter(parameterName).getValue();
-    }
-
-    private SortDirection getSortDirection(List<String> parameterValues) {
-        return SortDirection.parseAscDesc(parameterValues.get(0));
-    }
-
-    private void parsePaginationParameter(EntityFinder finder, String parameterName,
-                                          int number) {
-        switch (getPaginationParameterName(parameterName)) {
-            case LIMIT:
-                finder.limit(number);
-                break;
-            case PAGE:
-                finder.page(number);
-                break;
         }
     }
 

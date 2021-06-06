@@ -1,7 +1,6 @@
 package com.epam.esm.web.controller;
 
 import com.epam.esm.model.entity.Order;
-import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.service.order.OrderService;
@@ -10,6 +9,7 @@ import com.epam.esm.web.dto.order.OrderDTO;
 import com.epam.esm.web.dto.order.OrderDTOMapper;
 import com.epam.esm.web.security.roles.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/orders")
-public class OrderController implements PaginableSearch {
+public class OrderController implements PageableSearch {
     private final OrderService orderService;
     private final OrderDTOMapper orderDTOMapper;
 
@@ -41,13 +41,14 @@ public class OrderController implements PaginableSearch {
 
     @Secured(Roles.ADMIN)
     @GetMapping
-    public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params)
+    public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params,
+                                  Pageable pageable)
             throws NotFoundException, BadRequestException {
-        List<Order> orders = orderService.findByParameters(params);
+        List<Order> orders = orderService.findByParameters(params, pageable);
         CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(orders);
-        orderDTOs.add(linkTo(methodOn(this.getClass()).find(params)).withRel("orders"));
+        orderDTOs.add(linkTo(methodOn(this.getClass()).find(params, pageable)).withRel("orders"));
 
-        paginate(params, orderDTOs);
+        paginate(params, orderDTOs, pageable);
 
         return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
     }

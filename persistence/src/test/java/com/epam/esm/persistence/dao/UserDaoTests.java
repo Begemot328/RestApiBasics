@@ -1,8 +1,8 @@
 package com.epam.esm.persistence.dao;
 
+import com.epam.esm.model.entity.QUser;
 import com.epam.esm.model.entity.Role;
 import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.constants.UserColumns;
 import com.epam.esm.persistence.dao.user.UserDAO;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import org.apache.commons.collections4.IterableUtils;
@@ -17,9 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -125,14 +122,8 @@ class UserDaoTests {
 
     @Test
     void findByParameters_findByName_returnUsers() {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> query = builder.createQuery(User.class);
-        Root<User> root = query.from(User.class);
-        query = query.select(root);
-        query.where(builder.equal(root.get(UserColumns.LOGIN.getValue()), "root"));
-
         UserFinder finderMock = mock(UserFinder.class);
-        //when(finderMock.getQuery()).thenReturn(query);
+        when(finderMock.getPredicate()).thenReturn(QUser.user.login.eq("root"));
 
         user.setId(1);
         assertEquals(Collections.singletonList(user), userDao.findAll(finderMock.getPredicate()));

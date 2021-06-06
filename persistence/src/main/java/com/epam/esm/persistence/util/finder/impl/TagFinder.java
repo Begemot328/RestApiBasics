@@ -38,7 +38,7 @@ public class TagFinder extends EntityFinder<Tag> {
     /**
      * Find by name condition adding method.
      *
-     * @param name String that found names will include.
+     * @param name String that found names will be equal.
      */
     public void findByName(String name) {
         add(QTag.tag.name.eq(name));

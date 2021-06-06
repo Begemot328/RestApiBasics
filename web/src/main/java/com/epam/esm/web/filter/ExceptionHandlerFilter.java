@@ -3,6 +3,7 @@ package com.epam.esm.web.filter;
 import com.epam.esm.web.dto.ExceptionDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -20,10 +21,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     public void doFilterInternal(HttpServletRequest request,
                                  HttpServletResponse response,
                                  FilterChain filterChain)
-            throws IOException {
+            throws IOException, ServletException {
         try {
             filterChain.doFilter(request, response);
-        } catch (Exception e) {
+        } catch (AuthenticationException | javax.security.sasl.AuthenticationException e) {
             commence(request, response, e);
         }
     }

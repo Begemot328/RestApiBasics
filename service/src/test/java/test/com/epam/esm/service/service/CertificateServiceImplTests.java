@@ -4,35 +4,28 @@ import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.persistence.dao.tag.TagDAO;
-import com.epam.esm.persistence.util.finder.EntityFinder;
-import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
 import com.epam.esm.service.constants.CertificateSearchParameters;
-import com.epam.esm.service.constants.CertificateSortingParameters;
 import com.epam.esm.service.constants.ErrorCodes;
-import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.certificate.CertificateServiceImpl;
 import com.epam.esm.service.validator.EntityValidator;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
@@ -67,23 +60,21 @@ class CertificateServiceImplTests {
     private static final Certificate[] certificatesShort = {certificate1, certificate2};
     private static final List<Certificate> fullList = Arrays.asList(certificates);
     private static final List<Certificate> shortList = Arrays.asList(certificatesShort);
+
     @MockBean
     CertificateDAO certificateDaoMock;
+
     @MockBean
     TagDAO tagDaoMock;
+
     @MockBean
     EntityValidator<Certificate> validator;
+
     @Autowired
     CertificateServiceImpl service;
-    @PersistenceContext
-    private EntityManager entityManager;
-/*
+
     @BeforeEach
     void init() throws ValidationException {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
-        Root<Tag> tagRoot = query.from(Tag.class);
-        query = query.select(tagRoot);
 
         when(tagDaoMock.findById(any(Integer.class))).thenReturn(Optional.of(tag1));
         when(tagDaoMock.save(any(Tag.class))).thenAnswer(invocation -> {
@@ -94,10 +85,11 @@ class CertificateServiceImplTests {
         when(certificateDaoMock.findAll()).thenReturn(fullList);
         when(certificateDaoMock.findById(1)).thenReturn(Optional.of(certificate1));
         when(certificateDaoMock.findById(2)).thenReturn(Optional.of(certificate2));
-        when(certificateDaoMock.findByParameters(any(CertificateFinder.class))).thenReturn(shortList);
+        when(certificateDaoMock.findAll(any(BooleanExpression.class), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(shortList));
         doNothing().when(certificateDaoMock).delete(any(Certificate.class));
-        when(certificateDaoMock.getBuilder()).thenReturn(builder);
-        when(certificateDaoMock.save(any(Certificate.class))).thenAnswer(invocation -> invocation.getArgument(0, Certificate.class));
+        when(certificateDaoMock.save(any(Certificate.class))).thenAnswer(
+                invocation -> invocation.getArgument(0, Certificate.class));
         when(certificateDaoMock.save(any(Certificate.class))).thenAnswer(invocation -> {
             Certificate certificate = invocation.getArgument(0, Certificate.class);
             certificate.setId(fullList.size());
@@ -117,7 +109,7 @@ class CertificateServiceImplTests {
     }
 
     @Test
-    void getById_invalidId_throwException() throws NotFoundException {
+    void getById_invalidId_throwException() {
         assertThrows(NotFoundException.class, () -> service.getById(1000));
     }
 
@@ -150,36 +142,9 @@ class CertificateServiceImplTests {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(CertificateSearchParameters.NAME.name(), Collections.singletonList("1"));
-        params.put(CertificateSortingParameters.SORT_BY_NAME.name().toLowerCase(),
-                Collections.singletonList("2"));
-        assertEquals(shortList, service.findByParameters(params));
-        verify(certificateDaoMock, times(1)).findByParameters(any(CertificateFinder.class));
-    }
-
-    @Test
-    void findByParameters_parsePaginationLimit_invokeFinderLimit()
-            throws NotFoundException, BadRequestException {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
-        };
-        params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
-        service.findByParameters(params);
-
-        ArgumentCaptor<EntityFinder<Certificate>> captor = ArgumentCaptor.forClass(EntityFinder.class);
-        verify(certificateDaoMock, atLeast(1)).findByParameters(captor.capture());
-        assertEquals(1, captor.getValue().getLimit());
-    }
-
-    @Test
-    void findByParameters_parsePaginationLimit_invokeFinderOffset()
-            throws NotFoundException, BadRequestException {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
-        };
-        params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
-        service.findByParameters(params);
-
-        ArgumentCaptor<EntityFinder<Certificate>> captor = ArgumentCaptor.forClass(EntityFinder.class);
-        verify(certificateDaoMock, atLeast(1)).findByParameters(captor.capture());
-        assertEquals(1, captor.getValue().getPage());
+        assertEquals(shortList, service.findByParameters(params, Pageable.unpaged()));
+        verify(certificateDaoMock, times(1))
+                .findAll(any(BooleanExpression.class), any(Pageable.class));
     }
 
     @Test
@@ -234,5 +199,5 @@ class CertificateServiceImplTests {
         certificate.setId(10);
         certificate2.setDuration(certificate.getDuration());
         assertThrows(NotFoundException.class, () -> service.patch(certificate));
-    } */
+    }
 }

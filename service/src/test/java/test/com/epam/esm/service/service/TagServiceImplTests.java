@@ -20,15 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -48,9 +45,6 @@ import static org.mockito.Mockito.when;
 @Transactional
 class TagServiceImplTests {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     static Logger logger = LoggerFactory.getLogger(TagServiceImplTests.class);
 
     @MockBean
@@ -62,7 +56,7 @@ class TagServiceImplTests {
     @Autowired
     TagServiceImpl service;
 
-    private final Tag tag1 = new Tag("Tag1");
+    private final Tag tag1 = new Tag("books");
     private final Tag tag2 = new Tag("Tag2");
     private final Tag tag3 = new Tag("Tag3");
     private final Tag tag4 = new Tag("Tag4");
@@ -74,16 +68,12 @@ class TagServiceImplTests {
     
     @BeforeEach
     void init() {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
-        Root<Tag> tagRoot = query.from(Tag.class);
-        query = query.select(tagRoot);
-
         try {
             when(tagDaoMock.findAll()).thenReturn(fullList);
             when(tagDaoMock.findById(1)).thenReturn(Optional.of(tag1));
             when(tagDaoMock.findById(2)).thenReturn(Optional.of(tag2));
-            when(tagDaoMock.findAll(any(BooleanExpression.class))).thenReturn(shortList);
+            when(tagDaoMock.findAll(any(BooleanExpression.class), any(Pageable.class)))
+                    .thenReturn(new PageImpl<>(shortList));
             doNothing().when(tagDaoMock).delete(any(Tag.class));
             when(tagDaoMock.save(any(Tag.class))).thenAnswer(invocation -> {
                 Tag tag = invocation.getArgument(0, Tag.class);
@@ -92,7 +82,6 @@ class TagServiceImplTests {
             });
 
             doNothing().when(validator).validate(any(Tag.class));
-
             when(tagDaoMock.findMostPopularTag()).thenReturn(Optional.of(tag4));
 
         } catch (ValidationException e) {
@@ -112,13 +101,6 @@ class TagServiceImplTests {
     @Test
     void findAll_returnTags() throws NotFoundException {
         assertEquals(fullList, service.findAll());
-    }
-
-    @Test
-    void save_throwException() {
-        tag1.setId(0);
-        assertThrows(BadRequestException.class, () -> service.create(tag1));
-
     }
 
     @Test
@@ -150,8 +132,9 @@ class TagServiceImplTests {
         };
         params.put(TagSearchParameters.NAME.name(), Collections.singletonList("1"));
         params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), Collections.singletonList("2"));
-        assertEquals(shortList, service.findByParameters(params));
-        verify(tagDaoMock, atLeast(1)).findAll(any(BooleanExpression.class));
+        assertEquals(shortList, service.findByParameters(params, Pageable.unpaged()));
+        verify(tagDaoMock, atLeast(1))
+                .findAll(any(BooleanExpression.class), any(Pageable.class));
     }
 
     @Test
@@ -175,38 +158,14 @@ class TagServiceImplTests {
     void readMostlyUsedTag_returnTag() throws NotFoundException {
         assertEquals(service.findMostPopularTag(), tag4);
     }
-/*
-    @Test
-    void read_parsePaginationLimit_invokeFinderLimit() throws NotFoundException, BadRequestException {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
-        };
-        params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
-        service.findByParameters(params);
-
-        ArgumentCaptor<EntityFinder<Tag>> captor = ArgumentCaptor.forClass(EntityFinder.class);
-        verify(tagDaoMock, atLeast(1)).findByParameters(captor.capture());
-        assertEquals(1, captor.getValue().getLimit());
-    }
-
-    @Test
-    void read_parsePaginationLimit_invokeFinderOffset() throws NotFoundException, BadRequestException {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
-        };
-        params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
-        service.findByParameters(params);
-
-        ArgumentCaptor<EntityFinder<Tag>> captor = ArgumentCaptor.forClass(EntityFinder.class);
-        verify(tagDaoMock, atLeast(1)).findByParameters(captor.capture());
-        assertEquals(1, captor.getValue().getOffset());
-    }
 
     @Test
     void read_badParameter_ThrowsBadRequestException() {
-        TagFinder finder = new TagFinder(tagDaoMock);
-        finder.offset(1);
+        TagFinder finder = new TagFinder();
+
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put("unknown", Collections.singletonList("1"));
-        assertThrows(BadRequestException.class, () -> service.findByParameters(params));
-    }*/
+        assertThrows(BadRequestException.class, () -> service.findByParameters(params, Pageable.unpaged()));
+    }
 }

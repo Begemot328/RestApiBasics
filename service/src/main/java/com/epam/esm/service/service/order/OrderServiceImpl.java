@@ -4,7 +4,6 @@ import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.order.OrderDAO;
-import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.persistence.util.finder.impl.OrderFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.OrderSearchParameters;
@@ -18,6 +17,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -56,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order createOrder(int certificateId, int userId, int quantity)
-            throws ValidationException, BadRequestException, NotFoundException {
+            throws ValidationException, NotFoundException {
         User user = userService.getById(userId);
         Certificate certificate = certificateService.getById(certificateId);
         Order order = new Order(certificate, user,
@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order create(Order order) throws ValidationException, BadRequestException {
+    public Order create(Order order) {
         throw new UnsupportedOperationException("Create order using certificate and user ID's!");
     }
 
@@ -103,9 +103,9 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private List<Order> readBy(OrderFinder entityFinder) throws NotFoundException {
+    private List<Order> readBy(OrderFinder entityFinder, Pageable pageable) throws NotFoundException {
         List<Order> orders = dao.findAll(
-                entityFinder.getPredicate(), entityFinder.getPaginationAndSorting())
+                entityFinder.getPredicate(), pageable)
                 .getContent();
         if (CollectionUtils.isEmpty(orders)) {
             throw new NotFoundException("Requested resource not found!",
@@ -122,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findByParameters(MultiValueMap<String, String> params)
+    public List<Order> findByParameters(MultiValueMap<String, String> params, Pageable pageable)
             throws NotFoundException, BadRequestException {
         OrderFinder finder = getFinder();
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
@@ -133,14 +133,14 @@ public class OrderServiceImpl implements OrderService {
                 throw new BadRequestException(e, ErrorCodes.ORDER_BAD_REQUEST);
             }
         }
-        return readBy(finder);
+        return readBy(finder, pageable);
     }
 
     private void parseParameter(OrderFinder finder,
                                 String parameterName,
                                 List<String> parameterValues) {
-        if (PaginationParameters.contains(parameterName)) {
-            parsePaginationParameter(finder, parameterName, parameterValues);
+        if (parameterName.equals(SORT) || PaginationParameters.contains(parameterName)) {
+            return;
         } else {
             parseFindParameter(finder, parameterName, parameterValues);
         }
@@ -162,18 +162,6 @@ public class OrderServiceImpl implements OrderService {
     private void validateParameterValues(List<String> parameterValues) throws BadRequestException {
         if (CollectionUtils.isEmpty(parameterValues)) {
             throw new BadRequestException("Empty parameter!", ErrorCodes.USER_BAD_REQUEST);
-        }
-    }
-
-    private void parsePaginationParameter(EntityFinder finder, String parameterString, List<String> list) {
-        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterString);
-        switch (parameter) {
-            case LIMIT:
-                finder.limit(Integer.parseInt(list.get(0)));
-                break;
-            case PAGE:
-                finder.page(Integer.parseInt(list.get(0)));
-                break;
         }
     }
 }

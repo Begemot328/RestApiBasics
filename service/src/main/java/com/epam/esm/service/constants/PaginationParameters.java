@@ -10,7 +10,7 @@ import org.apache.commons.lang3.EnumUtils;
  * @version 1.0
  */
 public enum PaginationParameters {
-    LIMIT, PAGE;
+    OFFSET, PAGE, SIZE;
 
     /**
      * Obtain enum element by {@link String} name.

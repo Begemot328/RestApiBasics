@@ -32,6 +32,6 @@ public interface TagService extends EntityService<Tag> {
      */
     Optional<Tag> getByName(String name);
 
-    public void makeAllTagsDetached(List<Tag> tags)
+    void makeAllTagsDetached(List<Tag> tags)
             throws BadRequestException, ValidationException;
 }

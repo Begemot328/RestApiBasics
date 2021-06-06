@@ -7,6 +7,7 @@ import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.EntityService;
+import org.springframework.util.MultiValueMap;
 
 import javax.persistence.Entity;
 
@@ -26,5 +27,5 @@ public interface OrderService extends EntityService<Order> {
      * @param quantity {@link Certificate} quantity to order.
      */
     Order createOrder(int certificateId, int userId, int quantity)
-            throws ValidationException, BadRequestException, NotFoundException;
+            throws ValidationException, NotFoundException;
 }

@@ -26,10 +26,8 @@ import java.util.Optional;
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-    @Autowired
     private final JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
     private final UserService userService;
 
     @Autowired

@@ -2,10 +2,8 @@ package com.epam.esm.service.service.certificate;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.persistence.dao.certificate.CertificateDAO;
-import com.epam.esm.persistence.util.finder.SortDirection;
 import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
 import com.epam.esm.service.constants.CertificateSearchParameters;
-import com.epam.esm.service.constants.CertificateSortingParameters;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
@@ -19,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -109,9 +108,10 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
-    private List<Certificate> findByFinder(CertificateFinder entityFinder) throws NotFoundException {
+    private List<Certificate> findByFinder(CertificateFinder entityFinder, Pageable pageable)
+            throws NotFoundException {
         List<Certificate> certificates = dao.findAll(
-                entityFinder.getPredicate(), entityFinder.getPaginationAndSorting()).getContent();
+                entityFinder.getPredicate(), pageable).getContent();
         if (CollectionUtils.isEmpty(certificates)) {
             throw new NotFoundException("Requested certificate not found!",
                     ErrorCodes.CERTIFICATE_NOT_FOUND);
@@ -127,7 +127,7 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public List<Certificate> findByParameters(MultiValueMap<String, String> params)
+    public List<Certificate> findByParameters(MultiValueMap<String, String> params, Pageable pageable)
             throws BadRequestException, NotFoundException {
         CertificateFinder finder = getFinder();
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
@@ -138,7 +138,7 @@ public class CertificateServiceImpl implements CertificateService {
                 throw new BadRequestException(e, ErrorCodes.CERTIFICATE_BAD_REQUEST);
             }
         }
-        return findByFinder(finder);
+        return findByFinder(finder, pageable);
     }
 
     @Transactional
@@ -172,42 +172,11 @@ public class CertificateServiceImpl implements CertificateService {
     private void parseParameter(CertificateFinder finder,
                                 String parameterName,
                                 List<String> parameterValues) {
-        if (parameterName.contains("sort")) {
-            addSortingToFinder(finder, getSortingParameter(parameterName),
-                    getSortDirection(parameterValues));
-        } else if (PaginationParameters.contains(parameterName)) {
-            parsePaginationParameter(finder, parameterName, parameterValues);
+        if (parameterName.equals(SORT) || PaginationParameters.contains(parameterName)) {
+            return;
         } else {
             parseFindParameter(finder, parameterName, parameterValues);
         }
-    }
-
-    private void parsePaginationParameter(CertificateFinder finder,
-                                          String parameterName,
-                                          List<String> parameterValues) {
-        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterName);
-        switch (parameter) {
-            case LIMIT:
-                finder.limit(Integer.parseInt(parameterValues.get(0)));
-                break;
-            case PAGE:
-                finder.page(Integer.parseInt(parameterValues.get(0)));
-                break;
-        }
-    }
-
-    private void addSortingToFinder(CertificateFinder finder,
-                                    String sortingParameter,
-                                    SortDirection sortDirection) {
-        finder.sortBy(sortingParameter, sortDirection);
-    }
-
-    private String getSortingParameter(String parameterName) {
-        return CertificateSortingParameters.getEntryByParameter(parameterName).getValue();
-    }
-
-    private SortDirection getSortDirection(List<String> parameterValues) {
-        return SortDirection.parseAscDesc(parameterValues.get(0));
     }
 
     private void parseFindParameter(CertificateFinder finder,
@@ -258,7 +227,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     private Certificate findOldCertificate(int certificateId) throws NotFoundException {
         return dao.findById(certificateId).orElseThrow(
-                () -> new NotFoundException(String.format(notFoundErrorMessage, "id",
+                () -> new NotFoundException(String.format(NOT_FOUND_ERROR_MESSAGE, "id",
                         certificateId),
                         ErrorCodes.CERTIFICATE_NOT_FOUND));
     }

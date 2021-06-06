@@ -2,7 +2,6 @@ package com.epam.esm.persistence.util.finder.impl;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.QCertificate;
-import com.epam.esm.model.entity.QTag;
 import com.epam.esm.persistence.dao.certificate.CertificateDAO;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.context.annotation.Scope;

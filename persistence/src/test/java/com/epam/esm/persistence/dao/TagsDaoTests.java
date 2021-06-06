@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.dao;
 
+import com.epam.esm.model.entity.QTag;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.constants.TagColumns;
 import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import org.apache.commons.collections4.IterableUtils;
@@ -14,11 +14,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,9 +27,6 @@ import static org.mockito.Mockito.when;
 @Sql({"/SQL/test_db.sql"})
 class TagsDaoTests {
     private Tag tag;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Autowired
     private TagDAO tagsDao;
@@ -92,14 +84,8 @@ class TagsDaoTests {
 
     @Test
     void findByParameters_findByName_returnTags() {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
-        Root<Tag> tagRoot = query.from(Tag.class);
-        query = query.select(tagRoot);
-        query.where(builder.equal(tagRoot.get(TagColumns.NAME.getValue()), "books"));
-
         TagFinder finderMock = mock(TagFinder.class);
-       // when(finderMock.getQuery()).thenReturn(query);
+        when(finderMock.getPredicate()).thenReturn(QTag.tag.name.eq("books"));
 
         tag = new Tag("books");
         tag.setId(3);

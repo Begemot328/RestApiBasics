@@ -1,6 +1,5 @@
 package com.epam.esm.web.controller;
 
-import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
 import com.epam.esm.model.entity.User;
 import com.epam.esm.service.constants.ErrorCodes;
@@ -19,6 +18,7 @@ import com.epam.esm.web.dto.user.UserDTO;
 import com.epam.esm.web.dto.user.UserDTOMapper;
 import com.epam.esm.web.security.roles.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,7 +42,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/users")
-public class UserController implements PaginableSearch {
+public class UserController implements PageableSearch {
     private final OrderService orderService;
     private final UserService userService;
     private final CertificateService certificateService;
@@ -64,14 +64,14 @@ public class UserController implements PaginableSearch {
 
     @Secured(Roles.ADMIN)
     @GetMapping
-    public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params)
+    public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params, Pageable pageable)
             throws NotFoundException, BadRequestException {
-        List<User> users = userService.findByParameters(params);
+        List<User> users = userService.findByParameters(params, pageable);
         CollectionModel<UserDTO> userDTOs = userDTOMapper.toUserDTOList(
                 users);
-        userDTOs.add(linkTo(methodOn(this.getClass()).find(params)).withRel("users"));
+        userDTOs.add(linkTo(methodOn(this.getClass()).find(params, pageable)).withRel("users"));
 
-        paginate(params, userDTOs);
+        paginate(params, userDTOs, pageable);
 
         return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
@@ -86,23 +86,24 @@ public class UserController implements PaginableSearch {
 
     @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') and hasPermission(#id,'user_permission')")
     @GetMapping(value = "/{id}/orders")
-    public ResponseEntity<?> readUsersOrders(@PathVariable(value = "id") int id,
-                                             @RequestParam MultiValueMap<String, String> params)
+    public ResponseEntity<?> findUsersOrders(@PathVariable(value = "id") int id,
+                                             @RequestParam MultiValueMap<String, String> params,
+                                             Pageable pageable)
             throws NotFoundException, BadRequestException {
         params.put(OrderSearchParameters.USER_ID.getParameterName(),
                 Collections.singletonList(Integer.toString(id)));
-        List<Order> orders = orderService.findByParameters(params);
+        List<Order> orders = orderService.findByParameters(params, pageable);
         CollectionModel<OrderDTO> orderDTOs = orderDTOMapper.toOrderDTOList(orders);
-        orderDTOs.add(linkTo(methodOn(this.getClass()).readUsersOrders(id, params)).withRel("tags"));
+        orderDTOs.add(linkTo(methodOn(this.getClass()).findUsersOrders(id, params, pageable)).withRel("tags"));
 
-        paginate(params, orderDTOs);
+        paginate(params, orderDTOs, pageable);
 
         return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
     }
 
     @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') and hasPermission(#id,'user_permission')")
     @GetMapping(value = "/{id}/orders/{order_id}")
-    public ResponseEntity<?> readOrder(@PathVariable(value = "id") int id,
+    public ResponseEntity<?> findOrder(@PathVariable(value = "id") int id,
                                        @PathVariable(value = "order_id") int orderId,
                                        @RequestParam MultiValueMap<String, String> params)
             throws NotFoundException, BadRequestException {
@@ -110,11 +111,7 @@ public class UserController implements PaginableSearch {
                 Collections.singletonList(Integer.toString(id)));
         params.put(OrderSearchParameters.ORDER_ID.getParameterName(),
                 Collections.singletonList(Integer.toString(orderId)));
-        OrderDTO order = orderDTOMapper.toOrderDTO(
-                Optional.ofNullable(orderService.findByParameters(params).get(0)).orElseThrow(
-                        () -> new NotFoundException(
-                                String.format(userService.notFoundErrorMessage, "id", id),
-                                ErrorCodes.USER_NOT_FOUND)));
+        OrderDTO order = orderDTOMapper.toOrderDTO(orderService.findByParameters(params, Pageable.unpaged()).get(0));
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 

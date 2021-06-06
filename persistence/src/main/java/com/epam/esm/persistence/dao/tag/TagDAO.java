@@ -14,8 +14,7 @@ import java.util.Optional;
  * @version 1.0
  */
 @Repository
-public interface TagDAO extends /*CrudRepository<Tag, Integer>,*/
-        EntityRepository<Tag, QTag, Integer>,
+public interface TagDAO extends EntityRepository<Tag, QTag, Integer>,
         TagDAOCustom {
 
     Optional<Tag> getByName(String name);

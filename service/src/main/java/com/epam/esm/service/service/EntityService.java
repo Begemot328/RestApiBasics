@@ -3,18 +3,16 @@ package com.epam.esm.service.service;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.CustomEntity;
 import com.epam.esm.persistence.util.finder.EntityFinder;
-import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.querydsl.core.types.dsl.EntityPathBase;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.MultiValueMap;
 
 import javax.persistence.Entity;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * {@link CustomEntity} service interface.
@@ -23,7 +21,7 @@ import java.util.Optional;
  * @version 1.0
  */
 public interface EntityService<T extends CustomEntity> {
-    String notFoundErrorMessage = "Requested entity not found(%s = %s)!";
+    String SORT = "sort";
 
     /**
      * Create {@link CustomEntity} and add it to database method.
@@ -71,7 +69,7 @@ public interface EntityService<T extends CustomEntity> {
      *
      * @param params finding and sorting parameters.
      */
-    List<T> findByParameters(MultiValueMap<String, String> params) throws BadRequestException, NotFoundException;
+    List<T> findByParameters(MultiValueMap<String, String> params, Pageable pageable) throws BadRequestException, NotFoundException;
 
     /**
      * Decode request parameters using UTF-8.
@@ -81,13 +79,5 @@ public interface EntityService<T extends CustomEntity> {
      */
     default String decodeParam(String param) {
         return URLDecoder.decode(param, StandardCharsets.UTF_8);
-    }
-
-    default T validateEntity(Optional<T> entityOptional, String parameterName,
-                             String parameterValue, int errorCode)
-            throws NotFoundException {
-        return entityOptional.orElseThrow(
-                () -> new NotFoundException(String.format(
-                        notFoundErrorMessage, parameterName, parameterValue), errorCode));
     }
 }
