@@ -19,8 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 
 
 @Component
@@ -48,23 +46,23 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         final String token = header.split(" ")[1].trim();
-            if (!jwtTokenUtil.validate(token)) {
-                chain.doFilter(request, response);
-            }
 
-            UserDetails userDetails = userService.getByLogin(jwtTokenUtil.getUsername(token))
-                    .map(Account::new)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
-
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null,
-                    Optional.ofNullable(userDetails).map(UserDetails::getAuthorities).orElse(List.of())
-            );
-
-            authentication
-                    .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (!jwtTokenUtil.validate(token)) {
             chain.doFilter(request, response);
+        }
+
+        UserDetails userDetails = userService.getByLogin(jwtTokenUtil.getUsername(token))
+                .map(Account::new)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+
+        authentication
+                .setDetails(new WebAuthenticationDetailsSource()
+                        .buildDetails(request));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        chain.doFilter(request, response);
     }
 }

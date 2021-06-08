@@ -5,7 +5,6 @@ import com.epam.esm.persistence.dao.tag.TagDAO;
 import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.TagSearchParameters;
-import com.epam.esm.service.constants.TagSortingParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
@@ -99,11 +98,6 @@ class TagServiceImplTests {
     }
 
     @Test
-    void findAll_returnTags() throws NotFoundException {
-        assertEquals(fullList, service.findAll());
-    }
-
-    @Test
     void save_createTag() throws ValidationException, BadRequestException {
         tag1.setId(0);
         when(tagDaoMock.findAll(any(BooleanExpression.class))).thenReturn(Collections.EMPTY_LIST);
@@ -127,11 +121,10 @@ class TagServiceImplTests {
     }
 
     @Test
-    void read_readByName_returnTags() throws BadRequestException, NotFoundException {
+    void findByParameters_findByName_returnTags() throws BadRequestException, NotFoundException {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put(TagSearchParameters.NAME.name(), Collections.singletonList("1"));
-        params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), Collections.singletonList("2"));
         assertEquals(shortList, service.findByParameters(params, Pageable.unpaged()));
         verify(tagDaoMock, atLeast(1))
                 .findAll(any(BooleanExpression.class), any(Pageable.class));
@@ -155,12 +148,12 @@ class TagServiceImplTests {
     }
 
     @Test
-    void readMostlyUsedTag_returnTag() throws NotFoundException {
+    void findMostPopularTag_returnTag() throws NotFoundException {
         assertEquals(service.findMostPopularTag(), tag4);
     }
 
     @Test
-    void read_badParameter_ThrowsBadRequestException() {
+    void findByParameters_badParameter_ThrowsBadRequestException() {
         TagFinder finder = new TagFinder();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {

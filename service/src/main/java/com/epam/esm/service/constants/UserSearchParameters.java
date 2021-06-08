@@ -3,7 +3,7 @@ package com.epam.esm.service.constants;
 import com.epam.esm.service.util.ConfigUtils;
 
 /**
- * Search parameters to search users
+ * Search parameters to search users.
  *
  * @author Yury Zmushko
  * @version 1.0
@@ -12,13 +12,13 @@ public enum UserSearchParameters {
     FIRST_NAME, LAST_NAME, LOGIN;
 
     /**
-     * Obtain enum element by {@link String} name
+     * Obtain corresponding enum element by {@link String} name.
      *
-     * @param parameter parameter to find search parameter by
-     * @return {@link CertificateSearchParameters} enum element
+     * @param parameterName Parameter to find search parameter by.
+     * @return {@link CertificateSearchParameters} enum element.
      */
-    public static UserSearchParameters getEntryByParameter(String parameter) {
-        return valueOf(ConfigUtils.convertToEnumName(parameter));
+    public static UserSearchParameters getEntryByParameter(String parameterName) {
+        return valueOf(ConfigUtils.convertToEnumName(parameterName));
     }
 
     /**

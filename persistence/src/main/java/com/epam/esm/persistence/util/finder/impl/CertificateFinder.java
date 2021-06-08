@@ -33,7 +33,7 @@ public class CertificateFinder extends EntityFinder<Certificate> {
      * @param name String that found names will include.
      */
     public void findByNameLike(String name) {
-        add(QCertificate.certificate.name.like("%" + name + "%"));
+        add(QCertificate.certificate.name.containsIgnoreCase(name));
     }
 
     /**
@@ -42,7 +42,7 @@ public class CertificateFinder extends EntityFinder<Certificate> {
      * @param description String that found descriptions will include.
      */
     public void findByDescriptionLike(String description) {
-        add(QCertificate.certificate.tags.any().tag.name.like("%" + description + "%"));
+        add(QCertificate.certificate.description.containsIgnoreCase(description));
      }
 
     /**
@@ -50,7 +50,7 @@ public class CertificateFinder extends EntityFinder<Certificate> {
      *
      * @param name String that found tag names will include.
      */
-    public void findByTag(String name) {
+    public void findByTagName(String name) {
 
         add(QCertificate.certificate.tags.any().name.eq(name));
     }
@@ -82,7 +82,7 @@ public class CertificateFinder extends EntityFinder<Certificate> {
      */
     public void findByTags(String[] tags) {
         for (String tag : tags) {
-            findByTag(tag);
+            findByTagName(tag);
         }
     }
 }

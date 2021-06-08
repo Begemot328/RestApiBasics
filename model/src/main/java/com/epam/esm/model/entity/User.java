@@ -187,7 +187,7 @@ public class User extends CustomEntity {
     }
 
     /**
-     * Hach code calculator.
+     * Hash code calculator.
      *
      * @return Hash code value.
      */

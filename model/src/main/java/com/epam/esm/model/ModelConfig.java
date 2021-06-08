@@ -5,7 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Spring config for entity module.
+ * Spring config for model module.
  *
  * @author Yury Zmushko
  * @version 2.0

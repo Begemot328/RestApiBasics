@@ -21,7 +21,7 @@ public class CustomEntity {
     /**
      * Id getter
      *
-     * @return id of the entity
+     * @return ID of the entity.
      */
     public int getId() {
         return id;
@@ -30,7 +30,7 @@ public class CustomEntity {
     /**
      * Id setter
      *
-     * @param id id - of the entity
+     * @param id ID of the entity.
      */
     public void setId(int id) {
         this.id = id;

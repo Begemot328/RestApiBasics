@@ -3,22 +3,22 @@ package com.epam.esm.service.constants;
 import com.epam.esm.service.util.ConfigUtils;
 
 /**
- * Search parameters to search tags
+ * Search parameters to search orders.
  *
  * @author Yury Zmushko
  * @version 1.0
  */
 public enum OrderSearchParameters {
-    USER_ID, ORDER_ID;
+    USER_ID, ORDER_ID, CERTIFICATE_ID;
 
     /**
-     * Obtain enum element by {@link String} name
+     * Obtain corresponding enum element by {@link String} name.
      *
-     * @param parameter parameter to find search parameter by
-     * @return {@link CertificateSearchParameters} enum element
+     * @param parameterName Parameter to find search parameter by.
+     * @return {@link CertificateSearchParameters} enum element.
      */
-    public static OrderSearchParameters getEntryByParameter(String parameter) {
-        return valueOf(ConfigUtils.convertToEnumName(parameter));
+    public static OrderSearchParameters getEntryByParameter(String parameterName) {
+        return valueOf(ConfigUtils.convertToEnumName(parameterName));
     }
 
     /**

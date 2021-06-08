@@ -24,22 +24,47 @@ public class Role extends CustomEntity {
         // Default constructor for JPA purposes.
     }
 
+    /**
+     * Name getter.
+     *
+     * @return Name of the role.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Name setter.
+     *
+     * @param name Name of the role.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Description getter.
+     *
+     * @return Description of the role.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Description setter.
+     *
+     * @param description Description of the role.
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Equality check.
+     *
+     * @param o Object to check equality.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,11 +74,21 @@ public class Role extends CustomEntity {
                 && Objects.equals(description, role.description);
     }
 
+    /**
+     * Hash code calculator.
+     *
+     * @return Hash code value.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, name, description);
     }
 
+    /**
+     * String value generator.
+     *
+     * @return {@link String} interpretation of object.
+     */
     @Override
     public String toString() {
         return "Role{" +

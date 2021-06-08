@@ -14,5 +14,11 @@ import java.util.Optional;
  */
 public interface UserDAO extends EntityRepository<User, QUser, Integer> {
 
-    Optional<User> getByLogin(String name);
+    /**
+     * Find {@link User} object by login.
+     *
+     * @return {@link User} object concluded in {@link Optional}.
+     * @param login Name to find by.
+     */
+    Optional<User> getByLogin(String login);
 }

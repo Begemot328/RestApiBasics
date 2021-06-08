@@ -23,7 +23,6 @@ public class CertificateDTO extends RepresentationModel<CertificateDTO> {
     private int duration;
     private List<TagDTO> tags = new ArrayList<>();
 
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

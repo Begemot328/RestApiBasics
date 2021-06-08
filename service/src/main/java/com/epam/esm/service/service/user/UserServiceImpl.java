@@ -4,15 +4,13 @@ import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.user.UserDAO;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.ErrorCodes;
-import com.epam.esm.service.constants.PaginationParameters;
+import com.epam.esm.service.constants.PageableParameters;
 import com.epam.esm.service.constants.UserSearchParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.IterableUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,7 +22,6 @@ import org.springframework.util.MultiValueMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * {@link User} service implementation.
@@ -82,16 +79,6 @@ public class UserServiceImpl implements UserService {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public List<User> findAll() throws NotFoundException {
-        List<User> users = IterableUtils.toList(dao.findAll());
-        if (CollectionUtils.isEmpty(users)) {
-            throw new NotFoundException("No users found!",
-                    ErrorCodes.USER_NOT_FOUND);
-        }
-        return users;
-    }
-
     @Lookup
     @Override
     public UserFinder getFinder() {
@@ -105,7 +92,9 @@ public class UserServiceImpl implements UserService {
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
             try {
                 validateParameterValues(entry.getValue());
-                parseParameter(finder, entry.getKey(), entry.getValue());
+                if (!PageableParameters.contains(entry.getKey())) {
+                    parseFindParameter(finder, entry.getKey(), entry.getValue());
+                }
             } catch (IllegalArgumentException e) {
                 throw new BadRequestException(e, ErrorCodes.USER_BAD_REQUEST);
             }
@@ -113,33 +102,19 @@ public class UserServiceImpl implements UserService {
         return findByFinder(finder, pageable);
     }
 
-    private void parseParameter(UserFinder finder, String parameterName, List<String> parameterValues) {
-        if (parameterName.equals(SORT) || PaginationParameters.contains(parameterName)) {
-            return;
-        } else {
-            parseFindParameter (finder, parameterName, parameterValues);
-        }
-    }
-
     private void parseFindParameter(UserFinder finder, String parameterString, List<String> parameterValues) {
         UserSearchParameters parameter =
                 UserSearchParameters.getEntryByParameter(parameterString);
         switch (parameter) {
             case LOGIN:
-                addToFinder(finder::findByLogin, parameterValues);
+                finder.findByLogin(parameterValues.get(0));
                 break;
             case FIRST_NAME:
-                addToFinder(finder::findByFirstName, parameterValues);
+                finder.findByFirstName(decodeParam(parameterValues.get(0)));
                 break;
             case LAST_NAME:
-                addToFinder(finder::findByLastName, parameterValues);
+                finder.findByLastName(decodeParam(parameterValues.get(0)));
                 break;
-        }
-    }
-
-    private void addToFinder(Consumer<String> consumer, List<String> parameterValues) {
-        if (CollectionUtils.isNotEmpty(parameterValues)) {
-            addToFinder(consumer, parameterValues.get(0));
         }
     }
 
@@ -163,11 +138,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getByLogin(String login) {
         return dao.getByLogin(login);
-    }
-
-    private void addToFinder(Consumer<String> consumer, String value) {
-        if (StringUtils.isNotEmpty(value)) {
-            consumer.accept(decodeParam(value));
-        }
     }
 }

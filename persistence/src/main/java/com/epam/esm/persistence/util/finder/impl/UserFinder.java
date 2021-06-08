@@ -31,7 +31,7 @@ public class UserFinder extends EntityFinder<User> {
      * @param name String that found firstname must include.
      */
     public void findByFirstName(String name) {
-        add(QUser.user.firstName.like("%" + name + "%"));
+        add(QUser.user.firstName.contains(name));
     }
 
     /**
@@ -40,7 +40,7 @@ public class UserFinder extends EntityFinder<User> {
      * @param name String that found lastname must include.
      */
     public void findByLastName(String name) {
-        add(QUser.user.lastName.like("%" + name + "%"));
+        add(QUser.user.lastName.containsIgnoreCase(name));
     }
 
     /**
@@ -49,6 +49,6 @@ public class UserFinder extends EntityFinder<User> {
      * @param login String that found login must include.
      */
     public void findByLogin(String login) {
-        add(QUser.user.login.like("%" + login + "%"));
+        add(QUser.user.login.like(login));
     }
 }

@@ -12,7 +12,6 @@ public class ConfigUtils {
     private static final  String UNDERSCORE = "_";
     private static final  String DASH = "-";
 
-
     private ConfigUtils() {
         // Private constructor to avoid creation.
     }
@@ -36,5 +35,4 @@ public class ConfigUtils {
     public static String convertToRequestParameter(String parameter) {
         return parameter.toLowerCase().replace(UNDERSCORE, DASH);
     }
-
 }

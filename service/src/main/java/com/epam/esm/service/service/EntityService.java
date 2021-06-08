@@ -21,7 +21,6 @@ import java.util.List;
  * @version 1.0
  */
 public interface EntityService<T extends CustomEntity> {
-    String SORT = "sort";
 
     /**
      * Create {@link CustomEntity} and add it to database method.
@@ -54,15 +53,6 @@ public interface EntityService<T extends CustomEntity> {
      * @return Updated {@link Certificate}.
      */
     T update(T t) throws ValidationException, BadRequestException, NotFoundException;
-
-    /**
-     * Find all  {@link CustomEntity} objects in database method.
-     *
-     * @return list of founded {@link CustomEntity} objects.
-     * @throws NotFoundException in case of malfunctioning, e.g..
-     *
-     */
-    List<T> findAll() throws NotFoundException;
 
     /**
      * Find {@link Entity} objects by parameters method.

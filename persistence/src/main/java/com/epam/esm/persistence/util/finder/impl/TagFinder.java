@@ -32,7 +32,7 @@ public class TagFinder extends EntityFinder<Tag> {
      * @param name String that found names will include.
      */
     public void findByNameLike(String name) {
-        add(QTag.tag.name.like("%" + name + "%"));
+        add(QTag.tag.name.containsIgnoreCase(name));
     }
 
     /**

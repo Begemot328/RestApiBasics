@@ -120,15 +120,8 @@ class OrderServiceImplTests {
     }
 
     @Test
-    void readAll_returnOrders() throws NotFoundException {
-        assertEquals(fullList, service.findAll());
-    }
-
-    @Test
     void create_createOrder() throws ValidationException, BadRequestException {
-        Order order = service.create(order1);
-        assertEquals(order.getId(), fullList.size());
-        verify(orderDaoMock, atLeast(1)).save(order1);
+        assertThrows(UnsupportedOperationException.class, () -> service.create(order1));
     }
 
     @Test

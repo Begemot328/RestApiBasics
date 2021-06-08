@@ -9,7 +9,7 @@ import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.service.certificate.CertificateServiceImpl;
+import com.epam.esm.service.service.certificate.CertificateService;
 import com.epam.esm.service.validator.EntityValidator;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,7 +71,7 @@ class CertificateServiceImplTests {
     EntityValidator<Certificate> validator;
 
     @Autowired
-    CertificateServiceImpl service;
+    CertificateService service;
 
     @BeforeEach
     void init() throws ValidationException {
@@ -111,11 +111,6 @@ class CertificateServiceImplTests {
     @Test
     void getById_invalidId_throwException() {
         assertThrows(NotFoundException.class, () -> service.getById(1000));
-    }
-
-    @Test
-    void findAll_returnCertificates() throws NotFoundException {
-        assertEquals(fullList, service.findAll());
     }
 
     @Test

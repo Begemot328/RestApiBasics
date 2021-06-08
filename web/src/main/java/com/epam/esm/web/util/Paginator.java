@@ -1,12 +1,15 @@
 package com.epam.esm.web.util;
 
-import com.epam.esm.service.constants.PaginationParameters;
+import com.epam.esm.service.constants.PageableParameters;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 /**
@@ -16,13 +19,15 @@ import java.util.Collections;
  * @version 1.0
  */
 @Component
+@Scope("prototype")
+@PropertySource("classpath:application.properties")
 public class Paginator {
 
-    @Value("spring.data.web.pageable.one-indexed-parameters")
-    private String isStartedFromOne;
+    @Value("${spring.data.web.pageable.one-indexed-parameters}")
+    private boolean isStartedFromOne;
+    private int addition = 0;
 
-    Pageable pageable;
-    private final int addition = 1;
+    private Pageable pageable;
 
     /**
      * Constructor.
@@ -49,7 +54,7 @@ public class Paginator {
     public MultiValueMap<String, String> nextPageParams(MultiValueMap<String, String> params) {
         MultiValueMap<String, String> resultParams = new LinkedMultiValueMap<>();
         resultParams.addAll(params);
-        resultParams.put(PaginationParameters.PAGE.getParameterName(),
+        resultParams.put(PageableParameters.PAGE.getParameterName(),
                 Collections.singletonList(Integer.toString(
                         pageable.next().getPageNumber() + addition)));
         return resultParams;
@@ -64,9 +69,16 @@ public class Paginator {
     public MultiValueMap<String, String> previousPageParams(MultiValueMap<String, String> params) {
         MultiValueMap<String, String> resultParams = new LinkedMultiValueMap<>();
         resultParams.addAll(params);
-        resultParams.put(PaginationParameters.PAGE.getParameterName(),
+        resultParams.put(PageableParameters.PAGE.getParameterName(),
                 Collections.singletonList(Integer.toString(
                         pageable.previousOrFirst().getPageNumber() + addition)));
         return resultParams;
+    }
+
+    @PostConstruct
+    private void calculateAddition() {
+        if (isStartedFromOne) {
+            addition = 1;
+        }
     }
 }

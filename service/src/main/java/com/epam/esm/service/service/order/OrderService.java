@@ -3,11 +3,9 @@ package com.epam.esm.service.service.order;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
 import com.epam.esm.model.entity.User;
-import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.EntityService;
-import org.springframework.util.MultiValueMap;
 
 import javax.persistence.Entity;
 

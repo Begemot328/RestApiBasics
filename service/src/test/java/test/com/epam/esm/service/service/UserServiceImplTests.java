@@ -7,7 +7,7 @@ import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.service.user.UserServiceImpl;
+import com.epam.esm.service.service.user.UserService;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ class UserServiceImplTests {
     @MockBean
     UserDAO userDaoMock;
     @Autowired
-    UserServiceImpl service;
+    UserService service;
     private User user1;
     private User user2;
     private User user3;
@@ -79,11 +79,6 @@ class UserServiceImplTests {
     }
 
     @Test
-    void readAll_returnUsers() throws NotFoundException {
-        assertEquals(fullList, service.findAll());
-    }
-
-    @Test
     void create_createUser() throws BadRequestException, ValidationException {
         when(userDaoMock.findAll(any(BooleanExpression.class), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(Collections.EMPTY_LIST));
@@ -102,7 +97,7 @@ class UserServiceImplTests {
     }
 
     @Test
-    void read_badParameter_ThrowsBadRequestException() {
+    void findByParameters_badParameter_ThrowsBadRequestException() {
         UserFinder finder = new UserFinder();
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
@@ -111,7 +106,7 @@ class UserServiceImplTests {
     }
 
     @Test
-    void read_badParameterValue_ThrowsBadRequestException() {
+    void findByParameters_badParameterValue_ThrowsBadRequestException() {
         UserFinder finder = new UserFinder();
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };

@@ -38,7 +38,8 @@ public class UserDTOMapper {
     public UserDTO toUserDTO(User user) {
         UserDTO userDTO = mapper.map(user, UserDTO.class);
         try {
-            Link link = linkTo(methodOn(UserController.class).get(user.getId())).withSelfRel();
+            Link link = linkTo(methodOn(UserController.class).get(user.getId()))
+                    .withSelfRel();
             userDTO.add(link);
         } catch (NotFoundException e) {
             throw new DTOException(e);

@@ -7,14 +7,13 @@ import com.epam.esm.persistence.dao.order.OrderDAO;
 import com.epam.esm.persistence.util.finder.impl.OrderFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.OrderSearchParameters;
-import com.epam.esm.service.constants.PaginationParameters;
+import com.epam.esm.service.constants.PageableParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.EntityService;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.data.domain.Pageable;
@@ -92,17 +91,6 @@ public class OrderServiceImpl implements OrderService {
         throw new UnsupportedOperationException("Update operation for order is unavailable");
     }
 
-    @Override
-    public List<Order> findAll() throws NotFoundException {
-        List<Order> orders = IterableUtils.toList(dao.findAll());
-        if (CollectionUtils.isEmpty(orders)) {
-            throw new NotFoundException("No orders found!",
-                    ErrorCodes.ORDER_NOT_FOUND);
-        } else {
-            return orders;
-        }
-    }
-
     private List<Order> readBy(OrderFinder entityFinder, Pageable pageable) throws NotFoundException {
         List<Order> orders = dao.findAll(
                 entityFinder.getPredicate(), pageable)
@@ -128,7 +116,9 @@ public class OrderServiceImpl implements OrderService {
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
             try {
                 validateParameterValues(entry.getValue());
-                parseParameter(finder, entry.getKey(), entry.getValue());
+                if (!PageableParameters.contains(entry.getKey())) {
+                    parseFindParameter(finder, entry.getKey(), entry.getValue());
+                }
             } catch (IllegalArgumentException e) {
                 throw new BadRequestException(e, ErrorCodes.ORDER_BAD_REQUEST);
             }
@@ -136,25 +126,18 @@ public class OrderServiceImpl implements OrderService {
         return readBy(finder, pageable);
     }
 
-    private void parseParameter(OrderFinder finder,
-                                String parameterName,
-                                List<String> parameterValues) {
-        if (parameterName.equals(SORT) || PaginationParameters.contains(parameterName)) {
-            return;
-        } else {
-            parseFindParameter(finder, parameterName, parameterValues);
-        }
-    }
-
-    private void parseFindParameter(OrderFinder finder, String parameterName, List<String> list) {
+    private void parseFindParameter(OrderFinder finder, String parameterName, List<String> parameterValues) {
         OrderSearchParameters parameter =
                 OrderSearchParameters.getEntryByParameter(parameterName);
         switch (parameter) {
             case ORDER_ID:
-                finder.findById(Integer.parseInt(list.get(0)));
+                finder.findById(Integer.parseInt(parameterValues.get(0)));
                 break;
             case USER_ID:
-                finder.findByUser(Integer.parseInt(list.get(0)));
+                finder.findByUser(Integer.parseInt(parameterValues.get(0)));
+                break;
+            case CERTIFICATE_ID:
+                finder.findByCertificate(Integer.parseInt(parameterValues.get(0)));
                 break;
         }
     }

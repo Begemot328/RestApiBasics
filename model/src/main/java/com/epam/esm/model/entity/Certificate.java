@@ -35,7 +35,6 @@ public class Certificate extends CustomEntity {
     @Column(nullable = false)
     private int duration;
 
-
     @Column(name = "create_date", nullable = false)
     private LocalDateTime createDate;
 
@@ -81,7 +80,7 @@ public class Certificate extends CustomEntity {
     /**
      * Name setter.
      *
-     * @param name Name of the certificate
+     * @param name Name of the certificate.
      */
     public void setName(String name) {
         this.name = name;
@@ -215,7 +214,7 @@ public class Certificate extends CustomEntity {
     }
 
     /**
-     * Hach code calculator.
+     * Hash code calculator.
      *
      * @return Hash code value.
      */

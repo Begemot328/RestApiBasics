@@ -9,16 +9,16 @@ import org.apache.commons.lang3.EnumUtils;
  * @author Yury Zmushko
  * @version 1.0
  */
-public enum PaginationParameters {
-    OFFSET, PAGE, SIZE;
+public enum PageableParameters {
+    PAGE, SIZE, SORT;
 
     /**
      * Obtain enum element by {@link String} name.
      *
      * @param parameter Parameter to find search parameter by.
-     * @return {@link PaginationParameters} Corresponding enum element.
+     * @return {@link PageableParameters} Corresponding enum element.
      */
-    public static PaginationParameters getEntryByParameter(String parameter) {
+    public static PageableParameters getEntryByParameter(String parameter) {
         return valueOf(ConfigUtils.convertToEnumName(parameter));
     }
 
@@ -26,10 +26,10 @@ public enum PaginationParameters {
      * Checks if enum contains element with name similar to parameter.
      *
      * @param parameter Parameter to find search parameter by.
-     * @return {@link PaginationParameters} Corresponding enum element.
+     * @return {@link PageableParameters} Corresponding enum element.
      */
     public static boolean contains(String parameter) {
-        return EnumUtils.isValidEnum(PaginationParameters.class, ConfigUtils.convertToEnumName(parameter));
+        return EnumUtils.isValidEnum(PageableParameters.class, ConfigUtils.convertToEnumName(parameter));
     }
 
     /**

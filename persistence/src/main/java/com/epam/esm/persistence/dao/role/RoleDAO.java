@@ -11,5 +11,12 @@ import com.epam.esm.persistence.dao.EntityRepository;
  * @version 1.0
  */
 public interface RoleDAO extends EntityRepository<Role, QRole, Integer> {
+
+    /**
+     * Find {@link Role} object by name.
+     *
+     * @return {@link Role} object.
+     * @param name Name to find by.
+     */
     Role getByName(String name);
 }
