@@ -161,8 +161,3 @@ create table user_role
     foreign key (user_id) references user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     foreign key (role_id) references role (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-insert
-    role(id, name, description) VALUES (2,'USER', 'Regular user');
-insert
-    role(id, name, description) VALUES (1,'ADMIN', 'Super admin');
