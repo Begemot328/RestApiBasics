@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Search criteria class to find {@link User} objects.
- * via {@link com.epam.esm.persistence.dao.user.UserDAO} data sources.
+ * via {@link com.epam.esm.persistence.dao.UserDAO} data sources.
  *
  * @author Yury Zmushko
  * @version 2.0

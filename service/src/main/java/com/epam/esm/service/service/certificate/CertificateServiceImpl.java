@@ -1,7 +1,7 @@
 package com.epam.esm.service.service.certificate;
 
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.persistence.dao.certificate.CertificateDAO;
+import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
 import com.epam.esm.service.constants.CertificateSearchParameters;
 import com.epam.esm.service.constants.ErrorCodes;

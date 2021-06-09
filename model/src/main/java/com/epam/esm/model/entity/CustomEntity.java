@@ -1,5 +1,8 @@
 package com.epam.esm.model.entity;
 
+import com.epam.esm.persistence.audit.AuditableListener;
+
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,7 +15,8 @@ import javax.persistence.MappedSuperclass;
  * @version 2.0
  */
 @MappedSuperclass
-public class CustomEntity {
+@EntityListeners(AuditableListener.class)
+public abstract class CustomEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

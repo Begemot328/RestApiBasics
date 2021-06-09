@@ -2,6 +2,8 @@ package com.epam.esm.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,6 +19,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "orders")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Order extends CustomEntity {
 
     @ManyToOne

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Search criteria class to find {@link Tag} objects.
- * via {@link com.epam.esm.persistence.dao.tag.TagDAO} data sources.
+ * via {@link com.epam.esm.persistence.dao.TagDAO} data sources.
  *
  * @author Yury Zmushko
  * @version 2.0

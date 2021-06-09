@@ -3,7 +3,7 @@ package com.epam.esm.service.service.order;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Order;
 import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.dao.order.OrderDAO;
+import com.epam.esm.persistence.dao.OrderDAO;
 import com.epam.esm.persistence.util.finder.impl.OrderFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.OrderSearchParameters;

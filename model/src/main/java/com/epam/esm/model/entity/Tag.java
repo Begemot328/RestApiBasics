@@ -3,6 +3,8 @@ package com.epam.esm.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 /**
  * Tag entity class.
@@ -11,6 +13,7 @@ import javax.persistence.Entity;
  * @version 2.0
  */
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Tag extends CustomEntity {
 
     @Column(nullable = false, unique = true)

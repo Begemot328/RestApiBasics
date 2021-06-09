@@ -249,3 +249,26 @@ insert
 orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (1, 2, '2021-03-22 09:20:11', 10, 2);
 insert
 orders(user_id, certificate_id, purchase_date, amount, quantity) VALUES (4, 5, '2021-04-22 19:21:21', 11, 1);
+
+create table audit
+(
+    id          int auto_increment
+        primary key,
+    user_id     int         not null,
+    entity_id   int         not null,
+    entity_name varchar(20) not null,
+    operation   varchar(20) not null,
+    date        timestamp   not null,
+    constraint audit_ibfk_1
+        foreign key (user_id) references user (id)
+            on update cascade on delete cascade,
+    constraint audit_ibfk_2
+        foreign key (user_id) references account (id)
+            on update cascade on delete cascade
+);
+
+create index audit_entity_id
+    on audit (entity_id);
+
+create index audit_user_id
+    on audit (user_id);

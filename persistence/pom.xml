@@ -18,10 +18,24 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
+            <groupId>com.epam.esm</groupId>
+            <artifactId>web</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.epam.esm</groupId>
+                    <artifactId>service</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.esm</groupId>
             <artifactId>model</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

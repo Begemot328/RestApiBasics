@@ -1,7 +1,7 @@
 package com.epam.esm.web.security.service;
 
 import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.dao.role.RoleDAO;
+import com.epam.esm.persistence.dao.RoleDAO;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.user.UserService;

@@ -11,11 +11,19 @@
     <modelVersion>4.0.0</modelVersion>
     <version>1.0</version>
     <artifactId>model</artifactId>
+    <groupId>com.epam.esm</groupId>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.epam.esm</groupId>
+            <artifactId>persistence</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>

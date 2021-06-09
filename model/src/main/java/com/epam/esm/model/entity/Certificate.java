@@ -1,9 +1,13 @@
 package com.epam.esm.model.entity;
 
+import com.epam.esm.persistence.audit.AuditableListener;
 import org.apache.commons.collections4.CollectionUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -21,6 +25,7 @@ import java.util.Objects;
  */
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Certificate extends CustomEntity {
 
     @Column(nullable = false)

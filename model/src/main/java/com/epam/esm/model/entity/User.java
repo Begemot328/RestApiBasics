@@ -3,6 +3,8 @@ package com.epam.esm.model.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -21,6 +23,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "user")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @SecondaryTable(name = "account", pkJoinColumns=@PrimaryKeyJoinColumn(name="id"))
 public class User extends CustomEntity {
 
