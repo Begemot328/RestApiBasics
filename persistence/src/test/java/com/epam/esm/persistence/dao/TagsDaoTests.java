@@ -2,7 +2,7 @@ package com.epam.esm.persistence.dao;
 
 import com.epam.esm.model.entity.QTag;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.tag.TagDAO;
+import com.epam.esm.persistence.dao.TagDAO;
 import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import org.apache.commons.collections4.IterableUtils;
 import org.junit.jupiter.api.BeforeEach;

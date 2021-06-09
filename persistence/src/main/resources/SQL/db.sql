@@ -259,12 +259,7 @@ create table audit
     entity_name varchar(20) not null,
     operation   varchar(20) not null,
     date        timestamp   not null,
-    constraint audit_ibfk_1
-        foreign key (user_id) references user (id)
-            on update cascade on delete cascade,
-    constraint audit_ibfk_2
-        foreign key (user_id) references account (id)
-            on update cascade on delete cascade
+    foreign key (user_id) references user (id) on update cascade on delete cascade
 );
 
 create index audit_entity_id

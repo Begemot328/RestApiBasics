@@ -6,7 +6,7 @@ import com.epam.esm.model.entity.QOrder;
 import com.epam.esm.model.entity.Role;
 import com.epam.esm.model.entity.Tag;
 import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.dao.order.OrderDAO;
+import com.epam.esm.persistence.dao.OrderDAO;
 import com.epam.esm.persistence.util.finder.impl.OrderFinder;
 import org.apache.commons.collections4.IterableUtils;
 import org.junit.jupiter.api.BeforeEach;

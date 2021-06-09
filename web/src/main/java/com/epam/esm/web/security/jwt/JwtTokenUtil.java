@@ -1,6 +1,6 @@
 package com.epam.esm.web.security.jwt;
 
-import com.epam.esm.web.security.auth.Account;
+import com.epam.esm.model.entity.Account;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

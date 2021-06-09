@@ -3,7 +3,7 @@ package com.epam.esm.persistence.dao;
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.QCertificate;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.certificate.CertificateDAO;
+import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
 import org.apache.commons.collections4.IterableUtils;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,9 +1,9 @@
-package com.epam.esm.persistence;
+package com.epam.esm;
 
-import com.epam.esm.model.ModelConfig;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
@@ -14,7 +14,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Configuration
 @ComponentScan
-@Import(ModelConfig.class)
 @EnableJpaRepositories
+@ComponentScan(value = "com.epam.esm")
+@EntityScan
+@EnableJpaAuditing
 public class PersistenceConfig {
 }

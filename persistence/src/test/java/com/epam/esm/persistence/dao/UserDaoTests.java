@@ -3,7 +3,7 @@ package com.epam.esm.persistence.dao;
 import com.epam.esm.model.entity.QUser;
 import com.epam.esm.model.entity.Role;
 import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.dao.user.UserDAO;
+import com.epam.esm.persistence.dao.UserDAO;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import org.apache.commons.collections4.IterableUtils;
 import org.junit.jupiter.api.BeforeEach;
