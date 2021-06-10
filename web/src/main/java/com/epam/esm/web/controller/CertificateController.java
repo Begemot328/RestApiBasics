@@ -11,7 +11,7 @@ import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.certificate.CertificateDTOMapper;
 import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.dto.tag.TagDTOMapper;
-import com.epam.esm.model.entity.roles.Roles;
+import com.epam.esm.model.userdetails.roles.SecurityRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
@@ -78,7 +78,7 @@ public class CertificateController implements PageableSearch {
         return new ResponseEntity<>(certificateDTO, HttpStatus.OK);
     }
 
-    @Secured(Roles.ADMIN)
+    @Secured(SecurityRoles.ADMIN)
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(value = "id") int id)
             throws BadRequestException {
@@ -86,7 +86,7 @@ public class CertificateController implements PageableSearch {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @Secured(Roles.ADMIN)
+    @Secured(SecurityRoles.ADMIN)
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -98,7 +98,7 @@ public class CertificateController implements PageableSearch {
                 HttpStatus.CREATED);
     }
 
-    @Secured(Roles.ADMIN)
+    @Secured(SecurityRoles.ADMIN)
     @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -125,7 +125,7 @@ public class CertificateController implements PageableSearch {
         return new ResponseEntity<>(tagDTOs, HttpStatus.OK);
     }
 
-    @Secured(Roles.ADMIN)
+    @Secured(SecurityRoles.ADMIN)
     @PatchMapping(value = "/{id}")
     public ResponseEntity<CertificateDTO> patchCertificate(@PathVariable(value = "id") int id,
                                                            @RequestBody CertificateDTO certificateDTO)

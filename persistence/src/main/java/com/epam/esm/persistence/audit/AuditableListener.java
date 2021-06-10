@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PostPersist;
-import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 @Service

@@ -15,7 +15,7 @@ import com.epam.esm.web.dto.order.OrderDTO;
 import com.epam.esm.web.dto.order.OrderDTOMapper;
 import com.epam.esm.web.dto.user.UserDTO;
 import com.epam.esm.web.dto.user.UserDTOMapper;
-import com.epam.esm.model.entity.roles.Roles;
+import com.epam.esm.model.userdetails.roles.SecurityRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
@@ -60,7 +60,7 @@ public class UserController implements PageableSearch {
         this.certificateService = certificateService;
     }
 
-    @Secured(Roles.ADMIN)
+    @Secured(SecurityRoles.ADMIN)
     @GetMapping
     public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params, Pageable pageable)
             throws NotFoundException, BadRequestException {

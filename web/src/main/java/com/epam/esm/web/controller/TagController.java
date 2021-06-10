@@ -11,7 +11,7 @@ import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.certificate.CertificateDTOMapper;
 import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.dto.tag.TagDTOMapper;
-import com.epam.esm.model.entity.roles.Roles;
+import com.epam.esm.model.userdetails.roles.SecurityRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
@@ -81,14 +81,14 @@ public class TagController implements PageableSearch {
         return new ResponseEntity<>(tagDTO, HttpStatus.OK);
     }
 
-    @Secured(Roles.ADMIN)
+    @Secured(SecurityRoles.ADMIN)
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Tag> delete(@PathVariable(value = "id") int id) throws BadRequestException {
         tagService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Secured(Roles.ADMIN)
+    @Secured(SecurityRoles.ADMIN)
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)

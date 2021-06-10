@@ -5,7 +5,7 @@ import com.epam.esm.web.exceptionhandler.RESTAuthenticationEntryPoint;
 import com.epam.esm.web.exceptionhandler.RestAccessDeniedHandler;
 import com.epam.esm.web.filter.ExceptionHandlerFilter;
 import com.epam.esm.web.filter.JwtTokenFilter;
-import com.epam.esm.model.entity.Account;
+import com.epam.esm.model.userdetails.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;

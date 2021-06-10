@@ -1,6 +1,6 @@
 package com.epam.esm.web.security.auth;
 
-import com.epam.esm.model.entity.Account;
+import com.epam.esm.model.userdetails.Account;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;

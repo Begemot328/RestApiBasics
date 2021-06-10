@@ -7,7 +7,7 @@ import com.epam.esm.service.service.order.OrderService;
 import com.epam.esm.service.service.order.OrderServiceImpl;
 import com.epam.esm.web.dto.order.OrderDTO;
 import com.epam.esm.web.dto.order.OrderDTOMapper;
-import com.epam.esm.model.entity.roles.Roles;
+import com.epam.esm.model.userdetails.roles.SecurityRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
@@ -39,7 +39,7 @@ public class OrderController implements PageableSearch {
         this.orderDTOMapper = orderDTOMapper;
     }
 
-    @Secured(Roles.ADMIN)
+    @Secured(SecurityRoles.ADMIN)
     @GetMapping
     public ResponseEntity<?> find(@RequestParam MultiValueMap<String, String> params,
                                   Pageable pageable)
@@ -53,7 +53,7 @@ public class OrderController implements PageableSearch {
         return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
     }
 
-    @Secured(Roles.ADMIN)
+    @Secured(SecurityRoles.ADMIN)
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> get(@PathVariable(value = "id") int id) throws NotFoundException {
         OrderDTO order = orderDTOMapper.toOrderDTO(orderService.getById(id));
