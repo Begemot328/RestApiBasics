@@ -1,7 +1,7 @@
 package com.epam.esm.service.service.tag;
 
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.persistence.util.finder.impl.TagFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PageableParameters;

@@ -1,6 +1,6 @@
 package com.epam.esm.service.service.tag;
 
-import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;

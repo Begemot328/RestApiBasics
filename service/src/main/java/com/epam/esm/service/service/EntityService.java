@@ -1,7 +1,7 @@
 package com.epam.esm.service.service;
 
-import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.CustomEntity;
+import com.epam.esm.persistence.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.CustomEntity;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;

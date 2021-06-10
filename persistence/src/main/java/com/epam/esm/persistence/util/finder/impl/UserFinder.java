@@ -1,14 +1,15 @@
 package com.epam.esm.persistence.util.finder.impl;
 
-import com.epam.esm.model.entity.QUser;
-import com.epam.esm.model.entity.User;
+import com.epam.esm.persistence.dao.UserDAO;
+import com.epam.esm.persistence.model.entity.QUser;
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
  * Search criteria class to find {@link User} objects.
- * via {@link com.epam.esm.persistence.dao.UserDAO} data sources.
+ * via {@link UserDAO} data sources.
  *
  * @author Yury Zmushko
  * @version 2.0

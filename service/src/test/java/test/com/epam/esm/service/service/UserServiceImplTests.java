@@ -1,8 +1,8 @@
 package test.com.epam.esm.service.service;
 
-import com.epam.esm.model.entity.Role;
-import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.UserDAO;
+import com.epam.esm.persistence.model.entity.Role;
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;

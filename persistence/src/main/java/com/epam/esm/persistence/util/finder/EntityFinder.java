@@ -1,6 +1,6 @@
 package com.epam.esm.persistence.util.finder;
 
-import com.epam.esm.model.entity.CustomEntity;
+import com.epam.esm.persistence.model.entity.CustomEntity;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;

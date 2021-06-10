@@ -1,7 +1,7 @@
 package com.epam.esm.web.dto.user;
 
-import com.epam.esm.model.entity.Role;
-import com.epam.esm.model.entity.User;
+import com.epam.esm.persistence.model.entity.Role;
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.web.controller.UserController;
 import com.epam.esm.web.exceptions.DTOException;

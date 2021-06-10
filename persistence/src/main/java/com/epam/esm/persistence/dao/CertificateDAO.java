@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.dao;
 
-import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.QCertificate;
+import com.epam.esm.persistence.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.QCertificate;
 
 /**
  * Certificate DAO interface.

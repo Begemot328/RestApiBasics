@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.dao;
 
-import com.epam.esm.model.entity.QTag;
-import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.model.entity.QTag;
+import com.epam.esm.persistence.model.entity.Tag;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 

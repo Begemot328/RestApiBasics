@@ -1,11 +1,11 @@
 package test.com.epam.esm.service.service;
 
-import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Order;
-import com.epam.esm.model.entity.Role;
-import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.OrderDAO;
 import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.Order;
+import com.epam.esm.persistence.model.entity.Role;
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.persistence.util.finder.impl.OrderFinder;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;

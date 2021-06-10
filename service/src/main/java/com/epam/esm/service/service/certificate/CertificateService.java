@@ -1,6 +1,6 @@
 package com.epam.esm.service.service.certificate;
 
-import com.epam.esm.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.Certificate;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;

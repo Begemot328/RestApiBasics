@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.dao;
 
-import com.epam.esm.model.entity.QRole;
-import com.epam.esm.model.entity.Role;
+import com.epam.esm.persistence.model.entity.QRole;
+import com.epam.esm.persistence.model.entity.Role;
 
 /**
  * Tag DAO interface.

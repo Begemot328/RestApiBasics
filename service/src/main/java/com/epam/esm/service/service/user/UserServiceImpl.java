@@ -1,7 +1,7 @@
 package com.epam.esm.service.service.user;
 
-import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.UserDAO;
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.persistence.util.finder.impl.UserFinder;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.constants.PageableParameters;

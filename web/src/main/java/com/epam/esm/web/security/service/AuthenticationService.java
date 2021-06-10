@@ -1,11 +1,11 @@
 package com.epam.esm.web.security.service;
 
-import com.epam.esm.model.entity.User;
 import com.epam.esm.persistence.dao.RoleDAO;
+import com.epam.esm.persistence.model.entity.User;
+import com.epam.esm.persistence.model.userdetails.Account;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.user.UserService;
-import com.epam.esm.model.userdetails.Account;
 import com.epam.esm.web.security.auth.UserAuthorizationRequest;
 import com.epam.esm.web.security.auth.UserRegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;

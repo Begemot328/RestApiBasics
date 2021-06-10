@@ -1,7 +1,7 @@
 package com.epam.esm.web.filter;
 
+import com.epam.esm.persistence.model.userdetails.Account;
 import com.epam.esm.service.service.user.UserService;
-import com.epam.esm.model.userdetails.Account;
 import com.epam.esm.web.security.jwt.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

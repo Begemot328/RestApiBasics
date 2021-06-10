@@ -1,7 +1,7 @@
 package com.epam.esm.persistence.dao;
 
-import com.epam.esm.model.entity.QUser;
-import com.epam.esm.model.entity.User;
+import com.epam.esm.persistence.model.entity.QUser;
+import com.epam.esm.persistence.model.entity.User;
 
 import java.util.Optional;
 

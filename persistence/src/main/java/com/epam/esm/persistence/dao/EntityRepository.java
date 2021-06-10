@@ -1,6 +1,6 @@
 package com.epam.esm.persistence.dao;
 
-import com.epam.esm.model.entity.CustomEntity;
+import com.epam.esm.persistence.model.entity.CustomEntity;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;

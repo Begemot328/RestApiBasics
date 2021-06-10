@@ -1,6 +1,7 @@
 package com.epam.esm.web.controller;
 
-import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.model.entity.Tag;
+import com.epam.esm.persistence.model.userdetails.roles.SecurityRoles;
 import com.epam.esm.service.constants.CertificateSearchParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
@@ -11,7 +12,6 @@ import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.certificate.CertificateDTOMapper;
 import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.dto.tag.TagDTOMapper;
-import com.epam.esm.model.userdetails.roles.SecurityRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;

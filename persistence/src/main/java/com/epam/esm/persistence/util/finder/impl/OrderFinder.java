@@ -1,14 +1,15 @@
 package com.epam.esm.persistence.util.finder.impl;
 
-import com.epam.esm.model.entity.Order;
-import com.epam.esm.model.entity.QOrder;
+import com.epam.esm.persistence.dao.OrderDAO;
+import com.epam.esm.persistence.model.entity.Order;
+import com.epam.esm.persistence.model.entity.QOrder;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
  * Search criteria class to find {@link Order} objects
- * via {@link com.epam.esm.persistence.dao.OrderDAO} datasources.
+ * via {@link OrderDAO} datasources.
  *
  * @author Yury Zmushko
  * @version 1.0

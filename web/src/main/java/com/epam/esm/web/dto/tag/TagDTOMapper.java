@@ -1,6 +1,6 @@
 package com.epam.esm.web.dto.tag;
 
-import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.web.controller.TagController;
 import com.epam.esm.web.exceptions.DTOException;

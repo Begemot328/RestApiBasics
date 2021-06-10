@@ -1,9 +1,9 @@
 package test.com.epam.esm.service.service;
 
-import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Tag;
 import com.epam.esm.persistence.dao.CertificateDAO;
 import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.service.constants.CertificateSearchParameters;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.BadRequestException;

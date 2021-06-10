@@ -1,7 +1,7 @@
 package com.epam.esm.service.validator;
 
 
-import com.epam.esm.model.entity.CustomEntity;
+import com.epam.esm.persistence.model.entity.CustomEntity;
 import com.epam.esm.service.exceptions.ValidationException;
 
 import java.util.regex.Pattern;

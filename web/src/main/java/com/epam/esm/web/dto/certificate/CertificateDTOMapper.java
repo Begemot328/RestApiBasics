@@ -1,7 +1,7 @@
 package com.epam.esm.web.dto.certificate;
 
-import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.web.controller.CertificateController;
 import com.epam.esm.web.dto.tag.TagDTO;

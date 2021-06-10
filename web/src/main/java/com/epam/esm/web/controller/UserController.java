@@ -1,7 +1,8 @@
 package com.epam.esm.web.controller;
 
-import com.epam.esm.model.entity.Order;
-import com.epam.esm.model.entity.User;
+import com.epam.esm.persistence.model.entity.Order;
+import com.epam.esm.persistence.model.entity.User;
+import com.epam.esm.persistence.model.userdetails.roles.SecurityRoles;
 import com.epam.esm.service.constants.OrderSearchParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
@@ -15,7 +16,6 @@ import com.epam.esm.web.dto.order.OrderDTO;
 import com.epam.esm.web.dto.order.OrderDTOMapper;
 import com.epam.esm.web.dto.user.UserDTO;
 import com.epam.esm.web.dto.user.UserDTOMapper;
-import com.epam.esm.model.userdetails.roles.SecurityRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;

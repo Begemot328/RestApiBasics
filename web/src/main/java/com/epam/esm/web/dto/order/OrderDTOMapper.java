@@ -1,8 +1,8 @@
 package com.epam.esm.web.dto.order;
 
-import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Order;
-import com.epam.esm.model.entity.User;
+import com.epam.esm.persistence.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.Order;
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.web.controller.UserController;
 import com.epam.esm.web.dto.certificate.CertificateDTO;
