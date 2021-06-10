@@ -1,0 +1,754 @@
+19/05/2021 18:02:53 TRACE - <Initializing service [role=org.hibernate.engine.query.spi.NativeQueryInterpreter]>
+19/05/2021 18:02:53 DEBUG - <HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6e92e4e6>
+19/05/2021 18:02:53 DEBUG - <HikariPool-1 - After adding stats (total=10, active=0, idle=10, waiting=0)>
+19/05/2021 18:02:53 DEBUG - <Skipping JACC integration as it was not enabled>
+19/05/2021 18:02:53 DEBUG - <Instantiated session factory>
+19/05/2021 18:02:53 DEBUG - <Scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration@7aae1170] to SessionFactoryImpl [org.hibernate.internal.SessionFactoryImpl@4afcae7]>
+19/05/2021 18:02:53 TRACE - <Initializing service [role=org.hibernate.persister.spi.PersisterFactory]>
+19/05/2021 18:02:53 TRACE - <Initializing service [role=org.hibernate.persister.spi.PersisterClassResolver]>
+19/05/2021 18:02:53 TRACE - <Initializing service [role=org.hibernate.property.access.spi.PropertyAccessStrategyResolver]>
+19/05/2021 18:02:53 DEBUG - <Not known whether passed class name [com.epam.esm.model.entity.Certificate] is safe>
+19/05/2021 18:02:53 DEBUG - <No temp ClassLoader provided; using live ClassLoader for loading potentially unsafe class : com.epam.esm.model.entity.Certificate>
+19/05/2021 18:02:53 TRACE - <Initializing service [role=org.hibernate.bytecode.spi.ProxyFactoryFactory]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [createDate], existing type = [org.hibernate.type.LocalDateTimeType@3cc053], incoming type = [org.hibernate.type.LocalDateTimeType@3cc053]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [description], existing type = [org.hibernate.type.StringType@2e1eb85f], incoming type = [org.hibernate.type.StringType@2e1eb85f]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [duration], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [lastUpdateDate], existing type = [org.hibernate.type.LocalDateTimeType@3cc053], incoming type = [org.hibernate.type.LocalDateTimeType@3cc053]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [name], existing type = [org.hibernate.type.StringType@2e1eb85f], incoming type = [org.hibernate.type.StringType@2e1eb85f]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [price], existing type = [org.hibernate.type.BigDecimalType@79b18230], incoming type = [org.hibernate.type.BigDecimalType@79b18230]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [tags], existing type = [org.hibernate.type.BagType(com.epam.esm.model.entity.Certificate.tags)], incoming type = [org.hibernate.type.BagType(com.epam.esm.model.entity.Certificate.tags)]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [id], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 DEBUG - <Not known whether passed class name [com.epam.esm.model.entity.Tag] is safe>
+19/05/2021 18:02:53 DEBUG - <No temp ClassLoader provided; using live ClassLoader for loading potentially unsafe class : com.epam.esm.model.entity.Tag>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [name], existing type = [org.hibernate.type.StringType@2e1eb85f], incoming type = [org.hibernate.type.StringType@2e1eb85f]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [id], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 DEBUG - <Not known whether passed class name [com.epam.esm.model.entity.User] is safe>
+19/05/2021 18:02:53 DEBUG - <No temp ClassLoader provided; using live ClassLoader for loading potentially unsafe class : com.epam.esm.model.entity.User>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [firstName], existing type = [org.hibernate.type.StringType@2e1eb85f], incoming type = [org.hibernate.type.StringType@2e1eb85f]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [lastName], existing type = [org.hibernate.type.StringType@2e1eb85f], incoming type = [org.hibernate.type.StringType@2e1eb85f]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [login], existing type = [org.hibernate.type.StringType@2e1eb85f], incoming type = [org.hibernate.type.StringType@2e1eb85f]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [password], existing type = [org.hibernate.type.StringType@2e1eb85f], incoming type = [org.hibernate.type.StringType@2e1eb85f]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [id], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 DEBUG - <Not known whether passed class name [com.epam.esm.model.entity.Order] is safe>
+19/05/2021 18:02:53 DEBUG - <No temp ClassLoader provided; using live ClassLoader for loading potentially unsafe class : com.epam.esm.model.entity.Order>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [certificate.id], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [user.id], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [certificate], existing type = [org.hibernate.type.ManyToOneType(com.epam.esm.model.entity.Certificate)], incoming type = [org.hibernate.type.ManyToOneType(com.epam.esm.model.entity.Certificate)]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [certificate.id], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [certificate.id], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [certificateQuantity], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [orderAmount], existing type = [org.hibernate.type.BigDecimalType@79b18230], incoming type = [org.hibernate.type.BigDecimalType@79b18230]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [purchaseDate], existing type = [org.hibernate.type.LocalDateTimeType@3cc053], incoming type = [org.hibernate.type.LocalDateTimeType@3cc053]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [user], existing type = [org.hibernate.type.ManyToOneType(com.epam.esm.model.entity.User)], incoming type = [org.hibernate.type.ManyToOneType(com.epam.esm.model.entity.User)]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [user.id], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [user.id], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 TRACE - <Skipping duplicate registration of path [id], existing type = [org.hibernate.type.IntegerType@1a950fdd], incoming type = [org.hibernate.type.IntegerType@1a950fdd]>
+19/05/2021 18:02:53 DEBUG - <Static SQL for collection: com.epam.esm.model.entity.Certificate.tags>
+19/05/2021 18:02:53 DEBUG - < Row insert: insert into certificate_tag (certificate_id, tag_id) values (?, ?)>
+19/05/2021 18:02:53 DEBUG - < Row update: update certificate_tag set tag_id=? where certificate_id=? and tag_id=?>
+19/05/2021 18:02:53 DEBUG - < Row delete: delete from certificate_tag where certificate_id=? and tag_id=?>
+19/05/2021 18:02:53 DEBUG - < One-shot delete: delete from certificate_tag where certificate_id=?>
+19/05/2021 18:02:53 DEBUG - <Static SQL for entity: com.epam.esm.model.entity.Certificate>
+19/05/2021 18:02:53 DEBUG - < Version select: select id from certificate where id =?>
+19/05/2021 18:02:53 DEBUG - < Snapshot select: select certificat_.id, certificat_.create_date as create_d2_1_, certificat_.description as descript3_1_, certificat_.duration as duration4_1_, certificat_.last_update_date as last_upd5_1_, certificat_.name as name6_1_, certificat_.price as price7_1_ from certificate certificat_ where certificat_.id=?>
+19/05/2021 18:02:53 DEBUG - < Insert 0: insert into certificate (create_date, description, duration, last_update_date, name, price, id) values (?, ?, ?, ?, ?, ?, ?)>
+19/05/2021 18:02:53 DEBUG - < Update 0: update certificate set create_date=?, description=?, duration=?, last_update_date=?, name=?, price=? where id=?>
+19/05/2021 18:02:53 DEBUG - < Delete 0: delete from certificate where id=?>
+19/05/2021 18:02:53 DEBUG - < Identity insert: insert into certificate (create_date, description, duration, last_update_date, name, price) values (?, ?, ?, ?, ?, ?)>
+19/05/2021 18:02:53 TRACE - < Starting root entity : com.epam.esm.model.entity.Certificate>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@77d95e5a]>
+19/05/2021 18:02:53 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@64eeddd8>
+19/05/2021 18:02:53 TRACE - <.. Registering AssociationKey : AssociationKey(table=certificate, columns={id}) -> org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@64eeddd8>
+19/05/2021 18:02:53 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.Certificate>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : createDate>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=createDate, type=LocalDateTime [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=createDate, type=LocalDateTime [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : description>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=description, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=description, type=string [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : duration>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=duration, type=integer [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=duration, type=integer [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : lastUpdateDate>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=lastUpdateDate, type=LocalDateTime [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=lastUpdateDate, type=LocalDateTime [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : name>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : price>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=price, type=big_decimal [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=price, type=big_decimal [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : tags>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=tags, type=java.util.Collection(com.epam.esm.model.entity.Certificate.tags) [non-identifier,association])>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:1> -> org.hibernate.loader.plan.build.internal.spaces.CollectionQuerySpaceImpl@65b73689]>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:2> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@4f552aa2]>
+19/05/2021 18:02:53 TRACE - <Pushing collection reference to stack : org.hibernate.loader.plan.build.internal.returns.CollectionAttributeFetchImpl@1c411474>
+19/05/2021 18:02:53 TRACE - <.. Registering AssociationKey : AssociationKey(table=certificate_tag, columns={certificate_id}) -> org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@64eeddd8>
+19/05/2021 18:02:53 TRACE - <>> Starting collection element graph : com.epam.esm.model.entity.Certificate.tags>
+19/05/2021 18:02:53 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@4df7b4ac>
+19/05/2021 18:02:53 TRACE - <.... Registering AssociationKey : AssociationKey(table=certificate_tag, columns={tag_id}) -> org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@4df7b4ac>
+19/05/2021 18:02:53 TRACE - <>>>> Starting entity identifier : com.epam.esm.model.entity.Tag>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : tags.name>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@4df7b4ac>
+19/05/2021 18:02:53 TRACE - <<< Finished collection element graph : com.epam.esm.model.entity.Certificate.tags>
+19/05/2021 18:02:53 TRACE - <Popped collection reference from stack : org.hibernate.loader.plan.build.internal.returns.CollectionAttributeFetchImpl@1c411474>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=tags, type=java.util.Collection(com.epam.esm.model.entity.Certificate.tags) [non-identifier,association])>
+19/05/2021 18:02:53 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@64eeddd8>
+19/05/2021 18:02:53 TRACE - < Finished root entity : com.epam.esm.model.entity.Certificate>
+19/05/2021 18:02:53 DEBUG - <Building LoadPlan...>
+19/05/2021 18:02:53 DEBUG - <processing queryspace <gen:0>>
+19/05/2021 18:02:53 DEBUG - <LoadPlan(entity=com.epam.esm.model.entity.Certificate)
+    - Returns
+       - EntityReturnImpl(entity=com.epam.esm.model.entity.Certificate, querySpaceUid=<gen:0>, path=com.epam.esm.model.entity.Certificate)
+          - CollectionAttributeFetchImpl(collection=com.epam.esm.model.entity.Certificate.tags, querySpaceUid=<gen:1>, path=com.epam.esm.model.entity.Certificate.tags)
+             - (collection element) CollectionFetchableElementEntityGraph(entity=com.epam.esm.model.entity.Tag, querySpaceUid=<gen:2>, path=com.epam.esm.model.entity.Certificate.tags.<elements>)
+    - QuerySpaces
+       - EntityQuerySpaceImpl(uid=<gen:0>, entity=com.epam.esm.model.entity.Certificate)
+          - SQL table alias mapping - certificat0_
+          - alias suffix - 0_
+          - suffixed key columns - {id1_1_0_}
+          - JOIN (JoinDefinedByMetadata(tags)) : <gen:0> -> <gen:1>
+             - CollectionQuerySpaceImpl(uid=<gen:1>, collection=com.epam.esm.model.entity.Certificate.tags)
+                - SQL table alias mapping - tags1_
+                - alias suffix - 1_
+                - suffixed key columns - {certific1_2_1_}
+                - entity-element alias suffix - 2_
+                - 2_entity-element suffixed key columns - id1_4_2_
+                - JOIN (JoinDefinedByMetadata(elements)) : <gen:1> -> <gen:2>
+                   - EntityQuerySpaceImpl(uid=<gen:2>, entity=com.epam.esm.model.entity.Tag)
+                      - SQL table alias mapping - tag2_
+                      - alias suffix - 2_
+                      - suffixed key columns - {id1_4_2_}
+>
+19/05/2021 18:02:53 DEBUG - <Static select for entity com.epam.esm.model.entity.Certificate [NONE]: select certificat0_.id as id1_1_0_, certificat0_.create_date as create_d2_1_0_, certificat0_.description as descript3_1_0_, certificat0_.duration as duration4_1_0_, certificat0_.last_update_date as last_upd5_1_0_, certificat0_.name as name6_1_0_, certificat0_.price as price7_1_0_, tags1_.certificate_id as certific1_2_1_, tag2_.id as tag_id2_2_1_, tag2_.id as id1_4_2_, tag2_.name as name2_4_2_ from certificate certificat0_ left outer join certificate_tag tags1_ on certificat0_.id=tags1_.certificate_id left outer join tag tag2_ on tags1_.tag_id=tag2_.id where certificat0_.id=?>
+19/05/2021 18:02:53 DEBUG - <Static SQL for entity: com.epam.esm.model.entity.Tag>
+19/05/2021 18:02:53 DEBUG - < Version select: select id from tag where id =?>
+19/05/2021 18:02:53 DEBUG - < Snapshot select: select tag_.id, tag_.name as name2_4_ from tag tag_ where tag_.id=?>
+19/05/2021 18:02:53 DEBUG - < Insert 0: insert into tag (name, id) values (?, ?)>
+19/05/2021 18:02:53 DEBUG - < Update 0: update tag set name=? where id=?>
+19/05/2021 18:02:53 DEBUG - < Delete 0: delete from tag where id=?>
+19/05/2021 18:02:53 DEBUG - < Identity insert: insert into tag (name) values (?)>
+19/05/2021 18:02:53 TRACE - < Starting root entity : com.epam.esm.model.entity.Tag>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@14af73e1]>
+19/05/2021 18:02:53 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@73da303e>
+19/05/2021 18:02:53 TRACE - <.. Registering AssociationKey : AssociationKey(table=tag, columns={id}) -> org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@73da303e>
+19/05/2021 18:02:53 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.Tag>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : name>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@73da303e>
+19/05/2021 18:02:53 TRACE - < Finished root entity : com.epam.esm.model.entity.Tag>
+19/05/2021 18:02:53 DEBUG - <Building LoadPlan...>
+19/05/2021 18:02:53 DEBUG - <processing queryspace <gen:0>>
+19/05/2021 18:02:53 DEBUG - <LoadPlan(entity=com.epam.esm.model.entity.Tag)
+    - Returns
+       - EntityReturnImpl(entity=com.epam.esm.model.entity.Tag, querySpaceUid=<gen:0>, path=com.epam.esm.model.entity.Tag)
+    - QuerySpaces
+       - EntityQuerySpaceImpl(uid=<gen:0>, entity=com.epam.esm.model.entity.Tag)
+          - SQL table alias mapping - tag0_
+          - alias suffix - 0_
+          - suffixed key columns - {id1_4_0_}
+>
+19/05/2021 18:02:53 DEBUG - <Static select for entity com.epam.esm.model.entity.Tag [NONE]: select tag0_.id as id1_4_0_, tag0_.name as name2_4_0_ from tag tag0_ where tag0_.id=?>
+19/05/2021 18:02:53 DEBUG - <Static SQL for entity: com.epam.esm.model.entity.User>
+19/05/2021 18:02:53 DEBUG - < Version select: select id from user where id =?>
+19/05/2021 18:02:53 DEBUG - < Snapshot select: select user_.id, user_.first_name as first_na2_5_, user_.last_name as last_nam3_5_, user_1_.login as login1_0_, user_1_.password as password2_0_ from user user_ left outer join account user_1_ on user_.id=user_1_.id where user_.id=?>
+19/05/2021 18:02:53 DEBUG - < Insert 0: insert into user (first_name, last_name, id) values (?, ?, ?)>
+19/05/2021 18:02:53 DEBUG - < Update 0: update user set first_name=?, last_name=? where id=?>
+19/05/2021 18:02:53 DEBUG - < Delete 0: delete from user where id=?>
+19/05/2021 18:02:53 DEBUG - < Insert 1: insert into account (login, password, id) values (?, ?, ?)>
+19/05/2021 18:02:53 DEBUG - < Update 1: update account set login=?, password=? where id=?>
+19/05/2021 18:02:53 DEBUG - < Delete 1: delete from account where id=?>
+19/05/2021 18:02:53 DEBUG - < Identity insert: insert into user (first_name, last_name) values (?, ?)>
+19/05/2021 18:02:53 TRACE - < Starting root entity : com.epam.esm.model.entity.User>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@24068086]>
+19/05/2021 18:02:53 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@32513dea>
+19/05/2021 18:02:53 TRACE - <.. Registering AssociationKey : AssociationKey(table=user, columns={id}) -> org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@32513dea>
+19/05/2021 18:02:53 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.User>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : firstName>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=firstName, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=firstName, type=string [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : lastName>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=lastName, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=lastName, type=string [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : login>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=login, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=login, type=string [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : password>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=password, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=password, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@32513dea>
+19/05/2021 18:02:53 TRACE - < Finished root entity : com.epam.esm.model.entity.User>
+19/05/2021 18:02:53 DEBUG - <Building LoadPlan...>
+19/05/2021 18:02:53 DEBUG - <processing queryspace <gen:0>>
+19/05/2021 18:02:53 DEBUG - <LoadPlan(entity=com.epam.esm.model.entity.User)
+    - Returns
+       - EntityReturnImpl(entity=com.epam.esm.model.entity.User, querySpaceUid=<gen:0>, path=com.epam.esm.model.entity.User)
+    - QuerySpaces
+       - EntityQuerySpaceImpl(uid=<gen:0>, entity=com.epam.esm.model.entity.User)
+          - SQL table alias mapping - user0_
+          - alias suffix - 0_
+          - suffixed key columns - {id1_5_0_}
+>
+19/05/2021 18:02:53 DEBUG - <Static select for entity com.epam.esm.model.entity.User [NONE]: select user0_.id as id1_5_0_, user0_.first_name as first_na2_5_0_, user0_.last_name as last_nam3_5_0_, user0_1_.login as login1_0_0_, user0_1_.password as password2_0_0_ from user user0_ left outer join account user0_1_ on user0_.id=user0_1_.id where user0_.id=?>
+19/05/2021 18:02:53 DEBUG - <Static SQL for entity: com.epam.esm.model.entity.Order>
+19/05/2021 18:02:53 DEBUG - < Version select: select id from orders where id =?>
+19/05/2021 18:02:53 DEBUG - < Snapshot select: select order_.id, order_.certificate_id as certific5_3_, order_.quantity as quantity2_3_, order_.amount as amount3_3_, order_.purchase_date as purchase4_3_, order_.user_id as user_id6_3_ from orders order_ where order_.id=?>
+19/05/2021 18:02:53 DEBUG - < Insert 0: insert into orders (certificate_id, quantity, amount, purchase_date, user_id, id) values (?, ?, ?, ?, ?, ?)>
+19/05/2021 18:02:53 DEBUG - < Update 0: update orders set certificate_id=?, quantity=?, amount=?, purchase_date=?, user_id=? where id=?>
+19/05/2021 18:02:53 DEBUG - < Delete 0: delete from orders where id=?>
+19/05/2021 18:02:53 DEBUG - < Identity insert: insert into orders (certificate_id, quantity, amount, purchase_date, user_id) values (?, ?, ?, ?, ?)>
+19/05/2021 18:02:53 TRACE - < Starting root entity : com.epam.esm.model.entity.Order>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@5d0e703a]>
+19/05/2021 18:02:53 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@7f77e065>
+19/05/2021 18:02:53 TRACE - <.. Registering AssociationKey : AssociationKey(table=orders, columns={id}) -> org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@7f77e065>
+19/05/2021 18:02:53 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.Order>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : certificate>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=certificate, type=com.epam.esm.model.entity.Certificate [non-identifier,association])>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:1> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@6f655dbd]>
+19/05/2021 18:02:53 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@2f166d61>
+19/05/2021 18:02:53 TRACE - <.... Registering AssociationKey : AssociationKey(table=orders, columns={certificate_id}) -> org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@2f166d61>
+19/05/2021 18:02:53 TRACE - <>>>> Starting entity identifier : com.epam.esm.model.entity.Certificate>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : certificate.createDate>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=createDate, type=LocalDateTime [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=createDate, type=LocalDateTime [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : certificate.description>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=description, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=description, type=string [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : certificate.duration>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=duration, type=integer [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=duration, type=integer [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : certificate.lastUpdateDate>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=lastUpdateDate, type=LocalDateTime [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=lastUpdateDate, type=LocalDateTime [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : certificate.name>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : certificate.price>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=price, type=big_decimal [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=price, type=big_decimal [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : certificate.tags>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=tags, type=java.util.Collection(com.epam.esm.model.entity.Certificate.tags) [non-identifier,association])>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:2> -> org.hibernate.loader.plan.build.internal.spaces.CollectionQuerySpaceImpl@5896b9f5]>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:3> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@4ad8d36f]>
+19/05/2021 18:02:53 TRACE - <Pushing collection reference to stack : org.hibernate.loader.plan.build.internal.returns.CollectionAttributeFetchImpl@74a5bef0>
+19/05/2021 18:02:53 TRACE - <.... Registering AssociationKey : AssociationKey(table=certificate_tag, columns={certificate_id}) -> org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@2f166d61>
+19/05/2021 18:02:53 TRACE - <>>>> Starting collection element graph : com.epam.esm.model.entity.Certificate.tags>
+19/05/2021 18:02:53 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@68c4a860>
+19/05/2021 18:02:53 TRACE - <...... Registering AssociationKey : AssociationKey(table=certificate_tag, columns={tag_id}) -> org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@68c4a860>
+19/05/2021 18:02:53 TRACE - <>>>>>> Starting entity identifier : com.epam.esm.model.entity.Tag>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : certificate.tags.name>
+19/05/2021 18:02:53 TRACE - <>>>>>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<<<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@68c4a860>
+19/05/2021 18:02:53 TRACE - <<<<< Finished collection element graph : com.epam.esm.model.entity.Certificate.tags>
+19/05/2021 18:02:53 TRACE - <Popped collection reference from stack : org.hibernate.loader.plan.build.internal.returns.CollectionAttributeFetchImpl@74a5bef0>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=tags, type=java.util.Collection(com.epam.esm.model.entity.Certificate.tags) [non-identifier,association])>
+19/05/2021 18:02:53 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@2f166d61>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=certificate, type=com.epam.esm.model.entity.Certificate [non-identifier,association])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : certificateQuantity>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=certificateQuantity, type=integer [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=certificateQuantity, type=integer [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : orderAmount>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=orderAmount, type=big_decimal [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=orderAmount, type=big_decimal [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : purchaseDate>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=purchaseDate, type=LocalDateTime [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=purchaseDate, type=LocalDateTime [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : user>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=user, type=com.epam.esm.model.entity.User [non-identifier,association])>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:4> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@570ed9c]>
+19/05/2021 18:02:53 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@93f15f6>
+19/05/2021 18:02:53 TRACE - <.... Registering AssociationKey : AssociationKey(table=orders, columns={user_id}) -> org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@93f15f6>
+19/05/2021 18:02:53 TRACE - <>>>> Starting entity identifier : com.epam.esm.model.entity.User>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : user.firstName>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=firstName, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=firstName, type=string [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : user.lastName>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=lastName, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=lastName, type=string [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : user.login>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=login, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=login, type=string [non-identifier])>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : user.password>
+19/05/2021 18:02:53 TRACE - <>>>> Starting attribute Attribute(name=password, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<<<< Finishing up attribute : Attribute(name=password, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@93f15f6>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=user, type=com.epam.esm.model.entity.User [non-identifier,association])>
+19/05/2021 18:02:53 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@7f77e065>
+19/05/2021 18:02:53 TRACE - < Finished root entity : com.epam.esm.model.entity.Order>
+19/05/2021 18:02:53 DEBUG - <Building LoadPlan...>
+19/05/2021 18:02:53 DEBUG - <processing queryspace <gen:0>>
+19/05/2021 18:02:53 DEBUG - <LoadPlan(entity=com.epam.esm.model.entity.Order)
+    - Returns
+       - EntityReturnImpl(entity=com.epam.esm.model.entity.Order, querySpaceUid=<gen:0>, path=com.epam.esm.model.entity.Order)
+          - EntityAttributeFetchImpl(entity=com.epam.esm.model.entity.Certificate, querySpaceUid=<gen:1>, path=com.epam.esm.model.entity.Order.certificate)
+             - CollectionAttributeFetchImpl(collection=com.epam.esm.model.entity.Certificate.tags, querySpaceUid=<gen:2>, path=com.epam.esm.model.entity.Order.certificate.tags)
+                - (collection element) CollectionFetchableElementEntityGraph(entity=com.epam.esm.model.entity.Tag, querySpaceUid=<gen:3>, path=com.epam.esm.model.entity.Order.certificate.tags.<elements>)
+          - EntityAttributeFetchImpl(entity=com.epam.esm.model.entity.User, querySpaceUid=<gen:4>, path=com.epam.esm.model.entity.Order.user)
+    - QuerySpaces
+       - EntityQuerySpaceImpl(uid=<gen:0>, entity=com.epam.esm.model.entity.Order)
+          - SQL table alias mapping - order0_
+          - alias suffix - 0_
+          - suffixed key columns - {id1_3_0_}
+          - JOIN (JoinDefinedByMetadata(certificate)) : <gen:0> -> <gen:1>
+             - EntityQuerySpaceImpl(uid=<gen:1>, entity=com.epam.esm.model.entity.Certificate)
+                - SQL table alias mapping - certificat1_
+                - alias suffix - 1_
+                - suffixed key columns - {id1_1_1_}
+                - JOIN (JoinDefinedByMetadata(tags)) : <gen:1> -> <gen:2>
+                   - CollectionQuerySpaceImpl(uid=<gen:2>, collection=com.epam.esm.model.entity.Certificate.tags)
+                      - SQL table alias mapping - tags2_
+                      - alias suffix - 2_
+                      - suffixed key columns - {certific1_2_2_}
+                      - entity-element alias suffix - 3_
+                      - 3_entity-element suffixed key columns - id1_4_3_
+                      - JOIN (JoinDefinedByMetadata(elements)) : <gen:2> -> <gen:3>
+                         - EntityQuerySpaceImpl(uid=<gen:3>, entity=com.epam.esm.model.entity.Tag)
+                            - SQL table alias mapping - tag3_
+                            - alias suffix - 3_
+                            - suffixed key columns - {id1_4_3_}
+          - JOIN (JoinDefinedByMetadata(user)) : <gen:0> -> <gen:4>
+             - EntityQuerySpaceImpl(uid=<gen:4>, entity=com.epam.esm.model.entity.User)
+                - SQL table alias mapping - user4_
+                - alias suffix - 4_
+                - suffixed key columns - {id1_5_4_}
+>
+19/05/2021 18:02:53 DEBUG - <Static select for entity com.epam.esm.model.entity.Order [NONE]: select order0_.id as id1_3_0_, order0_.certificate_id as certific5_3_0_, order0_.quantity as quantity2_3_0_, order0_.amount as amount3_3_0_, order0_.purchase_date as purchase4_3_0_, order0_.user_id as user_id6_3_0_, certificat1_.id as id1_1_1_, certificat1_.create_date as create_d2_1_1_, certificat1_.description as descript3_1_1_, certificat1_.duration as duration4_1_1_, certificat1_.last_update_date as last_upd5_1_1_, certificat1_.name as name6_1_1_, certificat1_.price as price7_1_1_, tags2_.certificate_id as certific1_2_2_, tag3_.id as tag_id2_2_2_, tag3_.id as id1_4_3_, tag3_.name as name2_4_3_, user4_.id as id1_5_4_, user4_.first_name as first_na2_5_4_, user4_.last_name as last_nam3_5_4_, user4_1_.login as login1_0_4_, user4_1_.password as password2_0_4_ from orders order0_ inner join certificate certificat1_ on order0_.certificate_id=certificat1_.id left outer join certificate_tag tags2_ on certificat1_.id=tags2_.certificate_id left outer join tag tag3_ on tags2_.tag_id=tag3_.id left outer join user user4_ on order0_.user_id=user4_.id left outer join account user4_1_ on user4_.id=user4_1_.id where order0_.id=?>
+19/05/2021 18:02:53 TRACE - < Starting root collection : com.epam.esm.model.entity.Certificate.tags>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.CollectionQuerySpaceImpl@4bc21e34]>
+19/05/2021 18:02:53 DEBUG - <Adding QuerySpace : uid = <gen:1> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@7544260a]>
+19/05/2021 18:02:53 TRACE - <Pushing collection reference to stack : org.hibernate.loader.plan.build.internal.returns.CollectionReturnImpl@bb6869a>
+19/05/2021 18:02:53 TRACE - < Registering AssociationKey : AssociationKey(table=certificate_tag, columns={certificate_id}) -> null>
+19/05/2021 18:02:53 TRACE - < Starting collection element graph : com.epam.esm.model.entity.Certificate.tags>
+19/05/2021 18:02:53 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@506b083>
+19/05/2021 18:02:53 TRACE - <.. Registering AssociationKey : AssociationKey(table=certificate_tag, columns={tag_id}) -> org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@506b083>
+19/05/2021 18:02:53 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.Tag>
+19/05/2021 18:02:53 DEBUG - <Visiting attribute path : name>
+19/05/2021 18:02:53 TRACE - <>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+19/05/2021 18:02:53 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@506b083>
+19/05/2021 18:02:53 TRACE - < Finished collection element graph : com.epam.esm.model.entity.Certificate.tags>
+19/05/2021 18:02:53 TRACE - <Popped collection reference from stack : org.hibernate.loader.plan.build.internal.returns.CollectionReturnImpl@bb6869a>
+19/05/2021 18:02:53 TRACE - < Finished root collection : com.epam.esm.model.entity.Certificate.tags>
+19/05/2021 18:02:53 DEBUG - <Building LoadPlan...>
+19/05/2021 18:02:53 DEBUG - <processing queryspace <gen:0>>
+19/05/2021 18:02:53 DEBUG - <LoadPlan(collection=com.epam.esm.model.entity.Certificate.tags)
+    - Returns
+       - CollectionReturnImpl(collection=com.epam.esm.model.entity.Certificate.tags, querySpaceUid=<gen:0>, path=[com.epam.esm.model.entity.Certificate.tags])
+          - (collection element) CollectionFetchableElementEntityGraph(entity=com.epam.esm.model.entity.Tag, querySpaceUid=<gen:1>, path=[com.epam.esm.model.entity.Certificate.tags].<elements>)
+    - QuerySpaces
+       - CollectionQuerySpaceImpl(uid=<gen:0>, collection=com.epam.esm.model.entity.Certificate.tags)
+          - SQL table alias mapping - tags0_
+          - alias suffix - 0_
+          - suffixed key columns - {certific1_2_0_}
+          - entity-element alias suffix - 1_
+          - 1_entity-element suffixed key columns - id1_4_1_
+          - JOIN (JoinDefinedByMetadata(elements)) : <gen:0> -> <gen:1>
+             - EntityQuerySpaceImpl(uid=<gen:1>, entity=com.epam.esm.model.entity.Tag)
+                - SQL table alias mapping - tag1_
+                - alias suffix - 1_
+                - suffixed key columns - {id1_4_1_}
+>
+19/05/2021 18:02:53 DEBUG - <Static select for collection com.epam.esm.model.entity.Certificate.tags: select tags0_.certificate_id as certific1_2_0_, tags0_.tag_id as tag_id2_2_0_, tag1_.id as id1_4_1_, tag1_.name as name2_4_1_ from certificate_tag tags0_ inner join tag tag1_ on tags0_.tag_id=tag1_.id where tags0_.certificate_id=?>
+19/05/2021 18:02:53 TRACE - <Wrapping up metadata context...>
+19/05/2021 18:02:53 TRACE - <Starting mapped superclass [com.epam.esm.model.entity.CustomEntity]>
+19/05/2021 18:02:53 TRACE - <Building identifier attribute [com.epam.esm.model.entity.CustomEntity.id]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [id]>
+19/05/2021 18:02:53 TRACE - <    Determined member [protected int com.epam.esm.model.entity.CustomEntity.id]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=integer, class=org.hibernate.type.IntegerType]>
+19/05/2021 18:02:53 TRACE - <Completed mapped superclass [com.epam.esm.model.entity.CustomEntity]>
+19/05/2021 18:02:53 TRACE - <Starting entity [com.epam.esm.model.entity.Certificate]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Certificate.createDate]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [createDate]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.time.LocalDateTime com.epam.esm.model.entity.Certificate.createDate]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=LocalDateTime, class=org.hibernate.type.LocalDateTimeType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Certificate.description]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [description]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.Certificate.description]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Certificate.duration]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [duration]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private int com.epam.esm.model.entity.Certificate.duration]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=integer, class=org.hibernate.type.IntegerType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Certificate.lastUpdateDate]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [lastUpdateDate]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.time.LocalDateTime com.epam.esm.model.entity.Certificate.lastUpdateDate]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=LocalDateTime, class=org.hibernate.type.LocalDateTimeType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Certificate.name]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [name]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.Certificate.name]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Certificate.price]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [price]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.math.BigDecimal com.epam.esm.model.entity.Certificate.price]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=big_decimal, class=org.hibernate.type.BigDecimalType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Certificate.tags]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [tags]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.util.List com.epam.esm.model.entity.Certificate.tags]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=java.util.Collection(com.epam.esm.model.entity.Certificate.tags), class=org.hibernate.type.BagType]>
+19/05/2021 18:02:53 TRACE - <Completed entity [com.epam.esm.model.entity.Certificate]>
+19/05/2021 18:02:53 TRACE - <Starting entity [com.epam.esm.model.entity.Tag]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Tag.name]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [name]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.Tag.name]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+19/05/2021 18:02:53 TRACE - <Completed entity [com.epam.esm.model.entity.Tag]>
+19/05/2021 18:02:53 TRACE - <Starting entity [com.epam.esm.model.entity.User]>
+19/05/2021 18:02:53 TRACE - <Building attribute [User.firstName]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [firstName]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.User.firstName]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [User.lastName]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [lastName]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.User.lastName]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [User.login]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [login]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.User.login]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [User.password]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [password]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.User.password]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+19/05/2021 18:02:53 TRACE - <Completed entity [com.epam.esm.model.entity.User]>
+19/05/2021 18:02:53 TRACE - <Starting entity [com.epam.esm.model.entity.Order]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Order.certificate]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [certificate]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private com.epam.esm.model.entity.Certificate com.epam.esm.model.entity.Order.certificate]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=com.epam.esm.model.entity.Certificate, class=org.hibernate.type.ManyToOneType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Order.certificateQuantity]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [certificateQuantity]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private int com.epam.esm.model.entity.Order.certificateQuantity]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=integer, class=org.hibernate.type.IntegerType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Order.orderAmount]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [orderAmount]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.math.BigDecimal com.epam.esm.model.entity.Order.orderAmount]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=big_decimal, class=org.hibernate.type.BigDecimalType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Order.purchaseDate]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [purchaseDate]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private java.time.LocalDateTime com.epam.esm.model.entity.Order.purchaseDate]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=LocalDateTime, class=org.hibernate.type.LocalDateTimeType]>
+19/05/2021 18:02:53 TRACE - <Building attribute [Order.user]>
+19/05/2021 18:02:53 TRACE - <Starting attribute metadata determination [user]>
+19/05/2021 18:02:53 TRACE - <    Determined member [private com.epam.esm.model.entity.User com.epam.esm.model.entity.Order.user]>
+19/05/2021 18:02:53 TRACE - <    Determined type [name=com.epam.esm.model.entity.User, class=org.hibernate.type.ManyToOneType]>
+19/05/2021 18:02:53 TRACE - <Completed entity [com.epam.esm.model.entity.Order]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting [HT_user]>
+19/05/2021 18:02:53 TRACE - <Initializing service [role=org.hibernate.tool.schema.spi.SchemaManagementTool]>
+19/05/2021 18:02:53 TRACE - <Initializing service [role=org.hibernate.resource.transaction.spi.TransactionCoordinatorBuilder]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificates]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [certificates] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [account]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [account] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [login]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [login] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [password]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [password] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [id] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 DEBUG - <No alter strings for table : account>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [certificate] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [id] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [create_date]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [create_date] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [description]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [description] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [duration]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [duration] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [last_update_date]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [last_update_date] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [name]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [name] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [price]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [price] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 DEBUG - <No alter strings for table : certificate>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate_tag]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [certificate_tag] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate_id]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [certificate_id] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [tag_id]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [tag_id] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 DEBUG - <No alter strings for table : certificate_tag>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [orders]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [orders] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [id] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [quantity]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [quantity] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [amount]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [amount] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [purchase_date]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [purchase_date] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate_id]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [certificate_id] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [user_id]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [user_id] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 DEBUG - <No alter strings for table : orders>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [tag]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [tag] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [id] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [name]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [name] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 DEBUG - <No alter strings for table : tag>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [user]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [user] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [id] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [first_name]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [first_name] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [last_name]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [last_name] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 DEBUG - <No alter strings for table : user>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [account]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [account] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Interpreting UniqueConstraintSchemaUpdateStrategy from setting : null>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [certificate] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate_tag]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [certificate_tag] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [orders]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [orders] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [tag]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [tag] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [user]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [user] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [account]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [account] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificates]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [user]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [certificate] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate_tag]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [certificate_tag] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificates]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate_id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificates]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [tag]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [tag_id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [orders]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [orders] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificates]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [account]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [user_id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificates]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificate_id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [certificates]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [user]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [user_id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [id]>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [tag]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [tag] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Normalizing identifier quoting for object name [user]>
+19/05/2021 18:02:53 TRACE - <Rendering unquoted identifier [user] in lower case for use in DatabaseMetaData>
+19/05/2021 18:02:53 TRACE - <Initializing service [role=org.hibernate.engine.transaction.jta.platform.spi.JtaPlatform]>
+19/05/2021 18:02:53  INFO - <HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]>
+19/05/2021 18:02:53 DEBUG - <Checking 0 named HQL queries>
+19/05/2021 18:02:53 DEBUG - <Checking 0 named SQL queries>
+19/05/2021 18:02:53 TRACE - <Handling #sessionFactoryCreated from [org.hibernate.internal.SessionFactoryImpl@4afcae7] for TypeConfiguration>
+19/05/2021 18:02:53 DEBUG - <Initializing SessionFactoryRegistry : org.hibernate.internal.SessionFactoryRegistry@73ae82da>
+19/05/2021 18:02:53 DEBUG - <Registering SessionFactory: 2de8f15f-aabb-4699-baeb-ea62a5a45b1f (<unnamed>)>
+19/05/2021 18:02:53 DEBUG - <Not binding SessionFactory to JNDI, no JNDI name configured>
+19/05/2021 18:02:53  INFO - <Initialized JPA EntityManagerFactory for persistence unit 'default'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 DEBUG - <Creating shared instance of singleton bean 'springApplicationAdminRegistrar'>
+19/05/2021 18:02:53 TRACE - <Creating instance of bean 'springApplicationAdminRegistrar'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 DEBUG - <Creating shared instance of singleton bean 'org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration'>
+19/05/2021 18:02:53 TRACE - <Creating instance of bean 'org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Eagerly caching bean 'org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration' to allow for resolving potential circular references>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Finished creating instance of bean 'org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'environment'>
+19/05/2021 18:02:53 DEBUG - <Autowiring by type from bean name 'springApplicationAdminRegistrar' via factory method to bean named 'environment'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.application.admin.jmx-name' in PropertySource 'configurationProperties'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.application.admin.jmx-name' in PropertySource 'servletConfigInitParams'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.application.admin.jmx-name' in PropertySource 'servletContextInitParams'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.application.admin.jmx-name' in PropertySource 'systemProperties'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.application.admin.jmx-name' in PropertySource 'systemEnvironment'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.application.admin.jmx-name' in PropertySource 'random'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.application.admin.jmx-name' in PropertySource 'Config resource 'class path resource [application-prod.properties]' via location 'optional:classpath:/''>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.application.admin.jmx-name' in PropertySource 'Config resource 'class path resource [application.properties]' via location 'optional:classpath:/''>
+19/05/2021 18:02:53 TRACE - <Could not find key 'spring.application.admin.jmx-name' in any property source>
+19/05/2021 18:02:53 DEBUG - <Creating shared instance of singleton bean 'mbeanExporter'>
+19/05/2021 18:02:53 TRACE - <Creating instance of bean 'mbeanExporter'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 DEBUG - <Creating shared instance of singleton bean 'org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration'>
+19/05/2021 18:02:53 TRACE - <Creating instance of bean 'org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'environment'>
+19/05/2021 18:02:53 DEBUG - <Autowiring by type from bean name 'org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration' via constructor to bean named 'environment'>
+19/05/2021 18:02:53 TRACE - <Eagerly caching bean 'org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration' to allow for resolving potential circular references>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Finished creating instance of bean 'org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration'>
+19/05/2021 18:02:53 DEBUG - <Creating shared instance of singleton bean 'objectNamingStrategy'>
+19/05/2021 18:02:53 TRACE - <Creating instance of bean 'objectNamingStrategy'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.default-domain' in PropertySource 'configurationProperties'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.default-domain' in PropertySource 'servletConfigInitParams'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.default-domain' in PropertySource 'servletContextInitParams'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.default-domain' in PropertySource 'systemProperties'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.default-domain' in PropertySource 'systemEnvironment'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.default-domain' in PropertySource 'random'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.default-domain' in PropertySource 'Config resource 'class path resource [application-prod.properties]' via location 'optional:classpath:/''>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.default-domain' in PropertySource 'Config resource 'class path resource [application.properties]' via location 'optional:classpath:/''>
+19/05/2021 18:02:53 TRACE - <Could not find key 'spring.jmx.default-domain' in any property source>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.unique-names' in PropertySource 'configurationProperties'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.unique-names' in PropertySource 'servletConfigInitParams'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.unique-names' in PropertySource 'servletContextInitParams'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.unique-names' in PropertySource 'systemProperties'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.unique-names' in PropertySource 'systemEnvironment'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.unique-names' in PropertySource 'random'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.unique-names' in PropertySource 'Config resource 'class path resource [application-prod.properties]' via location 'optional:classpath:/''>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.unique-names' in PropertySource 'Config resource 'class path resource [application.properties]' via location 'optional:classpath:/''>
+19/05/2021 18:02:53 TRACE - <Could not find key 'spring.jmx.unique-names' in any property source>
+19/05/2021 18:02:53 TRACE - <Eagerly caching bean 'objectNamingStrategy' to allow for resolving potential circular references>
+19/05/2021 18:02:53 TRACE - <Invoking afterPropertiesSet() on bean with name 'objectNamingStrategy'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Finished creating instance of bean 'objectNamingStrategy'>
+19/05/2021 18:02:53 DEBUG - <Autowiring by type from bean name 'mbeanExporter' via factory method to bean named 'objectNamingStrategy'>
+19/05/2021 18:02:53 DEBUG - <Autowiring by type from bean name 'mbeanExporter' via factory method to bean named 'org.springframework.beans.factory.support.DefaultListableBeanFactory@4baf352a'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.server' in PropertySource 'configurationProperties'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.server' in PropertySource 'servletConfigInitParams'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.server' in PropertySource 'servletContextInitParams'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.server' in PropertySource 'systemProperties'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.server' in PropertySource 'systemEnvironment'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.server' in PropertySource 'random'>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.server' in PropertySource 'Config resource 'class path resource [application-prod.properties]' via location 'optional:classpath:/''>
+19/05/2021 18:02:53 TRACE - <Searching for key 'spring.jmx.server' in PropertySource 'Config resource 'class path resource [application.properties]' via location 'optional:classpath:/''>
+19/05/2021 18:02:53 TRACE - <Could not find key 'spring.jmx.server' in any property source>
+19/05/2021 18:02:53 DEBUG - <Creating shared instance of singleton bean 'mbeanServer'>
+19/05/2021 18:02:53 TRACE - <Creating instance of bean 'mbeanServer'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration'>
+19/05/2021 18:02:53 DEBUG - <Found MBeanServer: com.sun.jmx.mbeanserver.JmxMBeanServer@36b4cef0>
+19/05/2021 18:02:53 TRACE - <Eagerly caching bean 'mbeanServer' to allow for resolving potential circular references>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Finished creating instance of bean 'mbeanServer'>
+19/05/2021 18:02:53 TRACE - <Eagerly caching bean 'mbeanExporter' to allow for resolving potential circular references>
+19/05/2021 18:02:53 TRACE - <Invoking afterPropertiesSet() on bean with name 'mbeanExporter'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Finished creating instance of bean 'mbeanExporter'>
+19/05/2021 18:02:53 TRACE - <Eagerly caching bean 'springApplicationAdminRegistrar' to allow for resolving potential circular references>
+19/05/2021 18:02:53 TRACE - <Invoking afterPropertiesSet() on bean with name 'springApplicationAdminRegistrar'>
+19/05/2021 18:02:53 DEBUG - <Application Admin MBean registered with name 'org.springframework.boot:type=Admin,name=SpringApplication'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Finished creating instance of bean 'springApplicationAdminRegistrar'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.boot.autoconfigure.jdbc.DataSourceInitializerInvoker'>
+19/05/2021 18:02:53 TRACE - <Resolved classpath location [data-all.sql] to resources []>
+19/05/2021 18:02:53 TRACE - <Resolved classpath location [data.sql] to resources []>
+19/05/2021 18:02:53 TRACE - <Finished creating instance of bean 'entityManagerFactory'>
+19/05/2021 18:02:53 TRACE - <Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@4baf352a: defining beans [org.springframework.context.annotation.internalConfigurationAnnotationProcessor,org.springframework.context.annotation.internalAutowiredAnnotationProcessor,org.springframework.context.annotation.internalCommonAnnotationProcessor,org.springframework.context.annotation.internalPersistenceAnnotationProcessor,org.springframework.context.event.internalEventListenerProcessor,org.springframework.context.event.internalEventListenerFactory,restappApplication,org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory,certificateController,tagController,userController,certificateDTOMapper,orderDTOMapper,tagDTOMapper,userDTOMapper,controllerExceptionHandler,certificateServiceImpl,orderServiceImpl,tagServiceImpl,userServiceImpl,certificateValidator,orderValidator,tagValidator,userValidator,certificateDAOImpl,orderDAOImpl,tagDAOImpl,userDAOImpl,certificateFinder,orderFinder,tagFinder,userFinder,com.epam.esm.model.ModelConfig,org.springframework.boot.autoconfigure.domain.EntityScanPackages,com.epam.esm.PersistenceConfig,com.epam.esm.service.ServiceConfig,modelMapper,org.springframework.boot.autoconfigure.AutoConfigurationPackages,org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration,propertySourcesPlaceholderConfigurer,org.springframework.boot.autoconfigure.websocket.servlet.WebSocketServletAutoConfiguration$TomcatWebSocketConfiguration,websocketServletWebServerCustomizer,org.springframework.boot.autoconfigure.websocket.servlet.WebSocketServletAutoConfiguration,org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryConfiguration$EmbeddedTomcat,tomcatServletWebServerFactory,org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration,servletWebServerFactoryCustomizer,tomcatServletWebServerFactoryCustomizer,org.springframework.boot.context.properties.ConfigurationPropertiesBindingPostProcessor,org.springframework.boot.context.internalConfigurationPropertiesBinderFactory,org.springframework.boot.context.internalConfigurationPropertiesBinder,org.springframework.boot.context.properties.BoundConfigurationProperties,org.springframework.boot.context.properties.EnableConfigurationPropertiesRegistrar.methodValidationExcludeFilter,server-org.springframework.boot.autoconfigure.web.ServerProperties,webServerFactoryCustomizerBeanPostProcessor,errorPageRegistrarBeanPostProcessor,org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration$DispatcherServletConfiguration,dispatcherServlet,spring.mvc-org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties,org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration$DispatcherServletRegistrationConfiguration,dispatcherServletRegistration,org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration,org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration,taskExecutorBuilder,applicationTaskExecutor,spring.task.execution-org.springframework.boot.autoconfigure.task.TaskExecutionProperties,org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration$WhitelabelErrorViewConfiguration,error,beanNameViewResolver,org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration$DefaultErrorViewResolverConfiguration,conventionErrorViewResolver,spring.resources-org.springframework.boot.autoconfigure.web.ResourceProperties,spring.web-org.springframework.boot.autoconfigure.web.WebProperties,org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration,errorAttributes,basicErrorController,errorPageCustomizer,preserveErrorControllerTargetClassPostProcessor,org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration$EnableWebMvcConfiguration,requestMappingHandlerAdapter,requestMappingHandlerMapping,welcomePageHandlerMapping,localeResolver,themeResolver,flashMapManager,mvcConversionService,mvcValidator,mvcContentNegotiationManager,mvcPatternParser,mvcUrlPathHelper,mvcPathMatcher,viewControllerHandlerMapping,beanNameHandlerMapping,routerFunctionMapping,resourceHandlerMapping,mvcResourceUrlProvider,defaultServletHandlerMapping,handlerFunctionAdapter,mvcUriComponentsContributor,httpRequestHandlerAdapter,simpleControllerHandlerAdapter,handlerExceptionResolver,mvcViewResolver,mvcHandlerMappingIntrospector,viewNameTranslator,org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration$WebMvcAutoConfigurationAdapter,defaultViewResolver,viewResolver,requestContextFilter,org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration,formContentFilter,org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration,mbeanExporter,objectNamingStrategy,mbeanServer,org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration,springApplicationAdminRegistrar,org.springframework.boot.autoconfigure.aop.AopAutoConfiguration$AspectJAutoProxyingConfiguration$CglibAutoProxyConfiguration,org.springframework.aop.config.internalAutoProxyCreator,org.springframework.boot.autoconfigure.aop.AopAutoConfiguration$AspectJAutoProxyingConfiguration,org.springframework.boot.autoconfigure.aop.AopAutoConfiguration,org.springframework.boot.autoconfigure.availability.ApplicationAvailabilityAutoConfiguration,applicationAvailability,org.springframework.boot.autoconfigure.transaction.jta.JtaAutoConfiguration,org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari,dataSource,org.springframework.boot.autoconfigure.jdbc.DataSourceJmxConfiguration$Hikari,org.springframework.boot.autoconfigure.jdbc.DataSourceJmxConfiguration,org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration$PooledDataSourceConfiguration,org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetadataProvidersConfiguration$HikariPoolDataSourceMetadataProviderConfiguration,hikariPoolDataSourceMetadataProvider,org.springframework.boot.autoconfigure.jdbc.metadata.DataSourcePoolMetadataProvidersConfiguration,org.springframework.boot.autoconfigure.jdbc.DataSourceInitializerInvoker,org.springframework.boot.autoconfigure.jdbc.DataSourceInitializationConfiguration,dataSourceInitializerPostProcessor,org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties,org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration,openEntityManagerInViewInterceptor,openEntityManagerInViewInterceptorConfigurer,org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaConfiguration,transactionManager,jpaVendorAdapter,entityManagerFactoryBuilder,entityManagerFactory,spring.jpa.hibernate-org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties,spring.jpa-org.springframework.boot.autoconfigure.orm.jpa.JpaProperties,dataSourceInitializedPublisher,org.springframework.boot.autoconfigure.orm.jpa.DataSourceInitializedPublisher$DataSourceInitializationCompletionListener,org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration,org.springframework.boot.autoconfigure.context.ConfigurationPropertiesAutoConfiguration,org.springframework.boot.autoconfigure.context.LifecycleAutoConfiguration,lifecycleProcessor,spring.lifecycle-org.springframework.boot.autoconfigure.context.LifecycleProperties,org.springframework.boot.autoconfigure.dao.PersistenceExceptionTranslationAutoConfiguration,persistenceExceptionTranslationPostProcessor,org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration,emBeanDefinitionRegistrarPostProcessor,jpaMappingContext,jpaContext,org.springframework.data.jpa.util.JpaMetamodelCacheCleanup,org.springframework.data.jpa.repository.support.JpaEvaluationContextExtension,org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration$Jackson2ObjectMapperBuilderCustomizerConfiguration,standardJacksonObjectMapperBuilderCustomizer,spring.jackson-org.springframework.boot.autoconfigure.jackson.JacksonProperties,org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration$JacksonObjectMapperBuilderConfiguration,jacksonObjectMapperBuilder,org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration$ParameterNamesModuleConfiguration,parameterNamesModule,org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration$JacksonObjectMapperConfiguration,jacksonObjectMapper,org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration,jsonComponentModule,org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration$StringHttpMessageConverterConfiguration,stringHttpMessageConverter,org.springframework.boot.autoconfigure.http.JacksonHttpMessageConvertersConfiguration$MappingJackson2HttpMessageConverterConfiguration,mappingJackson2HttpMessageConverter,org.springframework.boot.autoconfigure.http.JacksonHttpMessageConvertersConfiguration,org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration,messageConverters,org.springframework.data.web.config.ProjectingArgumentResolverRegistrar,projectingArgumentResolverBeanPostProcessor,org.springframework.data.web.config.HateoasAwareSpringDataWebConfiguration,pageableResolver,sortResolver,pagedResourcesAssembler,pagedResourcesAssemblerArgumentResolver,org.springframework.data.web.config.SpringDataJacksonConfiguration,jacksonGeoModule,org.springframework.boot.autoconfigure.data.web.SpringDataWebAutoConfiguration,pageableCustomizer,sortCustomizer,spring.data.web-org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties,org.springframework.hateoas.mediatype.hal.HalMediaTypeConfiguration,halLinkDisocoverer,org.springframework.hateoas.config.HateoasConfiguration,messageResolver,hypermediaWebMvcConverters,defaultRelProvider,annotationRelProvider,_relProvider,relProviderPluginRegistry,linkDiscoverers,linkDiscovererRegistry,org.springframework.hateoas.config.WebMvcEntityLinksConfiguration,webMvcEntityLinks,entityLinksPluginRegistry,delegatingEntityLinks,org.springframework.hateoas.config.WebMvcHateoasConfiguration,hypermediaWebMvcConfigurer,representationModelProcessorInvoker,hypermediaRepresentionModelProcessorConfigurator,webMvcLinkBuilderFactory,org.springframework.hateoas.config.RestTemplateHateoasConfiguration,hypermediaRestTemplateBeanPostProcessor,hypermediaRestTemplateConfigurer,org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration$HypermediaConfiguration,org.springframework.boot.autoconfigure.hateoas.HypermediaHttpMessageConverterConfiguration,halMessageConverterSupportedMediaTypeCustomizer,org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration,spring.hateoas-org.springframework.boot.autoconfigure.hateoas.HateoasProperties,org.springframework.boot.autoconfigure.info.ProjectInfoAutoConfiguration,spring.info-org.springframework.boot.autoconfigure.info.ProjectInfoProperties,org.springframework.boot.autoconfigure.jdbc.JdbcTemplateConfiguration,jdbcTemplate,org.springframework.boot.autoconfigure.jdbc.NamedParameterJdbcTemplateConfiguration,namedParameterJdbcTemplate,org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration,spring.jdbc-org.springframework.boot.autoconfigure.jdbc.JdbcProperties,org.springframework.boot.autoconfigure.task.TaskSchedulingAutoConfiguration,taskSchedulerBuilder,spring.task.scheduling-org.springframework.boot.autoconfigure.task.TaskSchedulingProperties,org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration$JdbcTransactionManagerConfiguration,org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration,org.springframework.transaction.config.internalTransactionAdvisor,transactionAttributeSource,transactionInterceptor,org.springframework.transaction.config.internalTransactionalEventListenerFactory,org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration$EnableTransactionManagementConfiguration$CglibAutoProxyConfiguration,org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration$EnableTransactionManagementConfiguration,org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration$TransactionTemplateConfiguration,transactionTemplate,org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration,platformTransactionManagerCustomizers,spring.transaction-org.springframework.boot.autoconfigure.transaction.TransactionProperties,org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration,restTemplateBuilderConfigurer,restTemplateBuilder,org.springframework.boot.autoconfigure.web.embedded.EmbeddedWebServerFactoryCustomizerAutoConfiguration$TomcatWebServerFactoryCustomizerConfiguration,tomcatWebServerFactoryCustomizer,org.springframework.boot.autoconfigure.web.embedded.EmbeddedWebServerFactoryCustomizerAutoConfiguration,org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration,characterEncodingFilter,localeCharsetMappingsCustomizer,org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration,multipartConfigElement,multipartResolver,spring.servlet.multipart-org.springframework.boot.autoconfigure.web.servlet.MultipartProperties,org.springframework.orm.jpa.SharedEntityManagerCreator#0]; root of factory hierarchy>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.context.annotation.internalConfigurationAnnotationProcessor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.context.annotation.internalAutowiredAnnotationProcessor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.context.annotation.internalCommonAnnotationProcessor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.context.annotation.internalPersistenceAnnotationProcessor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.context.event.internalEventListenerProcessor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.context.event.internalEventListenerFactory'>
+19/05/2021 18:02:53 DEBUG - <Creating shared instance of singleton bean 'restappApplication'>
+19/05/2021 18:02:53 TRACE - <Creating instance of bean 'restappApplication'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Eagerly caching bean 'restappApplication' to allow for resolving potential circular references>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Finished creating instance of bean 'restappApplication'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory'>
+19/05/2021 18:02:53 DEBUG - <Creating shared instance of singleton bean 'certificateController'>
+19/05/2021 18:02:53 TRACE - <Creating instance of bean 'certificateController'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 DEBUG - <Creating shared instance of singleton bean 'tagServiceImpl'>
+19/05/2021 18:02:53 TRACE - <Creating instance of bean 'tagServiceImpl'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 DEBUG - <Creating shared instance of singleton bean 'tagDAOImpl'>
+19/05/2021 18:02:53 TRACE - <Creating instance of bean 'tagDAOImpl'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Eagerly caching bean 'tagDAOImpl' to allow for resolving potential circular references>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'entityManagerFactory'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Creating CGLIB proxy: SingletonTargetSource for target object [com.epam.esm.persistence.dao.tag.TagDAOImpl@6706da3d]>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public com.epam.esm.model.entity.CustomEntity com.epam.esm.persistence.dao.tag.TagDAOImpl.update(com.epam.esm.model.entity.CustomEntity)>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public com.epam.esm.model.entity.Tag com.epam.esm.persistence.dao.tag.TagDAOImpl.update(com.epam.esm.model.entity.Tag)>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public void com.epam.esm.persistence.dao.tag.TagDAOImpl.delete(int)>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public com.epam.esm.model.entity.CustomEntity com.epam.esm.persistence.dao.tag.TagDAOImpl.create(com.epam.esm.model.entity.CustomEntity)>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public com.epam.esm.model.entity.Tag com.epam.esm.persistence.dao.tag.TagDAOImpl.create(com.epam.esm.model.entity.Tag)>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public java.util.List com.epam.esm.persistence.dao.tag.TagDAOImpl.findAll()>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public javax.persistence.metamodel.Metamodel com.epam.esm.persistence.dao.tag.TagDAOImpl.getMetamodel()>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public com.epam.esm.model.entity.Tag com.epam.esm.persistence.dao.tag.TagDAOImpl.findMostPopularTag()>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public com.epam.esm.model.entity.CustomEntity com.epam.esm.persistence.dao.tag.TagDAOImpl.getById(int)>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public com.epam.esm.model.entity.Tag com.epam.esm.persistence.dao.tag.TagDAOImpl.getById(int)>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public java.util.List com.epam.esm.persistence.dao.tag.TagDAOImpl.findByParameters(com.epam.esm.persistence.util.finder.EntityFinder)>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public java.util.List com.epam.esm.persistence.dao.tag.TagDAOImpl.findByQuery(java.lang.String)>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public javax.persistence.criteria.CriteriaBuilder com.epam.esm.persistence.dao.tag.TagDAOImpl.getBuilder()>
+19/05/2021 18:02:53 TRACE - <Found 'equals' method: public boolean java.lang.Object.equals(java.lang.Object)>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: public java.lang.String java.lang.Object.toString()>
+19/05/2021 18:02:53 TRACE - <Found 'hashCode' method: public native int java.lang.Object.hashCode()>
+19/05/2021 18:02:53 TRACE - <Unable to apply any optimizations to advised method: protected native java.lang.Object java.lang.Object.clone() throws java.lang.CloneNotSupportedException>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract int org.springframework.aop.framework.Advised.indexOf(org.springframework.aop.Advisor)>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract int org.springframework.aop.framework.Advised.indexOf(org.aopalliance.aop.Advice)>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract boolean org.springframework.aop.framework.Advised.isFrozen()>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract java.lang.String org.springframework.aop.framework.Advised.toProxyConfigString()>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract java.lang.Class[] org.springframework.aop.framework.Advised.getProxiedInterfaces()>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract boolean org.springframework.aop.framework.Advised.replaceAdvisor(org.springframework.aop.Advisor,org.springframework.aop.Advisor) throws org.springframework.aop.framework.AopConfigException>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract void org.springframework.aop.framework.Advised.setExposeProxy(boolean)>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract void org.springframework.aop.framework.Advised.addAdvice(int,org.aopalliance.aop.Advice) throws org.springframework.aop.framework.AopConfigException>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract void org.springframework.aop.framework.Advised.addAdvice(org.aopalliance.aop.Advice) throws org.springframework.aop.framework.AopConfigException>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract boolean org.springframework.aop.framework.Advised.isProxyTargetClass()>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract boolean org.springframework.aop.framework.Advised.removeAdvice(org.aopalliance.aop.Advice)>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract org.springframework.aop.Advisor[] org.springframework.aop.framework.Advised.getAdvisors()>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract org.springframework.aop.TargetSource org.springframework.aop.framework.Advised.getTargetSource()>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public default int org.springframework.aop.framework.Advised.getAdvisorCount()>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract void org.springframework.aop.framework.Advised.setPreFiltered(boolean)>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract boolean org.springframework.aop.framework.Advised.isPreFiltered()>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract void org.springframework.aop.framework.Advised.addAdvisor(int,org.springframework.aop.Advisor) throws org.springframework.aop.framework.AopConfigException>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract void org.springframework.aop.framework.Advised.addAdvisor(org.springframework.aop.Advisor) throws org.springframework.aop.framework.AopConfigException>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract boolean org.springframework.aop.framework.Advised.isExposeProxy()>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract boolean org.springframework.aop.framework.Advised.isInterfaceProxied(java.lang.Class)>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract void org.springframework.aop.framework.Advised.setTargetSource(org.springframework.aop.TargetSource)>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract boolean org.springframework.aop.framework.Advised.removeAdvisor(org.springframework.aop.Advisor)>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract void org.springframework.aop.framework.Advised.removeAdvisor(int) throws org.springframework.aop.framework.AopConfigException>
+19/05/2021 18:02:53 TRACE - <Method is declared on Advised interface: public abstract java.lang.Class org.springframework.aop.TargetClassAware.getTargetClass()>
+19/05/2021 18:02:53 TRACE - <Finished creating instance of bean 'tagDAOImpl'>
+19/05/2021 18:02:53 DEBUG - <Creating shared instance of singleton bean 'tagValidator'>
+19/05/2021 18:02:53 TRACE - <Creating instance of bean 'tagValidator'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Eagerly caching bean 'tagValidator' to allow for resolving potential circular references>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'>
+19/05/2021 18:02:53 TRACE - <Finished creating instance of bean 'tagValidator'>
+19/05/2021 18:02:53 DEBUG - <Autowiring by type from bean name 'tagServiceImpl' via constructor to bean named 'tagDAOImpl'>
+19/05/2021 18:02:53 DEBUG - <Autowiring by type from bean name 'tagServiceImpl' via constructor to bean named 'tagValidator'>
+19/05/2021 18:02:53 TRACE - <MethodOverride for public com.epam.esm.model.entity.Tag com.epam.esm.service.service.tag.TagServiceImpl.update(com.epam.esm.model.entity.Tag): null>
+19/05/2021 18:02:53 TRACE - <MethodOverride for public com.epam.esm.model.entity.CustomEntity com.epam.esm.service.service.tag.TagServiceImpl.update(com.epam.esm.model.entity.CustomEntity) throws com.epam.esm.service.exceptions.ValidationException,com.epam.esm.service.exceptions.BadRequestException,com.epam.esm.service.exceptions.NotFoundException: null>
+19/05/2021 18:02:53 TRACE - <MethodOverride for public com.epam.esm.model.entity.Tag com.epam.esm.service.service.tag.TagServiceImpl.read(int) throws com.epam.esm.service.exceptions.NotFoundException: null>
+19/05/2021 18:02:53 TRACE - <MethodOverride for public java.util.List com.epam.esm.service.service.tag.TagServiceImpl.read(org.springframework.util.MultiValueMap) throws com.epam.esm.service.exceptions.NotFoundException,com.epam.esm.service.exceptions.BadRequestException: null>
+19/05/2021 18:02:53 TRACE - <MethodOverride for public com.epam.esm.model.entity.CustomEntity com.epam.esm.service.service.tag.TagServiceImpl.read(int) throws com.epam.esm.service.exceptions.NotFoundException: null>
+19/05/2021 18:02:53 TRACE - <MethodOverride for public void com.epam.esm.service.service.tag.TagServiceImpl.delete(int) throws com.epam.esm.service.exceptions.BadRequestException: null>
+19/05/2021 18:02:53 TRACE - <MethodOverride for public com.epam.esm.model.entity.CustomEntity com.epam.esm.service.service.tag.TagServiceImpl.create(com.epam.esm.model.entity.CustomEntity) throws com.epam.esm.service.exceptions.ValidationException,com.epam.esm.service.exceptions.BadRequestException: null>
+19/05/2021 18:02:53 TRACE - <MethodOverride for public com.epam.esm.model.entity.Tag com.epam.esm.service.service.tag.TagServiceImpl.create(com.epam.esm.model.entity.Tag) throws com.epam.esm.service.exceptions.ValidationException,com.epam.esm.service.exceptions.BadRequestException: null>
+19/05/2021 18:02:53 TRACE - <MethodOverride for public com.epam.esm.persistence.util.finder.impl.TagFinder com.epam.esm.service.service.tag.TagServiceImpl.getFinder(): LookupOverride for method 'getFinder'>
+19/05/2021 18:02:53 TRACE - <MethodOverride for public com.epam.esm.persistence.util.finder.EntityFinder com.epam.esm.service.service.tag.TagServiceImpl.getFinder(): LookupOverride for method 'getFinder'>

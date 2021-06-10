@@ -1,0 +1,960 @@
+08/06/2021 09:04:18 TRACE - <Initializing service [role=org.hibernate.engine.query.spi.NativeQueryInterpreter]>
+08/06/2021 09:04:18 DEBUG - <Skipping JACC integration as it was not enabled>
+08/06/2021 09:04:18 DEBUG - <Instantiated session factory>
+08/06/2021 09:04:18 DEBUG - <Scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration@58e0d1ac] to SessionFactoryImpl [org.hibernate.internal.SessionFactoryImpl@2f51b100]>
+08/06/2021 09:04:18 TRACE - <Initializing service [role=org.hibernate.persister.spi.PersisterFactory]>
+08/06/2021 09:04:18 TRACE - <Initializing service [role=org.hibernate.persister.spi.PersisterClassResolver]>
+08/06/2021 09:04:18 TRACE - <Initializing service [role=org.hibernate.property.access.spi.PropertyAccessStrategyResolver]>
+08/06/2021 09:04:18 DEBUG - <Not known whether passed class name [com.epam.esm.model.entity.Certificate] is safe>
+08/06/2021 09:04:18 DEBUG - <No temp ClassLoader provided; using live ClassLoader for loading potentially unsafe class : com.epam.esm.model.entity.Certificate>
+08/06/2021 09:04:18 TRACE - <Initializing service [role=org.hibernate.bytecode.spi.ProxyFactoryFactory]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [createDate], existing type = [org.hibernate.type.LocalDateTimeType@591f6f83], incoming type = [org.hibernate.type.LocalDateTimeType@591f6f83]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [description], existing type = [org.hibernate.type.StringType@687eb455], incoming type = [org.hibernate.type.StringType@687eb455]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [duration], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [lastUpdateDate], existing type = [org.hibernate.type.LocalDateTimeType@591f6f83], incoming type = [org.hibernate.type.LocalDateTimeType@591f6f83]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [name], existing type = [org.hibernate.type.StringType@687eb455], incoming type = [org.hibernate.type.StringType@687eb455]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [price], existing type = [org.hibernate.type.BigDecimalType@402b4f81], incoming type = [org.hibernate.type.BigDecimalType@402b4f81]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [tags], existing type = [org.hibernate.type.BagType(com.epam.esm.model.entity.Certificate.tags)], incoming type = [org.hibernate.type.BagType(com.epam.esm.model.entity.Certificate.tags)]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [id], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 DEBUG - <Not known whether passed class name [com.epam.esm.model.entity.Tag] is safe>
+08/06/2021 09:04:18 DEBUG - <No temp ClassLoader provided; using live ClassLoader for loading potentially unsafe class : com.epam.esm.model.entity.Tag>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [name], existing type = [org.hibernate.type.StringType@687eb455], incoming type = [org.hibernate.type.StringType@687eb455]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [id], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 DEBUG - <Not known whether passed class name [com.epam.esm.model.entity.Role] is safe>
+08/06/2021 09:04:18 DEBUG - <No temp ClassLoader provided; using live ClassLoader for loading potentially unsafe class : com.epam.esm.model.entity.Role>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [description], existing type = [org.hibernate.type.StringType@687eb455], incoming type = [org.hibernate.type.StringType@687eb455]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [name], existing type = [org.hibernate.type.StringType@687eb455], incoming type = [org.hibernate.type.StringType@687eb455]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [id], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 DEBUG - <Not known whether passed class name [com.epam.esm.model.entity.User] is safe>
+08/06/2021 09:04:18 DEBUG - <No temp ClassLoader provided; using live ClassLoader for loading potentially unsafe class : com.epam.esm.model.entity.User>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [firstName], existing type = [org.hibernate.type.StringType@687eb455], incoming type = [org.hibernate.type.StringType@687eb455]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [lastName], existing type = [org.hibernate.type.StringType@687eb455], incoming type = [org.hibernate.type.StringType@687eb455]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [roles], existing type = [org.hibernate.type.SetType(com.epam.esm.model.entity.User.roles)], incoming type = [org.hibernate.type.SetType(com.epam.esm.model.entity.User.roles)]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [isActive], existing type = [org.hibernate.type.BooleanType@5d7f8467], incoming type = [org.hibernate.type.BooleanType@5d7f8467]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [login], existing type = [org.hibernate.type.StringType@687eb455], incoming type = [org.hibernate.type.StringType@687eb455]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [password], existing type = [org.hibernate.type.StringType@687eb455], incoming type = [org.hibernate.type.StringType@687eb455]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [id], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 DEBUG - <Not known whether passed class name [com.epam.esm.model.entity.Order] is safe>
+08/06/2021 09:04:18 DEBUG - <No temp ClassLoader provided; using live ClassLoader for loading potentially unsafe class : com.epam.esm.model.entity.Order>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [certificate.id], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [user.id], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [certificate], existing type = [org.hibernate.type.ManyToOneType(com.epam.esm.model.entity.Certificate)], incoming type = [org.hibernate.type.ManyToOneType(com.epam.esm.model.entity.Certificate)]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [certificate.id], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [certificate.id], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [certificateQuantity], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [orderAmount], existing type = [org.hibernate.type.BigDecimalType@402b4f81], incoming type = [org.hibernate.type.BigDecimalType@402b4f81]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [purchaseDate], existing type = [org.hibernate.type.LocalDateTimeType@591f6f83], incoming type = [org.hibernate.type.LocalDateTimeType@591f6f83]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [user], existing type = [org.hibernate.type.ManyToOneType(com.epam.esm.model.entity.User)], incoming type = [org.hibernate.type.ManyToOneType(com.epam.esm.model.entity.User)]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [user.id], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [user.id], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 TRACE - <Skipping duplicate registration of path [id], existing type = [org.hibernate.type.IntegerType@482ba4b1], incoming type = [org.hibernate.type.IntegerType@482ba4b1]>
+08/06/2021 09:04:18 DEBUG - <Static SQL for collection: com.epam.esm.model.entity.User.roles>
+08/06/2021 09:04:18 DEBUG - < Row insert: insert into user_role (user_id, role_id) values (?, ?)>
+08/06/2021 09:04:18 DEBUG - < Row update: update user_role set role_id=? where user_id=? and role_id=?>
+08/06/2021 09:04:18 DEBUG - < Row delete: delete from user_role where user_id=? and role_id=?>
+08/06/2021 09:04:18 DEBUG - < One-shot delete: delete from user_role where user_id=?>
+08/06/2021 09:04:18 DEBUG - <Static SQL for collection: com.epam.esm.model.entity.Certificate.tags>
+08/06/2021 09:04:18 DEBUG - < Row insert: insert into certificate_tag (certificate_id, tag_id) values (?, ?)>
+08/06/2021 09:04:18 DEBUG - < Row update: update certificate_tag set tag_id=? where certificate_id=? and tag_id=?>
+08/06/2021 09:04:18 DEBUG - < Row delete: delete from certificate_tag where certificate_id=? and tag_id=?>
+08/06/2021 09:04:18 DEBUG - < One-shot delete: delete from certificate_tag where certificate_id=?>
+08/06/2021 09:04:18 DEBUG - <Static SQL for entity: com.epam.esm.model.entity.Certificate>
+08/06/2021 09:04:18 DEBUG - < Version select: select id from certificate where id =?>
+08/06/2021 09:04:18 DEBUG - < Snapshot select: select certificat_.id, certificat_.create_date as create_d2_1_, certificat_.description as descript3_1_, certificat_.duration as duration4_1_, certificat_.last_update_date as last_upd5_1_, certificat_.name as name6_1_, certificat_.price as price7_1_ from certificate certificat_ where certificat_.id=?>
+08/06/2021 09:04:18 DEBUG - < Insert 0: insert into certificate (create_date, description, duration, last_update_date, name, price, id) values (?, ?, ?, ?, ?, ?, ?)>
+08/06/2021 09:04:18 DEBUG - < Update 0: update certificate set create_date=?, description=?, duration=?, last_update_date=?, name=?, price=? where id=?>
+08/06/2021 09:04:18 DEBUG - < Delete 0: delete from certificate where id=?>
+08/06/2021 09:04:18 DEBUG - < Identity insert: insert into certificate (id, create_date, description, duration, last_update_date, name, price) values (null, ?, ?, ?, ?, ?, ?)>
+08/06/2021 09:04:18 TRACE - < Starting root entity : com.epam.esm.model.entity.Certificate>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@117be84a]>
+08/06/2021 09:04:18 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@140fa482>
+08/06/2021 09:04:18 TRACE - <.. Registering AssociationKey : AssociationKey(table=certificate, columns={id}) -> org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@140fa482>
+08/06/2021 09:04:18 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.Certificate>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : createDate>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=createDate, type=LocalDateTime [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=createDate, type=LocalDateTime [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : description>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : duration>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=duration, type=integer [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=duration, type=integer [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : lastUpdateDate>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=lastUpdateDate, type=LocalDateTime [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=lastUpdateDate, type=LocalDateTime [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : name>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : price>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=price, type=big_decimal [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=price, type=big_decimal [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : tags>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=tags, type=java.util.Collection(com.epam.esm.model.entity.Certificate.tags) [non-identifier,association])>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:1> -> org.hibernate.loader.plan.build.internal.spaces.CollectionQuerySpaceImpl@78de0f6f]>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:2> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@588614f9]>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=tags, type=java.util.Collection(com.epam.esm.model.entity.Certificate.tags) [non-identifier,association])>
+08/06/2021 09:04:18 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@140fa482>
+08/06/2021 09:04:18 TRACE - < Finished root entity : com.epam.esm.model.entity.Certificate>
+08/06/2021 09:04:18 DEBUG - <Building LoadPlan...>
+08/06/2021 09:04:18 DEBUG - <processing queryspace <gen:0>>
+08/06/2021 09:04:18 DEBUG - <LoadPlan(entity=com.epam.esm.model.entity.Certificate)
+    - Returns
+       - EntityReturnImpl(entity=com.epam.esm.model.entity.Certificate, querySpaceUid=<gen:0>, path=com.epam.esm.model.entity.Certificate)
+          - CollectionAttributeFetchImpl(collection=com.epam.esm.model.entity.Certificate.tags, querySpaceUid=<gen:1>, path=com.epam.esm.model.entity.Certificate.tags)
+             - (collection element) CollectionFetchableElementEntityGraph(entity=com.epam.esm.model.entity.Tag, querySpaceUid=<gen:2>, path=com.epam.esm.model.entity.Certificate.tags.<elements>)
+    - QuerySpaces
+       - EntityQuerySpaceImpl(uid=<gen:0>, entity=com.epam.esm.model.entity.Certificate)
+          - SQL table alias mapping - certificat0_
+          - alias suffix - 0_
+          - suffixed key columns - {id1_1_0_}
+>
+08/06/2021 09:04:18 DEBUG - <Static select for entity com.epam.esm.model.entity.Certificate [NONE]: select certificat0_.id as id1_1_0_, certificat0_.create_date as create_d2_1_0_, certificat0_.description as descript3_1_0_, certificat0_.duration as duration4_1_0_, certificat0_.last_update_date as last_upd5_1_0_, certificat0_.name as name6_1_0_, certificat0_.price as price7_1_0_ from certificate certificat0_ where certificat0_.id=?>
+08/06/2021 09:04:18 DEBUG - <Static SQL for entity: com.epam.esm.model.entity.Tag>
+08/06/2021 09:04:18 DEBUG - < Version select: select id from tag where id =?>
+08/06/2021 09:04:18 DEBUG - < Snapshot select: select tag_.id, tag_.name as name2_5_ from tag tag_ where tag_.id=?>
+08/06/2021 09:04:18 DEBUG - < Insert 0: insert into tag (name, id) values (?, ?)>
+08/06/2021 09:04:18 DEBUG - < Update 0: update tag set name=? where id=?>
+08/06/2021 09:04:18 DEBUG - < Delete 0: delete from tag where id=?>
+08/06/2021 09:04:18 DEBUG - < Identity insert: insert into tag (id, name) values (null, ?)>
+08/06/2021 09:04:18 TRACE - < Starting root entity : com.epam.esm.model.entity.Tag>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@16718e1b]>
+08/06/2021 09:04:18 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@7fb313e3>
+08/06/2021 09:04:18 TRACE - <.. Registering AssociationKey : AssociationKey(table=tag, columns={id}) -> org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@7fb313e3>
+08/06/2021 09:04:18 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.Tag>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : name>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@7fb313e3>
+08/06/2021 09:04:18 TRACE - < Finished root entity : com.epam.esm.model.entity.Tag>
+08/06/2021 09:04:18 DEBUG - <Building LoadPlan...>
+08/06/2021 09:04:18 DEBUG - <processing queryspace <gen:0>>
+08/06/2021 09:04:18 DEBUG - <LoadPlan(entity=com.epam.esm.model.entity.Tag)
+    - Returns
+       - EntityReturnImpl(entity=com.epam.esm.model.entity.Tag, querySpaceUid=<gen:0>, path=com.epam.esm.model.entity.Tag)
+    - QuerySpaces
+       - EntityQuerySpaceImpl(uid=<gen:0>, entity=com.epam.esm.model.entity.Tag)
+          - SQL table alias mapping - tag0_
+          - alias suffix - 0_
+          - suffixed key columns - {id1_5_0_}
+>
+08/06/2021 09:04:18 DEBUG - <Static select for entity com.epam.esm.model.entity.Tag [NONE]: select tag0_.id as id1_5_0_, tag0_.name as name2_5_0_ from tag tag0_ where tag0_.id=?>
+08/06/2021 09:04:18 DEBUG - <Static SQL for entity: com.epam.esm.model.entity.Role>
+08/06/2021 09:04:18 DEBUG - < Version select: select id from role where id =?>
+08/06/2021 09:04:18 DEBUG - < Snapshot select: select role_.id, role_.description as descript2_4_, role_.name as name3_4_ from role role_ where role_.id=?>
+08/06/2021 09:04:18 DEBUG - < Insert 0: insert into role (description, name, id) values (?, ?, ?)>
+08/06/2021 09:04:18 DEBUG - < Update 0: update role set description=?, name=? where id=?>
+08/06/2021 09:04:18 DEBUG - < Delete 0: delete from role where id=?>
+08/06/2021 09:04:18 DEBUG - < Identity insert: insert into role (id, description, name) values (null, ?, ?)>
+08/06/2021 09:04:18 TRACE - < Starting root entity : com.epam.esm.model.entity.Role>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@771ede0d]>
+08/06/2021 09:04:18 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@1fd73dcb>
+08/06/2021 09:04:18 TRACE - <.. Registering AssociationKey : AssociationKey(table=role, columns={id}) -> org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@1fd73dcb>
+08/06/2021 09:04:18 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.Role>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : description>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : name>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@1fd73dcb>
+08/06/2021 09:04:18 TRACE - < Finished root entity : com.epam.esm.model.entity.Role>
+08/06/2021 09:04:18 DEBUG - <Building LoadPlan...>
+08/06/2021 09:04:18 DEBUG - <processing queryspace <gen:0>>
+08/06/2021 09:04:18 DEBUG - <LoadPlan(entity=com.epam.esm.model.entity.Role)
+    - Returns
+       - EntityReturnImpl(entity=com.epam.esm.model.entity.Role, querySpaceUid=<gen:0>, path=com.epam.esm.model.entity.Role)
+    - QuerySpaces
+       - EntityQuerySpaceImpl(uid=<gen:0>, entity=com.epam.esm.model.entity.Role)
+          - SQL table alias mapping - role0_
+          - alias suffix - 0_
+          - suffixed key columns - {id1_4_0_}
+>
+08/06/2021 09:04:18 DEBUG - <Static select for entity com.epam.esm.model.entity.Role [NONE]: select role0_.id as id1_4_0_, role0_.description as descript2_4_0_, role0_.name as name3_4_0_ from role role0_ where role0_.id=?>
+08/06/2021 09:04:18 DEBUG - <Static SQL for entity: com.epam.esm.model.entity.User>
+08/06/2021 09:04:18 DEBUG - < Version select: select id from user where id =?>
+08/06/2021 09:04:18 DEBUG - < Snapshot select: select user_.id, user_.first_name as first_na2_6_, user_.last_name as last_nam3_6_, user_1_.is_active as is_activ1_0_, user_1_.login as login2_0_, user_1_.password as password3_0_ from user user_ left outer join account user_1_ on user_.id=user_1_.id where user_.id=?>
+08/06/2021 09:04:18 DEBUG - < Insert 0: insert into user (first_name, last_name, id) values (?, ?, ?)>
+08/06/2021 09:04:18 DEBUG - < Update 0: update user set first_name=?, last_name=? where id=?>
+08/06/2021 09:04:18 DEBUG - < Delete 0: delete from user where id=?>
+08/06/2021 09:04:18 DEBUG - < Insert 1: insert into account (is_active, login, password, id) values (?, ?, ?, ?)>
+08/06/2021 09:04:18 DEBUG - < Update 1: update account set is_active=?, login=?, password=? where id=?>
+08/06/2021 09:04:18 DEBUG - < Delete 1: delete from account where id=?>
+08/06/2021 09:04:18 DEBUG - < Identity insert: insert into user (id, first_name, last_name) values (null, ?, ?)>
+08/06/2021 09:04:18 TRACE - < Starting root entity : com.epam.esm.model.entity.User>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@54c697c]>
+08/06/2021 09:04:18 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@62075e3d>
+08/06/2021 09:04:18 TRACE - <.. Registering AssociationKey : AssociationKey(table=user, columns={id}) -> org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@62075e3d>
+08/06/2021 09:04:18 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.User>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : firstName>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=firstName, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=firstName, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : lastName>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=lastName, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=lastName, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : roles>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=roles, type=java.util.Set(com.epam.esm.model.entity.User.roles) [non-identifier,association])>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:1> -> org.hibernate.loader.plan.build.internal.spaces.CollectionQuerySpaceImpl@63e81ac6]>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:2> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@45775a15]>
+08/06/2021 09:04:18 TRACE - <Pushing collection reference to stack : org.hibernate.loader.plan.build.internal.returns.CollectionAttributeFetchImpl@2396dc4e>
+08/06/2021 09:04:18 TRACE - <.. Registering AssociationKey : AssociationKey(table=user_role, columns={user_id}) -> org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@62075e3d>
+08/06/2021 09:04:18 TRACE - <>> Starting collection element graph : com.epam.esm.model.entity.User.roles>
+08/06/2021 09:04:18 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@7bb888b7>
+08/06/2021 09:04:18 TRACE - <.... Registering AssociationKey : AssociationKey(table=user_role, columns={role_id}) -> org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@7bb888b7>
+08/06/2021 09:04:18 TRACE - <>>>> Starting entity identifier : com.epam.esm.model.entity.Role>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : roles.description>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : roles.name>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@7bb888b7>
+08/06/2021 09:04:18 TRACE - <<< Finished collection element graph : com.epam.esm.model.entity.User.roles>
+08/06/2021 09:04:18 TRACE - <Popped collection reference from stack : org.hibernate.loader.plan.build.internal.returns.CollectionAttributeFetchImpl@2396dc4e>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=roles, type=java.util.Set(com.epam.esm.model.entity.User.roles) [non-identifier,association])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : isActive>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=isActive, type=boolean [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=isActive, type=boolean [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : login>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=login, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=login, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : password>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=password, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=password, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@62075e3d>
+08/06/2021 09:04:18 TRACE - < Finished root entity : com.epam.esm.model.entity.User>
+08/06/2021 09:04:18 DEBUG - <Building LoadPlan...>
+08/06/2021 09:04:18 DEBUG - <processing queryspace <gen:0>>
+08/06/2021 09:04:18 DEBUG - <LoadPlan(entity=com.epam.esm.model.entity.User)
+    - Returns
+       - EntityReturnImpl(entity=com.epam.esm.model.entity.User, querySpaceUid=<gen:0>, path=com.epam.esm.model.entity.User)
+          - CollectionAttributeFetchImpl(collection=com.epam.esm.model.entity.User.roles, querySpaceUid=<gen:1>, path=com.epam.esm.model.entity.User.roles)
+             - (collection element) CollectionFetchableElementEntityGraph(entity=com.epam.esm.model.entity.Role, querySpaceUid=<gen:2>, path=com.epam.esm.model.entity.User.roles.<elements>)
+    - QuerySpaces
+       - EntityQuerySpaceImpl(uid=<gen:0>, entity=com.epam.esm.model.entity.User)
+          - SQL table alias mapping - user0_
+          - alias suffix - 0_
+          - suffixed key columns - {id1_6_0_}
+          - JOIN (JoinDefinedByMetadata(roles)) : <gen:0> -> <gen:1>
+             - CollectionQuerySpaceImpl(uid=<gen:1>, collection=com.epam.esm.model.entity.User.roles)
+                - SQL table alias mapping - roles1_
+                - alias suffix - 1_
+                - suffixed key columns - {user_id1_7_1_}
+                - entity-element alias suffix - 2_
+                - 2_entity-element suffixed key columns - id1_4_2_
+                - JOIN (JoinDefinedByMetadata(elements)) : <gen:1> -> <gen:2>
+                   - EntityQuerySpaceImpl(uid=<gen:2>, entity=com.epam.esm.model.entity.Role)
+                      - SQL table alias mapping - role2_
+                      - alias suffix - 2_
+                      - suffixed key columns - {id1_4_2_}
+>
+08/06/2021 09:04:18 DEBUG - <Static select for entity com.epam.esm.model.entity.User [NONE]: select user0_.id as id1_6_0_, user0_.first_name as first_na2_6_0_, user0_.last_name as last_nam3_6_0_, user0_1_.is_active as is_activ1_0_0_, user0_1_.login as login2_0_0_, user0_1_.password as password3_0_0_, roles1_.user_id as user_id1_7_1_, role2_.id as role_id2_7_1_, role2_.id as id1_4_2_, role2_.description as descript2_4_2_, role2_.name as name3_4_2_ from user user0_ left outer join account user0_1_ on user0_.id=user0_1_.id left outer join user_role roles1_ on user0_.id=roles1_.user_id left outer join role role2_ on roles1_.role_id=role2_.id where user0_.id=?>
+08/06/2021 09:04:18 DEBUG - <Static SQL for entity: com.epam.esm.model.entity.Order>
+08/06/2021 09:04:18 DEBUG - < Version select: select id from orders where id =?>
+08/06/2021 09:04:18 DEBUG - < Snapshot select: select order_.id, order_.certificate_id as certific5_3_, order_.quantity as quantity2_3_, order_.amount as amount3_3_, order_.purchase_date as purchase4_3_, order_.user_id as user_id6_3_ from orders order_ where order_.id=?>
+08/06/2021 09:04:18 DEBUG - < Insert 0: insert into orders (certificate_id, quantity, amount, purchase_date, user_id, id) values (?, ?, ?, ?, ?, ?)>
+08/06/2021 09:04:18 DEBUG - < Update 0: update orders set certificate_id=?, quantity=?, amount=?, purchase_date=?, user_id=? where id=?>
+08/06/2021 09:04:18 DEBUG - < Delete 0: delete from orders where id=?>
+08/06/2021 09:04:18 DEBUG - < Identity insert: insert into orders (id, certificate_id, quantity, amount, purchase_date, user_id) values (null, ?, ?, ?, ?, ?)>
+08/06/2021 09:04:18 TRACE - < Starting root entity : com.epam.esm.model.entity.Order>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@5825932c]>
+08/06/2021 09:04:18 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@277dddcf>
+08/06/2021 09:04:18 TRACE - <.. Registering AssociationKey : AssociationKey(table=orders, columns={id}) -> org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@277dddcf>
+08/06/2021 09:04:18 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.Order>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : certificate>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=certificate, type=com.epam.esm.model.entity.Certificate [non-identifier,association])>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:1> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@321c01c2]>
+08/06/2021 09:04:18 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@d5eca06>
+08/06/2021 09:04:18 TRACE - <.... Registering AssociationKey : AssociationKey(table=orders, columns={certificate_id}) -> org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@d5eca06>
+08/06/2021 09:04:18 TRACE - <>>>> Starting entity identifier : com.epam.esm.model.entity.Certificate>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : certificate.createDate>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=createDate, type=LocalDateTime [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=createDate, type=LocalDateTime [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : certificate.description>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : certificate.duration>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=duration, type=integer [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=duration, type=integer [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : certificate.lastUpdateDate>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=lastUpdateDate, type=LocalDateTime [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=lastUpdateDate, type=LocalDateTime [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : certificate.name>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : certificate.price>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=price, type=big_decimal [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=price, type=big_decimal [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : certificate.tags>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=tags, type=java.util.Collection(com.epam.esm.model.entity.Certificate.tags) [non-identifier,association])>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:2> -> org.hibernate.loader.plan.build.internal.spaces.CollectionQuerySpaceImpl@79169472]>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:3> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@304cad3a]>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=tags, type=java.util.Collection(com.epam.esm.model.entity.Certificate.tags) [non-identifier,association])>
+08/06/2021 09:04:18 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@d5eca06>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=certificate, type=com.epam.esm.model.entity.Certificate [non-identifier,association])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : certificateQuantity>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=certificateQuantity, type=integer [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=certificateQuantity, type=integer [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : orderAmount>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=orderAmount, type=big_decimal [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=orderAmount, type=big_decimal [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : purchaseDate>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=purchaseDate, type=LocalDateTime [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=purchaseDate, type=LocalDateTime [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : user>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=user, type=com.epam.esm.model.entity.User [non-identifier,association])>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:4> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@628cb8e0]>
+08/06/2021 09:04:18 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@19f9404d>
+08/06/2021 09:04:18 TRACE - <.... Registering AssociationKey : AssociationKey(table=orders, columns={user_id}) -> org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@19f9404d>
+08/06/2021 09:04:18 TRACE - <>>>> Starting entity identifier : com.epam.esm.model.entity.User>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : user.firstName>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=firstName, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=firstName, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : user.lastName>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=lastName, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=lastName, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : user.roles>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=roles, type=java.util.Set(com.epam.esm.model.entity.User.roles) [non-identifier,association])>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:5> -> org.hibernate.loader.plan.build.internal.spaces.CollectionQuerySpaceImpl@5481f204]>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:6> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@171b0d3]>
+08/06/2021 09:04:18 TRACE - <Pushing collection reference to stack : org.hibernate.loader.plan.build.internal.returns.CollectionAttributeFetchImpl@63d43a5>
+08/06/2021 09:04:18 TRACE - <.... Registering AssociationKey : AssociationKey(table=user_role, columns={user_id}) -> org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@19f9404d>
+08/06/2021 09:04:18 TRACE - <>>>> Starting collection element graph : com.epam.esm.model.entity.User.roles>
+08/06/2021 09:04:18 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@55159007>
+08/06/2021 09:04:18 TRACE - <...... Registering AssociationKey : AssociationKey(table=user_role, columns={role_id}) -> org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@55159007>
+08/06/2021 09:04:18 TRACE - <>>>>>> Starting entity identifier : com.epam.esm.model.entity.Role>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : user.roles.description>
+08/06/2021 09:04:18 TRACE - <>>>>>> Starting attribute Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<<<< Finishing up attribute : Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : user.roles.name>
+08/06/2021 09:04:18 TRACE - <>>>>>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<<<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@55159007>
+08/06/2021 09:04:18 TRACE - <<<<< Finished collection element graph : com.epam.esm.model.entity.User.roles>
+08/06/2021 09:04:18 TRACE - <Popped collection reference from stack : org.hibernate.loader.plan.build.internal.returns.CollectionAttributeFetchImpl@63d43a5>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=roles, type=java.util.Set(com.epam.esm.model.entity.User.roles) [non-identifier,association])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : user.isActive>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=isActive, type=boolean [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=isActive, type=boolean [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : user.login>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=login, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=login, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : user.password>
+08/06/2021 09:04:18 TRACE - <>>>> Starting attribute Attribute(name=password, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<<<< Finishing up attribute : Attribute(name=password, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl@19f9404d>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=user, type=com.epam.esm.model.entity.User [non-identifier,association])>
+08/06/2021 09:04:18 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.EntityReturnImpl@277dddcf>
+08/06/2021 09:04:18 TRACE - < Finished root entity : com.epam.esm.model.entity.Order>
+08/06/2021 09:04:18 DEBUG - <Building LoadPlan...>
+08/06/2021 09:04:18 DEBUG - <processing queryspace <gen:0>>
+08/06/2021 09:04:18 DEBUG - <LoadPlan(entity=com.epam.esm.model.entity.Order)
+    - Returns
+       - EntityReturnImpl(entity=com.epam.esm.model.entity.Order, querySpaceUid=<gen:0>, path=com.epam.esm.model.entity.Order)
+          - EntityAttributeFetchImpl(entity=com.epam.esm.model.entity.Certificate, querySpaceUid=<gen:1>, path=com.epam.esm.model.entity.Order.certificate)
+             - CollectionAttributeFetchImpl(collection=com.epam.esm.model.entity.Certificate.tags, querySpaceUid=<gen:2>, path=com.epam.esm.model.entity.Order.certificate.tags)
+                - (collection element) CollectionFetchableElementEntityGraph(entity=com.epam.esm.model.entity.Tag, querySpaceUid=<gen:3>, path=com.epam.esm.model.entity.Order.certificate.tags.<elements>)
+          - EntityAttributeFetchImpl(entity=com.epam.esm.model.entity.User, querySpaceUid=<gen:4>, path=com.epam.esm.model.entity.Order.user)
+             - CollectionAttributeFetchImpl(collection=com.epam.esm.model.entity.User.roles, querySpaceUid=<gen:5>, path=com.epam.esm.model.entity.Order.user.roles)
+                - (collection element) CollectionFetchableElementEntityGraph(entity=com.epam.esm.model.entity.Role, querySpaceUid=<gen:6>, path=com.epam.esm.model.entity.Order.user.roles.<elements>)
+    - QuerySpaces
+       - EntityQuerySpaceImpl(uid=<gen:0>, entity=com.epam.esm.model.entity.Order)
+          - SQL table alias mapping - order0_
+          - alias suffix - 0_
+          - suffixed key columns - {id1_3_0_}
+          - JOIN (JoinDefinedByMetadata(certificate)) : <gen:0> -> <gen:1>
+             - EntityQuerySpaceImpl(uid=<gen:1>, entity=com.epam.esm.model.entity.Certificate)
+                - SQL table alias mapping - certificat1_
+                - alias suffix - 1_
+                - suffixed key columns - {id1_1_1_}
+          - JOIN (JoinDefinedByMetadata(user)) : <gen:0> -> <gen:4>
+             - EntityQuerySpaceImpl(uid=<gen:4>, entity=com.epam.esm.model.entity.User)
+                - SQL table alias mapping - user2_
+                - alias suffix - 2_
+                - suffixed key columns - {id1_6_2_}
+                - JOIN (JoinDefinedByMetadata(roles)) : <gen:4> -> <gen:5>
+                   - CollectionQuerySpaceImpl(uid=<gen:5>, collection=com.epam.esm.model.entity.User.roles)
+                      - SQL table alias mapping - roles3_
+                      - alias suffix - 3_
+                      - suffixed key columns - {user_id1_7_3_}
+                      - entity-element alias suffix - 4_
+                      - 4_entity-element suffixed key columns - id1_4_4_
+                      - JOIN (JoinDefinedByMetadata(elements)) : <gen:5> -> <gen:6>
+                         - EntityQuerySpaceImpl(uid=<gen:6>, entity=com.epam.esm.model.entity.Role)
+                            - SQL table alias mapping - role4_
+                            - alias suffix - 4_
+                            - suffixed key columns - {id1_4_4_}
+>
+08/06/2021 09:04:18 DEBUG - <Static select for entity com.epam.esm.model.entity.Order [NONE]: select order0_.id as id1_3_0_, order0_.certificate_id as certific5_3_0_, order0_.quantity as quantity2_3_0_, order0_.amount as amount3_3_0_, order0_.purchase_date as purchase4_3_0_, order0_.user_id as user_id6_3_0_, certificat1_.id as id1_1_1_, certificat1_.create_date as create_d2_1_1_, certificat1_.description as descript3_1_1_, certificat1_.duration as duration4_1_1_, certificat1_.last_update_date as last_upd5_1_1_, certificat1_.name as name6_1_1_, certificat1_.price as price7_1_1_, user2_.id as id1_6_2_, user2_.first_name as first_na2_6_2_, user2_.last_name as last_nam3_6_2_, user2_1_.is_active as is_activ1_0_2_, user2_1_.login as login2_0_2_, user2_1_.password as password3_0_2_, roles3_.user_id as user_id1_7_3_, role4_.id as role_id2_7_3_, role4_.id as id1_4_4_, role4_.description as descript2_4_4_, role4_.name as name3_4_4_ from orders order0_ inner join certificate certificat1_ on order0_.certificate_id=certificat1_.id left outer join user user2_ on order0_.user_id=user2_.id left outer join account user2_1_ on user2_.id=user2_1_.id left outer join user_role roles3_ on user2_.id=roles3_.user_id left outer join role role4_ on roles3_.role_id=role4_.id where order0_.id=?>
+08/06/2021 09:04:18 TRACE - < Starting root collection : com.epam.esm.model.entity.User.roles>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.CollectionQuerySpaceImpl@edf4973]>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:1> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@2a49753]>
+08/06/2021 09:04:18 TRACE - <Pushing collection reference to stack : org.hibernate.loader.plan.build.internal.returns.CollectionReturnImpl@6e68ccc9>
+08/06/2021 09:04:18 TRACE - < Registering AssociationKey : AssociationKey(table=user_role, columns={user_id}) -> null>
+08/06/2021 09:04:18 TRACE - < Starting collection element graph : com.epam.esm.model.entity.User.roles>
+08/06/2021 09:04:18 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@1784fcab>
+08/06/2021 09:04:18 TRACE - <.. Registering AssociationKey : AssociationKey(table=user_role, columns={role_id}) -> org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@1784fcab>
+08/06/2021 09:04:18 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.Role>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : description>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=description, type=string [non-identifier])>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : name>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@1784fcab>
+08/06/2021 09:04:18 TRACE - < Finished collection element graph : com.epam.esm.model.entity.User.roles>
+08/06/2021 09:04:18 TRACE - <Popped collection reference from stack : org.hibernate.loader.plan.build.internal.returns.CollectionReturnImpl@6e68ccc9>
+08/06/2021 09:04:18 TRACE - < Finished root collection : com.epam.esm.model.entity.User.roles>
+08/06/2021 09:04:18 DEBUG - <Building LoadPlan...>
+08/06/2021 09:04:18 DEBUG - <processing queryspace <gen:0>>
+08/06/2021 09:04:18 DEBUG - <LoadPlan(collection=com.epam.esm.model.entity.User.roles)
+    - Returns
+       - CollectionReturnImpl(collection=com.epam.esm.model.entity.User.roles, querySpaceUid=<gen:0>, path=[com.epam.esm.model.entity.User.roles])
+          - (collection element) CollectionFetchableElementEntityGraph(entity=com.epam.esm.model.entity.Role, querySpaceUid=<gen:1>, path=[com.epam.esm.model.entity.User.roles].<elements>)
+    - QuerySpaces
+       - CollectionQuerySpaceImpl(uid=<gen:0>, collection=com.epam.esm.model.entity.User.roles)
+          - SQL table alias mapping - roles0_
+          - alias suffix - 0_
+          - suffixed key columns - {user_id1_7_0_}
+          - entity-element alias suffix - 1_
+          - 1_entity-element suffixed key columns - id1_4_1_
+          - JOIN (JoinDefinedByMetadata(elements)) : <gen:0> -> <gen:1>
+             - EntityQuerySpaceImpl(uid=<gen:1>, entity=com.epam.esm.model.entity.Role)
+                - SQL table alias mapping - role1_
+                - alias suffix - 1_
+                - suffixed key columns - {id1_4_1_}
+>
+08/06/2021 09:04:18 DEBUG - <Static select for collection com.epam.esm.model.entity.User.roles: select roles0_.user_id as user_id1_7_0_, roles0_.role_id as role_id2_7_0_, role1_.id as id1_4_1_, role1_.description as descript2_4_1_, role1_.name as name3_4_1_ from user_role roles0_ inner join role role1_ on roles0_.role_id=role1_.id where roles0_.user_id=?>
+08/06/2021 09:04:18 TRACE - < Starting root collection : com.epam.esm.model.entity.Certificate.tags>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:0> -> org.hibernate.loader.plan.build.internal.spaces.CollectionQuerySpaceImpl@63e4bbf9]>
+08/06/2021 09:04:18 DEBUG - <Adding QuerySpace : uid = <gen:1> -> org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl@455cb6d9]>
+08/06/2021 09:04:18 TRACE - <Pushing collection reference to stack : org.hibernate.loader.plan.build.internal.returns.CollectionReturnImpl@6d7a343f>
+08/06/2021 09:04:18 TRACE - < Registering AssociationKey : AssociationKey(table=certificate_tag, columns={certificate_id}) -> null>
+08/06/2021 09:04:18 TRACE - < Starting collection element graph : com.epam.esm.model.entity.Certificate.tags>
+08/06/2021 09:04:18 TRACE - <Pushing fetch source to stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@5d2bfc9f>
+08/06/2021 09:04:18 TRACE - <.. Registering AssociationKey : AssociationKey(table=certificate_tag, columns={tag_id}) -> org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@5d2bfc9f>
+08/06/2021 09:04:18 TRACE - <>> Starting entity identifier : com.epam.esm.model.entity.Tag>
+08/06/2021 09:04:18 DEBUG - <Visiting attribute path : name>
+08/06/2021 09:04:18 TRACE - <>> Starting attribute Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <<< Finishing up attribute : Attribute(name=name, type=string [non-identifier])>
+08/06/2021 09:04:18 TRACE - <Popped fetch owner from stack : org.hibernate.loader.plan.build.internal.returns.CollectionFetchableElementEntityGraph@5d2bfc9f>
+08/06/2021 09:04:18 TRACE - < Finished collection element graph : com.epam.esm.model.entity.Certificate.tags>
+08/06/2021 09:04:18 TRACE - <Popped collection reference from stack : org.hibernate.loader.plan.build.internal.returns.CollectionReturnImpl@6d7a343f>
+08/06/2021 09:04:18 TRACE - < Finished root collection : com.epam.esm.model.entity.Certificate.tags>
+08/06/2021 09:04:18 DEBUG - <Building LoadPlan...>
+08/06/2021 09:04:18 DEBUG - <processing queryspace <gen:0>>
+08/06/2021 09:04:18 DEBUG - <LoadPlan(collection=com.epam.esm.model.entity.Certificate.tags)
+    - Returns
+       - CollectionReturnImpl(collection=com.epam.esm.model.entity.Certificate.tags, querySpaceUid=<gen:0>, path=[com.epam.esm.model.entity.Certificate.tags])
+          - (collection element) CollectionFetchableElementEntityGraph(entity=com.epam.esm.model.entity.Tag, querySpaceUid=<gen:1>, path=[com.epam.esm.model.entity.Certificate.tags].<elements>)
+    - QuerySpaces
+       - CollectionQuerySpaceImpl(uid=<gen:0>, collection=com.epam.esm.model.entity.Certificate.tags)
+          - SQL table alias mapping - tags0_
+          - alias suffix - 0_
+          - suffixed key columns - {certific1_2_0_}
+          - entity-element alias suffix - 1_
+          - 1_entity-element suffixed key columns - id1_5_1_
+          - JOIN (JoinDefinedByMetadata(elements)) : <gen:0> -> <gen:1>
+             - EntityQuerySpaceImpl(uid=<gen:1>, entity=com.epam.esm.model.entity.Tag)
+                - SQL table alias mapping - tag1_
+                - alias suffix - 1_
+                - suffixed key columns - {id1_5_1_}
+>
+08/06/2021 09:04:18 DEBUG - <Static select for collection com.epam.esm.model.entity.Certificate.tags: select tags0_.certificate_id as certific1_2_0_, tags0_.tag_id as tag_id2_2_0_, tag1_.id as id1_5_1_, tag1_.name as name2_5_1_ from certificate_tag tags0_ inner join tag tag1_ on tags0_.tag_id=tag1_.id where tags0_.certificate_id=?>
+08/06/2021 09:04:18 TRACE - <Wrapping up metadata context...>
+08/06/2021 09:04:18 TRACE - <Starting mapped superclass [com.epam.esm.model.entity.CustomEntity]>
+08/06/2021 09:04:18 TRACE - <Building identifier attribute [com.epam.esm.model.entity.CustomEntity.id]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [id]>
+08/06/2021 09:04:18 TRACE - <    Determined member [protected int com.epam.esm.model.entity.CustomEntity.id]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=integer, class=org.hibernate.type.IntegerType]>
+08/06/2021 09:04:18 TRACE - <Completed mapped superclass [com.epam.esm.model.entity.CustomEntity]>
+08/06/2021 09:04:18 TRACE - <Starting entity [com.epam.esm.model.entity.Certificate]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Certificate.createDate]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [createDate]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.time.LocalDateTime com.epam.esm.model.entity.Certificate.createDate]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=LocalDateTime, class=org.hibernate.type.LocalDateTimeType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Certificate.description]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [description]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.Certificate.description]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Certificate.duration]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [duration]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private int com.epam.esm.model.entity.Certificate.duration]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=integer, class=org.hibernate.type.IntegerType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Certificate.lastUpdateDate]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [lastUpdateDate]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.time.LocalDateTime com.epam.esm.model.entity.Certificate.lastUpdateDate]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=LocalDateTime, class=org.hibernate.type.LocalDateTimeType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Certificate.name]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [name]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.Certificate.name]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Certificate.price]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [price]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.math.BigDecimal com.epam.esm.model.entity.Certificate.price]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=big_decimal, class=org.hibernate.type.BigDecimalType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Certificate.tags]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [tags]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.util.List com.epam.esm.model.entity.Certificate.tags]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=java.util.Collection(com.epam.esm.model.entity.Certificate.tags), class=org.hibernate.type.BagType]>
+08/06/2021 09:04:18 TRACE - <Completed entity [com.epam.esm.model.entity.Certificate]>
+08/06/2021 09:04:18 TRACE - <Starting entity [com.epam.esm.model.entity.Tag]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Tag.name]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [name]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.Tag.name]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+08/06/2021 09:04:18 TRACE - <Completed entity [com.epam.esm.model.entity.Tag]>
+08/06/2021 09:04:18 TRACE - <Starting entity [com.epam.esm.model.entity.Role]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Role.description]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [description]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.Role.description]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Role.name]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [name]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.Role.name]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+08/06/2021 09:04:18 TRACE - <Completed entity [com.epam.esm.model.entity.Role]>
+08/06/2021 09:04:18 TRACE - <Starting entity [com.epam.esm.model.entity.User]>
+08/06/2021 09:04:18 TRACE - <Building attribute [User.firstName]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [firstName]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.User.firstName]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [User.lastName]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [lastName]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.User.lastName]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [User.roles]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [roles]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.util.Set com.epam.esm.model.entity.User.roles]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=java.util.Set(com.epam.esm.model.entity.User.roles), class=org.hibernate.type.SetType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [User.isActive]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [isActive]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private boolean com.epam.esm.model.entity.User.isActive]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=boolean, class=org.hibernate.type.BooleanType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [User.login]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [login]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.User.login]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [User.password]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [password]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.lang.String com.epam.esm.model.entity.User.password]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=string, class=org.hibernate.type.StringType]>
+08/06/2021 09:04:18 TRACE - <Completed entity [com.epam.esm.model.entity.User]>
+08/06/2021 09:04:18 TRACE - <Starting entity [com.epam.esm.model.entity.Order]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Order.certificate]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [certificate]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private com.epam.esm.model.entity.Certificate com.epam.esm.model.entity.Order.certificate]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=com.epam.esm.model.entity.Certificate, class=org.hibernate.type.ManyToOneType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Order.certificateQuantity]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [certificateQuantity]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private int com.epam.esm.model.entity.Order.certificateQuantity]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=integer, class=org.hibernate.type.IntegerType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Order.orderAmount]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [orderAmount]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.math.BigDecimal com.epam.esm.model.entity.Order.orderAmount]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=big_decimal, class=org.hibernate.type.BigDecimalType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Order.purchaseDate]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [purchaseDate]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private java.time.LocalDateTime com.epam.esm.model.entity.Order.purchaseDate]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=LocalDateTime, class=org.hibernate.type.LocalDateTimeType]>
+08/06/2021 09:04:18 TRACE - <Building attribute [Order.user]>
+08/06/2021 09:04:18 TRACE - <Starting attribute metadata determination [user]>
+08/06/2021 09:04:18 TRACE - <    Determined member [private com.epam.esm.model.entity.User com.epam.esm.model.entity.Order.user]>
+08/06/2021 09:04:18 TRACE - <    Determined type [name=com.epam.esm.model.entity.User, class=org.hibernate.type.ManyToOneType]>
+08/06/2021 09:04:18 TRACE - <Completed entity [com.epam.esm.model.entity.Order]>
+08/06/2021 09:04:18 TRACE - <Normalizing identifier quoting [HT_user]>
+08/06/2021 09:04:18 TRACE - <Initializing service [role=org.hibernate.tool.schema.spi.SchemaManagementTool]>
+08/06/2021 09:04:18 TRACE - <Initializing service [role=org.hibernate.resource.transaction.spi.TransactionCoordinatorBuilder]>
+08/06/2021 09:04:18 TRACE - <Initializing service [role=org.hibernate.tool.hbm2ddl.ImportSqlCommandExtractor]>
+08/06/2021 09:04:18 DEBUG - <drop table if exists account CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists certificate CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists certificate_tag CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists orders CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists role CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists tag CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists user CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists user_role CASCADE >
+08/06/2021 09:04:18 DEBUG - <create table account (is_active is_active, login varchar(255) not null, password varchar(255) not null, id integer not null, primary key (id))>
+08/06/2021 09:04:18  WARN - <GenerationTarget encountered exception accepting command : Error executing DDL "create table account (is_active is_active, login varchar(255) not null, password varchar(255) not null, id integer not null, primary key (id))" via JDBC Statement>
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "create table account (is_active is_active, login varchar(255) not null, password varchar(255) not null, id integer not null, primary key (id))" via JDBC Statement
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:67)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.applySqlString(SchemaCreatorImpl.java:439)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.applySqlStrings(SchemaCreatorImpl.java:423)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createFromMetadata(SchemaCreatorImpl.java:314)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.performCreation(SchemaCreatorImpl.java:166)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:135)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:121)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:156)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:73)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:318)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:468)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1259)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:341)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1845)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:602)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:524)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1153)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:907)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:582)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:767)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:759)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:426)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:326)
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:123)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:99)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:124)
+	at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:124)
+	at org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener.postProcessFields(MockitoTestExecutionListener.java:105)
+	at org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener.injectFields(MockitoTestExecutionListener.java:89)
+	at org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener.prepareTestInstance(MockitoTestExecutionListener.java:56)
+	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:244)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.postProcessTestInstance(SpringExtension.java:138)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$6(ClassBasedTestDescriptor.java:350)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.executeAndMaskThrowable(ClassBasedTestDescriptor.java:355)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$7(ClassBasedTestDescriptor.java:350)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:177)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1655)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:312)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:735)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:658)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeTestInstancePostProcessors(ClassBasedTestDescriptor.java:349)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$instantiateAndPostProcessTestInstance$4(ClassBasedTestDescriptor.java:270)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.instantiateAndPostProcessTestInstance(ClassBasedTestDescriptor.java:269)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$2(ClassBasedTestDescriptor.java:259)
+	at java.base/java.util.Optional.orElseGet(Optional.java:369)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$3(ClassBasedTestDescriptor.java:258)
+	at org.junit.jupiter.engine.execution.TestInstancesProvider.getTestInstances(TestInstancesProvider.java:31)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$prepare$0(TestMethodTestDescriptor.java:101)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:100)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:65)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$prepare$1(NodeTestTask.java:111)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.prepare(NodeTestTask.java:111)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:79)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:38)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:129)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:127)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:126)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:84)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:38)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:129)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:127)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:126)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:84)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:32)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:51)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:108)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:96)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:75)
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:71)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:33)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:220)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:53)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: Неизвестный тип данных: "IS_ACTIVE"
+Unknown data type: "IS_ACTIVE"; SQL statement:
+create table account (is_active is_active, login varchar(255) not null, password varchar(255) not null, id integer not null, primary key (id)) [50004-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:505)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.command.Parser.parseColumnWithType(Parser.java:5971)
+	at org.h2.command.Parser.parseColumnForTable(Parser.java:5697)
+	at org.h2.command.Parser.parseTableColumnDefinition(Parser.java:8442)
+	at org.h2.command.Parser.parseCreateTable(Parser.java:8379)
+	at org.h2.command.Parser.parseCreate(Parser.java:6276)
+	at org.h2.command.Parser.parsePrepared(Parser.java:903)
+	at org.h2.command.Parser.parse(Parser.java:843)
+	at org.h2.command.Parser.parse(Parser.java:815)
+	at org.h2.command.Parser.prepareCommand(Parser.java:738)
+	at org.h2.engine.Session.prepareLocal(Session.java:657)
+	at org.h2.engine.Session.prepareCommand(Session.java:595)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1235)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:212)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:201)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:95)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:54)
+	... 102 more
+08/06/2021 09:04:18 DEBUG - <create table certificate (id integer generated by default as identity, create_date timestamp not null, description text, duration integer not null, last_update_date timestamp not null, name varchar(255) not null, price double not null, primary key (id))>
+08/06/2021 09:04:18 DEBUG - <create table certificate_tag (certificate_id integer not null, tag_id integer not null)>
+08/06/2021 09:04:18 DEBUG - <create table orders (id integer generated by default as identity, quantity integer not null, amount double not null, purchase_date timestamp not null, certificate_id integer not null, user_id integer not null, primary key (id))>
+08/06/2021 09:04:18 DEBUG - <create table role (id integer generated by default as identity, description varchar(255), name varchar(255), primary key (id))>
+08/06/2021 09:04:18 DEBUG - <create table tag (id integer generated by default as identity, name varchar(255) not null, primary key (id))>
+08/06/2021 09:04:18 DEBUG - <create table user (id integer generated by default as identity, first_name varchar(255) not null, last_name varchar(255) not null, primary key (id))>
+08/06/2021 09:04:18 DEBUG - <create table user_role (user_id integer not null, role_id integer not null, primary key (user_id, role_id))>
+08/06/2021 09:04:18 DEBUG - <alter table account add constraint UK_5vxwyorsr92jce3ore6h93k6q unique (login)>
+08/06/2021 09:04:18  WARN - <GenerationTarget encountered exception accepting command : Error executing DDL "alter table account add constraint UK_5vxwyorsr92jce3ore6h93k6q unique (login)" via JDBC Statement>
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "alter table account add constraint UK_5vxwyorsr92jce3ore6h93k6q unique (login)" via JDBC Statement
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:67)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.applySqlString(SchemaCreatorImpl.java:439)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.applySqlStrings(SchemaCreatorImpl.java:423)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createFromMetadata(SchemaCreatorImpl.java:348)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.performCreation(SchemaCreatorImpl.java:166)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:135)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:121)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:156)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:73)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:318)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:468)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1259)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:341)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1845)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:602)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:524)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1153)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:907)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:582)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:767)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:759)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:426)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:326)
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:123)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:99)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:124)
+	at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:124)
+	at org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener.postProcessFields(MockitoTestExecutionListener.java:105)
+	at org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener.injectFields(MockitoTestExecutionListener.java:89)
+	at org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener.prepareTestInstance(MockitoTestExecutionListener.java:56)
+	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:244)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.postProcessTestInstance(SpringExtension.java:138)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$6(ClassBasedTestDescriptor.java:350)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.executeAndMaskThrowable(ClassBasedTestDescriptor.java:355)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$7(ClassBasedTestDescriptor.java:350)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:177)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1655)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:312)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:735)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:658)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeTestInstancePostProcessors(ClassBasedTestDescriptor.java:349)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$instantiateAndPostProcessTestInstance$4(ClassBasedTestDescriptor.java:270)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.instantiateAndPostProcessTestInstance(ClassBasedTestDescriptor.java:269)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$2(ClassBasedTestDescriptor.java:259)
+	at java.base/java.util.Optional.orElseGet(Optional.java:369)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$3(ClassBasedTestDescriptor.java:258)
+	at org.junit.jupiter.engine.execution.TestInstancesProvider.getTestInstances(TestInstancesProvider.java:31)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$prepare$0(TestMethodTestDescriptor.java:101)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:100)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:65)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$prepare$1(NodeTestTask.java:111)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.prepare(NodeTestTask.java:111)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:79)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:38)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:129)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:127)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:126)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:84)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:38)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:129)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:127)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:126)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:84)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:32)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:51)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:108)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:96)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:75)
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:71)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:33)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:220)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:53)
+Caused by: org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "ACCOUNT" не найдена
+Table "ACCOUNT" not found; SQL statement:
+alter table account add constraint UK_5vxwyorsr92jce3ore6h93k6q unique (login) [42102-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:453)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.command.ddl.AlterTableAddConstraint.tryUpdate(AlterTableAddConstraint.java:108)
+	at org.h2.command.ddl.AlterTableAddConstraint.update(AlterTableAddConstraint.java:78)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:198)
+	at org.h2.command.Command.executeUpdate(Command.java:251)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:228)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:201)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:95)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:54)
+	... 102 more
+08/06/2021 09:04:18 DEBUG - <alter table tag add constraint UK_1wdpsed5kna2y38hnbgrnhi5b unique (name)>
+08/06/2021 09:04:18 DEBUG - <alter table account add constraint FK7y2xm0umcdojys1422d5walap foreign key (id) references user>
+08/06/2021 09:04:18  WARN - <GenerationTarget encountered exception accepting command : Error executing DDL "alter table account add constraint FK7y2xm0umcdojys1422d5walap foreign key (id) references user" via JDBC Statement>
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "alter table account add constraint FK7y2xm0umcdojys1422d5walap foreign key (id) references user" via JDBC Statement
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:67)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.applySqlString(SchemaCreatorImpl.java:439)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.applySqlStrings(SchemaCreatorImpl.java:423)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.createFromMetadata(SchemaCreatorImpl.java:374)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.performCreation(SchemaCreatorImpl.java:166)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:135)
+	at org.hibernate.tool.schema.internal.SchemaCreatorImpl.doCreation(SchemaCreatorImpl.java:121)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:156)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:73)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:318)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:468)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1259)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:341)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1845)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1782)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:602)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:524)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1153)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:907)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:582)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:767)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:759)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:426)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:326)
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:123)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:99)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:124)
+	at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:124)
+	at org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener.postProcessFields(MockitoTestExecutionListener.java:105)
+	at org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener.injectFields(MockitoTestExecutionListener.java:89)
+	at org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener.prepareTestInstance(MockitoTestExecutionListener.java:56)
+	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:244)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.postProcessTestInstance(SpringExtension.java:138)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$6(ClassBasedTestDescriptor.java:350)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.executeAndMaskThrowable(ClassBasedTestDescriptor.java:355)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$7(ClassBasedTestDescriptor.java:350)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:177)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1655)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:312)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:735)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:658)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeTestInstancePostProcessors(ClassBasedTestDescriptor.java:349)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$instantiateAndPostProcessTestInstance$4(ClassBasedTestDescriptor.java:270)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.instantiateAndPostProcessTestInstance(ClassBasedTestDescriptor.java:269)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$2(ClassBasedTestDescriptor.java:259)
+	at java.base/java.util.Optional.orElseGet(Optional.java:369)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$3(ClassBasedTestDescriptor.java:258)
+	at org.junit.jupiter.engine.execution.TestInstancesProvider.getTestInstances(TestInstancesProvider.java:31)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$prepare$0(TestMethodTestDescriptor.java:101)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:100)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:65)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$prepare$1(NodeTestTask.java:111)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.prepare(NodeTestTask.java:111)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:79)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:38)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:129)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:127)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:126)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:84)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:38)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:129)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:127)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:126)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:84)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:32)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:51)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:108)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:96)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:75)
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:71)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:33)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:220)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:53)
+Caused by: org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "ACCOUNT" не найдена
+Table "ACCOUNT" not found; SQL statement:
+alter table account add constraint FK7y2xm0umcdojys1422d5walap foreign key (id) references user [42102-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:453)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.command.ddl.AlterTableAddConstraint.tryUpdate(AlterTableAddConstraint.java:108)
+	at org.h2.command.ddl.AlterTableAddConstraint.update(AlterTableAddConstraint.java:78)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:198)
+	at org.h2.command.Command.executeUpdate(Command.java:251)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:228)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:201)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:95)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:54)
+	... 102 more

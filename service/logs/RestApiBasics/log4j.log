@@ -1,0 +1,174 @@
+08/06/2021 09:04:18 DEBUG - <drop table if exists certificate CASCADE >
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Added connection conn42: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <drop table if exists certificate CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists certificate CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists certificate_tag CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists orders CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists role CASCADE >
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Added connection conn43: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Added connection conn44: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Added connection conn40: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Added connection conn45: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Added connection conn46: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Added connection conn47: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Added connection conn48: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Added connection conn49: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Added connection conn50: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Added connection conn51: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - After adding stats (total=10, active=1, idle=9, waiting=0)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Added connection conn41: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Added connection conn53: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Added connection conn52: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Added connection conn54: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Added connection conn55: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Added connection conn56: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn16: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn26: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn3: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Added connection conn57: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Added connection conn58: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Added connection conn59: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn17: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Added connection conn61: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <drop table if exists certificate_tag CASCADE >
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Added connection conn62: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <drop table if exists tag CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists user CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists certificate_tag CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists user_role CASCADE >
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'dataSource': [org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaConfiguration, jdbcTemplate]>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaConfiguration': [entityManagerFactoryBuilder, jpaVendorAdapter, transactionManager]>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'transactionManager': [transactionTemplate]>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'jdbcTemplate': [namedParameterJdbcTemplate]>
+08/06/2021 09:04:18 TRACE - <Invoking destroy method 'close' on bean with name 'dataSource'>
+08/06/2021 09:04:18 TRACE - <Handling #sessionFactoryClosed from [org.hibernate.internal.SessionFactoryImpl@7878bbdb] for TypeConfiguration>
+08/06/2021 09:04:18 DEBUG - <drop table if exists orders CASCADE >
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Added connection conn63: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <drop table if exists orders CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists role CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists tag CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists user CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists user_role CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists role CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists tag CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists user CASCADE >
+08/06/2021 09:04:18 DEBUG - <drop table if exists user_role CASCADE >
+08/06/2021 09:04:18 TRACE - <Handling #sessionFactoryClosed from [org.hibernate.internal.SessionFactoryImpl@75b25ec3] for TypeConfiguration>
+08/06/2021 09:04:18 DEBUG - <Un-scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration$Scope@37b0ee0e] from SessionFactory [org.hibernate.internal.SessionFactoryImpl@75b25ec3]>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn4: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn5: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn6: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn27: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn18: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn28: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Added connection conn60: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn29: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn19: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn7: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 TRACE - <Handling #sessionFactoryClosed from [org.hibernate.internal.SessionFactoryImpl@2643ed03] for TypeConfiguration>
+08/06/2021 09:04:18 DEBUG - <Un-scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration$Scope@4d45076f] from SessionFactory [org.hibernate.internal.SessionFactoryImpl@2643ed03]>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Added connection conn64: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <Un-scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration$Scope@15611552] from SessionFactory [org.hibernate.internal.SessionFactoryImpl@7878bbdb]>
+08/06/2021 09:04:18  INFO - <HikariPool-4 - Shutdown initiated...>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Added connection conn65: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - After adding stats (total=6, active=0, idle=6, waiting=0)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn8: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <Implicitly destroying ServiceRegistry on de-registration of all child ServiceRegistries>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 DEBUG - <Implicitly destroying ServiceRegistry on de-registration of all child ServiceRegistries>
+08/06/2021 09:04:18 DEBUG - <Implicitly destroying Boot-strap registry on de-registration of all child ServiceRegistries>
+08/06/2021 09:04:18 DEBUG - <Implicitly destroying ServiceRegistry on de-registration of all child ServiceRegistries>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - Before shutdown stats (total=10, active=0, idle=10, waiting=0)>
+08/06/2021 09:04:18 DEBUG - <Implicitly destroying Boot-strap registry on de-registration of all child ServiceRegistries>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'dataSource': [org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaConfiguration, jdbcTemplate]>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaConfiguration': [entityManagerFactoryBuilder, jpaVendorAdapter, transactionManager]>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'dataSource': [org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaConfiguration, jdbcTemplate]>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Fill pool skipped, pool is at sufficient level.>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaConfiguration': [entityManagerFactoryBuilder, jpaVendorAdapter, transactionManager]>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'transactionManager': [transactionTemplate]>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Added connection conn66: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'jdbcTemplate': [namedParameterJdbcTemplate]>
+08/06/2021 09:04:18 TRACE - <Invoking destroy method 'close' on bean with name 'dataSource'>
+08/06/2021 09:04:18  INFO - <HikariPool-2 - Shutdown initiated...>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Before shutdown stats (total=10, active=0, idle=10, waiting=0)>
+08/06/2021 09:04:18 DEBUG - <Implicitly destroying Boot-strap registry on de-registration of all child ServiceRegistries>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'dataSource': [org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaConfiguration, jdbcTemplate]>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaConfiguration': [entityManagerFactoryBuilder, jpaVendorAdapter, transactionManager]>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'transactionManager': [transactionTemplate]>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'jdbcTemplate': [namedParameterJdbcTemplate]>
+08/06/2021 09:04:18 TRACE - <Invoking destroy method 'close' on bean with name 'dataSource'>
+08/06/2021 09:04:18  INFO - <HikariPool-1 - Shutdown initiated...>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Before shutdown stats (total=10, active=0, idle=10, waiting=0)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Added connection conn67: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Added connection conn68: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Added connection conn69: url=jdbc:h2:mem:test user=SA>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'transactionManager': [transactionTemplate]>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'jdbcTemplate': [namedParameterJdbcTemplate]>
+08/06/2021 09:04:18 TRACE - <Invoking destroy method 'close' on bean with name 'dataSource'>
+08/06/2021 09:04:18  INFO - <HikariPool-3 - Shutdown initiated...>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Before shutdown stats (total=10, active=0, idle=10, waiting=0)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn42: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn9: url=jdbc:h2:mem:test user=SA: (connection is dead)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn40: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn52: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn43: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - Closing connection conn30: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - Closing connection conn31: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - Closing connection conn32: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - Closing connection conn33: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - Closing connection conn34: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - Closing connection conn35: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - Closing connection conn36: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - Closing connection conn37: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - Closing connection conn38: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - Closing connection conn39: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn44: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn41: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn53: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-4 - After shutdown stats (total=0, active=0, idle=0, waiting=0)>
+08/06/2021 09:04:18  INFO - <HikariPool-4 - Shutdown completed.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn56: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory': [org.springframework.context.annotation.internalConfigurationAnnotationProcessor]>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn45: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn54: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn55: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn57: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn59: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn61: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn62: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn58: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn46: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn47: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn48: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn49: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn50: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - Closing connection conn51: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn60: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-2 - After shutdown stats (total=0, active=0, idle=0, waiting=0)>
+08/06/2021 09:04:18  INFO - <HikariPool-2 - Shutdown completed.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn63: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory': [org.springframework.context.annotation.internalConfigurationAnnotationProcessor]>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - Closing connection conn64: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn65: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn66: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-1 - After shutdown stats (total=0, active=0, idle=0, waiting=0)>
+08/06/2021 09:04:18  INFO - <HikariPool-1 - Shutdown completed.>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn67: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory': [org.springframework.context.annotation.internalConfigurationAnnotationProcessor]>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn68: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - Closing connection conn69: url=jdbc:h2:mem:test user=SA: (connection evicted)>
+08/06/2021 09:04:18 DEBUG - <HikariPool-3 - After shutdown stats (total=0, active=0, idle=0, waiting=0)>
+08/06/2021 09:04:18  INFO - <HikariPool-3 - Shutdown completed.>
+08/06/2021 09:04:18 TRACE - <Retrieved dependent beans for bean 'org.springframework.boot.autoconfigure.internalCachingMetadataReaderFactory': [org.springframework.context.annotation.internalConfigurationAnnotationProcessor]>
