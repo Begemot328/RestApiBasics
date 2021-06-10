@@ -42,7 +42,7 @@ public class AuditService {
     }
 
     /**
-     * Name setter.
+     * {@link AuditEntity} create and persist method.
      *
      * @param entity {@link CustomEntity} object to audit.
      * @param entity {@link String} name of the operation to audit.
@@ -56,6 +56,11 @@ public class AuditService {
         return dao.save(auditEntity);
     }
 
+    /**
+     * {@link CustomEntity} obtain by ID method.
+     *
+     * @param id {@link CustomEntity} ID  to obtain.
+     */
     public Optional<CustomEntity> getOperationEntity(int id) {
         return entityDAO.findById(dao.findById(id).orElseThrow(
                 () -> new RuntimeException("no such operation"))

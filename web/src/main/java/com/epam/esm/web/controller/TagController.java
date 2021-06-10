@@ -1,5 +1,6 @@
 package com.epam.esm.web.controller;
 
+import com.epam.esm.persistence.model.entity.Certificate;
 import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.persistence.model.userdetails.roles.SecurityRoles;
 import com.epam.esm.service.constants.CertificateSearchParameters;
@@ -35,6 +36,12 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * {@link Tag} controller class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @RestController
 @RequestMapping(value = "/tags")
 public class TagController implements PageableSearch {
@@ -44,6 +51,14 @@ public class TagController implements PageableSearch {
     private final TagDTOMapper tagDTOMapper;
     private final CertificateDTOMapper certificateDTOMapper;
 
+    /**
+     * Constructor.
+     *
+     * @param tagService Service for {@link Certificate} processing.
+     * @param certificateService Service for {@link Tag} processing.
+     * @param certificateDTOMapper {@link Certificate} to {@link CertificateDTO} mapper.
+     * @param tagDTOMapper {@link Tag} to {@link TagDTO} mapper.
+     */
     @Autowired
     public TagController(TagService tagService,
                          CertificateService certificateService,

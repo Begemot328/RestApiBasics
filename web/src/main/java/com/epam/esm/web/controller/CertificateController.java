@@ -1,6 +1,8 @@
 package com.epam.esm.web.controller;
 
 import com.epam.esm.persistence.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.Tag;
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.persistence.model.userdetails.roles.SecurityRoles;
 import com.epam.esm.service.constants.TagSearchParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
@@ -12,6 +14,7 @@ import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.certificate.CertificateDTOMapper;
 import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.dto.tag.TagDTOMapper;
+import com.epam.esm.web.dto.user.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
@@ -37,6 +40,12 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * {@link Certificate} controller class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @RestController
 @RequestMapping(value = "/certificates")
 public class CertificateController implements PageableSearch {
@@ -45,6 +54,14 @@ public class CertificateController implements PageableSearch {
     private final TagDTOMapper tagDTOMapper;
     private final CertificateDTOMapper certificateDTOMapper;
 
+    /**
+     * Constructor.
+     *
+     * @param tagService Service for {@link Certificate} processing.
+     * @param certificateService Service for {@link Tag} processing.
+     * @param certificateDTOMapper {@link Certificate} to {@link CertificateDTO} mapper.
+     * @param tagDTOMapper {@link Tag} to {@link TagDTO} mapper.
+     */
     @Autowired
     public CertificateController(TagService tagService,
                                  CertificateService certificateService,

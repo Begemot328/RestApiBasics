@@ -6,6 +6,12 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import java.util.Objects;
 
+/**
+ * Role class.
+ *
+ * @author Yury Zmushko
+ * @version 2.0
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Role extends CustomEntity {
@@ -16,6 +22,11 @@ public class Role extends CustomEntity {
     @Column
     private String description;
 
+    /**
+     * Constructor.
+     *
+     * @param name     Name of the role.
+     */
     public Role(String name) {
         this.name = name;
     }

@@ -21,7 +21,6 @@ import java.util.Objects;
  * @author Yury Zmushko
  * @version 2.0
  */
-
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Certificate extends CustomEntity {

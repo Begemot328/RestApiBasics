@@ -1,6 +1,8 @@
 package com.epam.esm.web.controller;
 
+import com.epam.esm.persistence.model.entity.Certificate;
 import com.epam.esm.persistence.model.entity.Order;
+import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.persistence.model.userdetails.roles.SecurityRoles;
 import com.epam.esm.service.constants.OrderSearchParameters;
@@ -12,8 +14,10 @@ import com.epam.esm.service.service.order.OrderService;
 import com.epam.esm.service.service.order.OrderServiceImpl;
 import com.epam.esm.service.service.user.UserService;
 import com.epam.esm.service.service.user.UserServiceImpl;
+import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.order.OrderDTO;
 import com.epam.esm.web.dto.order.OrderDTOMapper;
+import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.dto.user.UserDTO;
 import com.epam.esm.web.dto.user.UserDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +42,12 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * {@link User} controller class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @RestController
 @RequestMapping(value = "/users")
 public class UserController implements PageableSearch {
@@ -47,14 +57,22 @@ public class UserController implements PageableSearch {
     private final UserDTOMapper userDTOMapper;
     private final OrderDTOMapper orderDTOMapper;
 
+    /**
+     * Constructor.
+     *
+     * @param userService Service for {@link User} processing.
+     * @param orderService Service for {@link Order} processing.
+     * @param userDTOMapper {@link User} to {@link UserDTO} mapper.
+     * @param orderDTOMapper {@link Order} to {@link OrderDTO} mapper.
+     */
     @Autowired
     public UserController(OrderServiceImpl orderService,
-                          UserServiceImpl userServiceImpl,
+                          UserServiceImpl userService,
                           UserDTOMapper userDTOMapper,
                           OrderDTOMapper orderDTOMapper,
                           CertificateService certificateService) {
         this.orderService = orderService;
-        this.userService = userServiceImpl;
+        this.userService = userService;
         this.userDTOMapper = userDTOMapper;
         this.orderDTOMapper = orderDTOMapper;
         this.certificateService = certificateService;

@@ -1,5 +1,6 @@
 package com.epam.esm.web.controller;
 
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.persistence.model.userdetails.Account;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.ValidationException;
@@ -20,7 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 
-
+/**
+ * Authorization controller class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @RestController
 public class AuthorizationController {
 
@@ -28,6 +34,13 @@ public class AuthorizationController {
     private final AuthenticationService authenticationService;
     private final UserDTOMapper userDTOMapper;
 
+    /**
+     * Constructor.
+     *
+     * @param jwtTokenUtil Utility for JWT tokens processing.
+     * @param authenticationService Serfice for authentication and registration.
+     * @param userDTOMapper {@link User} to {@link UserDTO} mapper.
+     */
     public AuthorizationController(JwtTokenUtil jwtTokenUtil,
                                    AuthenticationService authenticationService,
                                    UserDTOMapper userDTOMapper) {

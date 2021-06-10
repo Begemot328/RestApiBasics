@@ -2,9 +2,14 @@ package com.epam.esm.persistence.model.userdetails.roles;
 
 import com.epam.esm.persistence.model.entity.Role;
 import org.apache.commons.lang3.StringUtils;
-
 import java.util.function.Function;
 
+/**
+ * {@link SecurityRoles} to and from {@link String} mapping class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public class SecurityRoleMapper {
     private static final String PREFIX = "ROLE_";
 

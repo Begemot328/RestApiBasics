@@ -1,13 +1,17 @@
 package com.epam.esm.web.controller;
 
+import com.epam.esm.persistence.model.entity.Certificate;
 import com.epam.esm.persistence.model.entity.Order;
+import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.persistence.model.userdetails.roles.SecurityRoles;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.service.order.OrderService;
 import com.epam.esm.service.service.order.OrderServiceImpl;
+import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.order.OrderDTO;
 import com.epam.esm.web.dto.order.OrderDTOMapper;
+import com.epam.esm.web.dto.tag.TagDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
@@ -26,12 +30,24 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * {@link Order} controller class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @RestController
 @RequestMapping(value = "/orders")
 public class OrderController implements PageableSearch {
     private final OrderService orderService;
     private final OrderDTOMapper orderDTOMapper;
 
+    /**
+     * Constructor.
+     *
+     * @param orderService Service for {@link Order} processing.
+     * @param orderDTOMapper {@link Order} to {@link OrderDTO} mapper.
+     */
     @Autowired
     public OrderController(OrderServiceImpl orderService,
                            OrderDTOMapper orderDTOMapper) {

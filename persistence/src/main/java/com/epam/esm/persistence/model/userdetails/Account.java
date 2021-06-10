@@ -5,16 +5,26 @@ import com.epam.esm.persistence.model.userdetails.roles.SecurityRoleMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * {@link UserDetails} implementation class for Spring Security.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public class Account implements UserDetails {
     private User user;
     private Set<GrantedAuthority> roles = new HashSet<>();
 
+    /**
+     * Constructor.
+     *
+     * @param user {@link User} object to create account.
+     */
     public Account(User user) {
         this.user = user;
         roles = user.getRoles().stream()
