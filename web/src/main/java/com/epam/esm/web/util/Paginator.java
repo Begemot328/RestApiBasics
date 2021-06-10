@@ -13,7 +13,8 @@ import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 /**
- * Paginator util class.
+ * Paginator util class. Allows to convert {@link Pageable} next
+ * and previous pages to requeat parameters.
  *
  * @author Yury Zmushko
  * @version 1.0

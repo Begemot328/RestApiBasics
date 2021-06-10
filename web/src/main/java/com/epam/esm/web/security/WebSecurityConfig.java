@@ -1,5 +1,6 @@
 package com.epam.esm.web.security;
 
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.persistence.model.userdetails.Account;
 import com.epam.esm.service.service.user.UserService;
 import com.epam.esm.web.exceptionhandler.RESTAuthenticationEntryPoint;
@@ -25,6 +26,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+/**
+ * Web security config class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         securedEnabled = true,
@@ -39,6 +46,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final RESTAuthenticationEntryPoint entryPoint;
     private final RestAccessDeniedHandler handler;
 
+    /**
+     * Constructor.
+     *
+     * @param userService Service for {@link User} processing.
+     * @param jwtTokenFilter Filter for JWT tokens processing.
+     * @param entryPoint {@link org.springframework.security.web.AuthenticationEntryPoint}
+     *   for {@link org.springframework.security.core.AuthenticationException} handling.
+     * @param handler {@link org.springframework.security.web.access.AccessDeniedHandler} for
+     * {@link java.nio.file.AccessDeniedException} handling.
+     * @param exceptionFilter Handler for exception occured during filtering.
+     */
     @Autowired
     public WebSecurityConfig(UserService userService,
                              JwtTokenFilter jwtTokenFilter,

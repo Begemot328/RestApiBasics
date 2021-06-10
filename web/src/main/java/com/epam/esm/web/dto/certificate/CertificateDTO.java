@@ -1,6 +1,9 @@
 package com.epam.esm.web.dto.certificate;
 
+import com.epam.esm.persistence.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.web.dto.tag.TagDTO;
+import com.epam.esm.web.dto.user.UserDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -15,6 +18,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {@link Certificate} DTO class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public class CertificateDTO extends RepresentationModel<CertificateDTO> {
     private int id;
     private String name;
@@ -33,6 +42,16 @@ public class CertificateDTO extends RepresentationModel<CertificateDTO> {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime lastUpdateDate;
 
+    /**
+     * Constructor.
+     *
+     * @param name Name of the Certificate.
+     * @param description Description of the Certificate.
+     * @param price Price of the Certificate.
+     * @param duration Duration of the Certificate in days.
+     * @param createDate Create date of the Certificate.
+     * @param lastUpdateDate Last update date of the Certificate.
+     */
     public CertificateDTO(String name, String description, BigDecimal price,
                           int duration, LocalDateTime createDate,
                           LocalDateTime lastUpdateDate) {
@@ -44,6 +63,9 @@ public class CertificateDTO extends RepresentationModel<CertificateDTO> {
         this.lastUpdateDate = lastUpdateDate;
     }
 
+    /**
+     * Default constructor.
+     */
     public CertificateDTO() {
         // Default constructor for Model mapper purposes.
     }

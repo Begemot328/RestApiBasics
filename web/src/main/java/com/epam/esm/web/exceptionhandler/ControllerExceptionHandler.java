@@ -1,5 +1,6 @@
 package com.epam.esm.web.exceptionhandler;
 
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;
@@ -14,6 +15,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * Exception handler class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @ControllerAdvice
 public class ControllerExceptionHandler {
 

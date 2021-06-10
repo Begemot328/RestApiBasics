@@ -1,5 +1,6 @@
 package com.epam.esm.web.filter;
 
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.persistence.model.userdetails.Account;
 import com.epam.esm.service.service.user.UserService;
 import com.epam.esm.web.security.jwt.JwtTokenUtil;
@@ -20,7 +21,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+/**
+ * Exception Handler Filter class. Handles exceptions occured during filtering.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
 
@@ -28,6 +34,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final UserService userService;
 
+
+    /**
+     * Constructor.
+     *
+     * @param jwtTokenUtil Util for JWT tokes processing.
+     * @param userService {@link UserService} for working with {@link User} entities.
+     */
     @Autowired
     public JwtTokenFilter(JwtTokenUtil jwtTokenUtil, UserService userService) {
         this.jwtTokenUtil = jwtTokenUtil;

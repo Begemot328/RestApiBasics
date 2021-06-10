@@ -14,6 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * Exception Handler Filter class. Handles exceptions occured during filtering.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Component
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 

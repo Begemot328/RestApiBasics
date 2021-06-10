@@ -1,5 +1,6 @@
 package com.epam.esm.web.exceptionhandler;
 
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.web.dto.ExceptionDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * {@link AccessDeniedException} handler class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Component
 public class RestAccessDeniedHandler implements AccessDeniedHandler {
 

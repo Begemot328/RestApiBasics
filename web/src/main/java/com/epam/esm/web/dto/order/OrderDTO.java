@@ -1,5 +1,6 @@
 package com.epam.esm.web.dto.order;
 
+import com.epam.esm.persistence.model.entity.Certificate;
 import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.user.UserDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -13,6 +14,12 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * {@link com.epam.esm.persistence.model.entity.Order} DTO class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public class OrderDTO extends RepresentationModel<OrderDTO> {
     private int id;
     private CertificateDTO certificate;
@@ -25,6 +32,15 @@ public class OrderDTO extends RepresentationModel<OrderDTO> {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime purchaseDate;
 
+    /**
+     * Constructor.
+     *
+     * @param certificate {@link CertificateDTO} of the order.
+     * @param user {@link UserDTO} of the order.
+     * @param orderAmount Money amount of the order.
+     * @param certificateQuantity Quantity of certificates.
+     * @param purchaseDate Purchase date of the order.
+     */
     public OrderDTO(CertificateDTO certificate, UserDTO user, BigDecimal orderAmount,
                     int certificateQuantity, LocalDateTime purchaseDate) {
         this.certificate = certificate;
@@ -34,6 +50,9 @@ public class OrderDTO extends RepresentationModel<OrderDTO> {
         this.purchaseDate = purchaseDate;
     }
 
+    /**
+     * Default constructor.
+     */
     public OrderDTO() {
         // Default constructor for Model mapper purposes.
     }
