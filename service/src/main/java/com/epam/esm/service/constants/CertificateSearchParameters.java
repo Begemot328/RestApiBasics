@@ -3,7 +3,7 @@ package com.epam.esm.service.constants;
 import com.epam.esm.service.util.ConfigUtils;
 
 /**
- * Certificate search parameters enum
+ * Certificate search parameters enum.
  *
  * @author Yury Zmushko
  * @version 1.0
@@ -12,13 +12,13 @@ public enum CertificateSearchParameters {
     NAME, DESCRIPTION, TAG_NAME, TAG_ID;
 
     /**
-     * Obtain enum element by {@link String} name
+     * Obtain corresponding enum element by {@link String} name.
      *
-     * @param parameter parameter to find search parameter by
-     * @return {@link CertificateSearchParameters} enum element
+     * @param parameterName Parameter to find search parameter by.
+     * @return {@link CertificateSearchParameters} enum element.
      */
-    public static CertificateSearchParameters getEntryByParameter(String parameter) {
-        return valueOf(ConfigUtils.convertToEnumName(parameter));
+    public static CertificateSearchParameters getEntryByParameter(String parameterName) {
+        return valueOf(ConfigUtils.convertToEnumName(parameterName));
     }
 
     /**

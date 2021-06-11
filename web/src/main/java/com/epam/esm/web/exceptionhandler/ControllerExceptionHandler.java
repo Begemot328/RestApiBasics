@@ -6,25 +6,33 @@ import com.epam.esm.service.exceptions.ServiceException;
 import com.epam.esm.service.exceptions.ServiceLayerException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.web.dto.ExceptionDTO;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * Exception handler class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<ExceptionDTO> handleRuntimeException(
+    @ExceptionHandler({LockedException.class})
+    public ResponseEntity<ExceptionDTO> handleLockedException(
             Exception ex, WebRequest request) {
         return new ResponseEntity<>(
-                new ExceptionDTO(ex, HttpStatus.INTERNAL_SERVER_ERROR.value()),
-                HttpStatus.INTERNAL_SERVER_ERROR);
+                new ExceptionDTO(ex, HttpStatus.FORBIDDEN.value()),
+                HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity<ExceptionDTO> handleException(
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ResponseEntity<ExceptionDTO> handleDataIntegrityViolationException(
             Exception ex, WebRequest request) {
         return new ResponseEntity<>(
                 new ExceptionDTO(ex, HttpStatus.INTERNAL_SERVER_ERROR.value()),

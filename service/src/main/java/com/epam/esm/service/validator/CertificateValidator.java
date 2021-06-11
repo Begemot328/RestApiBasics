@@ -1,6 +1,6 @@
 package com.epam.esm.service.validator;
 
-import com.epam.esm.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.Certificate;
 import com.epam.esm.service.constants.ErrorCodes;
 import com.epam.esm.service.exceptions.ValidationException;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class CertificateValidator implements EntityValidator<Certificate> {
     }
 
     private void validatePrice(Certificate certificate) throws ValidationException {
-        validatePositiveNumber(certificate.getPrice(), "Certificate duration",
+        validatePositiveNumber(certificate.getPrice(), "Certificate price",
                 ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION);
     }
 }

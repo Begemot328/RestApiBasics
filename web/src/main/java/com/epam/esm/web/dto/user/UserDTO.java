@@ -1,23 +1,51 @@
 package com.epam.esm.web.dto.user;
 
+import com.epam.esm.persistence.model.entity.User;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;
+import java.util.Set;
 
+/**
+ * {@link User} DTO class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public class UserDTO extends RepresentationModel<UserDTO> {
     private int id;
     private String firstName;
     private String lastName;
     private String login;
 
+    private Set<String> roles;
+
+    /**
+     * Constructor.
+     *
+     * @param firstName Firstname of the user.
+     * @param lastName Lastname of the user.
+     * @param login Login of the user.
+     */
     public UserDTO(String firstName, String lastName, String login) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
     }
 
+    /**
+     * Default constructor.
+     */
     public UserDTO() {
         // Default constructor for Model mapper purposes.
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
     public int getId() {
