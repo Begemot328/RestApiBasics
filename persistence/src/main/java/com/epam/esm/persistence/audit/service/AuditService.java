@@ -1,7 +1,6 @@
 package com.epam.esm.persistence.audit.service;
 
 import com.epam.esm.persistence.audit.dao.AuditDAO;
-import com.epam.esm.persistence.dao.EntityDAO;
 import com.epam.esm.persistence.model.auditentity.AuditEntity;
 import com.epam.esm.persistence.model.entity.CustomEntity;
 import com.epam.esm.persistence.model.userdetails.Account;
@@ -24,21 +23,18 @@ import java.util.Optional;
 public class AuditService {
 
     private AuditDAO dao;
-    private EntityDAO entityDAO;
     private AuditorAware<Account> auditorAware;
 
     /**
      * Constructor.
      *
      * @param dao  DAO to work with {@link AuditEntity} objects.
-     * @param entityDAO   DAO to work with {@link CustomEntity} objects.
      * @param auditorAware {@link AuditorAware} to obtain current
      * {@link org.springframework.security.core.userdetails.UserDetails}.
      */
     @Autowired
-    public AuditService(AuditDAO dao, EntityDAO entityDAO, AuditorAware<Account> auditorAware) {
+    public AuditService(AuditDAO dao, AuditorAware<Account> auditorAware) {
         this.dao = dao;
-        this.entityDAO = entityDAO;
         this.auditorAware = auditorAware;
     }
 
@@ -58,16 +54,5 @@ public class AuditService {
         }
         dao.save(auditEntity);
         return dao.save(auditEntity);
-    }
-
-    /**
-     * {@link CustomEntity} obtain by ID method.
-     *
-     * @param id {@link CustomEntity} ID  to obtain.
-     */
-    public Optional<CustomEntity> getOperationEntity(int id) {
-        return entityDAO.findById(dao.findById(id).orElseThrow(
-                () -> new RuntimeException("no such operation"))
-                .getEntityId());
     }
 }
