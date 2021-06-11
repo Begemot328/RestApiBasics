@@ -1,3 +1,0 @@
-57c3822b6b24b1a16b687f5fa419a070be935ba5
-
-mvn sonar:sonar -Dsonar.projectKey=RestApiBasics -Dsonar.host.url=http://localhost:9000 -Dsonar.login=57c3822b6b24b1a16b687f5fa419a070be935ba5
