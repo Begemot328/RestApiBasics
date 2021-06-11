@@ -50,8 +50,11 @@ public class AuditService {
     public AuditEntity createAudit(CustomEntity entity, String operation) {
         AuditEntity auditEntity = new AuditEntity(entity.getId(),
                 entity.getClass().getSimpleName(), operation);
-        auditEntity.setUser(auditorAware.getCurrentAuditor().orElseThrow(
-                () -> new UsernameNotFoundException("User not found!")).getUser());
+        Optional<Account> account = auditorAware.getCurrentAuditor();
+        if (account.isPresent()) {
+            auditEntity.setUser(auditorAware.getCurrentAuditor().orElseThrow(
+                    () -> new UsernameNotFoundException("User not found!")).getUser());
+        }
         dao.save(auditEntity);
         return dao.save(auditEntity);
     }

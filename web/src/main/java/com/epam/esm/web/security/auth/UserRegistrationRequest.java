@@ -1,17 +1,36 @@
 package com.epam.esm.web.security.auth;
 
+import com.epam.esm.persistence.model.entity.User;
+
 import java.util.Objects;
 
+/**
+ * {@link User} registration request DTO class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public class UserRegistrationRequest {
     private String username;
     private String password;
     private String firstName;
     private String lastName;
 
+    /**
+     * Default constructor.
+     */
     public UserRegistrationRequest() {
         // Default constructor for Model mapper purposes.
     }
 
+    /**
+     * Constructor.
+     *
+     * @param username Login of the user.
+     * @param password Password of the user.
+     * @param firstName Firstname of the user.
+     * @param lastName Lastname of the user.
+     */
     public UserRegistrationRequest(String username, String password, String firstName, String lastName) {
         this.username = username;
         this.password = password;
