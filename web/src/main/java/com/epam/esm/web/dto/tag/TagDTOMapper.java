@@ -16,15 +16,31 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * {@link Tag} to  {@link TagDTO} mapper class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Component
 public class TagDTOMapper {
     private final ModelMapper mapper;
 
+    /**
+     * Constructor.
+     *
+     * @param mapper {@link ModelMapper} bean to add mapping.
+     */
     @Autowired
     public TagDTOMapper(ModelMapper mapper) {
         this.mapper = mapper;
     }
 
+    /**
+     * {@link Tag} to  {@link TagDTO} mapping.
+     *
+     * @param tag {@link Tag} to map.
+     */
     public TagDTO toTagDTO(Tag tag) {
         TagDTO tagDTO = mapper.map(tag, TagDTO.class);
         try {
@@ -38,11 +54,22 @@ public class TagDTOMapper {
 
     }
 
+    /**
+     * {@link List} of {@link Tag} to {@link CollectionModel} of {@link TagDTO} mapping.
+     *
+     * @param tags {@link List} of {@link Tag} to map.
+     * @return {@link CollectionModel} of {@link TagDTO} objects.
+     */
     public CollectionModel<TagDTO> toTagDTOList(List<Tag> tags) {
         return CollectionModel.of(
                 tags.stream().map(this::toTagDTO).collect(Collectors.toList()));
     }
 
+    /**
+     * {@link TagDTO} to  {@link Tag} mapping.
+     *
+     * @param tagDTO {@link TagDTO} to map.
+     */
     public Tag toTag(TagDTO tagDTO) {
         return mapper.map(tagDTO, Tag.class);
     }

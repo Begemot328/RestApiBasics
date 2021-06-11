@@ -1,8 +1,6 @@
 package com.epam.esm.web.dto.user;
 
-import com.epam.esm.persistence.model.entity.Certificate;
 import com.epam.esm.persistence.model.entity.User;
-import com.epam.esm.web.dto.certificate.CertificateDTO;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;

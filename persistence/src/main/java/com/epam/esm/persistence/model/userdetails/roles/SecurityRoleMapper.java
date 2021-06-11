@@ -2,6 +2,7 @@ package com.epam.esm.persistence.model.userdetails.roles;
 
 import com.epam.esm.persistence.model.entity.Role;
 import org.apache.commons.lang3.StringUtils;
+
 import java.util.function.Function;
 
 /**

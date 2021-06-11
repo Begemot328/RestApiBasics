@@ -1,6 +1,5 @@
 package com.epam.esm.web.exceptionhandler;
 
-import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.web.dto.ExceptionDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;

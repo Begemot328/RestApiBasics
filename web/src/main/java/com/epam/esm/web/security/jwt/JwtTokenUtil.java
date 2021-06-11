@@ -16,6 +16,12 @@ import javax.security.sasl.AuthenticationException;
 import java.sql.Date;
 import java.time.LocalDate;
 
+/**
+ * JWT token processing util class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Component
 @PropertySource("classpath:jwtutil.properties")
 public class JwtTokenUtil {
@@ -25,6 +31,12 @@ public class JwtTokenUtil {
     @Value("${jwtIssuer}")
     private String jwtIssuer;
 
+    /**
+     * Generate {@link String} JWT token for {@link Account}.
+     *
+     * @param user User's {@link Account} to geterate token for.
+     * @return {@link String} JWT token.
+     */
     public String generateAccessToken(Account user) {
         return Jwts.builder()
                 .setSubject(user.getUsername())
@@ -35,6 +47,12 @@ public class JwtTokenUtil {
                 .compact();
     }
 
+    /**
+     * Get username from {@link String} JWT token for {@link Account}.
+     *
+     * @param token User's JWT token .
+     * @return {@link String} username value.
+     */
     public String getUsername(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
@@ -44,6 +62,12 @@ public class JwtTokenUtil {
         return claims.getSubject();
     }
 
+    /**
+     * Get expiration data from {@link String} JWT token.
+     *
+     * @param token User's JWT token .
+     * @return {@link Date} value.
+     */
     public java.util.Date getExpirationDate(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
@@ -53,6 +77,12 @@ public class JwtTokenUtil {
         return claims.getExpiration();
     }
 
+    /**
+     * Validate {@link String} JWT token.
+     *
+     * @param token User's JWT token .
+     * @return  true if token is valid.
+     */
     public boolean validate(String token) throws AuthenticationException {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);

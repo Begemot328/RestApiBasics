@@ -1,9 +1,7 @@
 package com.epam.esm.web.dto.certificate;
 
 import com.epam.esm.persistence.model.entity.Certificate;
-import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.web.dto.tag.TagDTO;
-import com.epam.esm.web.dto.user.UserDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

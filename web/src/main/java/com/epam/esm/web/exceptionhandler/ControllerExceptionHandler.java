@@ -1,6 +1,5 @@
 package com.epam.esm.web.exceptionhandler;
 
-import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ServiceException;

@@ -1,6 +1,5 @@
 package com.epam.esm.web.dto.order;
 
-import com.epam.esm.persistence.model.entity.Certificate;
 import com.epam.esm.web.dto.certificate.CertificateDTO;
 import com.epam.esm.web.dto.user.UserDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;

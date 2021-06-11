@@ -1,11 +1,7 @@
 package com.epam.esm.web.controller;
 
-import com.epam.esm.persistence.model.entity.Certificate;
-import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
-import com.epam.esm.web.dto.certificate.CertificateDTO;
-import com.epam.esm.web.dto.tag.TagDTO;
 import com.epam.esm.web.util.Paginator;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.data.domain.Pageable;

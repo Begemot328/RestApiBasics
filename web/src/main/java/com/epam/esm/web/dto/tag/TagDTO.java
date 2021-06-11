@@ -1,6 +1,5 @@
 package com.epam.esm.web.dto.tag;
 
-import com.epam.esm.persistence.model.entity.Certificate;
 import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.web.dto.certificate.CertificateDTO;
 import org.springframework.hateoas.RepresentationModel;

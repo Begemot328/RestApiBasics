@@ -1,10 +1,10 @@
 package com.epam.esm.persistence.audit.listener;
 
 import com.epam.esm.persistence.audit.service.AuditService;
-import com.epam.esm.persistence.model.auditentity.AuditEntity;
 import com.epam.esm.persistence.model.entity.CustomEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.persistence.PostPersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;

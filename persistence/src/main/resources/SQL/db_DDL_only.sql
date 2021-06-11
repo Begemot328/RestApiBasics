@@ -161,3 +161,22 @@ create table user_role
     foreign key (user_id) references user (id) ON DELETE CASCADE ON UPDATE CASCADE,
     foreign key (role_id) references role (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
+create table audit
+(
+    id          int auto_increment
+        primary key,
+    user_id     int,
+    entity_id   int         not null,
+    entity_name varchar(20) not null,
+    operation   varchar(20) not null,
+    date        timestamp   not null,
+    foreign key (user_id) references user (id) on update cascade on delete cascade
+);
+
+create index audit_entity_id
+    on audit (entity_id);
+
+create index audit_user_id
+    on audit (user_id);
