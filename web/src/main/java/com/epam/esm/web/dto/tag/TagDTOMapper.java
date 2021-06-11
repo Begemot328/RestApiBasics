@@ -1,8 +1,10 @@
 package com.epam.esm.web.dto.tag;
 
+import com.epam.esm.persistence.model.entity.Order;
 import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.web.controller.TagController;
+import com.epam.esm.web.dto.order.OrderDTO;
 import com.epam.esm.web.exceptions.DTOException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
