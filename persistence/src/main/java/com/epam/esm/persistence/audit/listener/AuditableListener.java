@@ -30,7 +30,7 @@ public class AuditableListener {
      */
     @Autowired
     public AuditableListener(AuditService service) {
-        this.service = service;
+        AuditableListener.service = service;
     }
 
     /**
