@@ -9,8 +9,8 @@ import com.epam.esm.service.constants.CertificateSearchParameters;
  * @version 1.0
  */
 public class ConfigUtils {
-    private static final  String UNDERSCORE = "_";
-    private static final  String DASH = "-";
+    private static final  String CONSTANT_NAME_DELIMETER = "_";
+    private static final  String REQUEST_PARAM_DELIMITER = "-";
 
     private ConfigUtils() {
         // Private constructor to avoid creation.
@@ -23,7 +23,7 @@ public class ConfigUtils {
      * @return {@link CertificateSearchParameters} enum element.
      */
     public static String convertToEnumName(String parameter) {
-        return parameter.toUpperCase().replace(DASH, UNDERSCORE);
+        return parameter.toUpperCase().replace(REQUEST_PARAM_DELIMITER, CONSTANT_NAME_DELIMETER);
     }
 
     /**
@@ -33,6 +33,6 @@ public class ConfigUtils {
      * @return {@link CertificateSearchParameters} enum element.
      */
     public static String convertToRequestParameter(String parameter) {
-        return parameter.toLowerCase().replace(UNDERSCORE, DASH);
+        return parameter.toLowerCase().replace(CONSTANT_NAME_DELIMETER, REQUEST_PARAM_DELIMITER);
     }
 }
