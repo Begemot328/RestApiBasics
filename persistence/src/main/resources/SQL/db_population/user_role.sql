@@ -1,7 +1,4 @@
-insert
-    role(id, name, description) VALUES (2,'USER', 'Regular user');
-insert
-    role(id, name, description) VALUES (1,'ADMIN', 'Super admin');
+
 insert
     user_role(user_id, role_id) VALUES (1,1);
 insert

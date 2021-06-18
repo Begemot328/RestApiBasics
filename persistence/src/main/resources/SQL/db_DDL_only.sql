@@ -180,3 +180,8 @@ create index audit_entity_id
 
 create index audit_user_id
     on audit (user_id);
+
+insert
+    role(id, name, description) VALUES (2,'USER', 'Regular user');
+insert
+    role(id, name, description) VALUES (1,'ADMIN', 'Super admin');
