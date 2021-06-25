@@ -14,7 +14,7 @@
 
     <artifactId>web</artifactId>
     <groupId>com.epam.esm</groupId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <version>1.0</version>
     <name>RestApi</name>
 
@@ -24,6 +24,11 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.epam.esm</groupId>
             <artifactId>service</artifactId>
