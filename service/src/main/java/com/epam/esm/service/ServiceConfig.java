@@ -1,13 +1,12 @@
 package com.epam.esm.service;
 
-import com.epam.esm.model.ModelConfig;
 import com.epam.esm.persistence.PersistenceConfig;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * Spring config for persistence module.
+ * Spring config for service module.
  *
  * @author Yury Zmushko
  * @version 2.0

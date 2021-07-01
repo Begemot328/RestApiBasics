@@ -9,7 +9,6 @@
     <version>1.0</version>
     <modules>
         <module>persistence</module>
-        <module>model</module>
         <module>web</module>
         <module>service</module>
     </modules>
