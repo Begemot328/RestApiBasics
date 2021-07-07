@@ -2,151 +2,240 @@ package test.com.epam.esm.service.service;
 
 import com.epam.esm.model.entity.Certificate;
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.impl.CertificateDAOImpl;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.epam.esm.persistence.util.CertificateFinder;
+import com.epam.esm.persistence.dao.certificate.CertificateDAOImpl;
+import com.epam.esm.persistence.dao.tag.TagDAOImpl;
+import com.epam.esm.persistence.util.finder.EntityFinder;
+import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
 import com.epam.esm.service.constants.CertificateSearchParameters;
 import com.epam.esm.service.constants.CertificateSortingParameters;
-import com.epam.esm.service.exceptions.ServiceException;
+import com.epam.esm.service.constants.ErrorCodes;
+import com.epam.esm.service.constants.PaginationParameters;
+import com.epam.esm.service.exceptions.BadRequestException;
+import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
-import com.epam.esm.service.service.impl.CertificateServiceImpl;
-import com.epam.esm.service.service.impl.TagServiceImpl;
+import com.epam.esm.service.service.certificate.CertificateServiceImpl;
 import com.epam.esm.service.validator.EntityValidator;
-import com.epam.esm.service.validator.CertificateValidator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.ArgumentCaptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-public class CertificateServiceImplTests {
-    private CertificateDAOImpl certificateDaoMock = Mockito.mock(CertificateDAOImpl.class);
-    private EntityValidator<Certificate> validator;
-    private CertificateFinder finder = new CertificateFinder();
-    private CertificateServiceImpl service;
-    private TagServiceImpl tagServiceMock = Mockito.mock(TagServiceImpl.class);
+@SpringBootTest(classes = ServiceTestConfig.class)
+@Transactional
+class CertificateServiceImplTests {
 
-    private Tag tag1 = new Tag("Tag1");
-    private Certificate certificate1 = new Certificate("Certificate1",
-            null, BigDecimal.valueOf(10.0), 3, null, null);
-    private Certificate certificate2 = new Certificate("Certificate2",
-            null, BigDecimal.valueOf(10.0), 3, null, null);
-    private Certificate certificate3 = new Certificate("Certificate3",
-            null, BigDecimal.valueOf(10.0), 3, null, null);
-    private Certificate certificate4 = new Certificate("Certificate4",
-            null, BigDecimal.valueOf(10.0), 3, null, null);
-    private Certificate[] certificates = {certificate1, certificate2, certificate3, certificate4};
-    private Certificate[] certificatesShort = {certificate1, certificate2};
-    private List<Certificate> fullList = Arrays.asList(certificates);
-    private List<Certificate> shortList = Arrays.asList(certificatesShort);
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    {
+    static Logger logger = LoggerFactory.getLogger(CertificateServiceImplTests.class);
+
+    @MockBean
+    CertificateDAOImpl certificateDaoMock;
+    
+    @MockBean
+    TagDAOImpl tagDaoMock;
+
+    @MockBean
+    EntityValidator<Certificate> validator;
+
+    @Autowired
+    CertificateServiceImpl service;
+    
+    private static final Tag tag1 = new Tag("Tag1");
+    private static final Certificate certificate1 = new Certificate("Certificate1",
+            BigDecimal.valueOf(10.0), 3);
+    private static final Certificate certificate2 = new Certificate("Certificate2",
+            BigDecimal.valueOf(10.0), 3);
+    private static final Certificate certificate3 = new Certificate("Certificate3",
+            BigDecimal.valueOf(10.0), 3);
+    private static final Certificate certificate4 = new Certificate("Certificate4",
+            BigDecimal.valueOf(10.0), 3);
+    private static final Certificate[] certificates = {certificate1, certificate2, certificate3, certificate4};
+    private static final Certificate[] certificatesShort = {certificate1, certificate2};
+    private static final List<Certificate> fullList = Arrays.asList(certificates);
+    private static final List<Certificate> shortList = Arrays.asList(certificatesShort);
+
+
+    @BeforeEach
+    void init() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
+        Root<Tag> tagRoot = query.from(Tag.class);
+        query = query.select(tagRoot);
+
         try {
-            Mockito.when(tagServiceMock.read(Mockito.any(Integer.class))).thenReturn(tag1);
-            Mockito.when(tagServiceMock.create(Mockito.any(Tag.class))).thenAnswer(invocation -> {
-                Tag tag = invocation.getArgumentAt(0, Tag.class);
+            when(tagDaoMock.getById(any(Integer.class))).thenReturn(tag1);
+            when(tagDaoMock.create(any(Tag.class))).thenAnswer(invocation -> {
+                Tag tag = invocation.getArgument(0, Tag.class);
                 tag.setId(tag.getId() + 1);
                 return tag;
             });
-
-            Mockito.when(certificateDaoMock.findAll()).thenReturn(fullList);
-            Mockito.when(certificateDaoMock.read(1)).thenReturn(certificate1);
-            Mockito.when(certificateDaoMock.read(2)).thenReturn(certificate2);
-            Mockito.when(certificateDaoMock.findBy(Mockito.any(CertificateFinder.class))).thenReturn(shortList);
-            Mockito.doNothing().when(certificateDaoMock).delete(Mockito.any(Integer.class));
-            Mockito.doNothing().when(certificateDaoMock).update(Mockito.any(Certificate.class));
-            Mockito.when(certificateDaoMock.create(Mockito.any(Certificate.class))).thenAnswer(invocation -> {
-                Certificate certificate = invocation.getArgumentAt(0, Certificate.class);
+            when(certificateDaoMock.findAll()).thenReturn(fullList);
+            when(certificateDaoMock.getById(1)).thenReturn(certificate1);
+            when(certificateDaoMock.getById(2)).thenReturn(certificate2);
+            when(certificateDaoMock.findByParameters(any(CertificateFinder.class))).thenReturn(shortList);
+            doNothing().when(certificateDaoMock).delete(any(Integer.class));
+            when(certificateDaoMock.getBuilder()).thenReturn(builder);
+            when(certificateDaoMock.update(any(Certificate.class))).thenAnswer(invocation -> invocation.getArgument(0, Certificate.class));
+            when(certificateDaoMock.create(any(Certificate.class))).thenAnswer(invocation -> {
+                Certificate certificate = invocation.getArgument(0, Certificate.class);
                 certificate.setId(fullList.size());
                 return certificate;
             });
-            Mockito.when(certificateDaoMock.isTagCertificateTied(
-                    Mockito.any(Integer.class), Mockito.any(Integer.class)))
-                    .thenReturn(false);
-            Mockito.when(certificateDaoMock.isTagCertificateTied(1, 3)).thenReturn(true);
 
-            validator = Mockito.mock(CertificateValidator.class);
-            Mockito.doNothing().when(validator).validate(Mockito.any(Certificate.class));
-        } catch (DAOSQLException | ValidationException | ServiceException e) {
-            e.printStackTrace();
+            doNothing().when(validator).validate(any(Certificate.class));
+        } catch (ValidationException e) {
+            logger.error(e.getMessage());
         }
         certificate1.setId(1);
         certificate2.setId(2);
-        certificate1.setId(3);
-        certificate2.setId(4);
-        service = new CertificateServiceImpl(certificateDaoMock, validator, finder, tagServiceMock);
+        certificate3.setId(3);
+        certificate4.setId(4);
     }
 
     @Test
-    public void readTest() throws ServiceException {
+    void read_returnCertificate() throws NotFoundException {
         assertEquals(certificate1, service.read(1));
     }
 
     @Test
-    public void findAllTest() throws ServiceException {
-        assertEquals(fullList, service.findAll());
+    void readAll_returnCertificates() throws NotFoundException {
+        assertEquals(fullList, service.readAll());
     }
 
     @Test
-    public void createTest() throws ServiceException, ValidationException, DAOSQLException {
+    void create_createCertificate() throws ValidationException, BadRequestException {
         Certificate certificate = service.create(certificate1);
         assertEquals(certificate.getId(), fullList.size());
-        Mockito.verify(certificateDaoMock, Mockito.times(1)).create(certificate1);
+        verify(certificateDaoMock, times(1)).create(certificate1);
     }
 
     @Test
-    public void deleteTest() throws ServiceException, DAOSQLException {
+    void delete_deleteCertificate() throws BadRequestException {
         service.delete(1);
-        Mockito.verify(certificateDaoMock, Mockito.times(1)).read(1);
+        verify(certificateDaoMock, times(1)).getById(1);
     }
 
     @Test
-    public void updateTest() throws ServiceException, ValidationException, DAOSQLException {
+    void update_updateCertificate() throws ValidationException, NotFoundException {
         service.update(certificate2);
-        Mockito.verify(certificateDaoMock, Mockito.times(1)).update(certificate2);
+        verify(certificateDaoMock, times(1)).update(certificate2);
     }
 
     @Test
-    public void findByTagTest() throws ServiceException, DAOSQLException {
-        assertEquals(shortList, service.findByTag(1));
-        CertificateFinder finder = new CertificateFinder();
-        finder.findByTag(1);
-        Mockito.verify(certificateDaoMock, Mockito.times(1)).findBy(finder);
+    void read_returnTags() throws BadRequestException, NotFoundException {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
+        };
+        params.put(CertificateSearchParameters.NAME.name(), Collections.singletonList("1"));
+        params.put(CertificateSortingParameters.SORT_BY_NAME.name().toLowerCase(),
+                Collections.singletonList("2"));
+        assertEquals(shortList, service.read(params));
+        verify(certificateDaoMock, times(1)).findByParameters(any(CertificateFinder.class));
     }
 
     @Test
-    public void findTest() throws ServiceException, DAOSQLException {
-        Map<String, String> params = new HashMap<>();
-        params.put(CertificateSearchParameters.NAME.name(), "1");
-        params.put(CertificateSortingParameters.SORT_BY_NAME.name().toLowerCase(), "2");
+    void read_parsePaginationLimit_invokeFinderLimit() throws NotFoundException, BadRequestException {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
+        };
+        params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
+        service.read(params);
 
-        assertEquals(shortList, service.find(params));
-        Mockito.verify(certificateDaoMock, Mockito.times(1)).findBy(Mockito.any(CertificateFinder.class));
+        ArgumentCaptor<EntityFinder<Certificate>> captor = ArgumentCaptor.forClass(EntityFinder.class);
+        verify(certificateDaoMock, atLeast(1)).findByParameters(captor.capture());
+        assertEquals(1, captor.getValue().getLimit());
     }
 
     @Test
-    public void addCertificateTagTest() throws ServiceException, ValidationException {
-        service.addCertificateTag(1, tag1);
-        Mockito.verify(certificateDaoMock, Mockito.times(1))
-                .addCertificateTag(1, tag1.getId());
+    void read_parsePaginationLimit_invokeFinderOffset() throws NotFoundException, BadRequestException {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
+        };
+        params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
+        service.read(params);
+
+        ArgumentCaptor<EntityFinder<Certificate>> captor = ArgumentCaptor.forClass(EntityFinder.class);
+        verify(certificateDaoMock, atLeast(1)).findByParameters(captor.capture());
+        assertEquals(1, captor.getValue().getOffset());
     }
 
     @Test
-    public void addCertificateTag2Test() throws ServiceException, ValidationException {
-        service.addCertificateTag(certificate1, 1);
-        Mockito.verify(certificateDaoMock, Mockito.times(1))
-                .addCertificateTag(certificate1.getId(), 1);
+    void create_invalidCertificate_throwValidationException()
+            throws ValidationException {
+        doThrow(new ValidationException("error", ErrorCodes.CERTIFICATE_VALIDATION_EXCEPTION))
+                .when(validator).validate(any(Certificate.class));
+        assertThrows(ValidationException.class, () -> service.create(certificate1));
     }
 
     @Test
-    public void deleteCertificateTagTest() throws ServiceException, ValidationException {
-        service.deleteCertificateTag(1, 3);
-        Mockito.verify(certificateDaoMock, Mockito.times(1))
-                .deleteCertificateTag(1, 3);
+    void create_catchDataAccessException_throwsException() {
+        doThrow(new DataIntegrityViolationException("error"))
+                .when(certificateDaoMock).create(any(Certificate.class));
+        assertThrows(BadRequestException.class, () -> service.create(certificate1));
+    }
+
+    @Test
+    void patch_changeName_updateCertificate()
+            throws BadRequestException, ValidationException, NotFoundException {
+        Certificate certificate = new Certificate("new name", null, 0);
+        certificate.setId(certificate2.getId());
+        certificate2.setName(certificate.getName());
+        service.patch(certificate);
+        verify(certificateDaoMock, atLeast(1)).update(certificate2);
+    }
+
+    @Test
+    void patch_changeDuration_updateCertificate()
+            throws BadRequestException, ValidationException, NotFoundException {
+        Certificate certificate = new Certificate(null, null, 5);
+        certificate.setId(certificate2.getId());
+        certificate2.setDuration(certificate.getDuration());
+        service.patch(certificate);
+        verify(certificateDaoMock, atLeast(1)).update(certificate2);
+    }
+
+    @Test
+    void patch_changeDescription_updateCertificate()
+            throws BadRequestException, ValidationException, NotFoundException {
+        Certificate certificate = new Certificate(null, null, 0);
+        certificate.setDescription("description");
+        certificate.setId(certificate2.getId());
+        certificate2.setDescription(certificate.getDescription());
+        service.patch(certificate);
+        verify(certificateDaoMock, atLeast(1)).update(certificate2);
+    }
+
+    @Test
+    void patch_wrongId_throwsException() {
+        Certificate certificate = new Certificate(null, null, 5);
+        certificate.setId(10);
+        certificate2.setDuration(certificate.getDuration());
+        assertThrows(BadRequestException.class, () -> service.patch(certificate));
     }
 }

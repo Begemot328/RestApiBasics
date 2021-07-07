@@ -1,98 +1,89 @@
 package com.epam.esm.service.service;
 
 import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.persistence.util.AscDesc;
-import com.epam.esm.persistence.util.EntityFinder;
-import com.epam.esm.model.entity.Entity;
+import com.epam.esm.model.entity.CustomEntity;
+import com.epam.esm.persistence.util.finder.EntityFinder;
 import com.epam.esm.service.exceptions.BadRequestException;
-import com.epam.esm.service.exceptions.ServiceException;
+import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
-import java.util.Collection;
+import org.springframework.util.MultiValueMap;
+
+import javax.persistence.Entity;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 
 /**
- * {@link Entity} service interface.
+ * {@link CustomEntity} service interface.
  *
  * @author Yury Zmushko
  * @version 1.0
  */
-public interface EntityService<T extends Entity> {
+public interface EntityService<T extends CustomEntity> {
 
     /**
-     * Create {@link Entity} and add it to database method
+     * Create {@link CustomEntity} and add it to database method.
      *
-     * @param t {@link Entity} to create
-     *
+     * @param t {@link CustomEntity} to create.
      */
-    T create (T t) throws ServiceException, ValidationException;
+    T create(T t) throws ValidationException, BadRequestException;
+
+
+    EntityFinder<T> getFinder();
 
     /**
-     * Read {@link Entity} from database method
+     * Read {@link CustomEntity} from database method.
      *
-     * @param id ID of the Entity
-     *
+     * @param id ID of the Entity.
      */
-    T read (int id) throws ServiceException;
+    T read(int id) throws NotFoundException;
 
     /**
-     * Delete {@link Entity} from database method
+     * Read {@link CustomEntity} from database method.
      *
-     * @param id ID of the Entity
-     *
+     * @param id ID of the Entity.
      */
-    void delete (int id) throws ServiceException;
+    Optional<T> readOptional(int id);
 
     /**
-     * Update {@link Entity} in database method
+     * Delete {@link CustomEntity} from database method.
      *
-     * @param t {@link Entity} to create
-     *
+     * @param id ID of the Entity.
      */
-    void update (T t) throws ServiceException, ValidationException;
+    void delete(int id) throws BadRequestException;
 
     /**
-     * Find all  {@link Entity} objects in database method
+     * Update {@link CustomEntity} in database method.
      *
-     * @throws ServiceException in case of malfunctioning, e.g.
-     * {@link com.epam.esm.persistence.exceptions.DAOSQLException}
-     * @return list of founded {@link Entity} objects
+     * @param t {@link CustomEntity} to create.
+     * @return Updated {@link Certificate}.
      */
-    List<T> findAll() throws ServiceException;
+    T update(T t) throws ValidationException, BadRequestException, NotFoundException;
 
     /**
-     * Find {@link Entity} objects by {@link EntityFinder} criteria in database method
+     * Find all  {@link CustomEntity} objects in database method.
      *
-     * @throws ServiceException in case of malfunctioning, e.g.
-     * {@link com.epam.esm.persistence.exceptions.DAOSQLException}
-     * @param entityFinder {@link EntityFinder} criteria to find objects
-     * @return list of founded {@link Entity} objects
+     * @return list of founded {@link CustomEntity} objects.
+     * @throws NotFoundException in case of malfunctioning, e.g..
+     *
      */
-    List<T> findBy(EntityFinder<T> entityFinder) throws ServiceException;
+    List<T> readAll() throws NotFoundException;
 
     /**
-     * Obtain {@link AscDesc} enum element
+     * Find {@link Entity} objects by parameters method.
      *
-     * @param param name of the parameter
-     * @throws BadRequestException in case of bad request parameters, e.g. param does not
-     * correspond to AscDesc elements
-     * @return {@link AscDesc} element
+     * @param params finding and sorting parameters.
      */
-    default AscDesc parseAscDesc(String param) throws BadRequestException {
-        switch (param) {
-            case "true":
-                return AscDesc.ASC;
-            case "false":
-                return AscDesc.DESC;
-            case "1":
-                return AscDesc.ASC;
-            case "2":
-                return AscDesc.DESC;
-            case "asc":
-                return AscDesc.ASC;
-            case "desc":
-                return AscDesc.DESC;
-            default:
-                throw new BadRequestException("Wrong parameter sort-by!");
-        }
+    List<T> read(MultiValueMap<String, String> params) throws BadRequestException, NotFoundException;
+
+    /**
+     * Decode request parameters using UTF-8.
+     *
+     * @return {@link String} decoded parameters.
+     *
+     */
+    default String decodeParam(String param) {
+        return URLDecoder.decode(param, StandardCharsets.UTF_8);
     }
 }

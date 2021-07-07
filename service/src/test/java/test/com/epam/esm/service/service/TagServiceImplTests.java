@@ -1,107 +1,202 @@
 package test.com.epam.esm.service.service;
 
 import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.impl.TagDAOImpl;
-import com.epam.esm.persistence.exceptions.DAOSQLException;
-import com.epam.esm.persistence.util.TagFinder;
-import com.epam.esm.service.exceptions.ServiceException;
-import com.epam.esm.service.exceptions.ValidationException;
+import com.epam.esm.persistence.dao.tag.TagDAOImpl;
+import com.epam.esm.persistence.util.finder.EntityFinder;
+import com.epam.esm.persistence.util.finder.impl.TagFinder;
+import com.epam.esm.service.constants.ErrorCodes;
+import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.constants.TagSearchParameters;
-import com.epam.esm.service.service.impl.TagServiceImpl;
 import com.epam.esm.service.constants.TagSortingParameters;
+import com.epam.esm.service.exceptions.BadRequestException;
+import com.epam.esm.service.exceptions.NotFoundException;
+import com.epam.esm.service.exceptions.ValidationException;
+import com.epam.esm.service.service.tag.TagServiceImpl;
 import com.epam.esm.service.validator.EntityValidator;
-import com.epam.esm.service.validator.TagValidator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.ArgumentCaptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import java.util.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-public class TagServiceImplTests {
-    private TagDAOImpl tagDaoMock = Mockito.mock(TagDAOImpl.class);
-    private EntityValidator<Tag> validator;
-    private TagFinder finder = new TagFinder();
-    private TagServiceImpl service;
+@SpringBootTest(classes = ServiceTestConfig.class)
+@Transactional
+class TagServiceImplTests {
 
-    private Tag tag1 = new Tag("Tag1");
-    private Tag tag2 = new Tag("Tag2");
-    private Tag tag3 = new Tag("Tag3");
-    private Tag tag4 = new Tag("Tag4");
-    private Tag[] tags = {tag1, tag2, tag3, tag4};
-    private Tag[] tagsShort = {tag1, tag2};
-    private List<Tag> fullList = Arrays.asList(tags);
-    private List<Tag> shortList = Arrays.asList(tagsShort);
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    {
+    static Logger logger = LoggerFactory.getLogger(CertificateServiceImplTests.class);
+
+    @MockBean
+    TagDAOImpl tagDaoMock;
+
+    @MockBean
+    EntityValidator<Tag> validator;
+
+    @Autowired
+    TagServiceImpl service;
+
+    private final Tag tag1 = new Tag("Tag1");
+    private final Tag tag2 = new Tag("Tag2");
+    private final Tag tag3 = new Tag("Tag3");
+    private final Tag tag4 = new Tag("Tag4");
+    private final Tag[] tags = {tag1, tag2, tag3, tag4};
+    private final Tag[] tagsShort = {tag1, tag2};
+    private final List<Tag> fullList = Arrays.asList(tags);
+    private final List<Tag> shortList = Arrays.asList(tagsShort);
+
+    @BeforeEach
+    void init() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
+        Root<Tag> tagRoot = query.from(Tag.class);
+        query = query.select(tagRoot);
+
         try {
-            Mockito.when(tagDaoMock.findAll()).thenReturn(fullList);
-            Mockito.when(tagDaoMock.read(1)).thenReturn(tag1);
-            Mockito.when(tagDaoMock.read(2)).thenReturn(tag2);
-            Mockito.when(tagDaoMock.findBy(Mockito.any(TagFinder.class))).thenReturn(shortList);
-            Mockito.doNothing().when(tagDaoMock).delete(Mockito.any(Integer.class));
-            Mockito.doNothing().when(tagDaoMock).update(Mockito.any(Tag.class));
-            Mockito.when(tagDaoMock.create(Mockito.any(Tag.class))).thenAnswer(invocation -> {
-                Tag tag = invocation.getArgumentAt(0, Tag.class);
+            when(tagDaoMock.findAll()).thenReturn(fullList);
+            when(tagDaoMock.getById(1)).thenReturn(tag1);
+            when(tagDaoMock.getById(2)).thenReturn(tag2);
+            when(tagDaoMock.findByParameters(any(TagFinder.class))).thenReturn(shortList);
+            doNothing().when(tagDaoMock).delete(any(Integer.class));
+            when(tagDaoMock.getBuilder()).thenReturn(builder);
+            when(tagDaoMock.create(any(Tag.class))).thenAnswer(invocation -> {
+                Tag tag = invocation.getArgument(0, Tag.class);
                 tag.setId(fullList.size());
                 return tag;
             });
 
-            validator = Mockito.mock(TagValidator.class);
-            Mockito.doNothing().when(validator).validate(Mockito.any(Tag.class));
-        } catch (DAOSQLException | ValidationException e) {
-            e.printStackTrace();
+            doNothing().when(validator).validate(any(Tag.class));
+
+            when(tagDaoMock.findMostPopularTag()).thenReturn(tag4);
+
+        } catch (ValidationException e) {
+            logger.error(e.getMessage());
         }
         tag1.setId(1);
         tag2.setId(2);
         tag1.setId(3);
         tag2.setId(4);
-        service = new TagServiceImpl(tagDaoMock, validator, finder);
     }
 
     @Test
-    public void readTest() throws ServiceException {
+    void read_returnTag() throws NotFoundException {
         assertEquals(tag1, service.read(1));
     }
 
     @Test
-    public void findAllTest() throws ServiceException {
-        assertEquals(fullList, service.findAll());
+    void readAll_returnTags() throws NotFoundException {
+        assertEquals(fullList, service.readAll());
     }
 
     @Test
-    public void createTest() throws ServiceException, ValidationException, DAOSQLException {
+    void create_createTag() throws ValidationException, BadRequestException {
         Tag tag = service.create(tag1);
         assertEquals(tag.getId(), fullList.size());
-        Mockito.verify(tagDaoMock, Mockito.times(1)).create(tag1);
+        verify(tagDaoMock, times(1)).create(tag1);
     }
 
     @Test
-    public void deleteTest() throws ServiceException, DAOSQLException {
+    void delete_deleteTag() throws BadRequestException {
         service.delete(1);
-        Mockito.verify(tagDaoMock, Mockito.times(1)).read(1);
+        verify(tagDaoMock, atLeast(1)).getById(1);
+        verify(tagDaoMock, atLeast(1)).delete(1);
     }
 
     @Test
-    public void updateTest() throws ServiceException, ValidationException, DAOSQLException {
-        service.update(tag2);
-        Mockito.verify(tagDaoMock, Mockito.times(1)).update(tag2);
+    void update_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> service.update(tag2));
     }
 
     @Test
-    public void findByCertificateTest() throws ServiceException, DAOSQLException {
-        assertEquals(shortList, service.findByCertificate(1));
-        TagFinder finder = new TagFinder().findByCertificate(1);
-        Mockito.verify(tagDaoMock, Mockito.times(1)).findBy(finder);
+    void read_readByName_returnTags() throws BadRequestException, NotFoundException {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
+        };
+        params.put(TagSearchParameters.NAME.name(), Collections.singletonList("1"));
+        params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), Collections.singletonList("2"));
+        assertEquals(shortList, service.read(params));
+        verify(tagDaoMock, atLeast(1)).findByParameters(any(TagFinder.class));
     }
 
     @Test
-    public void findTest() throws ServiceException, DAOSQLException {
-        Map<String, String> params = new HashMap<>();
-        params.put(TagSearchParameters.NAME.name(), "1");
-        params.put(TagSortingParameters.SORT_BY_NAME.name().toLowerCase(), "2");
+    void create_invalidTag_throwsException()
+            throws ValidationException {
+        doThrow(new ValidationException("error", ErrorCodes.TAG_VALIDATION_EXCEPTION))
+                .when(validator).validate(any(Tag.class));
+        assertThrows(ValidationException.class, () -> service.create(tag1));
+    }
 
-        assertEquals(shortList, service.find(params));
-        Mockito.verify(tagDaoMock, Mockito.times(1)).findBy(Mockito.any(TagFinder.class));
+    @Test
+    void create_catchDataAccessException_throwsException() {
+
+        doThrow(new DataIntegrityViolationException("error"))
+                .when(tagDaoMock).create(any(Tag.class));
+
+        assertThrows(BadRequestException.class, () -> service.create(tag1));
+    }
+
+    @Test
+    void readMostlyUsedTag_returnTag() throws NotFoundException {
+        assertEquals(service.readMostlyUsedTag(), tag4);
+    }
+
+    @Test
+    void read_parsePaginationLimit_invokeFinderLimit() throws NotFoundException, BadRequestException {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
+        };
+        params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
+        service.read(params);
+
+        ArgumentCaptor<EntityFinder<Tag>> captor = ArgumentCaptor.forClass(EntityFinder.class);
+        verify(tagDaoMock, atLeast(1)).findByParameters(captor.capture());
+        assertEquals(1, captor.getValue().getLimit());
+    }
+
+    @Test
+    void read_parsePaginationLimit_invokeFinderOffset() throws NotFoundException, BadRequestException {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
+        };
+        params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
+        service.read(params);
+
+        ArgumentCaptor<EntityFinder<Tag>> captor = ArgumentCaptor.forClass(EntityFinder.class);
+        verify(tagDaoMock, atLeast(1)).findByParameters(captor.capture());
+        assertEquals(1, captor.getValue().getOffset());
+    }
+
+    @Test
+    void read_badParameter_ThrowsBadRequestException() {
+        TagFinder finder = new TagFinder(tagDaoMock);
+        finder.offset(1);
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
+        };
+        params.put("unknown", Collections.singletonList("1"));
+        assertThrows(BadRequestException.class, () -> service.read(params));
     }
 }

@@ -8,23 +8,23 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TagValidatorTest {
+class TagValidatorTest {
     TagValidator validator = new TagValidator();
 
     @Test
-    void validateTest() throws ValidationException {
+    void validate_NullName_throwsException() {
         Tag tag = new Tag(null);
         assertThrows(ValidationException.class, () -> validator.validate(tag));
     }
 
     @Test
-    void validateTest2() throws ValidationException {
+    void validate_EmptyName_throwsException() {
         Tag tag = new Tag("");
         assertThrows(ValidationException.class, () -> validator.validate(tag));
     }
 
     @Test
-    void validateTest3() throws ValidationException {
+    void validate_valid_doNothing() {
         Tag tag = new Tag("Tagname");
         assertDoesNotThrow(() -> validator.validate(tag));
     }

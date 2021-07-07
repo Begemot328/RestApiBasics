@@ -1,8 +1,7 @@
 package com.epam.esm.service.validator;
 
 
-import com.epam.esm.model.entity.Entity;
-import com.epam.esm.service.constants.CertificateSearchParameters;
+import com.epam.esm.model.entity.CustomEntity;
 import com.epam.esm.service.exceptions.ValidationException;
 
 /**
@@ -11,13 +10,41 @@ import com.epam.esm.service.exceptions.ValidationException;
  * @author Yury Zmushko
  * @version 1.0
  */
-public interface EntityValidator<T extends Entity> {
+public interface EntityValidator<T extends CustomEntity> {
 
     /**
-     * Validate {@link Entity} method
+     * Validate {@link CustomEntity} method.
      *
-     * @param t {@link Entity} to validate
-     *
+     * @param t {@link CustomEntity} to validate.
      */
     void validate(T t) throws ValidationException;
+
+    default void validateNotEmptyString(String param, String name, int errorCode) throws ValidationException {
+        if (param == null) {
+            throw new ValidationException(name + " can't be null!",
+                    errorCode);
+        }
+        if (param.isEmpty()) {
+            throw new ValidationException(name + " can't be empty!",
+                    errorCode);
+        }
+    }
+
+    default void validateNotNullObject(Object object, String name, int errorCode) throws ValidationException {
+        if (object == null) {
+            throw new ValidationException(name + " can't be null!",
+                    errorCode);
+        }
+    }
+
+    default void validatePositiveNumber(Number number, String name, int errorCode) throws ValidationException {
+        if (number == null) {
+            throw new ValidationException(name + " can't be null!",
+                    errorCode);
+        }
+        if (number.doubleValue() <= 0) {
+            throw new ValidationException(name + " can't non-positive!",
+                    errorCode);
+        }
+    }
 }

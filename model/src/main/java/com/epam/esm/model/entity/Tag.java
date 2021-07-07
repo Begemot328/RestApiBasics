@@ -1,49 +1,60 @@
 package com.epam.esm.model.entity;
 
-import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 /**
  * Tag entity class.
  *
  * @author Yury Zmushko
- * @version 1.0
+ * @version 2.0
  */
-public class Tag extends Entity {
+@Entity
+public class Tag extends CustomEntity {
+
+    @Column(nullable = false)
     private String name;
 
     /**
-     * Default constructor
+     * Default constructor.
      */
-    public Tag() {}
+    public Tag() {
+        // Default constructor for JPA purposes.
+    }
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param name name of the tag
+     * @param name Name of the tag.
      */
     public Tag(String name) {
         this.name = name;
     }
 
-
     /**
-     * Name getter
+     * Name getter.
      *
-     * @return name of the tag
+     * @return Name of the tag.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Name setter
+     * Name setter.
      *
-     * @param  name name of the tag
+     * @param name Name of the tag.
      */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Equality check.
+     *
+     * @param o Object to check equality.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -52,11 +63,21 @@ public class Tag extends Entity {
         return getName() != null ? getName().equals(tag.getName()) : tag.getName() == null;
     }
 
+    /**
+     * Hach code calculator.
+     *
+     * @return Hash code value.
+     */
     @Override
     public int hashCode() {
         return getName() != null ? getName().hashCode() : 0;
     }
 
+    /**
+     * String value generator.
+     *
+     * @return {@link String} interpretation of object.
+     */
     @Override
     public String toString() {
         return "Tag{" +

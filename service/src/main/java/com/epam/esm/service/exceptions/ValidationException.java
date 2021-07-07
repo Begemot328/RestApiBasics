@@ -6,32 +6,13 @@ package com.epam.esm.service.exceptions;
  * @author Yury Zmushko
  * @version 1.0
  */
-public class ValidationException extends Exception {
-    /**
-     * Constructor
-     *
-     * @param message the message
-     */
-    public ValidationException(String message) {
-        super(message);
+public class ValidationException extends ServiceLayerException {
+
+    public ValidationException(String message, int errorCode) {
+        super(message, errorCode);
     }
 
-    /**
-     * Constructor
-     *
-     * @param message the message
-     * @param e the e
-     */
-    public ValidationException(String message, Exception e) {
-        super(message, e);
-    }
-
-    /**
-     * Constructor
-     *
-     * @param e the e
-     */
-    public ValidationException(Exception e) {
-        super(e);
+    public ValidationException(Exception e, int errorCode) {
+        super(e, errorCode);
     }
 }
