@@ -1,25 +1,21 @@
 package com.epam.esm.service.service.certificate;
 
-import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Tag;
-import com.epam.esm.persistence.dao.certificate.CertificateDAO;
-import com.epam.esm.persistence.util.finder.EntityFinder;
-import com.epam.esm.persistence.util.finder.SortDirection;
+import com.epam.esm.persistence.dao.CertificateDAO;
+import com.epam.esm.persistence.model.entity.Certificate;
 import com.epam.esm.persistence.util.finder.impl.CertificateFinder;
 import com.epam.esm.service.constants.CertificateSearchParameters;
-import com.epam.esm.service.constants.CertificateSortingParameters;
 import com.epam.esm.service.constants.ErrorCodes;
-import com.epam.esm.service.constants.PaginationParameters;
+import com.epam.esm.service.constants.PageableParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.service.tag.TagService;
 import com.epam.esm.service.validator.EntityValidator;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -29,7 +25,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * {@link Certificate} service class.
@@ -39,7 +34,7 @@ import java.util.function.Consumer;
  */
 @Service
 public class CertificateServiceImpl implements CertificateService {
-
+    private static final String NOT_FOUND_ERROR_MESSAGE = "Requested certificate not found(%s = %s)!";
     private final CertificateDAO dao;
     private final EntityValidator<Certificate> validator;
     private final TagService tagService;
@@ -61,66 +56,47 @@ public class CertificateServiceImpl implements CertificateService {
         certificate.setCreateDate(LocalDateTime.now());
         certificate.setLastUpdateDate(LocalDateTime.now());
         validator.validate(certificate);
-        for (Tag tag : certificate.getTags()) {
-            if (tagService.readOptional(tag.getId()).isEmpty()) {
-                tagService.create(tag);
-            }
-        }
+        tagService.makeAllTagsDetached(certificate.getTags());
         try {
-            return dao.create(certificate);
+            return dao.save(certificate);
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException(e, ErrorCodes.CERTIFICATE_BAD_REQUEST);
         }
     }
 
     @Override
-    public Certificate read(int id) throws NotFoundException {
-        Optional<Certificate> certificateOptional = readOptional(id);
-        if (certificateOptional.isEmpty()) {
-            throw new NotFoundException("Requested resource not found(id = " + id + ")!",
-                    ErrorCodes.CERTIFICATE_NOT_FOUND);
-        }
-        return certificateOptional.get();
-    }
-
-    @Override
-    public Optional<Certificate> readOptional(int id) {
-        return Optional.ofNullable(dao.getById(id));
+    public Certificate getById(int id) throws NotFoundException {
+        return dao.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format(NOT_FOUND_ERROR_MESSAGE, "id", id),
+                        ErrorCodes.CERTIFICATE_NOT_FOUND));
     }
 
     @Transactional
     @Override
     public void delete(int id) throws BadRequestException {
-        if (dao.getById(id) == null) {
+        Optional<Certificate> certificate = dao.findById(id);
+        if (certificate.isEmpty()) {
             throw new BadRequestException("Entity does not exist", ErrorCodes.CERTIFICATE_BAD_REQUEST);
         }
-        dao.delete(id);
+        dao.delete(certificate.get());
     }
 
     @Transactional
     @Override
     public Certificate update(Certificate certificate)
-            throws ValidationException, NotFoundException {
+            throws ValidationException, NotFoundException, BadRequestException {
+        Certificate oldCertificate = getById(certificate.getId());
         certificate.setLastUpdateDate(LocalDateTime.now());
-        certificate.setCreateDate(read(certificate.getId()).getCreateDate());
+        certificate.setCreateDate(oldCertificate.getCreateDate());
         validator.validate(certificate);
-        return dao.update(certificate);
-
+        tagService.makeAllTagsDetached(certificate.getTags());
+        return dao.save(certificate);
     }
 
-    @Override
-    public List<Certificate> readAll() throws NotFoundException {
-        List<Certificate> certificates = dao.findAll();
-        if (CollectionUtils.isEmpty(certificates)) {
-            throw new NotFoundException("No certificates found!",
-                    ErrorCodes.CERTIFICATE_NOT_FOUND);
-        } else {
-            return certificates;
-        }
-    }
-
-    private List<Certificate> readBy(EntityFinder<Certificate> entityFinder) throws NotFoundException {
-        List<Certificate> certificates = dao.findByParameters(entityFinder);
+    private List<Certificate> findByFinder(CertificateFinder entityFinder, Pageable pageable)
+            throws NotFoundException {
+        List<Certificate> certificates = dao.findAll(
+                entityFinder.getPredicate(), pageable).getContent();
         if (CollectionUtils.isEmpty(certificates)) {
             throw new NotFoundException("Requested certificate not found!",
                     ErrorCodes.CERTIFICATE_NOT_FOUND);
@@ -136,114 +112,50 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public List<Certificate> read(MultiValueMap<String, String> params)
+    public List<Certificate> findByParameters(MultiValueMap<String, String> params, Pageable pageable)
             throws BadRequestException, NotFoundException {
         CertificateFinder finder = getFinder();
         for (Map.Entry<String, List<String>> entry : params.entrySet()) {
             try {
                 validateParameterValues(entry.getValue());
-                parseParameter(finder, entry.getKey(), entry.getValue());
+                if (!PageableParameters.contains(entry.getKey())) {
+                    parseFindParameter(finder, entry.getKey(), entry.getValue());
+                }
             } catch (IllegalArgumentException e) {
                 throw new BadRequestException(e, ErrorCodes.CERTIFICATE_BAD_REQUEST);
             }
         }
-        return readBy(finder);
+        return findByFinder(finder, pageable);
     }
 
-    private void parseParameter(CertificateFinder finder, String parameterName, List<String> parameterValues) {
-        if (parameterName.contains("sort")) {
-            parseSortParameter(finder, parameterName, parameterValues);
-        } else if (PaginationParameters.contains(parameterName)) {
-            parsePaginationParameter(finder, parameterName, parameterValues);
-        } else {
-            parseFindParameter(finder, parameterName, parameterValues);
-        }
-    }
-
-    private void parsePaginationParameter(CertificateFinder finder,
-                                          String parameterName,
-                                          List<String> parameterValues) {
-        PaginationParameters parameter = PaginationParameters.getEntryByParameter(parameterName);
-        switch (parameter) {
-            case LIMIT:
-                finder.limit(Integer.parseInt(parameterValues.get(0)));
-                break;
-            case OFFSET:
-                finder.offset(Integer.parseInt(parameterValues.get(0)));
-                break;
-        }
-    }
-
-    private void parseSortParameter(CertificateFinder finder, String parameterName, List<String> parameterValues) {
-        finder.sortBy(CertificateSortingParameters.getEntryByParameter(parameterName).getValue(),
-                SortDirection.parseAscDesc(parameterValues.get(0)));
-    }
-
-    private void parseFindParameter(CertificateFinder finder, String parameterName, List<String> parameterValues) {
+    private void parseFindParameter(CertificateFinder finder,
+                                    String parameterName, List<String> parameterValues) {
         CertificateSearchParameters parameter =
                 CertificateSearchParameters.getEntryByParameter(parameterName);
         switch (parameter) {
             case NAME:
-                addToFinder(finder::findByName, parameterValues);
+                finder.findByNameLike(decodeParam(parameterValues.get(0)));
                 break;
             case DESCRIPTION:
-                addToFinder(finder::findByDescription, parameterValues);
+                finder.findByDescriptionLike(decodeParam(parameterValues.get(0)));
                 break;
             case TAG_ID:
-                if (parameterValues.size() > 1) {
-                    finder.findByTags(parameterValues.stream().mapToInt(Integer::parseInt).toArray());
-                } else {
-                    finder.findByTagId(Integer.parseInt(parameterValues.get(0)));
-                }
+                finder.findByTags(parameterValues.stream().mapToInt(Integer::parseInt).toArray());
                 break;
             case TAG_NAME:
-                if (parameterValues.size() > 1) {
-                    finder.findByTags(parameterValues.toArray(String[]::new));
-                } else {
-                    finder.findByTag(parameterValues.get(0));
-                }
+                finder.findByTags(parameterValues.toArray(String[]::new));
                 break;
         }
-    }
-
-    private void addToFinder(Consumer<String> consumer, String value) {
-        if (StringUtils.isNotEmpty(value)) {
-            consumer.accept(decodeParam(value));
-        }
-    }
-
-    private void addToFinder(Consumer<String> consumer, List<String> list) {
-        if (CollectionUtils.isNotEmpty(list)) {
-            addToFinder(consumer, list.get(0));
-        }
-    }
-
-    private void validateParameterValues(List<String> parameterValues) throws BadRequestException {
-        if (CollectionUtils.isEmpty(parameterValues)) {
-            throw new BadRequestException("Empty parameter!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
-        }
-    }
-
-    private Certificate findOldCertificate(int certificateId) throws BadRequestException {
-        if (certificateId <= 0) {
-            throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
-        }
-        return dao.getById(certificateId);
     }
 
     @Transactional
     @Override
     public Certificate patch(Certificate certificate)
             throws ValidationException, BadRequestException, NotFoundException {
-        Certificate oldCertificate = findOldCertificate(certificate.getId());
-
-        if (oldCertificate == null) {
-            throw new BadRequestException("Wrong certificate id!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
-        }
-        return update(updateCertificate(certificate, oldCertificate));
+        return update(applyChanges(certificate, getById(certificate.getId())));
     }
 
-    private Certificate updateCertificate(Certificate newCertificate, Certificate oldCertificate) {
+    private Certificate applyChanges(Certificate newCertificate, Certificate oldCertificate) {
         if (newCertificate.getPrice() != null
                 && newCertificate.getPrice().compareTo(BigDecimal.ZERO) > 0) {
             oldCertificate.setPrice(newCertificate.getPrice());
@@ -261,6 +173,12 @@ public class CertificateServiceImpl implements CertificateService {
             oldCertificate.setTags(newCertificate.getTags());
         }
         return oldCertificate;
+    }
+
+    private void validateParameterValues(List<String> parameterValues) throws BadRequestException {
+        if (CollectionUtils.isEmpty(parameterValues)) {
+            throw new BadRequestException("Empty parameter!", ErrorCodes.CERTIFICATE_BAD_REQUEST);
+        }
     }
 }
 

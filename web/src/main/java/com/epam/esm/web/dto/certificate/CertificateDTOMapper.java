@@ -1,7 +1,7 @@
 package com.epam.esm.web.dto.certificate;
 
-import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Tag;
+import com.epam.esm.persistence.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.web.controller.CertificateController;
 import com.epam.esm.web.dto.tag.TagDTO;
@@ -20,10 +20,21 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * {@link Certificate} to  {@link CertificateDTO} mapper class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 @Component
 public class CertificateDTOMapper {
     private final ModelMapper mapper;
 
+    /**
+     * Constructor.
+     *
+     * @param mapper {@link ModelMapper} bean to add mapping.
+     */
     @Autowired
     public CertificateDTOMapper(ModelMapper mapper) {
         this.mapper = mapper;
@@ -37,18 +48,24 @@ public class CertificateDTOMapper {
                         .toTag(tagDTO)).collect(Collectors.toList());
 
         mapper.typeMap(Certificate.class, CertificateDTO.class).addMappings(
-               newMapper -> newMapper.using(converterToDTO).map(
-                       Certificate::getTags, CertificateDTO::setTags));
+                newMapper -> newMapper.using(converterToDTO).map(
+                        Certificate::getTags, CertificateDTO::setTags));
 
         mapper.typeMap(CertificateDTO.class, Certificate.class).addMappings(
                 newMapper -> newMapper.using(converterToObject).map(
                         CertificateDTO::getTags, Certificate::setTags));
     }
 
+    /**
+     * {@link Certificate} to  {@link CertificateDTO} mapping.
+     *
+     * @param certificate {@link Certificate} to map.
+     */
     public CertificateDTO toCertificateDTO(Certificate certificate) {
         CertificateDTO certificateDTO = mapper.map(certificate, CertificateDTO.class);
         try {
-            Link link = linkTo(methodOn(CertificateController.class).read(certificate.getId())).withSelfRel();
+            Link link = linkTo(methodOn(CertificateController.class).get(certificate.getId()))
+                    .withSelfRel();
             certificateDTO.add(link);
         } catch (NotFoundException e) {
             throw new DTOException(e);
@@ -56,11 +73,22 @@ public class CertificateDTOMapper {
         return certificateDTO;
     }
 
+    /**
+     * {@link List} of {@link Certificate} to {@link CollectionModel} of {@link CertificateDTO} mapping.
+     *
+     * @param orders {@link List} of {@link Certificate} to map.
+     * @return {@link CollectionModel} of {@link CertificateDTO} objects.
+     */
     public CollectionModel<CertificateDTO> toCertificateDTOList(List<Certificate> certificates) {
         return CollectionModel.of(
                 certificates.stream().map(this::toCertificateDTO).collect(Collectors.toList()));
     }
 
+    /**
+     * {@link CertificateDTO} to  {@link Certificate} mapping.
+     *
+     * @param certificateDTO {@link CertificateDTO} to map.
+     */
     public Certificate toCertificate(CertificateDTO certificateDTO) {
         return mapper.map(certificateDTO, Certificate.class);
     }

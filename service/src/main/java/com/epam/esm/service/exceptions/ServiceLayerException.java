@@ -1,6 +1,11 @@
 package com.epam.esm.service.exceptions;
 
-
+/**
+ * Parent custom exception.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public class ServiceLayerException extends Exception {
     private final int errorCode;
 

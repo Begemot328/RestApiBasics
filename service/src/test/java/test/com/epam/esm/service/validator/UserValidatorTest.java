@@ -1,6 +1,6 @@
 package test.com.epam.esm.service.validator;
 
-import com.epam.esm.model.entity.User;
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.service.exceptions.ValidationException;
 import com.epam.esm.service.validator.UserValidator;
 import org.junit.jupiter.api.BeforeEach;

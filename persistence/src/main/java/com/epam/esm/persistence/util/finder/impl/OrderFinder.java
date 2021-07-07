@@ -1,34 +1,52 @@
 package com.epam.esm.persistence.util.finder.impl;
 
-import com.epam.esm.model.entity.Order;
-import com.epam.esm.persistence.dao.EntityDAO;
+import com.epam.esm.persistence.dao.OrderDAO;
+import com.epam.esm.persistence.model.entity.Order;
+import com.epam.esm.persistence.model.entity.QOrder;
 import com.epam.esm.persistence.util.finder.EntityFinder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+/**
+ * Search criteria class to find {@link Order} objects
+ * via {@link OrderDAO} datasources.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 
 @Component
 @Scope("prototype")
 public class OrderFinder extends EntityFinder<Order> {
 
-    public OrderFinder(EntityDAO<Order> dao) {
-        super(dao);
+    public OrderFinder() {
+        super();
     }
 
     /**
-     * Find by ID condition adding method
+     * Find by User ID condition adding method.
      *
-     * @param id string that found names will include
+     * @param id User ID that found orders will include.
      */
     public void findByUser(int id) {
-        add(builder.equal(root.join("user").get("id"), id));
+        add(QOrder.order.user.id.eq(id));
     }
 
+    /**
+     * Find by Certificate ID condition adding method.
+     *
+     * @param id Certificate ID that found orders will include.
+     */
     public void findByCertificate(int id) {
-        add(builder.equal(root.join("certificate").get("id"), id));
+        add(QOrder.order.certificate.id.eq(id));
     }
 
-    @Override
-    protected Class<Order> getClassType() {
-        return Order.class;
+    /**
+     * Find by ID condition adding method.
+     *
+     * @param id ID of the order.
+     */
+    public void findById(int id) {
+        add(QOrder.order.id.eq(id));
     }
 }

@@ -1,0 +1,35 @@
+package com.epam.esm.web.security.auth;
+
+import com.epam.esm.persistence.model.entity.User;
+import com.epam.esm.persistence.model.userdetails.Account;
+import org.springframework.security.access.PermissionEvaluator;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
+
+import java.io.Serializable;
+
+/**
+ * {@link User} permission evaluator class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
+@Component
+public class UserPermissionEvaluator implements PermissionEvaluator {
+
+    @Override
+    public boolean hasPermission(Authentication authentication, Object o, Object o1) {
+        if (!(authentication.getPrincipal() instanceof Account)) {
+            return false;
+        }
+        if (!(o instanceof Integer)) {
+            return false;
+        }
+        return ((Account) authentication.getPrincipal()).getUser().getId() == (Integer) o;
+    }
+
+    @Override
+    public boolean hasPermission(Authentication authentication, Serializable serializable, String s, Object o) {
+        return false;
+    }
+}

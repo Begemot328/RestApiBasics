@@ -1,19 +1,35 @@
 package com.epam.esm.web.dto.tag;
 
+import com.epam.esm.persistence.model.entity.Tag;
 import com.epam.esm.web.dto.certificate.CertificateDTO;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;
 
+/**
+ * {@link Tag} DTO class.
+ *
+ * @author Yury Zmushko
+ * @version 1.0
+ */
 public class TagDTO extends RepresentationModel<CertificateDTO> {
     private int id;
     private String name;
 
+    /**
+     * Constructor.
+     *
+     * @param name Name of the Tag.
+     * @param id ID of the Tag.
+     */
     public TagDTO(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
+    /**
+     * Default constructor.
+     */
     public TagDTO() {
         // Default constructor for Model mapper purposes.
     }

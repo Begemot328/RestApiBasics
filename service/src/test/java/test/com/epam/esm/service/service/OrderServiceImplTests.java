@@ -1,14 +1,12 @@
 package test.com.epam.esm.service.service;
 
-import com.epam.esm.model.entity.Certificate;
-import com.epam.esm.model.entity.Order;
-import com.epam.esm.model.entity.Tag;
-import com.epam.esm.model.entity.User;
-import com.epam.esm.persistence.dao.order.OrderDAOImpl;
-import com.epam.esm.persistence.dao.tag.TagDAOImpl;
-import com.epam.esm.persistence.util.finder.EntityFinder;
+import com.epam.esm.persistence.dao.OrderDAO;
+import com.epam.esm.persistence.dao.TagDAO;
+import com.epam.esm.persistence.model.entity.Certificate;
+import com.epam.esm.persistence.model.entity.Order;
+import com.epam.esm.persistence.model.entity.Role;
+import com.epam.esm.persistence.model.entity.User;
 import com.epam.esm.persistence.util.finder.impl.OrderFinder;
-import com.epam.esm.service.constants.PaginationParameters;
 import com.epam.esm.service.exceptions.BadRequestException;
 import com.epam.esm.service.exceptions.NotFoundException;
 import com.epam.esm.service.exceptions.ValidationException;
@@ -18,19 +16,14 @@ import com.epam.esm.service.service.user.UserService;
 import com.epam.esm.service.validator.EntityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -51,14 +44,11 @@ import static org.mockito.Mockito.when;
 @Transactional
 class OrderServiceImplTests {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @MockBean
+    OrderDAO orderDaoMock;
 
     @MockBean
-    OrderDAOImpl orderDaoMock;
-
-    @MockBean
-    TagDAOImpl tagDaoMock;
+    TagDAO tagDaoMock;
 
     @MockBean
     UserService userServiceMock;
@@ -82,11 +72,7 @@ class OrderServiceImplTests {
     private final List<Order> shortList = Arrays.asList(ordersShort);
 
     @BeforeEach
-    void init() throws ValidationException {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Tag> query = builder.createQuery(Tag.class);
-        Root<Tag> tagRoot = query.from(Tag.class);
-        query = query.select(tagRoot);
+    void init() throws ValidationException, NotFoundException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         Certificate certificate = new Certificate("nastolka.by",
@@ -96,8 +82,10 @@ class OrderServiceImplTests {
         certificate.setLastUpdateDate(LocalDateTime.parse("2021-03-22 09:20:11", formatter));
         certificate.setId(2);
 
-        User user = new User("Ivan", "Ivanov", "Ivanov", "qwerty");
+        User user = new User("Ivan", "Ivanov", "Ivanov",
+                "$2y$12$nDIbpnb/9S61LuSKF2JFt.AUHSESFw.xPwr/Ie6U6DvACFJuZACuq");
         user.setId(2);
+        user.addRole(new Role("USER"));
 
         order1 = new Order(certificate, user, BigDecimal.valueOf(10.0), 1,
                 LocalDateTime.parse("2021-01-22 09:20:11", formatter));
@@ -110,12 +98,11 @@ class OrderServiceImplTests {
         order3.setId(3);
 
         when(orderDaoMock.findAll()).thenReturn(fullList);
-        when(orderDaoMock.getById(1)).thenReturn(order1);
-        when(orderDaoMock.findByParameters(any(OrderFinder.class))).thenReturn(shortList);
-        when(orderDaoMock.update(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(
+        when(orderDaoMock.findById(1)).thenReturn(Optional.ofNullable(order1));
+        //when(orderDaoMock.findByParameters(any(OrderFinder.class))).thenReturn(shortList);
+        when(orderDaoMock.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(
                 0, Order.class));
-        when(orderDaoMock.getBuilder()).thenReturn(builder);
-        when(orderDaoMock.create(any(Order.class))).thenAnswer(invocation -> {
+        when(orderDaoMock.save(any(Order.class))).thenAnswer(invocation -> {
             Order order = invocation.getArgument(0, Order.class);
             order.setId(fullList.size());
             return order;
@@ -123,31 +110,24 @@ class OrderServiceImplTests {
 
         doNothing().when(validator).validate(any(Order.class));
 
-        when(userServiceMock.readOptional(any(Integer.class))).thenReturn(Optional.of(user));
-        when(certificateServiceMock.readOptional(any(Integer.class))).thenReturn(Optional.of(certificate));
+        when(userServiceMock.getById(any(Integer.class))).thenReturn(user);
+        when(certificateServiceMock.getById(any(Integer.class))).thenReturn(certificate);
     }
 
     @Test
-    void read_returnOrder() throws NotFoundException {
-        assertEquals(order1, service.read(1));
-    }
-
-    @Test
-    void readAll_returnOrders() throws NotFoundException {
-        assertEquals(fullList, service.readAll());
+    void getById_returnOrder() throws NotFoundException {
+        assertEquals(order1, service.getById(1));
     }
 
     @Test
     void create_createOrder() throws ValidationException, BadRequestException {
-        Order order = service.create(order1);
-        assertEquals(order.getId(), fullList.size());
-        verify(orderDaoMock, atLeast(1)).create(order1);
+        assertThrows(UnsupportedOperationException.class, () -> service.create(order1));
     }
 
     @Test
     void delete_deleteOrder() throws BadRequestException {
         service.delete(1);
-        verify(orderDaoMock, atLeast(1)).getById(1);
+        verify(orderDaoMock, atLeast(1)).findById(1);
     }
 
     @Test
@@ -156,56 +136,32 @@ class OrderServiceImplTests {
     }
 
     @Test
-    void read_parsePaginationLimit_invokeFinderLimit()
-            throws NotFoundException, BadRequestException {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
-        };
-        params.put(PaginationParameters.LIMIT.getParameterName(), Collections.singletonList("1"));
-        service.read(params);
-
-        ArgumentCaptor<EntityFinder<Order>> captor = ArgumentCaptor.forClass(EntityFinder.class);
-        verify(orderDaoMock, atLeast(1)).findByParameters(captor.capture());
-        assertEquals(1, captor.getValue().getLimit());
-    }
-
-    @Test
-    void read_parsePaginationLimit_invokeFinderOffset() throws NotFoundException, BadRequestException {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
-        };
-        params.put(PaginationParameters.OFFSET.getParameterName(), Collections.singletonList("1"));
-        service.read(params);
-
-        ArgumentCaptor<EntityFinder<Order>> captor = ArgumentCaptor.forClass(EntityFinder.class);
-        verify(orderDaoMock, atLeast(1)).findByParameters(captor.capture());
-        assertEquals(1, captor.getValue().getOffset());
-    }
-
-    @Test
-    void read_badParameter_ThrowsBadRequestException() {
-        OrderFinder finder = new OrderFinder(orderDaoMock);
-        finder.offset(1);
+    void find_badParameter_ThrowsBadRequestException() {
+        OrderFinder finder = new OrderFinder();
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put("unknown", Collections.singletonList("1"));
-        assertThrows(BadRequestException.class, () -> service.read(params));
+        assertThrows(BadRequestException.class,
+                () -> service.findByParameters(params, Pageable.unpaged()));
     }
 
     @Test
-    void read_badParameterValue_ThrowsBadRequestException() {
-        OrderFinder finder = new OrderFinder(orderDaoMock);
-        finder.offset(1);
+    void find_badParameterValue_ThrowsBadRequestException() {
+        OrderFinder finder = new OrderFinder();
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>() {
         };
         params.put("limit", Collections.singletonList("a"));
-        assertThrows(BadRequestException.class, () -> service.read(params));
+        assertThrows(BadRequestException.class,
+                () -> service.findByParameters(params, Pageable.unpaged()));
     }
 
     @Test
-    void createOrder_createNewOrder() throws ValidationException, BadRequestException {
+    void createOrder_createNewOrder()
+            throws ValidationException, BadRequestException, NotFoundException {
         order1.setOrderAmount(order1.getCertificate().getPrice()
                 .multiply(BigDecimal.valueOf(order1.getCertificateQuantity())));
-        Order order2 = service.createOrder(order1.getCertificate(),
-                order1.getUser(),
+        Order order2 = service.createOrder(order1.getCertificate().getId(),
+                order1.getUser().getId(),
                 order1.getCertificateQuantity());
         order1.setPurchaseDate(LocalDateTime.now());
 

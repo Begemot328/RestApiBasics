@@ -1,92 +1,85 @@
 package com.epam.esm.web.util;
 
-import com.epam.esm.service.constants.PaginationParameters;
-import org.springframework.util.CollectionUtils;
+import com.epam.esm.service.constants.PageableParameters;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 /**
- * Paginator util class.
+ * Paginator util class. Allows to convert {@link Pageable} next
+ * and previous pages to requeat parameters.
  *
  * @author Yury Zmushko
  * @version 1.0
  */
+@Component
+@Scope("prototype")
+@PropertySource("classpath:application.properties")
 public class Paginator {
-    private static final int DEFAULT_LIMIT = 20;
-    private final int limit;
-    private final int offset;
+
+    @Value("${spring.data.web.pageable.one-indexed-parameters}")
+    private boolean isStartedFromOne;
+    private int addition = 0;
+
+    private Pageable pageable;
 
     /**
      * Constructor.
      *
-     * @param params Parameters map to paginate.
+     * @param pageable Parameters to paginate.
      */
-    public Paginator(MultiValueMap<String, String> params) {
-        limit = getLimit(params);
-        offset = getOffset(params);
+    public Paginator(Pageable pageable) {
+        this.pageable = pageable;
     }
 
-    /*
-     * Limit value getter.
-     *
-     * @return Limit value.
+    /**
+     * Constructor for Spring bean creation.
      */
-    public int getLimit() {
-        return limit;
-    }
-
-    /*
-     * Offset value getter.
-     *
-     * @return Offset value.
-     */
-    public int getOffset() {
-        return offset;
-    }
-
-    /*
-     * Check whether parameter map contains limit parameters.
-     *
-     * @return true if parameter map contains limit parameters.
-     */
-    public boolean isLimited(MultiValueMap<String, String> params) {
-        return !CollectionUtils.isEmpty(params.get(PaginationParameters.LIMIT.getParameterName()));
-    }
-
-    private int getLimit(MultiValueMap<String, String> params) {
-        return isLimited(params)
-                ? Integer.parseInt(
-                params.get(PaginationParameters.LIMIT.getParameterName()).get(0))
-                : DEFAULT_LIMIT;
-    }
-
-    private int getOffset(MultiValueMap<String, String> params) {
-        return CollectionUtils.isEmpty(params.get(PaginationParameters.OFFSET.getParameterName())) ?
-                0 : Integer.parseInt(
-                params.get(PaginationParameters.OFFSET.getParameterName()).get(0));
+    public Paginator() {
+        //Empty constructor for Spring bean creation.
     }
 
     /*
      * Returns parameters map with limit and offset parameters for next page.
      *
+     * @param params Parameters to process.
      * @return {@link MultiValueMap} parameters map for next page.
      */
-    public MultiValueMap<String, String> nextPage(MultiValueMap<String, String> params) {
-        params.put(PaginationParameters.OFFSET.getParameterName(),
-                Collections.singletonList(Integer.toString(offset + limit)));
-        return params;
+    public MultiValueMap<String, String> nextPageParams(MultiValueMap<String, String> params) {
+        MultiValueMap<String, String> resultParams = new LinkedMultiValueMap<>();
+        resultParams.addAll(params);
+        resultParams.put(PageableParameters.PAGE.getParameterName(),
+                Collections.singletonList(Integer.toString(
+                        pageable.next().getPageNumber() + addition)));
+        return resultParams;
     }
 
     /*
      * Returns parameters map with limit and offset parameters for previous page.
      *
+     * @param params Parameterc to process.
      * @return {@link MultiValueMap} parameters map for previous page.
      */
-    public MultiValueMap<String, String> previousPage(MultiValueMap<String, String> params) {
-        int newOffset = Math.max(offset - limit, 0);
-        params.put(PaginationParameters.OFFSET.getParameterName(),
-                Collections.singletonList(Integer.toString(newOffset)));
-        return params;
+    public MultiValueMap<String, String> previousPageParams(MultiValueMap<String, String> params) {
+        MultiValueMap<String, String> resultParams = new LinkedMultiValueMap<>();
+        resultParams.addAll(params);
+        resultParams.put(PageableParameters.PAGE.getParameterName(),
+                Collections.singletonList(Integer.toString(
+                        pageable.previousOrFirst().getPageNumber() + addition)));
+        return resultParams;
+    }
+
+    @PostConstruct
+    private void calculateAddition() {
+        if (isStartedFromOne) {
+            addition = 1;
+        }
     }
 }
